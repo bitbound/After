@@ -1,6 +1,7 @@
 ﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -23,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,10 +45,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServerCompact, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.6.1.3\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WebSockets, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WebSockets.0.2.3.1\lib\net45\Microsoft.WebSockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -56,6 +78,21 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -65,25 +102,161 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\A-128.png" />
+    <Content Include="Assets\Images\A-512.png" />
+    <Content Include="Assets\Images\A.png" />
+    <Content Include="Assets\Images\AfterTitle.png" />
+    <Content Include="Assets\Images\Icons\abstract-user-flat-4-300px.png" />
+    <Content Include="Assets\Images\Icons\Asterisk_64x.png" />
+    <Content Include="Assets\Images\Icons\draw-star-2.png" />
+    <Content Include="Assets\Images\Icons\Ellipsis_16x.png" />
+    <Content Include="Assets\Images\Icons\Ellipsis_inverse_16x.png" />
+    <Content Include="Assets\Images\Icons\gear_32xLG.png" />
+    <Content Include="Assets\Images\Icons\Message_16xLG.png" />
+    <Content Include="Assets\Images\Icons\MoveGlyph_16x.png" />
+    <Content Include="Assets\Images\Icons\Package_64x.png" />
+    <Content Include="Assets\Images\Icons\PinnedItem_32x.png" />
+    <Content Include="Assets\Images\Icons\pointer2.png" />
+    <Content Include="Assets\Images\Icons\Previous_greyInverse_64x.png" />
+    <Content Include="Assets\Images\Icons\Script_64x.png" />
+    <Content Include="Assets\Images\Icons\Search_64x.png" />
+    <Content Include="Assets\Images\Icons\Security_Shields_Blank_32xLG.png" />
+    <Content Include="Assets\Images\Icons\star_40x.png" />
+    <Content Include="Assets\Images\Icons\StatusAlert_grey_64x.png" />
+    <Content Include="Assets\Images\Icons\StatusHelp_grey_32xLG.png" />
+    <Content Include="Assets\Images\Icons\StatusWarning_grey_64x.png" />
+    <Content Include="Assets\Images\Icons\Thread_64x.png" />
+    <Content Include="Assets\Images\Icons\Time_64x.png" />
+    <Content Include="Assets\Images\Icons\TransactionalComponent_256x.png" />
+    <Content Include="Assets\Images\Icons\Undo_grey_256x.png" />
+    <Content Include="Assets\Images\Icons\UniqueKey_256x.png" />
+    <Content Include="Assets\Images\Icons\Unlink_48x.png" />
+    <Content Include="Assets\Images\Icons\Upload_gray_64x.png" />
+    <Content Include="Assets\Images\Icons\UserProfile_76x.png" />
+    <Content Include="Assets\Images\Icons\User_64x.png" />
+    <Content Include="Assets\Images\Icons\Web_256x.png" />
+    <Content Include="Assets\Images\Portraits\Aurora.jpg" />
+    <Content Include="Assets\Images\Portraits\Ferryman.png" />
+    <Content Include="Assets\Images\Portraits\Ferryman_Squint.png" />
+    <Content Include="Assets\Images\Portraits\Scruffy Hair.jpg" />
+    <Content Include="Assets\Images\Portraits\Spiky Hair.jpg" />
+    <Content Include="Assets\Images\TranslucencyLogoInverse.png" />
+    <Content Include="Assets\Images\Tunnel and Shadow.png" />
+    <Content Include="Assets\Images\Tunnel.png" />
+    <Content Include="Assets\Sounds\ceich93_drone-ominousdistortion.mp3" />
+    <Content Include="Assets\Sounds\ceich93__drone-darkemptiness.mp3" />
+    <Content Include="Assets\Sounds\gameaudio_teleport-space-morph.mp3" />
+    <Content Include="Assets\Sounds\SoundCredits.txt" />
+    <Content Include="Assets\Sounds\urupin__heartbeat.mp3" />
+    <Content Include="Controls\CreateAccount.html" />
+    <Content Include="Controls\CreateCharacter.html" />
+    <Content Include="Controls\Game.html" />
+    <Content Include="Controls\Intro.html" />
+    <Content Include="Controls\LoginForm.html" />
+    <Content Include="Global.asax" />
     <Content Include="packages.config" />
+    <Content Include="default.cshtml" />
+    <Content Include="Scripts\Canvas.js.map" />
+    <Content Include="Scripts\Connection.js.map" />
+    <Content Include="Scripts\Controls\Game.js.map" />
+    <Content Include="Scripts\Drawing.js.map" />
+    <Content Include="Scripts\MainModel.js.map" />
+    <Content Include="Scripts\Models\Area.js.map" />
+    <Content Include="Scripts\Models\Bases\Selectable.js.map" />
+    <Content Include="Scripts\Models\Particle.js.map" />
+    <Content Include="Scripts\Models\Soul.js.map" />
+    <Content Include="Scripts\Utilities.js.map" />
+    <Content Include="Services\ErrorReporting.cshtml" />
+    <Content Include="tsconfig.json" />
+    <Content Include="default_old.cshtml" />
+    <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
+    <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
+    <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
+    <None Include="_bin_deployableAssemblies\x86\sqlceer40EN.dll" />
+    <None Include="_bin_deployableAssemblies\x86\sqlcecompact40.dll" />
+    <None Include="_bin_deployableAssemblies\x86\sqlceca40.dll" />
+    <None Include="_bin_deployableAssemblies\x86\Microsoft.VC90.CRT\README_ENU.txt" />
+    <None Include="_bin_deployableAssemblies\x86\Microsoft.VC90.CRT\msvcr90.dll" />
+    <None Include="_bin_deployableAssemblies\amd64\sqlcese40.dll" />
+    <None Include="_bin_deployableAssemblies\amd64\sqlceqp40.dll" />
+    <None Include="_bin_deployableAssemblies\amd64\sqlceme40.dll" />
+    <None Include="_bin_deployableAssemblies\amd64\sqlceer40EN.dll" />
+    <None Include="_bin_deployableAssemblies\amd64\sqlcecompact40.dll" />
+    <None Include="_bin_deployableAssemblies\amd64\sqlceca40.dll" />
+    <None Include="_bin_deployableAssemblies\amd64\Microsoft.VC90.CRT\README_ENU.txt" />
+    <None Include="_bin_deployableAssemblies\amd64\Microsoft.VC90.CRT\msvcr90.dll" />
+    <None Include="Properties\PublishProfiles\Localhost.pubxml" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <None Include="_bin_deployableAssemblies\amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
+    <None Include="_bin_deployableAssemblies\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\Canvas.js" />
+    <Content Include="Scripts\connection.js" />
+    <Content Include="Scripts\Controls\CreateAccount.js" />
+    <Content Include="Scripts\Controls\CreateCharacter.js" />
+    <Content Include="Scripts\Controls\game.js" />
+    <Content Include="Scripts\Controls\Intro.js" />
+    <Content Include="Scripts\Controls\LoginForm.js" />
+    <Content Include="Scripts\Drawing.js" />
+    <Content Include="Scripts\Init.js" />
+    <Content Include="Scripts\jquery-3.1.0.js" />
+    <Content Include="Scripts\jquery-3.1.0.min.js" />
+    <Content Include="Scripts\MainModel.js" />
+    <Content Include="Scripts\Models\area.js" />
+    <Content Include="Scripts\Models\Bases\Selectable.js" />
+    <Content Include="Scripts\Models\Particle.js" />
+    <Content Include="Scripts\Models\soul.js" />
+    <Content Include="Scripts\Utilities.js" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="Styles.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\Interactions\BaseInteraction.cs" />
+    <Content Include="App_Code\Interactions\Ferryman0.cs" />
+    <Content Include="App_Code\Interactions\IBaseInteraction.cs" />
+    <Content Include="App_Code\Models\Character.cs" />
+    <Content Include="App_Code\Models\InnerVoid.cs" />
+    <Content Include="App_Code\Models\Location.cs" />
+    <Content Include="App_Code\Models\Message.cs" />
+    <Content Include="App_Code\Models\Monster.cs" />
+    <Content Include="App_Code\Models\NPC.cs" />
+    <Content Include="App_Code\Models\Player.cs" />
+    <Content Include="App_Code\Models\SavedGame.cs" />
+    <Content Include="App_Code\Models\World.cs" />
+    <Content Include="App_Code\SocketHandler.cs" />
+    <Content Include="App_Code\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\Canvas.ts" />
+    <TypeScriptCompile Include="Scripts\Connection.ts" />
+    <TypeScriptCompile Include="Scripts\Controls\Game.ts" />
+    <TypeScriptCompile Include="Scripts\Drawing.ts" />
+    <TypeScriptCompile Include="Scripts\MainModel.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Area.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Bases\Selectable.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Particle.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Soul.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\Utilities.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
@@ -108,8 +281,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,0 +1,14 @@
+﻿/// <autosync enabled="false" />
+/// <reference path="jquery-3.1.0.js"/>
+/// <reference path="models/bases/selectable.ts" />
+/// <reference path="models/area.ts" />
+/// <reference path="models/particle.ts" />
+/// <reference path="models/soul.ts" />
+/// <reference path="canvas.ts" />
+/// <reference path="connection.ts" />
+/// <reference path="drawing.ts" />
+/// <reference path="utilities.ts" />
+/// <reference path="mainmodel.ts" />
+/// <reference path="controls/game.ts" />
+/// <reference path="controls/CreateAccount.js" />
+/// <reference path="controls/CreateCharacter.js" />

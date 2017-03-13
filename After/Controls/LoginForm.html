@@ -1,0 +1,62 @@
+﻿<div id="divLogin" onkeypress='if (event.keyCode == 13) { After.Temp.Login.TryLogin(); }'>
+    <div id="divLoginImage">
+        <img src="/Assets/Images/AfterTitle.png" alt="After" />
+    </div>
+
+    <br />
+    <div id="divLoginForm">
+        <label class="font-sansserif" for="inputUsername">Username:</label><br />
+        <input id="inputUsername" type="text" />
+        <br />
+        <label class="font-sansserif" for="inputPassword">Password:</label><br />
+        <input id="inputPassword" type="password"/>
+        <br />
+        <div style="text-align:right; margin-top: 6px">
+            <button id="buttonLogin" type="button" onclick="After.Temp.Login.TryLogin()">Log In</button>
+            <br />
+            <span onclick='After.Temp.Login.StartIntro()'>New player?  Click here!</span>
+        </div>
+    </div>
+    <div id="divLoginStatus" style="color: red; font-size: small; margin-top: 20px;"></div>
+    <style>
+        #divLogin {
+            height: 100%;
+            width: 100%;
+            text-align: center;
+        }
+
+        #divLoginImage {
+            height: 200px;
+            background-image: url('/Assets/Images/Tunnel.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        #divLoginImage img {
+            position: relative;
+            top: 20%;
+        }
+
+        #divLoginForm {
+            text-align: left;
+            display: inline-block;
+        }
+
+        #divLoginForm label {
+            color: white;
+        }
+
+        #divLoginForm span {
+            font-size: smaller;
+            color: Highlight;
+            cursor: pointer;
+            display: inline-block;
+            margin-top:10px;
+        }
+
+        #divLoginForm span:hover {
+            color: white;
+        }
+    </style>
+</div>

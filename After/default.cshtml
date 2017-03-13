@@ -1,0 +1,48 @@
+@{
+    if (!Request.IsSecureConnection && !Request.IsLocal)
+    {
+        Response.RedirectPermanent("https://play.after-game.net", true);
+    }
+    if (Context.IsWebSocketRequest)
+    {
+        Microsoft.Web.WebSockets.WebSocketExtensions.AcceptWebSocketRequest(Context, new After.SocketHandler());
+        return;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>After</title>
+    <link href="/Assets/Images/A.png" rel="icon" />
+    <link href="/manifest.webapp" rel="manifest" />
+    <meta id="viewport" name="viewport" content="width=device-width" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link href="/Styles.css" rel="stylesheet" />
+    <script src="/Scripts/jquery-3.1.0.js"></script>
+    <script>
+        try {
+            $ = jQuery = module.exports;
+        } catch (e) { }
+    </script>
+</head>
+<body>
+    <script src="~/Scripts/Models/Bases/Selectable.js"></script>
+    <script src="~/Scripts/Models/Particle.js"></script>
+    <script src="~/Scripts/Models/Area.js"></script>
+    <script src="~/Scripts/Models/Soul.js"></script>
+    <script src="~/Scripts/MainModel.js"></script>
+    <script src="~/Scripts/Controls/CreateAccount.js"></script>
+    <script src="~/Scripts/Controls/CreateCharacter.js"></script>
+    <script src="~/Scripts/Controls/Intro.js"></script>
+    <script src="~/Scripts/Controls/LoginForm.js"></script>
+    <script src="~/Scripts/Controls/Game.js"></script>
+    <script src="~/Scripts/Connection.js"></script>
+    <script src="~/Scripts/Canvas.js"></script>
+    <script src="~/Scripts/Drawing.js"></script>
+    <script src="~/Scripts/Utilities.js"></script>
+    <script defer src="/Scripts/Init.js"></script>
+    
+</body>
+</html>

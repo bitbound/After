@@ -1,0 +1,64 @@
+﻿<div id="divCreateAccount">
+    <div id="divTopBorder" class="horizontalBeam"></div>
+    <div id="divTitle">Account Creation</div>
+    <div id="divBottomBorder" class="horizontalBeam"></div>
+    <br />
+    <div id="divAccountForm" onkeypress='if (event.keyCode == 13) { After.Temp.Login.Create(); }'>
+        <label class="font-sansserif" for="inputUsername">Enter a Username:</label>
+        <br />
+        <input id="inputNewUsername" maxlength="25" type="text" />
+        <br />
+        <label class="font-sansserif" for="inputPassword">Enter a Password:</label>
+        <br />
+        <input id="inputNewPassword" maxlength="25" type="password" />
+        <br />
+        <label class="font-sansserif" for="inputConfirmPassword">Confirm Your Password:</label><br />
+        <input id="inputConfirmPassword" maxlength="25" type="password" />
+        <br />
+        <div style="text-align:right; margin-top: 6px">
+            <button id="buttonSubmit" type="button" onclick="After.Temp.Login.Create()">Submit</button>
+        </div>
+    </div>
+    <div id="divCreateAccountStatus"></div>
+    <script defer src="/Scripts/Controls/CreateAccount.js"></script>
+    <style>
+        #divCreateAccount {
+            text-align: center;
+            color: white;
+            height: 100%;
+            width: 100%;
+            padding-top: 50px;
+        }
+
+        #divAccountForm {
+            display: inline-block;
+            text-align: left;
+        }
+
+        #divTitle {
+            font-size: large;
+            font-weight: 900;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .horizontalBeam {
+            margin: auto;
+            height: 3px;
+            width: 200px;
+            background-color: white;
+            border-radius: 100%;
+        }
+
+        #divCreateAccount label {
+            font-size: small;
+        }
+
+        #divCreateAccountStatus {
+            color: red;
+            font-size: small;
+            margin-top: 20px;
+        }
+
+    </style>
+</div>

@@ -1,0 +1,563 @@
+﻿<div id="divGame">
+    <canvas id="canvasMap"></canvas>
+    <div id="divFPS"></div>
+
+    <div id="divChatFrame" class="bottom-tab-frame transparent-menu">
+        <div id="divChatIconBorder" class="bottom-tab-icon transparent-menu font-sansserif">
+            <img src="/Assets/Images/Icons/Message_16xLG.png" />
+            <br />
+            <span>Chat</span>
+        </div>
+        <div id="divChatInnerFrame" class="tab-outerframe" >
+            <div id="divChatMessageWindow" class="tab-innerframe"></div>
+            <div id="divChatInput">
+                <select id="selectChatChannel">
+                    <option>Global</option>
+                </select>
+                <div id="divChatInputWrapper">
+                    <input type="text" id="inputChatInput" />
+                </div>
+                <button id="buttonChatSubmit" type="button">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="divAdminFrame" class="bottom-tab-frame transparent-menu">
+        <div id="divAdminIconBorder" class="bottom-tab-icon transparent-menu font-sansserif">
+            <img src="/Assets/Images/Icons/Security_Shields_Blank_32xLG.png" />
+            <br />
+            <span>Admin</span>
+        </div>
+        <div class="tab-outerframe">
+            <div class="tab-innerframe"></div>
+        </div>
+        
+    </div>
+
+
+    <div id="divSideTabs">
+        <div id="divCharacterFrame" class="side-tab-frame transparent-menu">
+            <div id="divCharacterIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/abstract-user-flat-4-300px.png" />
+                <br />
+                <span>Character</span>
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe"></div>
+            </div>
+        </div>
+
+        <div id="divPowersFrame" class="side-tab-frame transparent-menu">
+            <div id="divPowersIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/draw-star-2.png" />
+                <br />
+                <span>Powers</span>
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe"></div>
+            </div>
+        </div>
+
+        <div id="divNotesFrame" class="side-tab-frame transparent-menu">
+            <div id="divNotesIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/PinnedItem_32x.png" />
+                <br />
+                <span>Notes</span>
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe"></div>
+            </div>
+        </div>
+
+        <div id="divMoreTabsFrame" class="side-tab-frame transparent-menu">
+            <div id="divMoreTabsIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/Ellipsis_inverse_16x.png" />
+                <br />
+                <span>More</span>
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe"></div>
+            </div>
+        </div>
+
+        <div id="divSettingsFrame" class="side-tab-frame transparent-menu">
+            <div id="divSettingsIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/gear_32xLG.png" />
+                <br />
+                <span>Settings</span>
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="divDPad" class="transparent-menu">
+        <div id="divDPadIconBorder" class="transparent-menu thumb-control">
+            <img src="/Assets/Images/Icons/MoveGlyph_16x.png" />
+        </div>
+        <div class="tab-outerframe">
+            <div class="tab-innerframe" style="overflow:hidden; border:1px solid gray">
+                <svg id="svgDPad" height="120px" width="120px" >
+                    <rect x="78.6" y="11.4" move-direction="ne" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                    <rect x="11.4" y="78.6" move-direction="sw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                    <rect x="11.4" y="11.4" move-direction="nw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                    <rect x="78.6" y="78.6" move-direction="se" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                    <rect x="78" y="42" move-direction="e" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                    <rect x="42" y="78" move-direction="s" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                    <rect x="42" y="6" move-direction="n" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                    <rect x="6" y="42" move-direction="w" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                    <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 103.5,60L 88.5,52.5L 88.5,67.5L 103.5,60 Z " class="dpad-triangle" />
+                    <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 16.5,60L 31.5,67.5L 31.5,52.5L 16.5,60 Z " class="dpad-triangle" />
+                    <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 60,103.5L 67.5,88.5L 52.5,88.5L 60,103.5 Z " class="dpad-triangle" />
+                    <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 60,16.5L 52.5,31.5L 67.5,31.5L 60,16.5 Z " class="dpad-triangle" />
+                    <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 22.8645,22.8645L 26.4,33.4711L 33.4711,26.4L 22.8645,22.8645 Z " class="dpad-triangle" />
+                    <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,22.8645L 86.5289,26.4L 93.6,33.4711L 97.1355,22.8645 Z " class="dpad-triangle" />
+                    <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 22.8645,97.1355L 33.4711,93.6L 26.4,86.5289L 22.8645,97.1355 Z " class="dpad-triangle" />
+                    <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,97.1355L 93.6,86.5289L 86.5289,93.6L 97.1355,97.1355 Z " class="dpad-triangle" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div id="divJoystick" class="transparent-menu" style="display:none">
+        <div id="divJoystickIconBorder" class="transparent-menu thumb-control">
+            <img src="/Assets/Images/Icons/MoveGlyph_16x.png" />
+        </div>
+        <div class="tab-outerframe">
+                <div class="tab-innerframe" style="overflow:hidden; border:1px solid gray">
+                    <svg id="svgJoystick" height="60px" width="60px">
+                        <circle r="30px" stroke="gray" fill="white" cx="30px" cy="30px"></circle>
+                        <circle r="10px" stroke="dimgray" fill="white" cx="30px" cy="30px"></circle>
+                    </svg>
+                </div>
+            </div>
+    </div>
+    
+    <div id="divActionButton" class="font-sansserif" >
+        <img src="/Assets/Images/Icons/pointer2.png" />
+        <br />
+        <span>Action</span>
+    </div>
+
+    <div id="divStatus" class="font-sansserif transparent-menu">
+        <div style="height: 1em">
+            <span class="pool-title" style="left:0">Energy</span>
+            <span class="pool-title" style="left:33.1%;">Charge</span>
+            <span class="pool-title" style="left:66.2%;">Willpower</span>
+        </div>
+        <div>
+            <div style="position:absolute; left:0; width:33%; text-align:center">
+                <svg id="svgEnergy" style="height:60px; width:100%">
+                    <defs>
+                        <radialGradient id="gradientEnergy" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                            <stop offset="0%" style="stop-color:white;" />
+                            <stop offset="70%" style="stop-color:cyan;" />
+                            <stop offset="100%" style="stop-color:transparent;" />
+                        </radialGradient>
+                    </defs>
+                    <ellipse cx="50%" cy="50%" rx="45%" ry="20%" fill="url(#gradientEnergy)"></ellipse>
+                </svg>
+                <div style="position:absolute;width:100%; top:20px">
+                    <div class="pool-amount" id="divEnergyAmount">
+                        0
+                    </div>
+                </div>
+            </div>
+
+            <div id="divButtonCharge" style="position:absolute; left:33.1%; width:33%; top:30px; text-align:center">
+                <button id="buttonCharge" style="border-width:2px; height:30px">Tap to Charge</button>
+            </div>
+
+            <div id="divCharge" style="position:absolute; left:33.1%; width:33%; text-align:center; display:none">
+                <svg id="svgCharge" style="height:60px; width:100%; cursor:pointer">
+                    <defs>
+                        <radialGradient id="gradientCharge" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                            <stop offset="0%" style="stop-color:white;" />
+                            <stop offset="70%" style="stop-color:magenta;" />
+                            <stop offset="100%" style="stop-color:transparent;" />
+                        </radialGradient>
+                    </defs>
+                    <ellipse cx="50%" cy="50%" rx="45%" ry="20%" fill="url(#gradientCharge)"></ellipse>
+                </svg>
+                <div style="position:absolute;width:100%; top:20px;cursor:pointer">
+                    <div class="pool-amount" id="divChargeAmount">
+                        0
+                    </div>
+                </div>
+            </div>
+
+            <div style="position:absolute; left:66.2%; width:33%; text-align:center">
+                <svg id="svgWillpower" style="height:60px; width:100%">
+                    <defs>
+                        <radialGradient id="gradientWillpower" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                            <stop offset="0%" style="stop-color:white;" />
+                            <stop offset="70%" style="stop-color:goldenrod;" />
+                            <stop offset="100%" style="stop-color:transparent;" />
+                        </radialGradient>
+                    </defs>
+                    <ellipse cx="50%" cy="50%" rx="45%" ry="20%" fill="url(#gradientWillpower)"></ellipse>
+                </svg>
+                <div style="position:absolute;width:100%; top:20px">
+                    <div class="pool-amount" id="divWillpowerAmount">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        /*** Page ***/
+        #divGame {
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+        }
+
+        #canvasMap {
+            height: 100%;
+            width: 100%;
+        }
+
+        #divFPS {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: white;
+            display: none;
+        }
+        #divDebugMessage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: white;
+        }
+        #divDPad {
+            position: absolute;
+            bottom: 150px;
+            left: 0;
+            width: 0;
+            height: 150px;
+            cursor: default;
+            overflow:visible !important;
+        }
+ 
+        #divDPadIconBorder {
+            position:absolute;
+            bottom:45px;
+            right: -60px;
+            width: 60px;
+            height: 60px;
+            border-top: 1px solid white;
+            border-right: 1px solid white;
+            border-bottom: 1px solid white;
+            text-align: center;
+            border-top-right-radius: 25%;
+            border-bottom-right-radius: 25%;
+            opacity: .8;
+        }
+        #divDPadIconBorder img {
+            height: 25px;
+            width: 25px;
+            margin-top: 17.5px;
+        }
+        #divDPadIconBorder:hover {
+            background-color: dimgray;
+        }
+        #divDPadIconBorder.hover {
+            background-color: dimgray;
+        }
+        #svgDPad {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .dpad-direction {
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .dpad-direction:hover {
+            fill: dimgray
+        }
+        .dpad-direction.hover {
+            fill: dimgray
+        }
+        .dpad-triangle {
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+            pointer-events: none;
+        }
+        #divJoystick {
+            position: absolute;
+            bottom: 150px;
+            left: 0;
+            width: 0;
+            height: 150px;
+            cursor: default;
+            overflow:visible !important;
+        }
+ 
+        #divJoystickIconBorder {
+            position:absolute;
+            bottom:45px;
+            right: -60px;
+            width: 60px;
+            height: 60px;
+            border-top: 1px solid white;
+            border-right: 1px solid white;
+            border-bottom: 1px solid white;
+            text-align: center;
+            border-top-right-radius: 25%;
+            border-bottom-right-radius: 25%;
+            opacity: .8;
+        }
+        #divJoystickIconBorder img {
+            height: 25px;
+            width: 25px;
+            margin-top: 17.5px;
+        }
+        #divJoystickIconBorder:hover {
+            background-color: dimgray;
+        }
+        #divJoystickIconBorder.hover {
+            background-color: dimgray;
+        }
+        #svgJoystick {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        /*** All Tabs ***/
+        .tab-outerframe {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            overflow: hidden;
+        }
+        .tab-innerframe {
+            position: absolute;
+            border: 2px solid lightgray;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 5px;
+            overflow-y: auto;
+        }
+        /*** Side Tabs ***/
+        #divSideTabs {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 155px;
+            overflow: visible;
+        }
+        #divCharacterIconBorder {
+            top: 0;
+        }
+        #divPowersIconBorder {
+            top: 65px;
+        }
+        #divNotesIconBorder {
+            top: 130px;
+        }
+        #divMoreTabsIconBorder {
+            top: 195px;
+        }
+        #divSettingsIconBorder {
+            top: 260px;
+        }
+        .side-tab-frame {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 10px;
+            color: whitesmoke;
+            overflow:visible !important;
+            cursor: default;
+        }
+        .side-tab-icon {
+            display: inline-block;
+            border-left: 2px solid lightgray;
+            border-top: 2px solid lightgray;
+            border-bottom: 2px solid lightgray;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            height: 55px;
+            width: 55px;
+            text-align: center;
+            position: absolute;
+            left: -55px;
+            font-size: .8em;
+        }
+        .side-tab-icon:hover {
+            background-color: dimgray;
+        }
+        .side-tab-icon.hover {
+            background-color: dimgray;
+        }
+        .side-tab-icon img {
+            height: 25px;
+            width: 25px;
+            margin-top: 5px;
+        }
+
+        #divActionButton {
+            position: absolute;
+            right: 0; 
+            bottom: 85px;
+            height: 60px;
+            width: 60px;
+            border-top-left-radius: 80%;
+            border-left: 3px solid white;
+            border-top: 3px solid white;
+            font-size: .8em;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        #divActionButton img {
+            margin-top: 10px;
+            margin-left: 5px;
+            height: 25px;
+            width: 25px
+        }
+        #divActionButton:hover {
+            background-color: dimgray;
+        }
+        #divActionButton.hover {
+            background-color: dimgray;
+        }
+        /*** Bottom Tabs ***/
+        #divChatIconBorder {
+            left: 8px;
+        }
+        #divAdminIconBorder {
+            left: 80px;
+        }
+        .bottom-tab-frame {
+            position: absolute;
+            bottom: 85px;
+            left: 10px;
+            right: 10px;
+            color: whitesmoke;
+            overflow:visible !important;
+            cursor: default;
+        }
+        .bottom-tab-icon {
+            display: inline-block;
+            border-left: 2px solid lightgray;
+            border-top: 2px solid lightgray;
+            border-right: 2px solid lightgray;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 55px;
+            width: 60px;
+            text-align: center;
+            position: absolute;
+            top: -55px;
+            font-size: .8em;
+        }
+        .bottom-tab-icon:hover {
+            background-color: dimgray;
+        }
+        .bottom-tab-icon.hover {
+            background-color: dimgray;
+        }
+        .bottom-tab-icon img {
+            height: 25px;
+            width: 25px;
+            margin-top: 5px;
+        }
+
+        #divChatMessageWindow {
+            bottom: 27px;
+        }
+        
+        #divChatInput {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 25px;
+        }
+
+        #selectChatChannel {
+            position: absolute;
+            left: 0;
+            width: 65px;
+            height: 25px;
+        }
+
+        #divChatInputWrapper {
+            position: absolute;
+            left: 67px;
+            right: 80px;
+        }
+
+        #inputChatInput {
+            width: 100%;
+        }
+
+        #buttonChatSubmit {
+            position: absolute;
+            right: 0;
+            width: 60px;
+            height: 25px;
+        }
+
+        /*** Status Area ***/
+        #divStatus {
+            border: 2px solid lightgray;
+            border-radius: 15px;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            left: 5px;
+            height: 75px;
+            color: white;
+        }
+
+        .pool-title {
+            position:absolute;
+            left:0;
+            width:33%;
+            text-align:center;
+            font-weight:bold
+        }
+        .pool-amount {
+            display: inline-block;
+            padding: 0 10px;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, .5);
+            font-weight: bolder;
+        }
+
+        .anim-charge-button {
+            animation-name: particle-charge-button;
+            animation-duration: 1s;
+        }
+        @keyframes particle-charge-button {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                top: -10px;
+            }
+        }
+    </style>
+</div>
