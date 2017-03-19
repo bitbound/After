@@ -8,13 +8,7 @@ namespace After.Models
     {
         public Player()
         {
-            CoreEnergy = 100;
-            CurrentEnergy = 100;
-            CurrentCharge = 0;
-            CurrentWillpower = 100;
-            FlagList.Add(PlayerFlags.NewCharacter);
-            FlagList.Add(PlayerFlags.IntroIncomplete);
-            FlagList.Add(PlayerFlags.IntroStage1);
+           
         }
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
@@ -23,11 +17,9 @@ namespace After.Models
 
         public bool Kicked { get; set; }
         public bool Banned { get; set; }
-
-        public Guid LastGameIDPlayed { get; set; }
         public int BadPasswordCount { get; set; } = 0;
         public bool LockedOut { get; set; }
-        public DateTime LockoutTime { get; set; }
+        public DateTime? LockoutTime { get; set; }
         public AccountTypes AccountType { get; set; }
 
         public string LastIP { get; set; }
@@ -36,18 +28,10 @@ namespace After.Models
         {
             Standard,
             Subscriber,
-            Transcendent,
+            Creator,
             Admin,
         }
 
-        public List<PlayerFlags> FlagList { get; set; } = new List<PlayerFlags>();
-
-        public enum PlayerFlags
-        {
-            NewCharacter,
-            IntroIncomplete,
-            IntroStage1,
-        }
         public override string ToString()
         {
             return Name;

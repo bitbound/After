@@ -127,7 +127,7 @@ After.Temp.Intro.Start = function () {
         };
         ATI.AllLines = ["They say your life flashes before your eyes when you die.",
                 "You see your loved ones.  You revisit your most cherished memories.",
-                "Everything that was good in your life, everything that fills your heart with joy and warmth, is there to ease you into what comes After.",
+                "Everything that was good in your life, everything that fills your heart with joy and warmth, is there to ease you into what comes after.",
                 "You feel an unwavering and comforting peace, and you know that all will be well.",
                 "At least, that's what they say.",
                 "Your passing was somewhat different.",

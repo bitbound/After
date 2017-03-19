@@ -1,69 +1,47 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Data.Entity;
 
 namespace After.Models
 {
-    public class World
+    public class World : DbContext
     {
+        public static World Current { get; set; } = new World();
         public World()
         {
             
         }
-        public override string ToString()
+
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<NPC> NPCs { get; set; }
+        public DbSet<Hostile> Hostiles { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            return Name;
+            base.OnModelCreating(modelBuilder);
         }
-        #region Load Methods
-        //public static async Task<World> Load(string WorldName)
-        //{
-        //    var sf = await StorageFile.GetFileFromPathAsync(ApplicationData.Current.LocalFolder.Path + @"\Worlds\" + WorldName + ".xml");
-        //    var strWorld = await FileIO.ReadTextAsync(sf);
-        //    var newWorld = await Utilities.Deserialize(strWorld) as World;
-        //    return newWorld;
-        //}
-        //public static async Task<World> LoadDefaultExplore()
-        //{
-        //    var sf = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///Data/World - Explore Default.xml"));
-        //    var strWorld = await FileIO.ReadTextAsync(sf);
-        //    var newWorld = await Utilities.Deserialize(strWorld) as World;
-        //    return newWorld;
-        //}
-        //public static async Task<World> LoadDefaultStory()
-        //{
-        //    var sf = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///Data/World - Story Default.xml"));
-        //    var strWorld = await FileIO.ReadTextAsync(sf);
-        //    var newWorld = await Utilities.Deserialize(strWorld) as World;
-        //    return newWorld;
-        //}
-        #endregion Load Methods
-        public string Name { get; set; }
-        public Guid WorldID { get; set; } = Guid.NewGuid();
-        public Location StartLocation { get; set; }
-        
-        public List<Location> AreaInformation { get; set; } = new List<Location>();
-
-        public List<Character> Characters { get; set; } = new List<Character>();
-
-
-        public void AddLocations(List<Location> Locations)
+        public void AddLocations(List<Location> LocationList)
         {
-            foreach (var location in Locations)
+
+            foreach (var location in LocationList)
             {
-                if (AreaInformation.Exists(ai => ai.XYZ == location.XYZ))
+                if (Locations.ToList().Exists(ai => ai.LocationID == location.LocationID))
                 {
                     RemoveLocation(location);
                 }
-                AreaInformation.Add(location);
+                Locations.Add(location);
             }
         }
         public void AddLocation(Location Location)
         {
-            if (AreaInformation.Exists(ai => ai.XYZ == Location.XYZ))
+            if (Locations.ToList().Exists(ai => ai.LocationID == Location.LocationID))
             {
                 RemoveLocation(Location);
             }
-            AreaInformation.Add(Location);
+            Locations.Add(Location);
         }
         public void RemoveLocations(List<Location> Locations)
         {
@@ -74,7 +52,7 @@ namespace After.Models
         }
         public void RemoveLocation(Location Location)
         {
-            AreaInformation.RemoveAll(ai => ai.XYZ == Location.XYZ);
+            Locations.ToList().RemoveAll(ai => ai.LocationID == Location.LocationID);
         }
     }
 }

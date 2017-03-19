@@ -1,6 +1,6 @@
 ﻿namespace After.Models
 {
-    public class Monster : Character
+    public class Hostile : Character
     {
     }
 }

@@ -36,7 +36,7 @@ namespace After
 
             if (type != "AccountCreation" && type != "Logon" && !Authenticated)
             {
-                this.Close();
+                Close();
                 return;
             }
             var methodHandler = Type.GetType("After.SocketHandler").GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
@@ -77,8 +77,8 @@ namespace After
 
         public void HandleAccountCreation(dynamic jsonMessage)
         {
-            this.Player.Name = jsonMessage.Username;
-            if (File.Exists(Utilities.App_Data + @"Accounts\" + this.Player.Name + ".json"))
+            Player.Name = jsonMessage.Username;
+            if (File.Exists(Utilities.App_Data + @"Accounts\" + Player.Name + ".json"))
             {
                 jsonMessage.Result = "exists";
                 jsonMessage.Password = null;
@@ -87,17 +87,15 @@ namespace After
             }
             else
             {
-                this.Authenticated = true;
-                this.Player.Color = jsonMessage.Color;
-                this.Player.Password = Crypto.HashPassword(jsonMessage.Password);
-                var newVoidArea = new Location() { XCoord = 0, YCoord = 0, ZCoord = this.Player.Name + ":0", Color = "gray", Static = true, Title = this.Player.Name + "'s Inner Void", IsInnerVoid = true, OwnerID = this.Player.ID };
+                Authenticated = true;
+                Player.Color = jsonMessage.Color;
+                Player.Password = Crypto.HashPassword(jsonMessage.Password);
+                var newVoidArea = new Location() { XCoord = 0, YCoord = 0, ZCoord = Player.Name + ":0", Color = "gray", Static = true, Title = Player.Name + "'s Inner Void", IsInnerVoid = true };
                 // TODO: Add Ferryman to void area.
-                var newVoid = new List<Location>
-                {
-                    newVoidArea
-                };
-                this.Player.CurrentLocation = newVoidArea;
-                File.WriteAllText(Utilities.App_Data + @"Accounts\" + this.Player.Name + ".json", Json.Encode(Player));
+                Player.CurrentLocation = newVoidArea;
+                World.Current.Players.Add(Player);
+                World.Current.SaveChanges();
+                //File.WriteAllText(Utilities.App_Data + @"Accounts\" + Player.Name + ".json", Json.Encode(Player));
                 jsonMessage.Result = "ok";
                 jsonMessage.Password = null;
                 SocketCollection.Broadcast(Json.Encode(jsonMessage));
@@ -105,14 +103,14 @@ namespace After
         }
         public void HandleLogon(dynamic jsonMessage)
         {
-            this.Player.Name = jsonMessage.Username;
-            if (!File.Exists(Utilities.App_Data + @"Accounts\" + this.Player.Name + ".json"))
+            Player.Name = jsonMessage.Username;
+            if (!File.Exists(Utilities.App_Data + @"Accounts\" + Player.Name + ".json"))
             {
                 jsonMessage.Result = "failed";
                 this.Send(Json.Encode(jsonMessage));
                 return;
             }
-            var strAccount = File.ReadAllText(Utilities.App_Data + @"Accounts\" + this.Player.Name + ".json");
+            var strAccount = File.ReadAllText(Utilities.App_Data + @"Accounts\" + Player.Name + ".json");
             var player = Json.Decode<Player>(strAccount);
             if (!Crypto.VerifyHashedPassword(player.Password, jsonMessage.Password))
             {
@@ -120,7 +118,7 @@ namespace After
                 this.Send(Json.Encode(jsonMessage));
                 return;
             }
-            this.Authenticated = true;
+            Authenticated = true;
             jsonMessage.Result = "ok";
             SocketCollection.Broadcast(Json.Encode(jsonMessage));
         }

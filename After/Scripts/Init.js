@@ -40,6 +40,5 @@
             };
         };
     });
-
-    After.Temp.Login.Init();
+    After.Temp.Splash.Init();
 });

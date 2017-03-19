@@ -10,27 +10,17 @@ namespace After.Models
     {
         public Character()
         {
+            CoreEnergy = 100;
+            CoreEnergyPeak = 100;
+            CurrentEnergy = 100;
+            CurrentCharge = 0;
+            CurrentWillpower = 100;
         }
-        public Guid ID { get; set; } = Guid.NewGuid();
+        public int CharacterID { get; set; }
         public string Name { get; set; }
         public string Color { get; set; } = "gray";
         public string PortraitUri { get; set; }
-        private double coreEnergyPeak;
-        public double CoreEnergyPeak
-        {
-            get
-            {
-                if (coreEnergyPeak == 0)
-                {
-                    coreEnergyPeak = CoreEnergy;
-                }
-                return coreEnergyPeak;
-            }
-            set
-            {
-                coreEnergyPeak = value;
-            }
-        }
+        public double CoreEnergyPeak { get; set; }
         private double coreEnergy;
         public double CoreEnergy
         {
@@ -47,18 +37,7 @@ namespace After.Models
                 }
             }
         }
-        private double maxEnergyModifier;
-        public double MaxEnergyModifier
-        {
-            get
-            {
-                return maxEnergyModifier;
-            }
-            set
-            {
-                maxEnergyModifier = value;
-            }
-        }
+        public double MaxEnergyModifier { get; set; }
         public double MaxEnergy
         {
             get
@@ -66,18 +45,7 @@ namespace After.Models
                 return CoreEnergy + MaxEnergyModifier;
             }
         }
-        private double currentEnergy;
-        public double CurrentEnergy
-        {
-            get
-            {
-                return currentEnergy;
-            }
-            set
-            {
-                currentEnergy = value;
-            }
-        }
+        public double CurrentEnergy { get; set; }
         public double EnergyPercent
         {
             get
@@ -85,18 +53,7 @@ namespace After.Models
                 return CurrentEnergy / MaxEnergy;
             }
         }
-        private double maxChargeModifier;
-        public double MaxChargeModifier
-        {
-            get
-            {
-                return maxChargeModifier;
-            }
-            set
-            {
-                maxChargeModifier = value;
-            }
-        }
+        public double MaxChargeModifier { get; set; }
         public double MaxCharge
         {
             get
@@ -104,18 +61,7 @@ namespace After.Models
                 return CoreEnergy + MaxChargeModifier;
             }
         }
-        private double currentCharge;
-        public double CurrentCharge
-        {
-            get
-            {
-                return currentCharge;
-            }
-            set
-            {
-                currentCharge = value;
-            }
-        }
+        public double CurrentCharge { get; set; }
         public double ChargePercent
         {
             get
@@ -123,18 +69,7 @@ namespace After.Models
                 return CurrentCharge / MaxCharge;
             }
         }
-        private double maxWillpowerModifier;
-        public double MaxWillpowerModifier
-        {
-            get
-            {
-                return maxWillpowerModifier;
-            }
-            set
-            {
-                maxWillpowerModifier = value;
-            }
-        }
+        public double MaxWillpowerModifier { get; set; }
         public double MaxWillpower
         {
             get
@@ -142,18 +77,7 @@ namespace After.Models
                 return CoreEnergy + MaxWillpowerModifier;
             }
         }
-        private double currentWillpower;
-        public double CurrentWillpower
-        {
-            get
-            {
-                return currentWillpower;
-            }
-            set
-            {
-                currentWillpower = value;
-            }
-        }
+        public double CurrentWillpower { get; set; }
         public double WillpowerPercent
         {
             get
@@ -161,51 +85,9 @@ namespace After.Models
                 return CurrentWillpower / MaxWillpower;
             }
         }
-        public string PreviousXYZ { get; set; }
-        private Location previousLocation;
 
-        public Location PreviousLocation
-        {
-            get
-            {
-                if (previousLocation == null && PreviousXYZ != null)
-                {
-                    return new Location() { XCoord = int.Parse(PreviousXYZ.Split(',')[0]), YCoord = int.Parse(PreviousXYZ.Split(',')[1]), ZCoord = PreviousXYZ.Split(',')[2] };
-                }
-                else if (previousLocation == null)
-                {
-                    return previousLocation;
-                }
-                else
-                {
-                    return CurrentLocation;
-                }
-            }
-            set
-            {
-                previousLocation = value;
-                PreviousXYZ = value?.XYZ;
-            }
-        }
-        public string CurrentXYZ { get; set; }
-        private Location currentLocation;
-        public Location CurrentLocation
-        {
-            get
-            {
-                if (currentLocation == null && CurrentXYZ != null)
-                {
-                    return new Location() { XCoord = int.Parse(CurrentXYZ.Split(',')[0]), YCoord = int.Parse(CurrentXYZ.Split(',')[1]), ZCoord = CurrentXYZ.Split(',')[2] };
-                }
-                return currentLocation;
-            }
-            set
-            {
-                currentLocation = value;
-                CurrentXYZ = value?.XYZ;
-            }
-        }
-
+        public Location PreviousLocation { get; set; }
+        public Location CurrentLocation { get; set; }
         public double ViewDistance { get; set; } = 2;
 
         public bool IsCharging { get; set; }
@@ -221,6 +103,7 @@ namespace After.Models
             Combat,
             Dialog
         }
+        public string Flags { get; set; }
         public bool IsHostile()
         {
             return false;
@@ -229,8 +112,6 @@ namespace After.Models
         {
             return false;
         }
-
-        public List<BaseInteraction> Interactions { get; set; }
-
+        public virtual ICollection<BaseInteraction> Interactions { get; set; }
     }
 }

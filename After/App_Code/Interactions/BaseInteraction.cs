@@ -2,7 +2,6 @@ using System.Xml.Serialization;
 
 namespace After.Interactions
 {
-    [XmlInclude(typeof(Ferryman0))]
     public class BaseInteraction
     {
         public string Namespace
@@ -11,12 +10,8 @@ namespace After.Interactions
             {
                 return this.GetType().Namespace;
             }
-            set
-            {
-
-            }
         }
-
+        public string InteractionID { get; set; }
         public Triggers Trigger { get; set; }
 
         public enum Triggers

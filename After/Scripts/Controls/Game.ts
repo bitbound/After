@@ -15,6 +15,7 @@
             });
         },
         Load: function () {
+            $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
             // TODO: First load.
             var query = {
                 Type: "Query",
@@ -38,13 +39,6 @@
 
             window.requestAnimationFrame(After.Drawing.DrawCanvas);
 
-            if (window.orientation == 0 || window.orientation == 180) {
-                $("#viewport").attr("content", "width=500, user-scalable=no");
-            }
-            else {
-                $("#viewport").attr("content", "width=900, user-scalable=no");
-            }
-
             window.onresize = function () {
                 After.Canvas.Element.width = document.documentElement.clientWidth;
                 After.Canvas.Element.height = document.documentElement.clientHeight;
@@ -52,14 +46,6 @@
                     After.Canvas.Element.width = document.documentElement.clientWidth;
                     After.Canvas.Element.height = document.documentElement.clientHeight;
                 }, 500);
-            };
-            window.onorientationchange = function (e) {
-                if (window.orientation == 0 || window.orientation == 180) {
-                    $("#viewport").attr("content", "width=500, user-scalable=no");
-                }
-                else {
-                    $("#viewport").attr("content", "width=900, user-scalable=no");
-                }
             };
             window.onkeypress = function (e) {
                 if ($("#inputChatInput").is(":focus") == false) {
