@@ -2,6 +2,7 @@ using After.Interactions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 
@@ -30,15 +31,15 @@ namespace After.Models
 
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool Static { get; set; }
+        public bool IsStatic { get; set; }
         public DateTime? LastVisited { get; set; }
-        public Player LastVisitedBy { get; set; }
-        public int Willpower { get; set; }
+        public virtual Player LastVisitedBy { get; set; }
+        public int InvestedWillpower { get; set; }
         
         public virtual ICollection<Character> Occupants { get; set; }
         public bool IsInnerVoid { get; set; }
-        public int OwnerID { get; set; }
-        public virtual ICollection<BaseInteraction> Interactions { get; set; }
+        public virtual Player Owner { get; set; }
+        public string Interactions { get; set; }
 
         public static bool Exists(string XYZ)
         {

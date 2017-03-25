@@ -1,5 +1,5 @@
 ﻿/// <autosync enabled="false" />
-/// <reference path="jQuery/jquery-3.1.1.js" />
+/// <reference path="Jquery/jquery-3.1.1.js" />
 /// <reference path="models/bases/selectable.ts" />
 /// <reference path="models/area.ts" />
 /// <reference path="models/particle.ts" />

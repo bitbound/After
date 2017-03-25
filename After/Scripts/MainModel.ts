@@ -22,22 +22,22 @@
 
         StartCharging: function () {
             var request = {
-                Type: "Event",
-                EventType: "StartCharging",
-                Username: After.Me.Name,
+                "Category": "Events",
+                "Type": "StartCharging",
+                "Username": After.Me.Name,
             };
             After.Connection.Socket.send(JSON.stringify(request));
         },
         ToggleCharging: function () {
             var request = <any>{
-                Type: "Event",
-                Username: After.Me.Name,
+                "Category": "Events",
+                "Username": After.Me.Name,
             };
             if (After.Me.IsCharging) {
-                request.EventType = "StopCharging";
+                request.Type = "StopCharging";
             }
             else {
-                request.EventType = "StartCharging";
+                request.Type = "StartCharging";
             }
             After.Connection.Socket.send(JSON.stringify(request));
         },
@@ -52,16 +52,13 @@
         },
         Move: function (strDirection:string) {
             var request = {
-                "Type": "Event",
-                "EventType": "PlayerMove",
+                "Category": "Events",
+                "Type": "PlayerMove",
                 "Direction": strDirection.toUpperCase()
             };
             After.Connection.Socket.send(JSON.stringify(request));
         }
     }
-    //export const Test = {
-    //    TestProperty: <String>"Hi",
-    //}
 }
 namespace After.World_Data {
     export const Areas = new Array<After.Models.Area>();

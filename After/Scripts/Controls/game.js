@@ -21,8 +21,8 @@ var After;
                 $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
                 // TODO: First load.
                 var query = {
-                    Type: "Query",
-                    QueryType: "FirstLoad",
+                    "Category": "Queries",
+                    "Type": "FirstLoad"
                 };
                 After.Connection.Socket.send(JSON.stringify(query));
                 After.Canvas.Element = document.getElementById("canvasMap");
@@ -728,4 +728,4 @@ var After;
         };
     })(Controls = After.Controls || (After.Controls = {}));
 })(After || (After = {}));
-//# sourceMappingURL=game.js.map
+//# sourceMappingURL=Game.js.map

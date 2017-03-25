@@ -34,7 +34,13 @@ After.Temp.Login.Create = function () {
         $("#divCreateAccountStatus").text("Usernames and passwords can only be a max of 25 characters.");
         return;
     };
-    var creationRequest = { Type: "AccountCreation", Username: strUsername, Password: strPassword, Color: After.Me.Color };
+    var creationRequest = {
+        "Category": "Accounts",
+        "Type": "AccountCreation",
+        "Username": strUsername,
+        "Password": strPassword,
+        "Color": After.Me.Color
+    };
     sessionStorage["Username"] = strUsername;
     After.Connection.Socket.send(JSON.stringify(creationRequest));
 };

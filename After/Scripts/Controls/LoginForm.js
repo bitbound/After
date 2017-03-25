@@ -18,7 +18,12 @@ After.Temp.Login.Init = function () {
             return;
         };
         $("#buttonLogin").attr("disabled", true);
-        var logonRequest = { Type: "Logon", Username: strUsername, Password: strPassword };
+        var logonRequest = {
+            "Category": "Accounts",
+            "Type": "Logon",
+            "Username": strUsername,
+            "Password": strPassword
+        };
         sessionStorage["Username"] = logonRequest.Username;
         After.Connection.Socket.send(JSON.stringify(logonRequest));
     };

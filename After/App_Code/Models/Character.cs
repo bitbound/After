@@ -16,7 +16,7 @@ namespace After.Models
             CurrentCharge = 0;
             CurrentWillpower = 100;
         }
-        public int CharacterID { get; set; }
+        public long CharacterID { get; set; }
         public string Name { get; set; }
         public string Color { get; set; } = "gray";
         public string PortraitUri { get; set; }
@@ -86,8 +86,8 @@ namespace After.Models
             }
         }
 
-        public Location PreviousLocation { get; set; }
-        public Location CurrentLocation { get; set; }
+        public virtual Location PreviousLocation { get; set; }
+        public virtual Location CurrentLocation { get; set; }
         public double ViewDistance { get; set; } = 2;
 
         public bool IsCharging { get; set; }
@@ -112,6 +112,6 @@ namespace After.Models
         {
             return false;
         }
-        public virtual ICollection<BaseInteraction> Interactions { get; set; }
+        public string Interactions { get; set; }
     }
 }

@@ -48,9 +48,11 @@ After.Temp.Splash = {
             $(document.body).append(data);
             $(document.body).one("click", function () {
                 $("img").css("opacity", 1);
+                After.Temp.Splash.Skipped = true;
+                After.Temp.Splash.RaiseParticle();
             });
             $('#imgBlog').click(function () {
-                $('body').fadeOut(function () {
+                $("#divSplash").fadeOut(function () {
                     window.location.assign("https://blog.after-game.net");
                 });
             });
@@ -61,8 +63,10 @@ After.Temp.Splash = {
                 });
             });
 
-            $('#imgTitle').animate({ opacity: "1" }, 2000, function () {
-                After.Temp.Splash.RaiseParticle();
+            $('#imgTitle').animate({ opacity: "1" }, 2000, function() {
+                if (!After.Temp.Splash.Skipped) {
+                    After.Temp.Splash.RaiseParticle();
+                }
                 $('#imgTunnel').animate({ opacity: "1" }, 2000, function () {
                     After.Temp.Splash.Glow();
                     $('#imgPlay').animate({ opacity: "1" }, 2000);

@@ -1,11 +1,11 @@
 @{
     if (!Request.IsSecureConnection && !Request.IsLocal)
     {
-        Response.RedirectPermanent("https://play.after-game.net", true);
+        Response.RedirectPermanent("https://after-game.net", true);
     }
     if (Context.IsWebSocketRequest)
     {
-        Microsoft.Web.WebSockets.WebSocketExtensions.AcceptWebSocketRequest(Context, new After.SocketHandler());
+        Microsoft.Web.WebSockets.WebSocketExtensions.AcceptWebSocketRequest(Context, new After.Socket_Handler());
         return;
     }
 }
@@ -43,6 +43,10 @@
     <script src="~/Scripts/Canvas.js"></script>
     <script src="~/Scripts/Drawing.js"></script>
     <script src="~/Scripts/Utilities.js"></script>
+    <script src="~/Scripts/Socket_Handlers/Accounts.js"></script>
+    <script src="~/Scripts/Socket_Handlers/Events.js"></script>
+    <script src="~/Scripts/Socket_Handlers/Messages.js"></script>
+    <script src="~/Scripts/Socket_Handlers/Queries.js"></script>
     <script defer src="/Scripts/Init.js"></script>
 </body>
 </html>
