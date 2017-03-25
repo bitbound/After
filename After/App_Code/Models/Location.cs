@@ -87,5 +87,12 @@ namespace After.Models
                 Math.Pow(FromLocation.YCoord - YCoord, 2)
             );
         }
+        public List<Location> GetNearbyLocations(double Distance)
+        {
+            var locations = World.Current.Locations.Where(l => l.ZCoord == this.ZCoord &&
+            Math.Abs(l.XCoord - this.XCoord) <= Distance &&
+            Math.Abs(l.YCoord - this.YCoord) <= Distance);
+            return locations?.ToList();
+        }
     }
 }

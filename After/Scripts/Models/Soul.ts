@@ -1,6 +1,6 @@
 ﻿namespace After.Models {
     export class Soul {
-        constructor () {
+        constructor() {
             this.Type = "Soul";
             this.Name = "";
             this.XCoord = 0;

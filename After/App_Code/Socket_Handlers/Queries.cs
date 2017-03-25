@@ -17,24 +17,24 @@ namespace After.Socket_Handlers
         public static void HandleFirstLoad(dynamic jsonMessage, Socket_Handler SH)
         {
             jsonMessage.Player = SH.Player;
-            var souls = new List<dynamic>
-            {
-                new
-                {
-                    Name = SH.Player.Name,
-                    Color = SH.Player.Color,
-                    XCoord = SH.Player.CurrentLocation.XCoord,
-                    YCoord = SH.Player.CurrentLocation.YCoord,
-                    ZCoord = SH.Player.CurrentLocation.ZCoord
-                }
-            };
-            jsonMessage.Souls = souls;
-            // TODO: Add nearby souls.
+            var souls = new List<dynamic>();
             var areas = new List<dynamic>();
-            foreach (var area in World.Current.Locations.Where(l => l.ZCoord == SH.Player.CurrentLocation.ZCoord &&
-            Math.Abs(l.XCoord - SH.Player.CurrentLocation.XCoord) <= SH.Player.ViewDistance &&
-            Math.Abs(l.YCoord - SH.Player.CurrentLocation.YCoord) <= SH.Player.ViewDistance))
+            foreach (var area in SH.Player.CurrentLocation.GetNearbyLocations(SH.Player.ViewDistance))
             {
+                foreach (var character in area.Occupants)
+                {
+                    souls.Add(
+                        new
+                        {
+                            Name = character.Name,
+                            Color = character.Color,
+                            XCoord = area.XCoord,
+                            YCoord = area.YCoord,
+                            ZCoord = area.ZCoord
+                        }
+                    );
+                }
+
                 areas.Add(new
                 {
                     Type = "Area",
@@ -47,6 +47,7 @@ namespace After.Socket_Handlers
                     InvestedWillpower = area.InvestedWillpower
                 });
             }
+            jsonMessage.Souls = souls;
             jsonMessage.Areas = areas;
             SH.Send(Json.Encode(jsonMessage));
         }
