@@ -31,6 +31,13 @@ var After;
                     }
                     After.World_Data.Souls.push(soul);
                 });
+                jsonMessage.Areas.forEach(function (value, index) {
+                    var area = new After.Models.Area(value.XCoord, value.YCoord, value.ZCoord);
+                    for (var prop in value) {
+                        area[prop] = value[prop];
+                    }
+                    After.World_Data.Areas.push(area);
+                });
                 After.Me.UpdateStatsUI();
             }
             Queries.HandleFirstLoad = HandleFirstLoad;

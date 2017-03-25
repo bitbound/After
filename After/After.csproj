@@ -225,7 +225,6 @@
     <Content Include="App_Code\Models\Hostile.cs" />
     <Content Include="App_Code\Models\NPC.cs" />
     <Content Include="App_Code\Models\Player.cs" />
-    <Content Include="App_Code\Models\SavedGame.cs" />
     <Content Include="App_Code\Models\World.cs" />
     <Content Include="App_Code\Socket_Handler.cs" />
     <Content Include="App_Code\Utilities.cs" />

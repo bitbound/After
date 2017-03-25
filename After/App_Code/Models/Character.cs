@@ -2,7 +2,8 @@ using After.Interactions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
+using System.Web.Script.Serialization;
 
 namespace After.Models
 {
@@ -85,9 +86,23 @@ namespace After.Models
                 return CurrentWillpower / MaxWillpower;
             }
         }
-
-        public virtual Location PreviousLocation { get; set; }
-        public virtual Location CurrentLocation { get; set; }
+        public Location PreviousLocation
+        {
+            get
+            {
+                return World.Current.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
+            }
+        }
+        public string PreviousXYZ { get; set; }
+        [ScriptIgnore]
+        public Location CurrentLocation
+        {
+            get
+            {
+                return World.Current.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+            }
+        }
+        public string CurrentXYZ { get; set; }
         public double ViewDistance { get; set; } = 2;
 
         public bool IsCharging { get; set; }

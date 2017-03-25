@@ -724,6 +724,14 @@ var After;
                 $(".dpad-direction").on("click", function (e) {
                     After.Me.Move($(e.currentTarget).attr("move-direction"));
                 });
+                After.Controls.Game.PositionSideTabs();
+            },
+            PositionSideTabs: function () {
+                var top = 0;
+                $("#divSideTabs").find(".side-tab-icon:visible").each(function (index, elem) {
+                    elem.style.top = String(top) + "px";
+                    top += 65;
+                });
             }
         };
     })(Controls = After.Controls || (After.Controls = {}));

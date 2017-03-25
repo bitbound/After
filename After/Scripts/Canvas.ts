@@ -37,12 +37,19 @@
                     return false;
                 }
             });
-            if (After.Canvas.SelectedObject) {
-                After.Canvas.SelectedObject.IsSelected = false;
+            if (After.Canvas.SelectedObject == area[0])
+            {
+                After.Canvas.SelectedObject.IsSelected = !After.Canvas.SelectedObject.IsSelected;
             }
-            After.Canvas.SelectedObject = area[0];
-            if (After.Canvas.SelectedObject) {
-                After.Canvas.SelectedObject.IsSelected = true;
+            else
+            {
+                if (After.Canvas.SelectedObject) {
+                    After.Canvas.SelectedObject.IsSelected = false;
+                }
+                After.Canvas.SelectedObject = area[0];
+                if (After.Canvas.SelectedObject) {
+                    After.Canvas.SelectedObject.IsSelected = true;
+                }
             }
         },
         ApplyInertia: function () {

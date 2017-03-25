@@ -50,6 +50,7 @@ var After;
                     "left": "50%",
                     "transform": "translateX(-50%)",
                     "z-index": "3",
+                    "box-shadow": "10px 10px 5px rgba(255,255,255,.15)"
                 });
                 divError.appendChild(divMessage);
                 divError.appendChild(buttonRefresh);
@@ -78,6 +79,7 @@ var After;
                     "left": "50%",
                     "transform": "translateX(-50%)",
                     "z-index": "3",
+                    "box-shadow": "10px 10px 5px rgba(255,255,255,.15)"
                 });
                 divError.appendChild(divMessage);
                 divError.appendChild(buttonRefresh);
@@ -85,6 +87,9 @@ var After;
             };
             After.Connection.Socket.onmessage = function (e) {
                 var jsonMessage = JSON.parse(e.data);
+                if (typeof jsonMessage.Category == "undefined" || typeof jsonMessage.Type == "undefined") {
+                    throw "Error handling message: " + e.data;
+                }
                 eval("After.Socket_Handlers." + jsonMessage.Category + "." + "Handle" + jsonMessage.Type + "(jsonMessage);");
                 var divChat = document.getElementById("divChatMessageWindow");
                 if (divChat != null) {

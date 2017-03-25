@@ -20,6 +20,7 @@ After.Temp.Intro.Start = function () {
                                             document.getElementById("audioHeartbeat").play();
                                             window.setTimeout(function () {
                                                 ATI.Narrate();
+                                                $("#buttonSkip").fadeIn();
                                             }, 1000)
                                         }
                                     });

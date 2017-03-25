@@ -7,8 +7,8 @@ namespace After.Models
     {
         public long MessageID { get; set; }
         public Message_Types Message_Type { get; set; }
-        public virtual Player Sender { get; set; }
-        public virtual Player Recipient { get; set; }
+        public string Sender { get; set; }
+        public string Recipient { get; set; }
         public DateTime? Timestamp { get; set; }
         public string Content { get; set; }
 

@@ -13,6 +13,9 @@
         YCoord: number;
         ZCoord: string;
         Color: string;
+        Title: string;
+        Description: string;
+        InvestedWillpower: number;
         IsSelected: boolean;
     }
 }

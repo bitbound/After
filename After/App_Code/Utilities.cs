@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Web;
 using System.Web.Helpers;
+using System.Web.Script.Serialization;
 
 /// <summary>
 /// Summary description for Utilities
@@ -13,13 +14,6 @@ namespace After
 {
     public static class Utilities
     {
-        public static HttpContext HTTPContext
-        {
-            get
-            {
-                return HttpContext.Current;
-            }
-        }
         public static dynamic Clone(dynamic JsonData)
         {
             var strData = Json.Encode(JsonData);

@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-
 namespace After.Models
 {
     public class Location
@@ -33,12 +32,33 @@ namespace After.Models
         public string Description { get; set; }
         public bool IsStatic { get; set; }
         public DateTime? LastVisited { get; set; }
-        public virtual Player LastVisitedBy { get; set; }
-        public int InvestedWillpower { get; set; }
-        
-        public virtual ICollection<Character> Occupants { get; set; }
+        public string LastVisitedBy { get; set; }
+        public long InvestedWillpower { get; set; }
+        public List<Character> Occupants
+        {
+            get
+            {
+                var occupants = new List<Character>();
+                var npcs = World.Current.NPCs.Where(n => n.CurrentXYZ == this.LocationID);
+                if (npcs != null)
+                {
+                    occupants.AddRange(npcs);
+                }
+                var hostiles = World.Current.Hostiles.Where(h => h.CurrentXYZ == this.LocationID);
+                if (hostiles != null)
+                {
+                    occupants.AddRange(hostiles);
+                }
+                var players = World.Current.Players.Where(p => p.CurrentXYZ == this.LocationID);
+                if (players != null)
+                {
+                    occupants.AddRange(players);
+                }
+                return occupants;
+            }
+        }
         public bool IsInnerVoid { get; set; }
-        public virtual Player Owner { get; set; }
+        public long OwnerID { get; set; }
         public string Interactions { get; set; }
 
         public static bool Exists(string XYZ)
@@ -51,18 +71,6 @@ namespace After.Models
             {
                 return false;
             }
-        }
-        public void AddOccupant(Character AddedOccupant)
-        {
-            if (Occupants.ToList().Exists(chara => chara.CharacterID == AddedOccupant.CharacterID))
-            {
-                RemoveOccupant(AddedOccupant);
-            }
-            Occupants.Add(AddedOccupant);
-        }
-        public void RemoveOccupant(Character CharacterObject)
-        {
-            Occupants.Remove(Occupants.FirstOrDefault(cha => cha.CharacterID == CharacterObject.CharacterID));
         }
         public bool ContainsOccupant(Character CharacterObject)
         {

@@ -68,7 +68,16 @@
                 <div class="tab-innerframe"></div>
             </div>
         </div>
-
+        <div id="divSettingsFrame" class="side-tab-frame transparent-menu">
+            <div id="divSettingsIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/gear_32xLG.png" />
+                <br />
+                <span>Settings</span>
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe"></div>
+            </div>
+        </div>
         <div id="divMoreTabsFrame" class="side-tab-frame transparent-menu">
             <div id="divMoreTabsIconBorder" class="side-tab-icon transparent-menu font-sansserif">
                 <img src="/Assets/Images/Icons/Ellipsis_inverse_16x.png" />
@@ -80,16 +89,6 @@
             </div>
         </div>
 
-        <div id="divSettingsFrame" class="side-tab-frame transparent-menu">
-            <div id="divSettingsIconBorder" class="side-tab-icon transparent-menu font-sansserif">
-                <img src="/Assets/Images/Icons/gear_32xLG.png" />
-                <br />
-                <span>Settings</span>
-            </div>
-            <div class="tab-outerframe">
-                <div class="tab-innerframe"></div>
-            </div>
-        </div>
     </div>
 
     <div id="divDPad" class="transparent-menu">
@@ -360,7 +359,7 @@
             bottom: 155px;
             overflow: visible;
         }
-        #divCharacterIconBorder {
+        /*#divCharacterIconBorder {
             top: 0;
         }
         #divPowersIconBorder {
@@ -374,7 +373,7 @@
         }
         #divSettingsIconBorder {
             top: 260px;
-        }
+        }*/
         .side-tab-frame {
             position: absolute;
             right: 0;
@@ -420,9 +419,9 @@
             border-left: 3px solid white;
             border-top: 3px solid white;
             font-size: .8em;
+            cursor: default;
             color: white;
             text-align: center;
-            cursor: pointer;
             -moz-user-select: none;
             -ms-user-select: none;
             -webkit-user-select: none;

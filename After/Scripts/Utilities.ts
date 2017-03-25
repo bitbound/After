@@ -190,6 +190,38 @@
             g = parseInt(g, 16);
             b = parseInt(b, 16);
             return 'rgb(' + r + ',' + g + ',' + b + ')';
+        },
+        ShowDialog: function(Message:string, TextColor:string, ButtonText:string, ButtonAction: ()=>void) {
+            var divOuter = document.createElement("div");
+            var divMessage = document.createElement("div");
+            var buttonAction = document.createElement("button");
+            divMessage.innerHTML = Message;
+            buttonAction.innerHTML = ButtonText;
+            buttonAction.type = "button";
+            buttonAction.removeAttribute("style");
+            buttonAction.style.setProperty("float", "right");
+            buttonAction.style.setProperty("margin-top", "20px");
+            buttonAction.onclick = function() {
+                ButtonAction();
+                $(divOuter).remove();
+            };
+            $(divOuter).css({
+                "position": "absolute",
+                "padding": "20px",
+                "font-weight": "bold",
+                "background-color": "lightgray",
+                "color": TextColor,
+                "border-radius": "10px",
+                "border": "2px solid dimgray",
+                "top": "40%",
+                "left": "50%",
+                "transform": "translateX(-50%)",
+                "z-index": "3",
+                "box-shadow": "10px 10px 5px rgba(255,255,255,.15)"
+            });
+            divOuter.appendChild(divMessage);
+            divOuter.appendChild(buttonAction);
+            $(document.body).append(divOuter);
         }
     }
 }

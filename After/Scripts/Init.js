@@ -11,7 +11,12 @@
             StackTrace: e.originalEvent.error.stack
         }
         $.post(window.location.origin + "/Services/ErrorReporting.cshtml", JSON.stringify(error));
-        alert(e.originalEvent.message);
+        if (After.Debug) {
+            alert("Unhandled Error: " + JSON.stringify(error));
+        }
+        else {
+            console.log("Unhandled Error: " + JSON.stringify(error));
+        }
         throw e;
     });
     After.Temp.W = document.documentElement.clientWidth;
