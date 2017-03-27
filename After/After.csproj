@@ -175,9 +175,9 @@
     <Content Include="Scripts\Models\Bases\Selectable.js.map" />
     <Content Include="Scripts\Models\Particle.js.map" />
     <Content Include="Scripts\Models\Soul.js.map" />
-    <TypeScriptCompile Include="Scripts\Socket_Handlers\Accounts.ts" />
-    <TypeScriptCompile Include="Scripts\Socket_Handlers\Events.ts" />
-    <TypeScriptCompile Include="Scripts\Socket_Handlers\Messages.ts" />
+    <TypeScriptCompile Include="Scripts\Message_Handlers\Accounts.ts" />
+    <TypeScriptCompile Include="Scripts\Message_Handlers\Events.ts" />
+    <TypeScriptCompile Include="Scripts\Message_Handlers\Messages.ts" />
     <Content Include="Scripts\Utilities.js.map" />
     <Content Include="Services\ErrorReporting.cshtml" />
     <Content Include="tsconfig.json" />
@@ -228,10 +228,10 @@
     <Content Include="App_Code\Models\World.cs" />
     <Content Include="App_Code\Socket_Handler.cs" />
     <Content Include="App_Code\Utilities.cs" />
-    <Content Include="App_Code\Socket_Handlers\Accounts.cs" />
-    <Content Include="App_Code\Socket_Handlers\Events.cs" />
-    <Content Include="App_Code\Socket_Handlers\Messages.cs" />
-    <Content Include="App_Code\Socket_Handlers\Queries.cs" />
+    <Content Include="App_Code\Message_Handlers\Accounts.cs" />
+    <Content Include="App_Code\Message_Handlers\Events.cs" />
+    <Content Include="App_Code\Message_Handlers\Messages.cs" />
+    <Content Include="App_Code\Message_Handlers\Queries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -244,7 +244,7 @@
     <TypeScriptCompile Include="Scripts\Models\Bases\Selectable.ts" />
     <TypeScriptCompile Include="Scripts\Models\Particle.ts" />
     <TypeScriptCompile Include="Scripts\Models\Soul.ts" />
-    <TypeScriptCompile Include="Scripts\Socket_Handlers\Queries.ts" />
+    <TypeScriptCompile Include="Scripts\Message_Handlers\Queries.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\Utilities.ts" />
   </ItemGroup>

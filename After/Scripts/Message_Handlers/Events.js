@@ -1,7 +1,7 @@
 var After;
 (function (After) {
-    var Socket_Handlers;
-    (function (Socket_Handlers) {
+    var Message_Handlers;
+    (function (Message_Handlers) {
         var Events;
         (function (Events) {
             function HandleStartCharging(jsonMessage) {
@@ -48,7 +48,7 @@ var After;
                 After.Me.IsCharging = false;
             }
             Events.HandleStopCharging = HandleStopCharging;
-        })(Events = Socket_Handlers.Events || (Socket_Handlers.Events = {}));
-    })(Socket_Handlers = After.Socket_Handlers || (After.Socket_Handlers = {}));
+        })(Events = Message_Handlers.Events || (Message_Handlers.Events = {}));
+    })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));
 //# sourceMappingURL=Events.js.map

@@ -9,7 +9,9 @@
     </div>
     <div style="text-align:center;">
         <img id="imgPlay" class="img-link" src="/Assets/Images/Play.png" style="opacity:0" />
-        <img id="imgBlog" class="img-link" src="/Assets/Images/DevBlog.png" style="opacity:0" />
+        <a href="https://blog.after-game.net" target="_blank">
+            <img id="imgBlog" class="img-link" src="/Assets/Images/DevBlog.png" style="opacity:0" />
+        </a>
     </div>
     <div style="margin-top:50px;text-align: right; color:white; font-size:50%">
         Sound by <a href="http://www.freesound.org/people/ceich93/">Operation Contrast</a> at FreeSound.org.
@@ -57,6 +59,21 @@
         }
         #divSplash .img-link:hover {
             border: 2px solid white;
+        }
+        .glowing {
+            animation-name: glowing;
+            animation-duration: 3s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+        @keyframes glowing {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: .5;
+            }
         }
     </style>
 </div>

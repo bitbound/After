@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 
-namespace After.Socket_Handlers
+namespace After.Message_Handlers
 {
     public static class Accounts
     {
@@ -53,6 +53,12 @@ namespace After.Socket_Handlers
                 jsonMessage.Result = "failed";
                 SH.Send(Json.Encode(jsonMessage));
                 return;
+            }
+            if (Socket_Handler.SocketCollection.Any(s=>(s as Socket_Handler)?.Player.Name.ToLower() == playerName.ToLower()))
+            {
+                var existing = Socket_Handler.SocketCollection.FirstOrDefault(s => (s as Socket_Handler)?.Player.Name.ToLower() == playerName.ToLower());
+                // TODO: Send notification to existing and new.
+                existing.Close();
             }
             SH.Authenticated = true;
             Socket_Handler.SocketCollection.Add(SH);

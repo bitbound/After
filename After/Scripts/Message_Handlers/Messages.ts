@@ -1,4 +1,4 @@
-﻿namespace After.Socket_Handlers.Messages {
+﻿namespace After.Message_Handlers.Messages {
     export function HandleChat(jsonMessage) {
         switch (jsonMessage.Channel) {
             case "Global":

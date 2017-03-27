@@ -1,7 +1,7 @@
 var After;
 (function (After) {
-    var Socket_Handlers;
-    (function (Socket_Handlers) {
+    var Message_Handlers;
+    (function (Message_Handlers) {
         var Messages;
         (function (Messages) {
             function HandleChat(jsonMessage) {
@@ -23,7 +23,7 @@ var After;
             }
             Messages.HandleChat = HandleChat;
             ;
-        })(Messages = Socket_Handlers.Messages || (Socket_Handlers.Messages = {}));
-    })(Socket_Handlers = After.Socket_Handlers || (After.Socket_Handlers = {}));
+        })(Messages = Message_Handlers.Messages || (Message_Handlers.Messages = {}));
+    })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));
 //# sourceMappingURL=Messages.js.map

@@ -1,7 +1,7 @@
 var After;
 (function (After) {
-    var Socket_Handlers;
-    (function (Socket_Handlers) {
+    var Message_Handlers;
+    (function (Message_Handlers) {
         var Queries;
         (function (Queries) {
             function HandleStatUpdate(jsonMessage) {
@@ -41,7 +41,7 @@ var After;
                 After.Me.UpdateStatsUI();
             }
             Queries.HandleFirstLoad = HandleFirstLoad;
-        })(Queries = Socket_Handlers.Queries || (Socket_Handlers.Queries = {}));
-    })(Socket_Handlers = After.Socket_Handlers || (After.Socket_Handlers = {}));
+        })(Queries = Message_Handlers.Queries || (Message_Handlers.Queries = {}));
+    })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));
 //# sourceMappingURL=Queries.js.map

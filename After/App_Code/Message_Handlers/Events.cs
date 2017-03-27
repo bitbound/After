@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 
-namespace After.Socket_Handlers
+namespace After.Message_Handlers
 {
     public static class Events
     {

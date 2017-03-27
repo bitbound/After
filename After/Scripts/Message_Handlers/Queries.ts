@@ -1,4 +1,4 @@
-﻿namespace After.Socket_Handlers.Queries {
+﻿namespace After.Message_Handlers.Queries {
     export function HandleStatUpdate(jsonMessage) {
         After.Me[jsonMessage.Stat] = jsonMessage.Amount;
         After.Me.UpdateStatsUI();

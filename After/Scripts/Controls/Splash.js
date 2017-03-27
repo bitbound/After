@@ -1,12 +1,5 @@
 ﻿After.Temp = After.Temp || {};
 After.Temp.Splash = {
-    Glow: function () {
-        $('#imgTunnel').animate({ opacity: "0.5" }, 3000, function () {
-            $('#imgTunnel').animate({ opacity: "1" }, 3000, function () {
-                After.Temp.Splash.Glow();
-            });
-        });
-    },
     RaiseParticle: function () {
         try {
             var rectList = document.getElementById("imgTunnel").getBoundingClientRect();
@@ -51,11 +44,6 @@ After.Temp.Splash = {
                 After.Temp.Splash.Skipped = true;
                 After.Temp.Splash.RaiseParticle();
             });
-            $('#imgBlog').click(function () {
-                $("#divSplash").fadeOut(function () {
-                    window.location.assign("https://blog.after-game.net");
-                });
-            });
             $('#imgPlay').click(function () {
                 $("#divSplash").fadeOut('slow',function () {
                     $("#divSplash").remove();
@@ -68,7 +56,7 @@ After.Temp.Splash = {
                     After.Temp.Splash.RaiseParticle();
                 }
                 $('#imgTunnel').animate({ opacity: "1" }, 2000, function () {
-                    After.Temp.Splash.Glow();
+                    $('#imgTunnel').addClass("glowing");
                     $('#imgPlay').animate({ opacity: "1" }, 2000);
                     $('#imgBlog').animate({ opacity: "1" }, 2000, function () {
                     });

@@ -89,7 +89,7 @@
                 if (typeof jsonMessage.Category == "undefined" || typeof jsonMessage.Type == "undefined") {
                     throw "Error handling message: " + e.data;
                 }
-                eval("After.Socket_Handlers." + jsonMessage.Category + "." + "Handle" + jsonMessage.Type + "(jsonMessage);");
+                eval("After.Message_Handlers." + jsonMessage.Category + "." + "Handle" + jsonMessage.Type + "(jsonMessage);");
                 var divChat = document.getElementById("divChatMessageWindow");
                 if (divChat != null) {
                     divChat.scrollTop = divChat.scrollHeight;

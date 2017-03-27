@@ -1,7 +1,7 @@
 var After;
 (function (After) {
-    var Socket_Handlers;
-    (function (Socket_Handlers) {
+    var Message_Handlers;
+    (function (Message_Handlers) {
         var Accounts;
         (function (Accounts) {
             function HandleAccountCreation(jsonMessage) {
@@ -55,7 +55,7 @@ var After;
             }
             Accounts.HandleLogoff = HandleLogoff;
             ;
-        })(Accounts = Socket_Handlers.Accounts || (Socket_Handlers.Accounts = {}));
-    })(Socket_Handlers = After.Socket_Handlers || (After.Socket_Handlers = {}));
+        })(Accounts = Message_Handlers.Accounts || (Message_Handlers.Accounts = {}));
+    })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));
 //# sourceMappingURL=Accounts.js.map

@@ -1,4 +1,4 @@
-﻿namespace After.Socket_Handlers.Accounts {
+﻿namespace After.Message_Handlers.Accounts {
     export function HandleAccountCreation(jsonMessage) {
         if (sessionStorage["Username"] == jsonMessage.Username) {
             if (jsonMessage.Result == "ok") {

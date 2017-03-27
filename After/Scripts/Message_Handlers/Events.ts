@@ -1,4 +1,4 @@
-﻿namespace After.Socket_Handlers.Events {
+﻿namespace After.Message_Handlers.Events {
     export function HandleStartCharging(jsonMessage) {
         $("#buttonCharge").removeAttr("disabled");
         if (jsonMessage.Result == "ok") {
