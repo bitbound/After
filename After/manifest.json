@@ -1,0 +1,25 @@
+﻿{
+  "name": "After",
+  "short_name": "After",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "black",
+  "description": "A MUD-like, infinite-progression, online RPG.",
+  "icons": [
+    {
+      "src": "/Assets/Images/A-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/Assets/Images/A-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web"
+    }
+  ]
+}

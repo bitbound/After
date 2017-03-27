@@ -43,7 +43,7 @@ namespace After
                     return;
                 }
             }
-            var methodHandler = Type.GetType("After.Socket_Handlers." + category).GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
+            var methodHandler = Type.GetType("After.Message_Handlers." + category).GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
             if (methodHandler != null)
             {
                 methodHandler.Invoke(null, new object[] { jsonMessage, this });

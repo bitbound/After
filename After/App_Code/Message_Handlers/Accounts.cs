@@ -61,6 +61,8 @@ namespace After.Message_Handlers
                 existing.Close();
             }
             SH.Authenticated = true;
+            SH.Player.IsCharging = false;
+            SH.Player.CurrentCharge = 0;
             Socket_Handler.SocketCollection.Add(SH);
             jsonMessage.Result = "ok";
             Socket_Handler.SocketCollection.Broadcast(Json.Encode(jsonMessage));
