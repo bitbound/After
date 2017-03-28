@@ -47,21 +47,27 @@ After.Temp.Splash = {
             $('#imgPlay').click(function () {
                 $("#divSplash").fadeOut('slow',function () {
                     $("#divSplash").remove();
+                    After.Audio.StopLoop();
                     After.Temp.Login.Init();
                 });
             });
-
-            $('#imgTitle').animate({ opacity: "1" }, 2000, function() {
-                if (!After.Temp.Splash.Skipped) {
-                    After.Temp.Splash.RaiseParticle();
+            // TODO: Reduce size.  Have a loading screen.
+            After.Audio.LoopSound("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3", function () {
+                if ($("#divSplash").length == 0) {
+                    After.Audio.StopLoop();
                 }
-                $('#imgTunnel').animate({ opacity: "1" }, 2000, function () {
-                    $('#imgTunnel').addClass("glowing");
-                    $('#imgPlay').animate({ opacity: "1" }, 2000);
-                    $('#imgBlog').animate({ opacity: "1" }, 2000, function () {
+                $('#imgTitle').animate({ opacity: "1" }, 2000, function () {
+                    if (!After.Temp.Splash.Skipped) {
+                        After.Temp.Splash.RaiseParticle();
+                    }
+                    $('#imgTunnel').animate({ opacity: "1" }, 2000, function () {
+                        $('#imgTunnel').addClass("glowing");
+                        $('#imgPlay').animate({ opacity: "1" }, 2000);
+                        $('#imgBlog').animate({ opacity: "1" }, 2000, function () {
+                        });
                     });
                 });
-            });
+            })
         });
     }
 }

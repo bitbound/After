@@ -52,15 +52,15 @@ After.Temp.CreateCharacter.Init = function () {
             ATI.canvasPreview.canvas.height = $("#divLogin").innerHeight() * .45;
             ATI.PreviewTop = Math.round(ATI.canvasPreview.canvas.height * .25);
             ATI.PreviewLeft = Math.round((ATI.canvasPreview.canvas.width / 2) - 50);
-            document.getElementById("audioDarkEmpty").play();
             document.getElementById("buttonSkip").onclick = function () {
                 $("#divIntro").hide();
-                document.getElementById("audioDarkEmpty").pause();
+                After.Audio.LoopSource.stop();
                 ATI.ShowFlybys = false;
                 $.get("/Controls/CreateAccount.html", function (data) {
                     $(document.body).append(data);
                 });
             };
+            After.Audio.LoopSource.start();
             ATI.CurrentPosition = 6;
             ATI.IsPaused = false;
             $("#divNarration").html("");

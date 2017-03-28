@@ -1,28 +1,45 @@
-var After;
-(function (After) {
-    After.Canvas = {
-        Element: {},
-        Context2D: {},
-        SelectedObject: {},
-        OffsetX: 0,
-        OffsetY: 0,
-        CurrentZ: 0,
-        Scale: 1,
-        ScaleChange: 1,
-        InertiaX: 0,
-        InertiaY: 0,
-        StartDragX: 0,
-        StartDragY: 0,
-        StartOffsetX: 0,
-        StartOffsetY: 0,
-        LastTouchPoint1: {},
-        LastTouchPoint2: {},
-        LastTouchDistance: 0,
-        InertiaStack: [],
-        IsPanning: false,
-        IsZooming: false,
-        FPSStack: new Array(),
-        SelectPoint: function (e) {
+﻿namespace After.Models.App {
+    export class Canvas {
+        constructor() {
+            this.OffsetX = 0;
+            this.OffsetY = 0;
+            this.CurrentZ = 0;
+            this.Scale = 1;
+            this.ScaleChange = 1;
+            this.InertiaX = 0;
+            this.InertiaY = 0;
+            this.StartDragX = 0;
+            this.StartDragY = 0;
+            this.StartOffsetX = 0;
+            this.StartOffsetY = 0;
+            this.LastTouchDistance = 0;
+            this.IsPanning = false;
+            this.IsZooming = false;
+            this.InertiaStack = new Array<any>();
+            this.FPSStack = new Array<number>();
+        }
+        Element: HTMLCanvasElement;
+        Context2D: CanvasRenderingContext2D;
+        SelectedObject: After.Models.Bases.Selectable;
+        OffsetX: number;
+        OffsetY: number;
+        CurrentZ: number;
+        Scale: number;
+        ScaleChange: number;
+        InertiaX: number;
+        InertiaY: number;
+        StartDragX: number;
+        StartDragY: number;
+        StartOffsetX: number;
+        StartOffsetY: number;
+        LastTouchPoint1: Touch;
+        LastTouchPoint2: Touch;
+        LastTouchDistance: number;
+        InertiaStack: Array<any>;
+        IsPanning: boolean;
+        IsZooming: boolean;
+        FPSStack: Array<number>;
+        SelectPoint(e: MouseEvent|Touch) {
             // TODO: Select object based on coords.
             var xTotal = e.clientX / After.Canvas.Scale - After.Canvas.OffsetX;
             var yTotal = e.clientY / After.Canvas.Scale - After.Canvas.OffsetY;
@@ -38,10 +55,12 @@ var After;
                     return false;
                 }
             });
-            if (After.Canvas.SelectedObject == area[0]) {
+            if (After.Canvas.SelectedObject != undefined && After.Canvas.SelectedObject == area[0])
+            {
                 After.Canvas.SelectedObject.IsSelected = !After.Canvas.SelectedObject.IsSelected;
             }
-            else {
+            else
+            {
                 if (After.Canvas.SelectedObject) {
                     After.Canvas.SelectedObject.IsSelected = false;
                 }
@@ -50,8 +69,8 @@ var After;
                     After.Canvas.SelectedObject.IsSelected = true;
                 }
             }
-        },
-        ApplyInertia: function () {
+        };
+        ApplyInertia() {
             After.Canvas.InertiaX = 0;
             After.Canvas.InertiaY = 0;
             After.Canvas.IsPanning = false;
@@ -108,6 +127,5 @@ var After;
                 }
             }, 20);
         }
-    };
-})(After || (After = {}));
-//# sourceMappingURL=Canvas.js.map
+    }
+}

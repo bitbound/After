@@ -18,14 +18,14 @@
             }
         }
         jsonMessage.Souls.forEach(function(value, index) {
-            var soul = new After.Models.Soul();
+            var soul = new After.Models.Game.Soul();
             for (var stat in value) {
                 soul[stat] = value[stat];
             }
             After.World_Data.Souls.push(soul);
         })
         jsonMessage.Areas.forEach(function(value, index) {
-            var area = new After.Models.Area(value.XCoord, value.YCoord, value.ZCoord);
+            var area = new After.Models.Game.Area(value.XCoord, value.YCoord, value.ZCoord);
             for (var prop in value) {
                 area[prop] = value[prop];
             }

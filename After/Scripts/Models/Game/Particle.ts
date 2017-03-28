@@ -1,4 +1,4 @@
-﻿namespace After.Models {
+﻿namespace After.Models.Game {
     export class Particle {
         CurrentX: number;
         FromX: number;

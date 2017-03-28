@@ -1,6 +1,6 @@
-﻿namespace After {
-    export const Utilities = {
-        NumberIsBetween: function (NumberAnalyzed, Min, Max, IncludeMinMax) {
+﻿namespace After.Models.App {
+    export class Utilities {
+        NumberIsBetween(NumberAnalyzed, Min, Max, IncludeMinMax) {
             if (IncludeMinMax) {
                 if (NumberAnalyzed == Min || NumberAnalyzed == Max) {
                     return true;
@@ -12,8 +12,8 @@
             else {
                 return false;
             }
-        },
-        GetRandom: function (Min, Max, Round) {
+        };
+        GetRandom(Min, Max, Round) {
             if (Min > Max) {
                 throw "Min must be less than max.";
             }
@@ -26,12 +26,12 @@
             else {
                 return result + Min;
             }
-        },
-        Delay: function (ms: number) {
+        };
+        Delay(ms: number) {
              return new Promise(resolve => setTimeout(resolve, ms));
-        },
-        ColorNames: ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenrod", "DarkGray", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "Goldenrod", "Gray", "Green", "GreenYellow", "Honeydew", "HotPink", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenrodYellow", "LightGreen", "LightGrey", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquamarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenrod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "Seashell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"],
-        ColorNameToHex: function (colour) {
+        };
+        get ColorNames() { return ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenrod", "DarkGray", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "Goldenrod", "Gray", "Green", "GreenYellow", "Honeydew", "HotPink", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenrodYellow", "LightGreen", "LightGrey", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquamarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenrod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "Seashell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"] };
+        ColorNameToHex(colour:string):string {
             var colours = {
                 "aliceblue": "#f0f8ff",
                 "antiquewhite": "#faebd7",
@@ -174,11 +174,13 @@
                 "yellowgreen": "#9acd32"
             };
 
-            if (typeof colours[colour.toLowerCase()] != 'undefined') return colours[colour.toLowerCase()];
+            if (typeof colours[colour.toLowerCase()] != 'undefined') {
+                return colours[colour.toLowerCase()];
+            }
 
-            return false;
-        },
-        HexToRGB: function (col) {
+            return "";
+        };
+        HexToRGB(col:string):string {
             var r, g, b;
             if (col.charAt(0) == '#') {
                 col = col.substr(1);
@@ -190,8 +192,8 @@
             g = parseInt(g, 16);
             b = parseInt(b, 16);
             return 'rgb(' + r + ',' + g + ',' + b + ')';
-        },
-        ShowDialog: function(Message:string, TextColor:string, ButtonText:string, ButtonAction: ()=>void) {
+        };
+        ShowDialog(Message:string, TextColor:string, ButtonText:string, ButtonAction: ()=>void) {
             var divOuter = document.createElement("div");
             var divMessage = document.createElement("div");
             var buttonAction = document.createElement("button");
@@ -222,6 +224,32 @@
             divOuter.appendChild(divMessage);
             divOuter.appendChild(buttonAction);
             $(document.body).append(divOuter);
+        };
+        ShowLoading() {
+            var frame = document.createElement("div");
+            frame.classList.add("loading-frame");
+            frame.id = "divLoadingFrame";
+            for (var i = 0; i < 10; i++) {
+                var track = document.createElement("div");
+                track.classList.add("loading-track");
+                var dot = document.createElement("div");
+                dot.classList.add("loading-dot");
+                //$(track).css("transform", "rotate(" + String(i * 36) + "deg)");
+                track.style.transform = "rotate(" + String(i * 36) + "deg)";
+                track.appendChild(dot);
+                frame.appendChild(track);
+            }
+            document.body.appendChild(frame);
+            var wait = 0;
+            $(frame).find(".loading-dot").each(function (index, elem) {
+                window.setTimeout(function () {
+                    elem.classList.add("loading-dot-animated");
+                }, wait);
+                wait += 300;
+            });
+        };
+        RemoveLoading() {
+            $("#divLoadingFrame").remove();
         }
     }
 }

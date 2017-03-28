@@ -1,6 +1,6 @@
-﻿namespace After {
-    export const Drawing = {
-        DrawCanvas: function () {
+﻿namespace After.Models.App {
+    export class Drawing {
+        DrawCanvas() {
             try {
                 After.Canvas.Context2D = After.Canvas.Context2D || (document.getElementById("#canvasMap") as HTMLCanvasElement).getContext("2d");
                 After.Canvas.Context2D.save();
@@ -27,8 +27,8 @@
                 window.requestAnimationFrame(After.Drawing.DrawCanvas);
                 throw e;
             }
-        },
-        DrawAreas: function () {
+        };
+        DrawAreas() {
             After.World_Data.Areas.forEach(function (value, index) {
                 After.Canvas.Context2D.save();
                 var scale = After.Canvas.Scale;
@@ -75,8 +75,8 @@
 
                 After.Canvas.Context2D.restore();
             });
-        },
-        DrawSouls: function () {
+        };
+        DrawSouls() {
             // TODO: Differentiate between self and others.
             After.World_Data.Souls.forEach(function (value, index) {
                 var c2d = After.Canvas.Context2D;
@@ -93,7 +93,7 @@
                 }
                 if (value.Particles.length < 50) {
                     for (var i = value.Particles.length; i < 50; i++) {
-                        var part = new After.Models.Particle();
+                        var part = new After.Models.Game.Particle();
                         part.CurrentX = After.Utilities.GetRandom(20, 35, true);
                         part.FromX = part.CurrentX;
                         part.ToX = After.Utilities.GetRandom(20, 35, true);

@@ -1,4 +1,4 @@
-﻿namespace After.Models {
+﻿namespace After.Models.Game {
     export class Area implements After.Models.Bases.Selectable {
         constructor(XCoord: number, YCoord: number, ZCoord: string) {
             this.Type = "Area";

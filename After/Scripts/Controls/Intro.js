@@ -8,26 +8,27 @@ After.Temp.Intro.Start = function () {
             $("#divIntro").animate({ opacity: 1 }, 2000, function () {
                 $("#svgRing1").animate({ opacity: 1 }, 1500);
                 $("#svgRing2").animate({ opacity: 1 }, 1500, function () {
-                    $("#svgSliver").show();
-                    document.getElementById("audioTeleport").play();
-                    $("#svgSliver").animate({ top: "20%" }, 500, function () {
-                        window.setTimeout(function () {
-                            $("#divPresents").animate({ opacity: 1 }, 2000, function () {
-                                window.setTimeout(function () {
-                                    $("#divLogo").animate({ opacity: 0 }, 1500, function () {
-                                        $("#divLogo").remove();
-                                        if (document.getElementById("audioHeartbeat") != null) {
-                                            document.getElementById("audioHeartbeat").play();
-                                            window.setTimeout(function () {
-                                                ATI.Narrate();
-                                                $("#buttonSkip").fadeIn();
-                                            }, 1000)
-                                        }
-                                    });
-                                }, 2000);
-                            });
-                        }, 1000);
-                    });
+                    After.Audio.LoadSound("/Assets/Sounds/gameaudio_teleport-space-morph.mp3", function () {
+                        $("#svgSliver").show();
+                        After.Audio.PlaySource.start();
+                        $("#svgSliver").animate({ top: "20%" }, 500, function () {
+                            window.setTimeout(function () {
+                                $("#divPresents").animate({ opacity: 1 }, 2000, function () {
+                                    window.setTimeout(function () {
+                                        $("#divLogo").animate({ opacity: 0 }, 1500, function () {
+                                            $("#divLogo").remove();
+                                            After.Audio.LoopSound("/Assets/Sounds/urupin__heartbeat.mp3", function () {
+                                                window.setTimeout(function () {
+                                                    ATI.Narrate();
+                                                    $("#buttonSkip").fadeIn();
+                                                }, 1000)
+                                            })
+                                        });
+                                    }, 2000);
+                                });
+                            }, 1000);
+                        });
+                    })
                 })
             });
         });
@@ -38,11 +39,12 @@ After.Temp.Intro.Start = function () {
         ATI.Skip = function () {
             $("#divIntro").hide();
             $("#divLogo").hide();
-            document.getElementById("audioHeartbeat").pause();
-            document.getElementById("audioHeartbeat").remove();
+            After.Audio.StopLoop();
             $.get("/Controls/CreateCharacter.html", function (data) {
                 $(document.body).append(data);
-                After.Temp.CreateCharacter.Init();
+                After.Audio.LoadLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", function () {
+                    After.Temp.CreateCharacter.Init();
+                });
             });
         };
         ATI.Narrate = function () {
@@ -50,7 +52,7 @@ After.Temp.Intro.Start = function () {
             window.setTimeout(function () {
                 if (ATI.CurrentPosition == ATI.AllLines.length) {
                     $("#divIntro").hide();
-                    document.getElementById("audioDarkEmpty").pause();
+                    After.Audio.StopLoop();
                     $.get("/Controls/CreateAccount.html", function (data) {
                         $(document.body).append(data);
                     });
@@ -80,12 +82,14 @@ After.Temp.Intro.Start = function () {
                         $("#divIntro").click(function () {
                             ATI.IsPaused = false;
                             if ($("#divNarration").text().search("Your passing was") > -1) {
-                                document.getElementById("audioHeartbeat").pause();
+                                After.Audio.StopLoop();
                                 $("#divNarration").html("");
                                 $("#divIntro").hide();
                                 $.get("/Controls/CreateCharacter.html", function (data) {
                                     $(document.body).append(data);
-                                    After.Temp.CreateCharacter.Init();
+                                    After.Audio.LoadLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", function () {
+                                        After.Temp.CreateCharacter.Init();
+                                    });
                                 });
                             }
                             else {

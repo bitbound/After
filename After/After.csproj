@@ -147,7 +147,9 @@
     <Content Include="Assets\Images\Tunnel and Shadow.png" />
     <Content Include="Assets\Images\Tunnel.png" />
     <Content Include="Assets\Sounds\ceich93_drone-ominousdistortion.mp3" />
+    <Content Include="Assets\Sounds\ceich93_drone-ominousdistortion_original.mp3" />
     <Content Include="Assets\Sounds\ceich93__drone-darkemptiness.mp3" />
+    <Content Include="Assets\Sounds\ceich93__drone-darkemptiness_original.mp3" />
     <Content Include="Assets\Sounds\gameaudio_teleport-space-morph.mp3" />
     <Content Include="Assets\Sounds\SoundCredits.txt" />
     <Content Include="Assets\Sounds\urupin__heartbeat.mp3" />
@@ -159,11 +161,12 @@
     <Content Include="Controls\Splash.html" />
     <Content Include="Global.asax" />
     <Content Include="default.cshtml" />
-    <Content Include="Scripts\Canvas.js.map" />
-    <Content Include="Scripts\Connection.js.map" />
+    <Content Include="Scripts\Models\App\Audio.js" />
+    <Content Include="Scripts\Models\App\Canvas.js.map" />
+    <Content Include="Scripts\Models\App\Connection.js.map" />
     <Content Include="Scripts\Controls\Game.js.map" />
     <Content Include="Scripts\Controls\Splash.js" />
-    <Content Include="Scripts\Drawing.js.map" />
+    <Content Include="Scripts\Models\App\Drawing.js.map" />
     <Content Include="packages.config" />
     <Content Include="manifest.json" />
     <None Include="Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
@@ -171,21 +174,22 @@
     <Content Include="Scripts\jQuery\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jQuery\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jQuery\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\MainModel.js.map" />
-    <Content Include="Scripts\Models\Area.js.map" />
-    <Content Include="Scripts\Models\Bases\Selectable.js.map" />
-    <Content Include="Scripts\Models\Particle.js.map" />
-    <Content Include="Scripts\Models\Soul.js.map" />
+    <Content Include="Scripts\Models\App\MainModel.js.map" />
+    <Content Include="Scripts\Models\Game\Area.js.map" />
+    <Content Include="Scripts\Models\Game\Bases\Selectable.js.map" />
+    <Content Include="Scripts\Models\Game\Particle.js.map" />
+    <Content Include="Scripts\Models\Game\Soul.js.map" />
     <TypeScriptCompile Include="Scripts\Message_Handlers\Accounts.ts" />
     <TypeScriptCompile Include="Scripts\Message_Handlers\Events.ts" />
     <TypeScriptCompile Include="Scripts\Message_Handlers\Messages.ts" />
-    <Content Include="Scripts\Utilities.js.map" />
+    <Content Include="Scripts\Models\App\Utilities.js.map" />
     <Content Include="Services\ErrorReporting.cshtml" />
     <Content Include="tsconfig.json" />
     <Content Include="Scripts\jQuery\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jQuery\jquery-3.1.1.min.map" />
     <None Include="Properties\PublishProfiles\Localhost.pubxml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
+    <Content Include="Scripts\Models\App\Audio.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -194,23 +198,23 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\Canvas.js" />
-    <Content Include="Scripts\connection.js" />
+    <Content Include="Scripts\Models\App\Canvas.js" />
+    <Content Include="Scripts\Models\App\connection.js" />
     <Content Include="Scripts\Controls\CreateAccount.js" />
     <Content Include="Scripts\Controls\CreateCharacter.js" />
     <Content Include="Scripts\Controls\game.js" />
     <Content Include="Scripts\Controls\Intro.js" />
     <Content Include="Scripts\Controls\LoginForm.js" />
-    <Content Include="Scripts\Drawing.js" />
+    <Content Include="Scripts\Models\App\Drawing.js" />
     <Content Include="Scripts\Init.js" />
     <Content Include="Scripts\jQuery\jquery-3.1.0.js" />
     <Content Include="Scripts\jQuery\jquery-3.1.0.min.js" />
-    <Content Include="Scripts\MainModel.js" />
-    <Content Include="Scripts\Models\area.js" />
-    <Content Include="Scripts\Models\Bases\Selectable.js" />
-    <Content Include="Scripts\Models\Particle.js" />
-    <Content Include="Scripts\Models\soul.js" />
-    <Content Include="Scripts\Utilities.js" />
+    <Content Include="Scripts\Models\App\MainModel.js" />
+    <Content Include="Scripts\Models\Game\area.js" />
+    <Content Include="Scripts\Models\Game\Bases\Selectable.js" />
+    <Content Include="Scripts\Models\Game\Particle.js" />
+    <Content Include="Scripts\Models\Game\soul.js" />
+    <Content Include="Scripts\Models\App\Utilities.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="Styles.css" />
     <Content Include="Web.config" />
@@ -236,18 +240,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Canvas.ts" />
-    <TypeScriptCompile Include="Scripts\Connection.ts" />
+    <TypeScriptCompile Include="Scripts\Models\App\Audio.ts" />
+    <TypeScriptCompile Include="Scripts\Models\App\Canvas.ts" />
+    <TypeScriptCompile Include="Scripts\Models\App\Connection.ts" />
     <TypeScriptCompile Include="Scripts\Controls\Game.ts" />
-    <TypeScriptCompile Include="Scripts\Drawing.ts" />
-    <TypeScriptCompile Include="Scripts\MainModel.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Area.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Bases\Selectable.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Particle.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Soul.ts" />
+    <TypeScriptCompile Include="Scripts\Models\App\Drawing.ts" />
+    <TypeScriptCompile Include="Scripts\Models\App\MainModel.ts" />
+    <TypeScriptCompile Include="Scripts\Models\App\Me.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Game\Area.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Game\Bases\Selectable.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Game\Particle.ts" />
+    <TypeScriptCompile Include="Scripts\Models\Game\Soul.ts" />
     <TypeScriptCompile Include="Scripts\Message_Handlers\Queries.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\Utilities.ts" />
+    <TypeScriptCompile Include="Scripts\Models\App\Utilities.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

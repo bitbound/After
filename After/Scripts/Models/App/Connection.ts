@@ -1,14 +1,14 @@
-﻿namespace After {
-    export const Connection = {
-        Socket: <WebSocket>{ },
-        Init: function () {
-            if (Object.keys(After.Connection.Socket).length == 0 || After.Connection.Socket.readyState != WebSocket.OPEN) {
+﻿namespace After.Models.App {
+    export class Connection {
+        Socket: WebSocket;
+        Init() {
+            if (After.Connection.Socket == undefined|| After.Connection.Socket.readyState != WebSocket.OPEN) {
                 After.Connection.Socket = new WebSocket(location.origin.replace("http", "ws"));
                 After.Connection.SetHandlers();
             }
             return After.Connection.Socket;
-        },
-        SendChat: function (e) {
+        };
+        SendChat(e) {
             var strMessage = $("#inputChatInput").val();
             if (strMessage == "") {
                 return;
@@ -21,8 +21,8 @@
             };
             After.Connection.Socket.send(JSON.stringify(jsonMessage));
             $("#inputChatInput").val("");
-        },
-        SetHandlers: function () {
+        };
+        SetHandlers() {
             After.Connection.Socket.onopen = function () {
                 console.log("Connected.");
             };
