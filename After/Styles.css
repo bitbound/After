@@ -76,7 +76,7 @@ button:active {
 .loading-dot-animated {
     animation-name: loading-dot-animated;
     animation-direction: alternate;
-    animation-duration: 1.5s;
+    animation-duration: .75s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
 }
@@ -90,12 +90,6 @@ button:active {
     }
 }
 
-
-@-moz-keyframes name {
-}
-
-@-webkit-keyframes name {
-}
 @viewport {
     width: device-width;
 }

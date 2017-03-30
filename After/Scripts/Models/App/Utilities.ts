@@ -245,7 +245,7 @@
                 window.setTimeout(function () {
                     elem.classList.add("loading-dot-animated");
                 }, wait);
-                wait += 300;
+                wait += 150;
             });
         };
         RemoveLoading() {
