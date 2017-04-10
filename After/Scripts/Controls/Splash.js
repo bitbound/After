@@ -40,6 +40,7 @@ After.Temp.Splash = {
         $.get("/Controls/Splash.html", function (data) {
             $(document.body).append(data);
             $(document.body).one("click", function () {
+                $("#divLoadingFrame").remove();
                 $("img").css("opacity", 1);
                 After.Temp.Splash.Skipped = true;
                 After.Temp.Splash.RaiseParticle();

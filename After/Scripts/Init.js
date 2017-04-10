@@ -2,23 +2,23 @@
     if (window.location.href.search("localhost") > -1) {
         After.Debug = true;
     };
-    $(window).on("error", function (e) {
-        var error = {
-            Message: e.originalEvent.message,
-            TimeStamp: e.originalEvent.timeStamp,
-            Line: e.originalEvent.lineno,
-            Column: e.originalEvent.colno,
-            StackTrace: e.originalEvent.error.stack
-        }
-        $.post(window.location.origin + "/Services/ErrorReporting.cshtml", JSON.stringify(error));
-        if (After.Debug) {
-            alert("Unhandled Error: " + JSON.stringify(error));
-        }
-        else {
-            console.log("Unhandled Error: " + JSON.stringify(error));
-        }
-        throw e;
-    });
+    //$(window).on("error", function (e) {
+    //    var error = {
+    //        Message: e.originalEvent.message,
+    //        TimeStamp: e.originalEvent.timeStamp,
+    //        Line: e.originalEvent.lineno,
+    //        Column: e.originalEvent.colno,
+    //        StackTrace: e.originalEvent.error.stack
+    //    }
+    //    $.post(window.location.origin + "/Services/ErrorReporting.cshtml", JSON.stringify(error));
+    //    if (After.Debug) {
+    //        alert("Unhandled Error: " + JSON.stringify(error));
+    //    }
+    //    else {
+    //        console.log("Unhandled Error: " + JSON.stringify(error));
+    //    }
+    //    throw e;
+    //});
     After.Temp.W = document.documentElement.clientWidth;
     After.Temp.H = document.documentElement.clientHeight;
     $(window).on("resize", function (e) {

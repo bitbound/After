@@ -5,9 +5,7 @@
     }
     export function HandlePlayerUpdate(jsonMessage) {
         for (var stat in jsonMessage.Player) {
-            if (After.Me[stat] != undefined && jsonMessage.Player[stat] != undefined) {
-                After.Me[stat] = jsonMessage.Player[stat];
-            }
+            After.Me[stat] = jsonMessage.Player[stat];
         }
         After.Me.UpdateStatsUI();
     }

@@ -60,6 +60,10 @@ namespace After.Message_Handlers
                 // TODO: Send notification to existing and new.
                 existing.Close();
             }
+            if (SH.Player.CurrentLocation == null)
+            {
+                SH.Player.CurrentXYZ = "0,0,0";
+            }
             SH.Authenticated = true;
             SH.Player.IsCharging = false;
             SH.Player.CurrentCharge = 0;

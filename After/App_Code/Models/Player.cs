@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace After.Models
 {
@@ -35,6 +36,11 @@ namespace After.Models
         public override string ToString()
         {
             return Name;
+        }
+
+        public bool IsLoggedIn()
+        {
+            return Socket_Handler.SocketCollection.Any(sh => (sh as Socket_Handler)?.Player?.Name == Name);
         }
     }
 }

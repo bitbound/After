@@ -90,7 +90,7 @@ var After;
                     After.Audio.Context = After.Audio.Context || new AudioContext();
                     var audioCtx = After.Audio.Context;
                     After.Audio.LoopSource = audioCtx.createBufferSource();
-                    var source = After.Audio.PlaySource;
+                    var source = After.Audio.LoopSource;
                     source.loop = false;
                     var request = new XMLHttpRequest();
                     request.responseType = "arraybuffer";

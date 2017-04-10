@@ -161,6 +161,10 @@
     <Content Include="Controls\Splash.html" />
     <Content Include="Global.asax" />
     <Content Include="default.cshtml" />
+    <Content Include="Scripts\Message_Handlers\Accounts.js" />
+    <Content Include="Scripts\Message_Handlers\Events.js" />
+    <Content Include="Scripts\Message_Handlers\Messages.js" />
+    <Content Include="Scripts\Message_Handlers\Queries.js" />
     <Content Include="Scripts\Models\App\Audio.js" />
     <Content Include="Scripts\Models\App\Canvas.js.map" />
     <Content Include="Scripts\Models\App\Connection.js.map" />
@@ -175,6 +179,7 @@
     <Content Include="Scripts\jQuery\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jQuery\jquery-3.1.1.slim.min.js" />
     <Content Include="Scripts\Models\App\MainModel.js.map" />
+    <Content Include="Scripts\Models\App\Me.js" />
     <Content Include="Scripts\Models\Game\Area.js.map" />
     <Content Include="Scripts\Models\Game\Bases\Selectable.js.map" />
     <Content Include="Scripts\Models\Game\Particle.js.map" />
@@ -190,6 +195,11 @@
     <None Include="Properties\PublishProfiles\Localhost.pubxml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <Content Include="Scripts\Models\App\Audio.js.map" />
+    <Content Include="Scripts\Models\App\Me.js.map" />
+    <Content Include="Scripts\Message_Handlers\Accounts.js.map" />
+    <Content Include="Scripts\Message_Handlers\Events.js.map" />
+    <Content Include="Scripts\Message_Handlers\Messages.js.map" />
+    <Content Include="Scripts\Message_Handlers\Queries.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

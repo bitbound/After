@@ -4,6 +4,11 @@ var After;
     (function (Controls) {
         Controls.Game = {
             Init: function () {
+                var query = {
+                    "Category": "Queries",
+                    "Type": "PlayerUpdate"
+                };
+                After.Connection.Socket.send(JSON.stringify(query));
                 $("#divLogin").animate({ opacity: 0 }, 1000, function () {
                     $("#divLogin").hide();
                     $.get("/Controls/Game.html", function (data) {

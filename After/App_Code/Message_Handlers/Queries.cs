@@ -23,6 +23,10 @@ namespace After.Message_Handlers
             {
                 foreach (var character in area.Occupants)
                 {
+                    if (character is Player && !(character as Player).IsLoggedIn())
+                    {
+                        continue;
+                    }
                     souls.Add(
                         new
                         {

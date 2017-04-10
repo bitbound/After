@@ -37,12 +37,13 @@ var After;
                     }
                     ;
                 }
-                ;
-                var spanMessage = document.createElement("span");
-                spanMessage.style.color = "whitesmoke";
-                spanMessage.innerText = jsonMessage.Username + " has connected.";
-                $("#divChatMessageWindow").append(spanMessage);
-                $("#divChatMessageWindow").append("<br/>");
+                else {
+                    var spanMessage = document.createElement("span");
+                    spanMessage.style.color = "whitesmoke";
+                    spanMessage.innerText = jsonMessage.Username + " has connected.";
+                    $("#divChatMessageWindow").append(spanMessage);
+                    $("#divChatMessageWindow").append("<br/>");
+                }
             }
             Accounts.HandleLogon = HandleLogon;
             ;
