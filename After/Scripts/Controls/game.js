@@ -15,7 +15,7 @@ var After;
                         $(document.body).append(data);
                         var spanMessage = document.createElement("span");
                         spanMessage.style.color = "whitesmoke";
-                        spanMessage.innerText = "Welcome to After!";
+                        spanMessage.innerHTML = "Welcome to After!";
                         $("#divChatMessageWindow").append(spanMessage);
                         $("#divChatMessageWindow").append("<br/>");
                         After.Controls.Game.Load();
@@ -89,10 +89,10 @@ var After;
                         scaleChange = -1;
                     }
                     ;
-                    scaleChange = scaleChange * .1 * After.Canvas.Scale;
-                    After.Canvas.Scale += scaleChange;
-                    After.Canvas.OffsetX -= (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.width * (e.clientX / After.Canvas.Element.width)) / After.Canvas.Scale;
-                    After.Canvas.OffsetY -= (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.height * (e.clientY / After.Canvas.Element.height)) / After.Canvas.Scale;
+                    scaleChange = scaleChange * .1 * After.Canvas.ZoomScale;
+                    After.Canvas.ZoomScale += scaleChange;
+                    After.Canvas.OffsetX -= (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.width * (e.clientX / After.Canvas.Element.width)) / After.Canvas.ZoomScale;
+                    After.Canvas.OffsetY -= (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.height * (e.clientY / After.Canvas.Element.height)) / After.Canvas.ZoomScale;
                     e.preventDefault();
                 };
                 After.Canvas.Element.onclick = function (e) {
@@ -114,8 +114,8 @@ var After;
                 };
                 After.Canvas.Element.onmousemove = function (e) {
                     if (e.buttons == 1 && After.Canvas.IsPanning) {
-                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.clientX - After.Canvas.StartDragX) / After.Canvas.Scale);
-                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.clientY - After.Canvas.StartDragY) / After.Canvas.Scale);
+                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.clientX - After.Canvas.StartDragX) / After.Canvas.ZoomScale);
+                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.clientY - After.Canvas.StartDragY) / After.Canvas.ZoomScale);
                         After.Canvas.InertiaStack.push({ "Event": e, "Timestamp": (new Date().getTime()) });
                         while (After.Canvas.InertiaStack.length > 5) {
                             After.Canvas.InertiaStack.splice(0, 1);
@@ -169,8 +169,8 @@ var After;
                 };
                 After.Canvas.Element.ontouchmove = function (e) {
                     if (e.touches.length == 1) {
-                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.touches[0].clientX - After.Canvas.StartDragX) / After.Canvas.Scale);
-                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.touches[0].clientY - After.Canvas.StartDragY) / After.Canvas.Scale);
+                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.touches[0].clientX - After.Canvas.StartDragX) / After.Canvas.ZoomScale);
+                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.touches[0].clientY - After.Canvas.StartDragY) / After.Canvas.ZoomScale);
                         After.Canvas.InertiaStack.push({ "Event": e.touches[0], "Timestamp": (new Date().getTime()) });
                         while (After.Canvas.InertiaStack.length > 5) {
                             After.Canvas.InertiaStack.splice(0, 1);
@@ -193,14 +193,14 @@ var After;
                         var lowerY = Math.min(e.touches[0].clientY, e.touches[1].clientY);
                         var distanceY = higherY - lowerY;
                         var distanceTotal = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-                        var scaleChange = (distanceTotal - After.Canvas.LastTouchDistance) * .0025 * After.Canvas.Scale;
-                        var tranPanX = (xCenter - After.Canvas.StartDragX) / After.Canvas.Scale;
-                        var tranPanY = (yCenter - After.Canvas.StartDragY) / After.Canvas.Scale;
-                        var scalePanX = (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.width * (xCenter / After.Canvas.Element.width)) / After.Canvas.Scale;
-                        var scalePanY = (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.height * (yCenter / After.Canvas.Element.height)) / After.Canvas.Scale;
+                        var scaleChange = (distanceTotal - After.Canvas.LastTouchDistance) * .0025 * After.Canvas.ZoomScale;
+                        var tranPanX = (xCenter - After.Canvas.StartDragX) / After.Canvas.ZoomScale;
+                        var tranPanY = (yCenter - After.Canvas.StartDragY) / After.Canvas.ZoomScale;
+                        var scalePanX = (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.width * (xCenter / After.Canvas.Element.width)) / After.Canvas.ZoomScale;
+                        var scalePanY = (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.height * (yCenter / After.Canvas.Element.height)) / After.Canvas.ZoomScale;
                         After.Canvas.OffsetX = After.Canvas.StartOffsetX + tranPanX;
                         After.Canvas.OffsetY = After.Canvas.StartOffsetY + tranPanY;
-                        After.Canvas.Scale += scaleChange;
+                        After.Canvas.ZoomScale += scaleChange;
                         After.Canvas.OffsetX -= scalePanX;
                         After.Canvas.OffsetY -= scalePanY;
                         After.Canvas.StartOffsetX -= scalePanX;

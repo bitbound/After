@@ -17,7 +17,7 @@
                 };
 
                 if (After.Debug) {
-                    document.getElementById("divFPS").innerHTML = "FPS: " + After.Canvas.FPSStack.length + "<br/> W: " + After.Temp.W + " / H: " + After.Temp.H + "<br/>Scale: " + After.Canvas.Scale.toFixed(2) + "<br/>OffsetX: " + After.Canvas.OffsetX.toFixed(2) + "<br/>OffsetY: " + After.Canvas.OffsetY.toFixed(2);
+                    document.getElementById("divFPS").innerHTML = "FPS: " + After.Canvas.FPSStack.length + "<br/> W: " + After.Temp.W + " / H: " + After.Temp.H + "<br/>Scale: " + After.Canvas.ZoomScale.toFixed(2) + "<br/>OffsetX: " + After.Canvas.OffsetX.toFixed(2) + "<br/>OffsetY: " + After.Canvas.OffsetY.toFixed(2);
                 }
 
                 window.requestAnimationFrame(After.Drawing.DrawCanvas);
@@ -31,7 +31,7 @@
         DrawAreas() {
             After.World_Data.Areas.forEach(function (value, index) {
                 After.Canvas.Context2D.save();
-                var scale = After.Canvas.Scale;
+                var scale = After.Canvas.ZoomScale;
                 After.Canvas.Context2D.translate(((value.XCoord * 100) + After.Canvas.OffsetX) * scale, ((value.YCoord * 100) + After.Canvas.OffsetY) * scale);
                 if (After.Debug) {
                     After.Canvas.Context2D.strokeStyle = "white";
@@ -80,15 +80,15 @@
             // TODO: Differentiate between self and others.
             After.World_Data.Souls.forEach(function (value, index) {
                 var c2d = After.Canvas.Context2D;
-                var scale = After.Canvas.Scale;
+                var scale = After.Canvas.ZoomScale;
                 c2d.save();
 
                 var parentX = ((value.XCoord * 100) + After.Canvas.OffsetX) * scale;
                 var parentY = ((value.YCoord * 100) + After.Canvas.OffsetY) * scale;
                 value.ParentBounds = {
                     top: parentY,
-                    right: parentX,
-                    bottom: parentY,
+                    right: parentX + (100 * scale),
+                    bottom: parentY + (100 * scale),
                     left: parentX,
                 }
                 if (value.Particles.length < 50) {

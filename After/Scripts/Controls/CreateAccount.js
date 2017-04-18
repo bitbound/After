@@ -41,6 +41,6 @@ After.Temp.Login.Create = function () {
         "Password": strPassword,
         "Color": After.Me.Color
     };
-    sessionStorage["Username"] = strUsername;
+    After.Me.Name = strUsername;
     After.Connection.Socket.send(JSON.stringify(creationRequest));
 };

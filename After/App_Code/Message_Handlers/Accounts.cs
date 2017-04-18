@@ -32,10 +32,19 @@ namespace After.Message_Handlers
                     CurrentXYZ = "0,0,0"
                 };
                 World.Current.Players.Add(SH.Player);
+                World.Current.SaveChanges();
                 Socket_Handler.SocketCollection.Add(SH);
+                SH.Player.AuthenticationToken = Guid.NewGuid().ToString();
                 jsonMessage.Result = "ok";
                 jsonMessage.Password = null;
-                Socket_Handler.SocketCollection.Broadcast(Json.Encode(jsonMessage));
+                jsonMessage.AuthenticationToken = SH.Player.AuthenticationToken;
+                SH.Send(Json.Encode(jsonMessage));
+                Socket_Handler.SocketCollection.Broadcast(Json.Encode(new
+                {
+                    Category = "Accounts",
+                    Type = "Connected",
+                    Username = SH.Player.Name
+                }));
             }
         }
         public static void HandleLogon(dynamic jsonMessage, Socket_Handler SH)
@@ -48,7 +57,16 @@ namespace After.Message_Handlers
                 SH.Send(Json.Encode(jsonMessage));
                 return;
             }
-            if (!Crypto.VerifyHashedPassword(SH.Player.Password, jsonMessage.Password))
+            else if (SH.Player.AuthenticationToken != null && jsonMessage.AuthenticationToken != null)
+            {
+                if (SH.Player.AuthenticationToken != jsonMessage.AuthenticationToken)
+                {
+                    jsonMessage.Result = "expired";
+                    SH.Send(Json.Encode(jsonMessage));
+                    return;
+                }
+            }
+            else if (!Crypto.VerifyHashedPassword(SH.Player.Password, jsonMessage.Password))
             {
                 jsonMessage.Result = "failed";
                 SH.Send(Json.Encode(jsonMessage));
@@ -57,8 +75,14 @@ namespace After.Message_Handlers
             if (Socket_Handler.SocketCollection.Any(s=>(s as Socket_Handler)?.Player.Name.ToLower() == playerName.ToLower()))
             {
                 var existing = Socket_Handler.SocketCollection.FirstOrDefault(s => (s as Socket_Handler)?.Player.Name.ToLower() == playerName.ToLower());
-                // TODO: Send notification to existing and new.
+                var message = new
+                {
+                    Category = "Accounts",
+                    Type = "LoginElsewhere"
+                };
+                existing.Send(Json.Encode(message));
                 existing.Close();
+                jsonMessage.Note = "LoginElsewhere";
             }
             if (SH.Player.CurrentLocation == null)
             {
@@ -69,7 +93,15 @@ namespace After.Message_Handlers
             SH.Player.CurrentCharge = 0;
             Socket_Handler.SocketCollection.Add(SH);
             jsonMessage.Result = "ok";
-            Socket_Handler.SocketCollection.Broadcast(Json.Encode(jsonMessage));
+            SH.Player.AuthenticationToken = Guid.NewGuid().ToString();
+            jsonMessage.AuthenticationToken = SH.Player.AuthenticationToken;
+            SH.Send(Json.Encode(jsonMessage));
+            Socket_Handler.SocketCollection.Broadcast(Json.Encode(new
+            {
+                Category = "Accounts",
+                Type = "Connected",
+                Username = SH.Player.Name
+            }));
         }
     }
 }

@@ -52,8 +52,7 @@ After.Temp.Splash = {
                     After.Temp.Login.Init();
                 });
             });
-            // TODO: Reduce size.  Have a loading screen.
-            After.Audio.LoopSound("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3", function () {
+            After.Audio.LoopSound("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3", true, function () {
                 if ($("#divSplash").length == 0) {
                     After.Audio.StopLoop();
                 }

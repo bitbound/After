@@ -6,6 +6,7 @@
     export const Connection = new After.Models.App.Connection();
     export const Drawing = new After.Models.App.Drawing();
     export const Me = new After.Models.App.Me();
+    export const Settings = new After.Models.App.Settings();
     export const Utilities = new After.Models.App.Utilities();
 }
 

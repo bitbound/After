@@ -11,8 +11,12 @@
             this.Color = "";
             this.Owner = "";
             this.Particles = new Array<Particle>();
+            this.Interval = window.setInterval(function () {
+
+            }, 25);
         };
         Type: string;
+        CharacterID: number;
         Name: string;
         XCoord: number;
         YCoord: number;

@@ -27,29 +27,10 @@ namespace After.Message_Handlers
                     {
                         continue;
                     }
-                    souls.Add(
-                        new
-                        {
-                            Name = character.Name,
-                            Color = character.Color,
-                            XCoord = area.XCoord,
-                            YCoord = area.YCoord,
-                            ZCoord = area.ZCoord
-                        }
-                    );
+                    souls.Add(character.ConvertToSoul());
                 }
 
-                areas.Add(new
-                {
-                    Type = "Area",
-                    XCoord = area.XCoord,
-                    YCoord = area.YCoord,
-                    ZCoord = area.ZCoord,
-                    Color = area.Color,
-                    Title = area.Title,
-                    Description = area.Description,
-                    InvestedWillpower = area.InvestedWillpower
-                });
+                areas.Add(area.ConvertToArea());
             }
             jsonMessage.Souls = souls;
             jsonMessage.Areas = areas;

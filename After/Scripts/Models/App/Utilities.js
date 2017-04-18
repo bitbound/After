@@ -213,7 +213,9 @@ var After;
                     buttonAction.style.setProperty("float", "right");
                     buttonAction.style.setProperty("margin-top", "20px");
                     buttonAction.onclick = function () {
-                        ButtonAction();
+                        if (ButtonAction) {
+                            ButtonAction();
+                        }
                         $(divOuter).remove();
                     };
                     $(divOuter).css({
@@ -224,10 +226,10 @@ var After;
                         "color": TextColor,
                         "border-radius": "10px",
                         "border": "2px solid dimgray",
-                        "top": "40%",
+                        "top": "50%",
                         "left": "50%",
-                        "transform": "translateX(-50%)",
-                        "z-index": "3",
+                        "transform": "translate(-50%, -50%)",
+                        "z-index": "4",
                         "box-shadow": "10px 10px 5px rgba(255,255,255,.15)"
                     });
                     divOuter.appendChild(divMessage);
@@ -244,7 +246,6 @@ var After;
                         track.classList.add("loading-track");
                         var dot = document.createElement("div");
                         dot.classList.add("loading-dot");
-                        //$(track).css("transform", "rotate(" + String(i * 36) + "deg)");
                         track.style.transform = "rotate(" + String(i * 36) + "deg)";
                         track.appendChild(dot);
                         frame.appendChild(track);
@@ -261,6 +262,41 @@ var After;
                 ;
                 RemoveLoading() {
                     $("#divLoadingFrame").remove();
+                }
+                ;
+                Animate(Object, Property, ToValue, MsTransition) {
+                    if (typeof Object[Property] != "number") {
+                        console.log("Property is not of type number.");
+                        return;
+                    }
+                    var fromValue = Object[Property];
+                    var totalChange = ToValue - fromValue;
+                    var frames = 20 * (MsTransition / 1000);
+                    var changePerFrame = totalChange / frames;
+                    var animateCount = 0;
+                    while (typeof After.Temp["AnimateIntervals" + animateCount] != "undefined") {
+                        animateCount++;
+                    }
+                    After.Temp["AnimateIntervals" + animateCount] = window.setInterval(function (Object, Property, changePerFrame, ToValue, animateCount) {
+                        if (changePerFrame > 0) {
+                            Object[Property] = Math.min(Object[Property] + changePerFrame, ToValue);
+                            if (Object[Property] >= ToValue) {
+                                Object[Property] = ToValue;
+                                window.clearInterval(After.Temp["AnimateIntervals" + animateCount]);
+                                After.Temp["AnimateIntervals" + animateCount] = undefined;
+                                return;
+                            }
+                        }
+                        else {
+                            Object[Property] = Math.max(Object[Property] + changePerFrame, ToValue);
+                            if (Object[Property] <= ToValue) {
+                                Object[Property] = ToValue;
+                                window.clearInterval(After.Temp["AnimateIntervals" + animateCount]);
+                                After.Temp["AnimateIntervals" + animateCount] = undefined;
+                                return;
+                            }
+                        }
+                    }, 50, Object, Property, changePerFrame, ToValue, animateCount);
                 }
             }
             App.Utilities = Utilities;

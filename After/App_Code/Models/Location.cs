@@ -94,5 +94,20 @@ namespace After.Models
             Math.Abs(l.YCoord - this.YCoord) <= Distance);
             return locations?.ToList();
         }
+        public dynamic ConvertToArea()
+        {
+            return new
+            {
+                Type = "Area",
+                XCoord = this.XCoord,
+                YCoord = this.YCoord,
+                ZCoord = this.ZCoord,
+                LocationID = this.LocationID,
+                Color = this.Color,
+                Title = this.Title,
+                Description = this.Description,
+                InvestedWillpower = this.InvestedWillpower
+            };
+        }
     }
 }

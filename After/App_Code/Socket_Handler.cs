@@ -66,7 +66,8 @@ namespace After
             }
             dynamic message = new
             {
-                Type = "Logoff",
+                Category = "Accounts",
+                Type = "Disconnected",
                 Username = Player?.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
@@ -87,7 +88,8 @@ namespace After
             }
             dynamic message = new
             {
-                Type = "Logoff",
+                Category = "Accounts",
+                Type = "Disconnected",
                 Username = Player?.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));

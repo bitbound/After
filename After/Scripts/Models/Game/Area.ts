@@ -12,6 +12,7 @@
         XCoord: number;
         YCoord: number;
         ZCoord: string;
+        LocationID: string;
         Color: string;
         Title: string;
         Description: string;

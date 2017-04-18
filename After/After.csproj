@@ -1,4 +1,5 @@
-﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
@@ -9,13 +10,14 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{06BCDA4B-9C36-4065-B0A2-DB3EC406F5D7}</ProjectGuid>
+    <ProjectGuid>{E3EC97D5-1C5C-4796-B7E2-AADA5CBDBEE8}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>After</RootNamespace>
     <AssemblyName>After</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -46,59 +48,106 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WebSockets, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.WebSockets.0.2.3.1\lib\net45\Microsoft.WebSockets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.Entity.Design" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\Interactions\BaseInteraction.cs" />
+    <Content Include="App_Code\Interactions\Ferryman0.cs" />
+    <Content Include="App_Code\Interactions\IBaseInteraction.cs" />
+    <Content Include="App_Code\Message_Handlers\Accounts.cs" />
+    <Content Include="App_Code\Message_Handlers\Events.cs" />
+    <Content Include="App_Code\Message_Handlers\Messages.cs" />
+    <Content Include="App_Code\Message_Handlers\Queries.cs" />
+    <Content Include="App_Code\Models\Character.cs" />
+    <Content Include="App_Code\Models\Hostile.cs" />
+    <Content Include="App_Code\Models\InnerVoid.cs" />
+    <Content Include="App_Code\Models\Location.cs" />
+    <Content Include="App_Code\Models\Message.cs" />
+    <Content Include="App_Code\Models\NPC.cs" />
+    <Content Include="App_Code\Models\Player.cs" />
+    <Content Include="App_Code\Models\World.cs" />
+    <Content Include="App_Code\Socket_Handler.cs" />
+    <Content Include="App_Code\Utilities.cs" />
+    <Content Include="App_Code\Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\ClientErrors\2017-03-13.txt" />
+    <Content Include="App_Data\ClientErrors\2017-03-22.txt" />
+    <Content Include="App_Data\ClientErrors\2017-03-24.txt" />
     <Content Include="App_Data\World.mdf" />
     <Content Include="App_Data\World_log.ldf">
       <DependentUpon>World.mdf</DependentUpon>
@@ -108,6 +157,8 @@
     <Content Include="Assets\Images\A.png" />
     <Content Include="Assets\Images\AfterTitle.png" />
     <Content Include="Assets\Images\DevBlog.png" />
+    <Content Include="Assets\Images\Enter.png" />
+    <Content Include="Assets\Images\freesound_logo_small.png" />
     <Content Include="Assets\Images\Icons\abstract-user-flat-4-300px.png" />
     <Content Include="Assets\Images\Icons\Asterisk_64x.png" />
     <Content Include="Assets\Images\Icons\draw-star-2.png" />
@@ -153,6 +204,57 @@
     <Content Include="Assets\Sounds\gameaudio_teleport-space-morph.mp3" />
     <Content Include="Assets\Sounds\SoundCredits.txt" />
     <Content Include="Assets\Sounds\urupin__heartbeat.mp3" />
+    <Content Include="bin\After.dll" />
+    <Content Include="bin\After.pdb" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Microsoft.WebSockets.dll" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\csi.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll" />
+    <Content Include="bin\roslyn\Microsoft.Win32.Primitives.dll" />
+    <Content Include="bin\roslyn\System.AppContext.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Console.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.FileVersionInfo.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.Process.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.StackTrace.dll" />
+    <Content Include="bin\roslyn\System.IO.Compression.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.DriveInfo.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.Primitives.dll" />
+    <Content Include="bin\roslyn\System.IO.Pipes.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\System.Security.AccessControl.dll" />
+    <Content Include="bin\roslyn\System.Security.Claims.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Algorithms.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Encoding.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Primitives.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.X509Certificates.dll" />
+    <Content Include="bin\roslyn\System.Security.Principal.Windows.dll" />
+    <Content Include="bin\roslyn\System.Text.Encoding.CodePages.dll" />
+    <Content Include="bin\roslyn\System.Threading.Thread.dll" />
+    <Content Include="bin\roslyn\System.ValueTuple.dll" />
+    <Content Include="bin\roslyn\System.Xml.ReaderWriter.dll" />
+    <Content Include="bin\roslyn\System.Xml.XmlDocument.dll" />
+    <Content Include="bin\roslyn\System.Xml.XPath.dll" />
+    <Content Include="bin\roslyn\System.Xml.XPath.XDocument.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
     <Content Include="Controls\CreateAccount.html" />
     <Content Include="Controls\CreateCharacter.html" />
     <Content Include="Controls\Game.html" />
@@ -160,46 +262,84 @@
     <Content Include="Controls\LoginForm.html" />
     <Content Include="Controls\Splash.html" />
     <Content Include="Global.asax" />
-    <Content Include="default.cshtml" />
-    <Content Include="Scripts\Message_Handlers\Accounts.js" />
-    <Content Include="Scripts\Message_Handlers\Events.js" />
-    <Content Include="Scripts\Message_Handlers\Messages.js" />
-    <Content Include="Scripts\Message_Handlers\Queries.js" />
-    <Content Include="Scripts\Models\App\Audio.js" />
-    <Content Include="Scripts\Models\App\Canvas.js.map" />
-    <Content Include="Scripts\Models\App\Connection.js.map" />
-    <Content Include="Scripts\Controls\Game.js.map" />
-    <Content Include="Scripts\Controls\Splash.js" />
-    <Content Include="Scripts\Models\App\Drawing.js.map" />
+    <Content Include="Properties\PublishProfiles\Localhost.pubxml.user" />
+    <Content Include="Properties\PublishProfiles\Production.pubxml.user" />
+    <Content Include="scripts\Controls\CreateAccount.js" />
+    <Content Include="scripts\Controls\CreateCharacter.js" />
+    <Content Include="scripts\Controls\Game.js" />
+    <Content Include="scripts\Controls\Intro.js" />
+    <Content Include="scripts\Controls\LoginForm.js" />
+    <Content Include="scripts\Controls\Splash.js" />
+    <Content Include="scripts\Init.js" />
+    <None Include="scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="scripts\jquery-3.1.1.js" />
+    <Content Include="scripts\jquery-3.1.1.min.js" />
+    <Content Include="scripts\jquery-3.1.1.slim.js" />
+    <Content Include="scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.0.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.0.min.js" />
     <Content Include="packages.config" />
+    <Content Include="scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="scripts\jquery-3.1.1.min.map" />
+    <None Include="scripts\jQuery\jquery-3.1.1-vsdoc.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.slim.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.js" />
+    <Content Include="scripts\Message_Handlers\Accounts.js" />
+    <Content Include="scripts\Message_Handlers\Events.js" />
+    <Content Include="scripts\Message_Handlers\Messages.js" />
+    <Content Include="scripts\Message_Handlers\Queries.js" />
+    <Content Include="scripts\Models\App\Audio.js" />
+    <Content Include="scripts\Models\App\Canvas.js" />
+    <Content Include="scripts\Models\App\Connection.js" />
+    <Content Include="scripts\Models\App\Drawing.js" />
+    <Content Include="scripts\Models\App\MainModel.js" />
+    <Content Include="scripts\Models\App\Me.js" />
+    <Content Include="scripts\Models\App\Settings.js" />
+    <Content Include="scripts\Models\App\Utilities.js" />
+    <Content Include="scripts\Models\Game\Area.js" />
+    <Content Include="scripts\Models\Game\Bases\Selectable.js" />
+    <Content Include="scripts\Models\Game\Particle.js" />
+    <Content Include="scripts\Models\Game\Soul.js" />
+    <None Include="scripts\_references.js" />
+    <Content Include="Styles.css" />
+    <Content Include="Web.config" />
+    <Content Include="bin\After.dll.config" />
+    <Content Include="bin\roslyn\csc.exe.config" />
+    <Content Include="bin\roslyn\csc.rsp" />
+    <Content Include="bin\roslyn\csi.exe.config" />
+    <Content Include="bin\roslyn\csi.rsp" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\vbc.exe.config" />
+    <Content Include="bin\roslyn\vbc.rsp" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="default.cshtml" />
     <Content Include="manifest.json" />
-    <None Include="Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\Models\App\MainModel.js.map" />
-    <Content Include="Scripts\Models\App\Me.js" />
-    <Content Include="Scripts\Models\Game\Area.js.map" />
-    <Content Include="Scripts\Models\Game\Bases\Selectable.js.map" />
-    <Content Include="Scripts\Models\Game\Particle.js.map" />
-    <Content Include="Scripts\Models\Game\Soul.js.map" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Accounts.ts" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Events.ts" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Messages.ts" />
-    <Content Include="Scripts\Models\App\Utilities.js.map" />
-    <Content Include="Services\ErrorReporting.cshtml" />
-    <Content Include="tsconfig.json" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.slim.min.map" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.min.map" />
     <None Include="Properties\PublishProfiles\Localhost.pubxml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
-    <Content Include="Scripts\Models\App\Audio.js.map" />
-    <Content Include="Scripts\Models\App\Me.js.map" />
-    <Content Include="Scripts\Message_Handlers\Accounts.js.map" />
-    <Content Include="Scripts\Message_Handlers\Events.js.map" />
-    <Content Include="Scripts\Message_Handlers\Messages.js.map" />
-    <Content Include="Scripts\Message_Handlers\Queries.js.map" />
+    <Content Include="scripts\Controls\Game.js.map" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.min.map" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.map" />
+    <Content Include="scripts\Message_Handlers\Accounts.js.map" />
+    <Content Include="scripts\Message_Handlers\Events.js.map" />
+    <Content Include="scripts\Message_Handlers\Messages.js.map" />
+    <Content Include="scripts\Message_Handlers\Queries.js.map" />
+    <Content Include="scripts\Models\App\Audio.js.map" />
+    <Content Include="scripts\Models\App\Canvas.js.map" />
+    <Content Include="scripts\Models\App\Connection.js.map" />
+    <Content Include="scripts\Models\App\Drawing.js.map" />
+    <Content Include="scripts\Models\App\MainModel.js.map" />
+    <Content Include="scripts\Models\App\Me.js.map" />
+    <Content Include="scripts\Models\App\Settings.js.map" />
+    <Content Include="scripts\Models\App\Utilities.js.map" />
+    <Content Include="scripts\Models\Game\Area.js.map" />
+    <Content Include="scripts\Models\Game\Bases\Selectable.js.map" />
+    <Content Include="scripts\Models\Game\Particle.js.map" />
+    <Content Include="scripts\Models\Game\Soul.js.map" />
+    <Content Include="Services\ErrorReporting.cshtml" />
+    <Content Include="tsconfig.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -208,68 +348,29 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\Models\App\Canvas.js" />
-    <Content Include="Scripts\Models\App\connection.js" />
-    <Content Include="Scripts\Controls\CreateAccount.js" />
-    <Content Include="Scripts\Controls\CreateCharacter.js" />
-    <Content Include="Scripts\Controls\game.js" />
-    <Content Include="Scripts\Controls\Intro.js" />
-    <Content Include="Scripts\Controls\LoginForm.js" />
-    <Content Include="Scripts\Models\App\Drawing.js" />
-    <Content Include="Scripts\Init.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.0.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.0.min.js" />
-    <Content Include="Scripts\Models\App\MainModel.js" />
-    <Content Include="Scripts\Models\Game\area.js" />
-    <Content Include="Scripts\Models\Game\Bases\Selectable.js" />
-    <Content Include="Scripts\Models\Game\Particle.js" />
-    <Content Include="Scripts\Models\Game\soul.js" />
-    <Content Include="Scripts\Models\App\Utilities.js" />
-    <None Include="Scripts\_references.js" />
-    <Content Include="Styles.css" />
-    <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_Code\Interactions\BaseInteraction.cs" />
-    <Content Include="App_Code\Interactions\Ferryman0.cs" />
-    <Content Include="App_Code\Interactions\IBaseInteraction.cs" />
-    <Content Include="App_Code\Models\Character.cs" />
-    <Content Include="App_Code\Models\InnerVoid.cs" />
-    <Content Include="App_Code\Models\Location.cs" />
-    <Content Include="App_Code\Models\Message.cs" />
-    <Content Include="App_Code\Models\Hostile.cs" />
-    <Content Include="App_Code\Models\NPC.cs" />
-    <Content Include="App_Code\Models\Player.cs" />
-    <Content Include="App_Code\Models\World.cs" />
-    <Content Include="App_Code\Socket_Handler.cs" />
-    <Content Include="App_Code\Utilities.cs" />
-    <Content Include="App_Code\Message_Handlers\Accounts.cs" />
-    <Content Include="App_Code\Message_Handlers\Events.cs" />
-    <Content Include="App_Code\Message_Handlers\Messages.cs" />
-    <Content Include="App_Code\Message_Handlers\Queries.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Models\App\Audio.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Canvas.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Connection.ts" />
-    <TypeScriptCompile Include="Scripts\Controls\Game.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Drawing.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\MainModel.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Me.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Area.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Bases\Selectable.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Particle.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Soul.ts" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Queries.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Utilities.ts" />
+    <TypeScriptCompile Include="scripts\Controls\Game.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Accounts.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Events.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Messages.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Queries.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Audio.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Canvas.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Connection.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Drawing.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\MainModel.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Me.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Settings.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Utilities.ts" />
+    <TypeScriptCompile Include="scripts\Models\Game\Area.ts" />
+    <TypeScriptCompile Include="scripts\Models\Game\Bases\Selectable.ts" />
+    <TypeScriptCompile Include="scripts\Models\Game\Particle.ts" />
+    <TypeScriptCompile Include="scripts\Models\Game\Soul.ts" />
+    <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -278,13 +379,16 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50224</DevelopmentServerPort>
+          <DevelopmentServerPort>61253</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:50224/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
@@ -303,11 +407,10 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-  </Target>
-  -->
+  </Target> -->
 </Project>

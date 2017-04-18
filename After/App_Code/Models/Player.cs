@@ -12,6 +12,7 @@ namespace After.Models
            
         }
         public string Password { get; set; }
+        public string AuthenticationToken { get; set; }
         public bool IsAdmin { get; set; }
 
         public bool AdminFlagged { get; set; }

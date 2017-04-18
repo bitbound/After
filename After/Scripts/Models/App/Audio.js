@@ -8,8 +8,10 @@ var After;
                 constructor() {
                     this.Context = new AudioContext();
                 }
-                PlaySound(SourceFile, Callback) {
-                    After.Utilities.ShowLoading();
+                PlaySound(SourceFile, ShowLoading, Callback) {
+                    if (ShowLoading) {
+                        After.Utilities.ShowLoading();
+                    }
                     After.Audio.Context = After.Audio.Context || new AudioContext();
                     var audioCtx = After.Audio.Context;
                     After.Audio.PlaySource = audioCtx.createBufferSource();
@@ -23,7 +25,9 @@ var After;
                             source.buffer = buffer;
                             source.connect(audioCtx.destination);
                             source.start(0);
-                            After.Utilities.RemoveLoading();
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
                             if (Callback) {
                                 Callback();
                             }
@@ -32,8 +36,10 @@ var After;
                     request.send();
                 }
                 ;
-                LoadSound(SourceFile, Callback) {
-                    After.Utilities.ShowLoading();
+                LoadSound(SourceFile, ShowLoading, Callback) {
+                    if (ShowLoading) {
+                        After.Utilities.ShowLoading();
+                    }
                     After.Audio.Context = After.Audio.Context || new AudioContext();
                     var audioCtx = After.Audio.Context;
                     After.Audio.PlaySource = audioCtx.createBufferSource();
@@ -46,7 +52,9 @@ var After;
                         audioCtx.decodeAudioData(request.response, function (buffer) {
                             source.buffer = buffer;
                             source.connect(audioCtx.destination);
-                            After.Utilities.RemoveLoading();
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
                             if (Callback) {
                                 Callback();
                             }
@@ -61,8 +69,10 @@ var After;
                         After.Audio.PlaySource.disconnect();
                     }
                 }
-                LoopSound(SourceFile, Callback) {
-                    After.Utilities.ShowLoading();
+                LoopSound(SourceFile, ShowLoading, Callback) {
+                    if (ShowLoading) {
+                        After.Utilities.ShowLoading();
+                    }
                     After.Audio.Context = After.Audio.Context || new AudioContext();
                     var audioCtx = After.Audio.Context;
                     After.Audio.LoopSource = audioCtx.createBufferSource();
@@ -76,7 +86,9 @@ var After;
                             source.buffer = buffer;
                             source.connect(audioCtx.destination);
                             source.start(0);
-                            After.Utilities.RemoveLoading();
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
                             if (Callback) {
                                 Callback();
                             }
@@ -85,8 +97,10 @@ var After;
                     request.send();
                 }
                 ;
-                LoadLoop(SourceFile, Callback) {
-                    After.Utilities.ShowLoading();
+                LoadLoop(SourceFile, ShowLoading, Callback) {
+                    if (ShowLoading) {
+                        After.Utilities.ShowLoading();
+                    }
                     After.Audio.Context = After.Audio.Context || new AudioContext();
                     var audioCtx = After.Audio.Context;
                     After.Audio.LoopSource = audioCtx.createBufferSource();
@@ -99,7 +113,9 @@ var After;
                         audioCtx.decodeAudioData(request.response, function (buffer) {
                             source.buffer = buffer;
                             source.connect(audioCtx.destination);
-                            After.Utilities.RemoveLoading();
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
                             if (Callback) {
                                 Callback();
                             }

@@ -1,6 +1,13 @@
 ﻿After.Temp.Login = After.Temp.Login || {};
 After.Temp.Login.Init = function () {
-    $.get("/Controls/LoginForm.html", function (data) { $(document.body).append(data); });
+    $.get("/Controls/LoginForm.html", function (data) {
+        $(document.body).append(data);
+        if (localStorage["RememberMe"] == "true" && typeof localStorage["AuthenticationToken"] != "undefined") {
+            $("#checkRememberMe")[0].checked = true;
+            $("#inputUsername").val(localStorage["Username"]);
+            $("#inputPassword").val("**********");
+        }
+    });
     After.Connection.Init();
     After.Temp.Login.TryLogin = function () {
         if (After.Connection.Socket.readyState != WebSocket.OPEN) {
@@ -10,11 +17,15 @@ After.Temp.Login.Init = function () {
         var strUsername = $("#inputUsername").val();
         var strPassword = $("#inputPassword").val();
         if (strUsername == "") {
-            alert("You must specify a username.");
+            $("#divLoginStatus").hide();
+            $("#divLoginStatus").text("You must specify a username.");
+            $("#divLoginStatus").fadeIn();
             return;
         };
         if (strPassword == "") {
-            alert("You must specify a password.");
+            $("#divLoginStatus").hide();
+            $("#divLoginStatus").text("You must specify a password.");
+            $("#divLoginStatus").fadeIn();
             return;
         };
         $("#buttonLogin").attr("disabled", true);
@@ -24,10 +35,28 @@ After.Temp.Login.Init = function () {
             "Username": strUsername,
             "Password": strPassword
         };
-        sessionStorage["Username"] = logonRequest.Username;
+        After.Me.Name = logonRequest.Username;
+        if (localStorage["RememberMe"] == "true") {
+            localStorage["Username"] = $("#inputUsername").val();
+            logonRequest.AuthenticationToken = localStorage["AuthenticationToken"];
+        }
+        else
+        {
+            localStorage.removeItem("Username");
+            localStorage.removeItem("AuthenticationToken");
+        }
         After.Connection.Socket.send(JSON.stringify(logonRequest));
     };
     After.Temp.Login.StartIntro = function () {
         After.Temp.Intro.Start();
     };
+    After.Temp.Login.RememberMeChanged = function (e) {
+        localStorage.setItem("RememberMe", String(e.currentTarget.checked));
+        if (e.currentTarget.checked == false) {
+            $("#inputPassword").val("");
+        }
+    };
+    After.Temp.Login.ForgotPasswordClicked = function () {
+        // TODO.
+    }
 };

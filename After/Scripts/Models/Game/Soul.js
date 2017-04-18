@@ -16,6 +16,8 @@ var After;
                     this.Color = "";
                     this.Owner = "";
                     this.Particles = new Array();
+                    this.Interval = window.setInterval(function () {
+                    }, 25);
                 }
                 ;
             }

@@ -128,5 +128,18 @@ namespace After.Models
             return false;
         }
         public string Interactions { get; set; }
+
+        public dynamic ConvertToSoul()
+        {
+            return new
+            {
+                CharacterID = this.CharacterID,
+                Name = this.Name,
+                Color = this.Color,
+                XCoord = this.CurrentLocation.XCoord,
+                YCoord = this.CurrentLocation.YCoord,
+                ZCoord = this.CurrentLocation.ZCoord
+            };
+        }
     }
 }

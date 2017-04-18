@@ -9,7 +9,7 @@ var After;
                     this.OffsetX = 0;
                     this.OffsetY = 0;
                     this.CurrentZ = 0;
-                    this.Scale = 1;
+                    this.ZoomScale = 1;
                     this.ScaleChange = 1;
                     this.InertiaX = 0;
                     this.InertiaY = 0;
@@ -25,8 +25,8 @@ var After;
                 }
                 SelectPoint(e) {
                     // TODO: Select object based on coords.
-                    var xTotal = e.clientX / After.Canvas.Scale - After.Canvas.OffsetX;
-                    var yTotal = e.clientY / After.Canvas.Scale - After.Canvas.OffsetY;
+                    var xTotal = e.clientX / After.Canvas.ZoomScale - After.Canvas.OffsetX;
+                    var yTotal = e.clientY / After.Canvas.ZoomScale - After.Canvas.OffsetY;
                     var xCoord = Math.floor(xTotal / 100);
                     var yCoord = Math.floor(yTotal / 100);
                     var xRemainder = xTotal - (xCoord * 100);
@@ -49,6 +49,35 @@ var After;
                         After.Canvas.SelectedObject = area[0];
                         if (After.Canvas.SelectedObject) {
                             After.Canvas.SelectedObject.IsSelected = true;
+                        }
+                    }
+                }
+                ;
+                CenterOnCoords(X, Y, ResetZoom, SmoothScroll) {
+                    if (SmoothScroll) {
+                        if (ResetZoom) {
+                            var toX = (X * 100) + (After.Canvas.Element.width / 2) - 50;
+                            var toY = (Y * 100) + (After.Canvas.Element.height / 2) - 50;
+                            After.Utilities.Animate(After.Canvas, "OffsetX", toX, 500);
+                            After.Utilities.Animate(After.Canvas, "OffsetY", toY, 500);
+                            After.Utilities.Animate(After.Canvas, "ZoomScale", 1, 500);
+                        }
+                        else {
+                            var toX = (X * 100 * After.Canvas.ZoomScale) + (After.Canvas.Element.width / 2 / After.Canvas.ZoomScale) - (100 * After.Canvas.ZoomScale / 2);
+                            var toY = (Y * 100 * After.Canvas.ZoomScale) + (After.Canvas.Element.height / 2 / After.Canvas.ZoomScale) - (100 * After.Canvas.ZoomScale / 2);
+                            After.Utilities.Animate(After.Canvas, "OffsetX", toX, 500);
+                            After.Utilities.Animate(After.Canvas, "OffsetY", toY, 500);
+                        }
+                    }
+                    else {
+                        if (ResetZoom) {
+                            After.Canvas.OffsetX = (X * 100) + (After.Canvas.Element.width / 2) - 50;
+                            After.Canvas.OffsetY = (Y * 100) + (After.Canvas.Element.height / 2) - 50;
+                            After.Canvas.ZoomScale = 1;
+                        }
+                        else {
+                            After.Canvas.OffsetX = (X * 100 * After.Canvas.ZoomScale) + (After.Canvas.Element.width / 2 / After.Canvas.ZoomScale) - (100 * After.Canvas.ZoomScale / 2);
+                            After.Canvas.OffsetY = (Y * 100 * After.Canvas.ZoomScale) + (After.Canvas.Element.height / 2 / After.Canvas.ZoomScale) - (100 * After.Canvas.ZoomScale / 2);
                         }
                     }
                 }
@@ -100,8 +129,8 @@ var After;
                             if (After.Canvas.InertiaX == 0 && After.Canvas.InertiaY == 0) {
                                 window.clearInterval(After.Temp.InertiaInterval);
                             }
-                            After.Canvas.OffsetX += (After.Canvas.InertiaX / After.Canvas.Scale);
-                            After.Canvas.OffsetY += (After.Canvas.InertiaY / After.Canvas.Scale);
+                            After.Canvas.OffsetX += (After.Canvas.InertiaX / After.Canvas.ZoomScale);
+                            After.Canvas.OffsetY += (After.Canvas.InertiaY / After.Canvas.ZoomScale);
                         }
                         else {
                             After.Canvas.InertiaX = 0;

@@ -6,7 +6,6 @@ var After;
         (function (App) {
             class Me {
                 constructor() {
-                    this.Name = sessionStorage["Username"];
                     this.IsCharging = false;
                     this.IsMoving = false;
                 }

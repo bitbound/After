@@ -8,7 +8,7 @@ After.Temp.Intro.Start = function () {
             $("#divIntro").animate({ opacity: 1 }, 2000, function () {
                 $("#svgRing1").animate({ opacity: 1 }, 1500);
                 $("#svgRing2").animate({ opacity: 1 }, 1500, function () {
-                    After.Audio.LoadSound("/Assets/Sounds/gameaudio_teleport-space-morph.mp3", function () {
+                    After.Audio.LoadSound("/Assets/Sounds/gameaudio_teleport-space-morph.mp3", false, function () {
                         $("#svgSliver").show();
                         After.Audio.PlaySource.start();
                         $("#svgSliver").animate({ top: "20%" }, 500, function () {
@@ -17,7 +17,7 @@ After.Temp.Intro.Start = function () {
                                     window.setTimeout(function () {
                                         $("#divLogo").animate({ opacity: 0 }, 1500, function () {
                                             $("#divLogo").remove();
-                                            After.Audio.LoopSound("/Assets/Sounds/urupin__heartbeat.mp3", function () {
+                                            After.Audio.LoopSound("/Assets/Sounds/urupin__heartbeat.mp3", false, function () {
                                                 window.setTimeout(function () {
                                                     ATI.Narrate();
                                                     $("#buttonSkip").fadeIn();
@@ -42,7 +42,7 @@ After.Temp.Intro.Start = function () {
             After.Audio.StopLoop();
             $.get("/Controls/CreateCharacter.html", function (data) {
                 $(document.body).append(data);
-                After.Audio.LoadLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", function () {
+                After.Audio.LoadLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", true, function () {
                     After.Temp.CreateCharacter.Init();
                 });
             });
@@ -87,7 +87,7 @@ After.Temp.Intro.Start = function () {
                                 $("#divIntro").hide();
                                 $.get("/Controls/CreateCharacter.html", function (data) {
                                     $(document.body).append(data);
-                                    After.Audio.LoadLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", function () {
+                                    After.Audio.LoadLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", true, function () {
                                         After.Temp.CreateCharacter.Init();
                                     });
                                 });

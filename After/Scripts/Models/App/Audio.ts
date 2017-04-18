@@ -7,8 +7,10 @@
         PlaySource: AudioBufferSourceNode;
         LoopSource: AudioBufferSourceNode;
 
-        PlaySound(SourceFile: string, Callback: () => void): void {
-            After.Utilities.ShowLoading();
+        PlaySound(SourceFile: string, ShowLoading: boolean, Callback: () => void): void {
+            if (ShowLoading) {
+                After.Utilities.ShowLoading();
+            }
             After.Audio.Context = After.Audio.Context || new AudioContext();
             var audioCtx = After.Audio.Context;
             After.Audio.PlaySource = audioCtx.createBufferSource();
@@ -22,7 +24,9 @@
                     source.buffer = buffer;
                     source.connect(audioCtx.destination);
                     source.start(0);
-                    After.Utilities.RemoveLoading();
+                    if (ShowLoading) {
+                        After.Utilities.RemoveLoading();
+                    }
                     if (Callback) {
                         Callback();
                     }
@@ -30,8 +34,10 @@
             }
             request.send();
         };
-        LoadSound(SourceFile: string, Callback: () => void) {
-            After.Utilities.ShowLoading();
+        LoadSound(SourceFile: string, ShowLoading: boolean, Callback: () => void) {
+            if (ShowLoading) {
+                After.Utilities.ShowLoading();
+            }
             After.Audio.Context = After.Audio.Context || new AudioContext();
             var audioCtx = After.Audio.Context;
             After.Audio.PlaySource = audioCtx.createBufferSource();
@@ -44,7 +50,9 @@
                 audioCtx.decodeAudioData(request.response, function (buffer) {
                     source.buffer = buffer;
                     source.connect(audioCtx.destination);
-                    After.Utilities.RemoveLoading();
+                    if (ShowLoading) {
+                        After.Utilities.RemoveLoading();
+                    }
                     if (Callback) {
                         Callback();
                     }
@@ -58,8 +66,10 @@
                 After.Audio.PlaySource.disconnect();
             }
         }
-        LoopSound(SourceFile: string, Callback: () => void): void {
-            After.Utilities.ShowLoading();
+        LoopSound(SourceFile: string, ShowLoading: boolean, Callback: () => void): void {
+            if (ShowLoading) {
+                After.Utilities.ShowLoading();
+            }
             After.Audio.Context = After.Audio.Context || new AudioContext();
             var audioCtx = After.Audio.Context;
             After.Audio.LoopSource = audioCtx.createBufferSource();
@@ -73,7 +83,9 @@
                     source.buffer = buffer;
                     source.connect(audioCtx.destination);
                     source.start(0);
-                    After.Utilities.RemoveLoading();
+                    if (ShowLoading) {
+                        After.Utilities.RemoveLoading();
+                    }
                     if (Callback) {
                         Callback();
                     }
@@ -81,8 +93,10 @@
             }
             request.send();
         };
-        LoadLoop(SourceFile: string, Callback: () => void) {
-            After.Utilities.ShowLoading();
+        LoadLoop(SourceFile: string, ShowLoading: boolean, Callback: () => void) {
+            if (ShowLoading) {
+                After.Utilities.ShowLoading();
+            }
             After.Audio.Context = After.Audio.Context || new AudioContext();
             var audioCtx = After.Audio.Context;
             After.Audio.LoopSource = audioCtx.createBufferSource();
@@ -95,7 +109,9 @@
                 audioCtx.decodeAudioData(request.response, function (buffer) {
                     source.buffer = buffer;
                     source.connect(audioCtx.destination);
-                    After.Utilities.RemoveLoading();
+                    if (ShowLoading) {
+                        After.Utilities.RemoveLoading();
+                    }
                     if (Callback) {
                         Callback();
                     }
