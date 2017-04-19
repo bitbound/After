@@ -89,7 +89,7 @@ var After;
                         scaleChange = -1;
                     }
                     ;
-                    scaleChange = scaleChange * .1 * After.Canvas.ZoomScale;
+                    scaleChange = scaleChange * .2 * After.Canvas.ZoomScale;
                     After.Canvas.ZoomScale += scaleChange;
                     After.Canvas.OffsetX -= (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.width * (e.clientX / After.Canvas.Element.width)) / After.Canvas.ZoomScale;
                     After.Canvas.OffsetY -= (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.height * (e.clientY / After.Canvas.Element.height)) / After.Canvas.ZoomScale;
@@ -193,7 +193,7 @@ var After;
                         var lowerY = Math.min(e.touches[0].clientY, e.touches[1].clientY);
                         var distanceY = higherY - lowerY;
                         var distanceTotal = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-                        var scaleChange = (distanceTotal - After.Canvas.LastTouchDistance) * .0025 * After.Canvas.ZoomScale;
+                        var scaleChange = (distanceTotal - After.Canvas.LastTouchDistance) * .005 * After.Canvas.ZoomScale;
                         var tranPanX = (xCenter - After.Canvas.StartDragX) / After.Canvas.ZoomScale;
                         var tranPanY = (yCenter - After.Canvas.StartDragY) / After.Canvas.ZoomScale;
                         var scalePanX = (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.width * (xCenter / After.Canvas.Element.width)) / After.Canvas.ZoomScale;

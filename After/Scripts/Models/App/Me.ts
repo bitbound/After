@@ -4,8 +4,13 @@
             this.IsCharging = false;
             this.IsMoving = false;
         }
+        CharacterID: number;
         Name: string;
         Color: string;
+        CurrentXYZ: string;
+        XCoord: number;
+        YCoord: number;
+        ZCoord: string;
         IsCharging: boolean;
         IsMoving: boolean;
         CoreEnergy: number;
@@ -20,7 +25,6 @@
         MaxWillpower: number;
         MaxWillpowerModifier: number;
         ViewDistance: number;
-        CurrentLocation: {};
 
         StartCharging() {
             var request = {

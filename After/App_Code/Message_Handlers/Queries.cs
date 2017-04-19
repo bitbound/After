@@ -16,7 +16,7 @@ namespace After.Message_Handlers
         }
         public static void HandleFirstLoad(dynamic jsonMessage, Socket_Handler SH)
         {
-            jsonMessage.Player = SH.Player;
+            jsonMessage.Player = SH.Player.ConvertToMe();
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
             foreach (var area in SH.Player.CurrentLocation.GetNearbyLocations(SH.Player.ViewDistance))

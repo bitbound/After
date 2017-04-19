@@ -43,5 +43,30 @@ namespace After.Models
         {
             return Socket_Handler.SocketCollection.Any(sh => (sh as Socket_Handler)?.Player?.Name == Name);
         }
+        public dynamic ConvertToMe()
+        {
+            return new
+            {
+                CharacterID = this.CharacterID,
+                Name = this.Name,
+                Color = this.Color,
+                XCoord = this.CurrentLocation.XCoord,
+                YCoord = this.CurrentLocation.YCoord,
+                ZCoord = this.CurrentLocation.ZCoord,
+                CurrentXYZ = this.CurrentXYZ,
+                CoreEnergy = this.CoreEnergy,
+                CoreEnergyPeak = this.CoreEnergyPeak,
+                CurrentEnergy = this.CurrentEnergy,
+                MaxEnergy = this.MaxEnergy,
+                MaxEnergyModifier = this.MaxEnergyModifier,
+                CurrentCharge = this.CurrentCharge,
+                MaxCharge = this.MaxCharge,
+                MaxChargeModifier = this.MaxChargeModifier,
+                CurrentWillpower = this.CurrentWillpower,
+                MaxWillpower = this.MaxWillpower,
+                MaxWillpowerModifier = this.MaxWillpowerModifier,
+                ViewDistance = this.ViewDistance
+            };
+        }
     }
 }

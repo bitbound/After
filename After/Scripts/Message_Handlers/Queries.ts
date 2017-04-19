@@ -28,5 +28,6 @@
             After.World_Data.Areas.push(area);
         })
         After.Me.UpdateStatsUI();
+        After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false)
     }
 }

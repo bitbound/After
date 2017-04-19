@@ -35,6 +35,7 @@ var After;
                     After.World_Data.Areas.push(area);
                 });
                 After.Me.UpdateStatsUI();
+                After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
             }
             Queries.HandleFirstLoad = HandleFirstLoad;
         })(Queries = Message_Handlers.Queries || (Message_Handlers.Queries = {}));

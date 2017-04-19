@@ -17,6 +17,117 @@
                 Description = "This is the center of nothing and the start of everything.",
                 Color = "lightsteelblue"
             });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = -2,
+                YCoord = 0,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = -1,
+                YCoord = 0,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = 1,
+                YCoord = 0,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = 2,
+                YCoord = 0,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = -1,
+                YCoord = -1,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = 1,
+                YCoord = -1,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = 0,
+                YCoord = -2,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = -3,
+                YCoord = 1,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = -4,
+                YCoord = 2,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = 3,
+                YCoord = 1,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
+            After.Models.World.Current.Locations.Add(new After.Models.Location()
+            {
+                XCoord = 4,
+                YCoord = 2,
+                ZCoord = "0",
+                IsStatic = true,
+                Title = "After Commons",
+                Description = "This is the center of nothing and the start of everything.",
+                Color = "lightsteelblue"
+            });
         }
     }
 
