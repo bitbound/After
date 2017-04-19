@@ -87,13 +87,15 @@
 
                     c2d.fillStyle = value.Color;
                     c2d.beginPath();
-                    c2d.arc(value.ParentBounds.left + (part.CurrentX * scale), value.ParentBounds.top + (part.CurrentY * scale), .5 * scale, 0, Math.PI * 2);
+                    var partX = value.ParentBounds.left + (part.CurrentX * scale) + (50 * scale);
+                    var partY = value.ParentBounds.top + (part.CurrentY * scale) + (30 * scale);
+                    c2d.arc(partX, partY, .5 * scale, 0, Math.PI * 2);
                     c2d.fill();
 
                     c2d.fillStyle = "dimgray";
                     c2d.globalAlpha = .1;
                     c2d.beginPath();
-                    c2d.arc(value.ParentBounds.left + (part.CurrentX * scale) + (3 * scale), value.ParentBounds.top + (part.CurrentY * scale) + (10 * scale), .75 * scale, 0, Math.PI * 2);
+                    c2d.arc(partX + (3 * scale), partY + (10 * scale), .75 * scale, 0, Math.PI * 2);
                     c2d.fill();
                     c2d.globalAlpha = 1;
 

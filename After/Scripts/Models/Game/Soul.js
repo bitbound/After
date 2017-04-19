@@ -43,16 +43,14 @@ var After;
                         var row = Math.ceil(position / columns);
                         var column = position - (columns * (row - 1));
                         Soul.CrowdScale = 1 / columns;
-                        var xCenter = 50;
-                        var yCenter = 30;
                         var centerRow = rows / 2 + .5;
                         var centerColumn = columns / 2 + .5;
                         var xOffset = row - centerRow;
                         var yOffset = column - centerColumn;
                         var particleDiameter = 20 * Soul.CrowdScale;
                         var particleRadius = (particleDiameter / 2);
-                        var top = (yOffset * particleDiameter) + yCenter - particleRadius;
-                        var left = (xOffset * particleDiameter) + xCenter - particleRadius;
+                        var top = (yOffset * particleDiameter) - particleRadius;
+                        var left = (xOffset * particleDiameter) - particleRadius;
                         Soul.ParticleBounds = {
                             top: top,
                             left: left,
