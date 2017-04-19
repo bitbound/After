@@ -271,16 +271,9 @@
     <Content Include="scripts\Controls\LoginForm.js" />
     <Content Include="scripts\Controls\Splash.js" />
     <Content Include="scripts\Init.js" />
-    <None Include="scripts\jquery-3.1.1.intellisense.js" />
-    <Content Include="scripts\jquery-3.1.1.js" />
-    <Content Include="scripts\jquery-3.1.1.min.js" />
-    <Content Include="scripts\jquery-3.1.1.slim.js" />
-    <Content Include="scripts\jquery-3.1.1.slim.min.js" />
     <Content Include="scripts\jQuery\jquery-3.1.0.js" />
     <Content Include="scripts\jQuery\jquery-3.1.0.min.js" />
     <Content Include="packages.config" />
-    <Content Include="scripts\jquery-3.1.1.slim.min.map" />
-    <Content Include="scripts\jquery-3.1.1.min.map" />
     <None Include="scripts\jQuery\jquery-3.1.1-vsdoc.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />

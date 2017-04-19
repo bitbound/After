@@ -138,7 +138,8 @@ namespace After.Models
                 Color = this.Color,
                 XCoord = this.CurrentLocation.XCoord,
                 YCoord = this.CurrentLocation.YCoord,
-                ZCoord = this.CurrentLocation.ZCoord
+                ZCoord = this.CurrentLocation.ZCoord,
+                CurrentXYZ = this.CurrentXYZ
             };
         }
     }
