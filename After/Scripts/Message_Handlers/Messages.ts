@@ -22,5 +22,9 @@
             default:
                 break;
         }
+        var divChat = document.getElementById("divChatMessageWindow");
+        if (divChat != null) {
+            divChat.scrollTop = divChat.scrollHeight;
+        }
     };
 }

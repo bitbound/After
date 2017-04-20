@@ -729,6 +729,14 @@ var After;
                 $(".dpad-direction").on("click", function (e) {
                     After.Me.Move($(e.currentTarget).attr("move-direction"));
                 });
+                $(".dpad-direction").on("touchstart", function (e) {
+                    e.preventDefault();
+                    $(e.currentTarget).addClass("hover");
+                });
+                $(".dpad-direction").on("touchend", function (e) {
+                    e.preventDefault();
+                    $(e.currentTarget).removeClass("hover");
+                });
                 After.Controls.Game.PositionSideTabs();
             },
             PositionSideTabs: function () {

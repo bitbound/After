@@ -90,10 +90,6 @@
                     throw "Error handling message: " + e.data;
                 }
                 eval("After.Message_Handlers." + jsonMessage.Category + "." + "Handle" + jsonMessage.Type + "(jsonMessage);");
-                var divChat = document.getElementById("divChatMessageWindow");
-                if (divChat != null) {
-                    divChat.scrollTop = divChat.scrollHeight;
-                }
             };
         }
     }

@@ -19,6 +19,9 @@ namespace After.Message_Handlers
                 case "Global":
                     Socket_Handler.SocketCollection.Broadcast(Json.Encode(jsonMessage));
                     break;
+                case "Command":
+                    ParseCommand(jsonMessage, SH);
+                    break;
                 default:
                     break;
             }
@@ -27,7 +30,7 @@ namespace After.Message_Handlers
         {
             string message = jsonMessage.Message;
             var commandArray = message.Split(' ');
-            var command = commandArray[0].Remove(0, 1).ToLower();
+            var command = commandArray[0].Replace("/", "");
             switch (command)
             {
                 case "?":
