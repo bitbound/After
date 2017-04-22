@@ -2,8 +2,9 @@ var After;
 (function (After) {
     var Controls;
     (function (Controls) {
-        Controls.Game = {
-            Init: function () {
+        var Game;
+        (function (Game) {
+            function Init() {
                 var query = {
                     "Category": "Queries",
                     "Type": "PlayerUpdate"
@@ -21,8 +22,10 @@ var After;
                         After.Controls.Game.Load();
                     });
                 });
-            },
-            Load: function () {
+            }
+            Game.Init = Init;
+            ;
+            function Load() {
                 $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
                 // TODO: First load.
                 var query = {
@@ -738,15 +741,37 @@ var After;
                     $(e.currentTarget).removeClass("hover");
                 });
                 After.Controls.Game.PositionSideTabs();
-            },
-            PositionSideTabs: function () {
+            }
+            Game.Load = Load;
+            ;
+            function ToggleProperty(e) {
+                var request = {
+                    "Category": "Settings",
+                    "Type": "",
+                    "Property": e.currentTarget.getAttribute("prop")
+                };
+                if ($(e.currentTarget).attr("on") == "false") {
+                    $(e.currentTarget).attr("on", "true");
+                    request["Value"] = true;
+                }
+                else {
+                    $(e.currentTarget).attr("on", "false");
+                    request["Value"] = false;
+                }
+                After.Connection.Socket.send(JSON.stringify(request));
+            }
+            Game.ToggleProperty = ToggleProperty;
+            ;
+            function PositionSideTabs() {
                 var top = 0;
                 $("#divSideTabs").find(".side-tab-icon:visible").each(function (index, elem) {
                     elem.style.top = String(top) + "px";
                     top += 65;
                 });
             }
-        };
+            Game.PositionSideTabs = PositionSideTabs;
+            ;
+        })(Game = Controls.Game || (Controls.Game = {}));
     })(Controls = After.Controls || (After.Controls = {}));
 })(After || (After = {}));
 //# sourceMappingURL=Game.js.map
