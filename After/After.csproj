@@ -142,6 +142,7 @@
     <Content Include="App_Code\Socket_Handler.cs" />
     <Content Include="App_Code\Utilities.cs" />
     <Content Include="App_Code\Migrations\Configuration.cs" />
+    <Content Include="App_Code\Message_Handlers\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

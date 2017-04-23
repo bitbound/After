@@ -755,7 +755,7 @@
     export function ToggleProperty(e) {
         var request = {
             "Category": "Settings",
-            "Type": "",
+            "Type": "ChangeSetting",
             "Property": e.currentTarget.getAttribute("prop")
         }
         if ($(e.currentTarget).attr("on") == "false") {
