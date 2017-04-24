@@ -272,6 +272,9 @@
 
         $(".bottom-tab-icon").mousedown(function (e) {
             e.preventDefault();
+            if (e.currentTarget.classList.contains("blinking")) {
+                e.currentTarget.classList.remove("blinking");
+            }
             After.Temp.Dragging = true;
             After.Temp.StartPoint = e;
             After.Temp.ActiveIcon = $(e.currentTarget);
@@ -325,6 +328,9 @@
         });
         $(".bottom-tab-icon").on("touchstart", function (e:JQueryEventObject&TouchEvent) {
             e.preventDefault();
+            if (e.currentTarget.classList.contains("blinking")) {
+                e.currentTarget.classList.remove("blinking");
+            }
             if (e.touches.length == 1) {
                 $(e.currentTarget).addClass("hover");
                 After.Temp.Dragging = true;
@@ -377,6 +383,9 @@
 
         $(".side-tab-icon").mousedown(function (e) {
             e.preventDefault();
+            if (e.currentTarget.classList.contains("blinking")) {
+                e.currentTarget.classList.remove("blinking");
+            }
             After.Temp.Dragging = true;
             After.Temp.StartPoint = e;
             After.Temp.ActiveIcon = $(e.currentTarget);
@@ -426,6 +435,9 @@
         });
         $(".side-tab-icon").on("touchstart", function (e:JQueryEventObject&TouchEvent) {
             e.preventDefault();
+            if (e.currentTarget.classList.contains("blinking")) {
+                e.currentTarget.classList.remove("blinking");
+            }
             if (e.touches.length == 1) {
                 $(e.currentTarget).addClass("hover");
                 After.Temp.Dragging = true;

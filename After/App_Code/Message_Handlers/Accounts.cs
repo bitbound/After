@@ -13,7 +13,7 @@ namespace After.Message_Handlers
         public static void HandleAccountCreation(dynamic jsonMessage, Socket_Handler SH)
         {
             string name = jsonMessage.Username;
-            if (World.Current.Players.FirstOrDefault((p => p.Name == name)) != null)
+            if (SH.World.Players.FirstOrDefault((p => p.Name == name)) != null)
             {
                 jsonMessage.Result = "exists";
                 jsonMessage.Password = null;
@@ -31,10 +31,9 @@ namespace After.Message_Handlers
                     // TODO: Add void area interaction.
                     CurrentXYZ = "0,0,0"
                 };
-                World.Current.Players.Add(SH.Player);
-                World.Current.SaveChanges();
                 Socket_Handler.SocketCollection.Add(SH);
                 SH.Player.AuthenticationToken = Guid.NewGuid().ToString();
+                SH.World.Players.Add(SH.Player);
                 jsonMessage.Result = "ok";
                 jsonMessage.Password = null;
                 jsonMessage.AuthenticationToken = SH.Player.AuthenticationToken;
@@ -50,7 +49,7 @@ namespace After.Message_Handlers
         public static void HandleLogon(dynamic jsonMessage, Socket_Handler SH)
         {
             var playerName = (string)jsonMessage.Username;
-            SH.Player = World.Current.Players.FirstOrDefault(p => p.Name == playerName);
+            SH.Player = SH.World.Players.FirstOrDefault(p => p.Name == playerName);
             if (SH.Player == null)
             {
                 jsonMessage.Result = "failed";

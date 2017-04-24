@@ -90,7 +90,10 @@ namespace After.Models
         {
             get
             {
-                return World.Current.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
+                using (var world = new World())
+                {
+                    return world.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
+                }
             }
         }
         public string PreviousXYZ { get; set; }
@@ -99,7 +102,10 @@ namespace After.Models
         {
             get
             {
-                return World.Current.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+                using (var world = new World())
+                {
+                    return world.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+                }
             }
         }
         public string CurrentXYZ { get; set; }

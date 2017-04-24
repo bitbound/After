@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using After.Models;
+using System;
+using System.Text;
 using System.Web.Helpers;
 
 namespace After.Message_Handlers
@@ -14,6 +16,14 @@ namespace After.Message_Handlers
                 return;
             }
             jsonMessage.Username = SH.Player.Name;
+            SH.World.Messages.Add(new Message()
+            {
+                Sender = SH.Player.Name,
+                Content = jsonMessage.Message,
+                Recipient = jsonMessage?.Recipent,
+                Channel = jsonMessage.Channel,
+                Timestamp = DateTime.Now
+            });
             switch ((string)jsonMessage.Channel)
             {
                 case "Global":

@@ -24,6 +24,9 @@
         }
         var divChat = document.getElementById("divChatMessageWindow");
         if (divChat != null) {
+            if ($("#divChatMessageWindow").height() == 0) {
+                $("#divChatIconBorder").addClass("blinking");
+            }
             divChat.scrollTop = divChat.scrollHeight;
         }
     };

@@ -38,23 +38,26 @@ namespace After.Models
         {
             get
             {
-                var occupants = new List<Character>();
-                var npcs = World.Current.NPCs.Where(n => n.CurrentXYZ == this.LocationID);
-                if (npcs != null)
+                using (var world = new World())
                 {
-                    occupants.AddRange(npcs);
+                    var occupants = new List<Character>();
+                    var npcs = world.NPCs.Where(n => n.CurrentXYZ == this.LocationID);
+                    if (npcs != null)
+                    {
+                        occupants.AddRange(npcs);
+                    }
+                    var hostiles = world.Hostiles.Where(h => h.CurrentXYZ == this.LocationID);
+                    if (hostiles != null)
+                    {
+                        occupants.AddRange(hostiles);
+                    }
+                    var players = world.Players.Where(p => p.CurrentXYZ == this.LocationID);
+                    if (players != null)
+                    {
+                        occupants.AddRange(players);
+                    }
+                    return occupants;
                 }
-                var hostiles = World.Current.Hostiles.Where(h => h.CurrentXYZ == this.LocationID);
-                if (hostiles != null)
-                {
-                    occupants.AddRange(hostiles);
-                }
-                var players = World.Current.Players.Where(p => p.CurrentXYZ == this.LocationID);
-                if (players != null)
-                {
-                    occupants.AddRange(players);
-                }
-                return occupants;
             }
         }
         public bool IsInnerVoid { get; set; }
@@ -63,13 +66,16 @@ namespace After.Models
 
         public static bool Exists(string XYZ)
         {
-            if (World.Current.Locations.FirstOrDefault(loc => loc.LocationID == XYZ) != null)
+            using (var world = new World())
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                if (world.Locations.FirstOrDefault(loc => loc.LocationID == XYZ) != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         public bool ContainsOccupant(Character CharacterObject)
@@ -89,10 +95,13 @@ namespace After.Models
         }
         public List<Location> GetNearbyLocations(double Distance)
         {
-            var locations = World.Current.Locations.Where(l => l.ZCoord == this.ZCoord &&
-            Math.Abs(l.XCoord - this.XCoord) <= Distance &&
-            Math.Abs(l.YCoord - this.YCoord) <= Distance);
-            return locations?.ToList();
+            using (var world = new World())
+            {
+                var locations = world.Locations.Where(l => l.ZCoord == this.ZCoord &&
+                    Math.Abs(l.XCoord - this.XCoord) <= Distance &&
+                    Math.Abs(l.YCoord - this.YCoord) <= Distance);
+                return locations?.ToList();
+            }
         }
         public dynamic ConvertToArea()
         {

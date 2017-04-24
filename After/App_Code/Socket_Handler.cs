@@ -17,8 +17,10 @@ namespace After
         public static WebSocketCollection SocketCollection { get; set; } = new WebSocketCollection();
         public bool Authenticated { get; set; }
         public Player Player { get; set; }
+        public World World { get; set; } = new World();
         public Socket_Handler()
         {
+
         }
         public override void OnOpen()
         {
@@ -48,6 +50,7 @@ namespace After
             {
                 methodHandler.Invoke(null, new object[] { jsonMessage, this });
             }
+            World.SaveChanges();
         }
 
         public override void OnClose()
@@ -71,6 +74,7 @@ namespace After
                 Username = Player?.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
+            World.SaveChanges();
         }
         public override void OnError()
         {
@@ -93,6 +97,7 @@ namespace After
                 Username = Player?.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
+            World.SaveChanges();
         }
     }
 }

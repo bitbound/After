@@ -337,6 +337,23 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
+
+        /*** All Elements ***/
+        .blinking {
+            animation-name: blinking;
+            animation-direction: alternate-reverse;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            animation-duration: 1s;
+        }
+        @keyframes blinking {
+            from {
+                background-color: transparent;
+            }
+            to {
+                background-color: dimgray;
+            }
+        }
         /*** All Tabs ***/
         .tab-outerframe {
             position: absolute;
@@ -537,10 +554,10 @@
         }
 
         .anim-charge-button {
-            animation-name: particle-charge-button;
+            animation-name: anim-charge-button;
             animation-duration: 1s;
         }
-        @keyframes particle-charge-button {
+        @keyframes anim-charge-button {
             from {
                 opacity: 1;
             }
