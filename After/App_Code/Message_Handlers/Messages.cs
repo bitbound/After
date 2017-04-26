@@ -38,7 +38,7 @@ namespace After.Message_Handlers
         }
         public static void ParseCommand(dynamic jsonMessage, Socket_Handler SH)
         {
-            string message = jsonMessage.Message;
+            string message = jsonMessage.Message.ToLower();
             var commandArray = message.Split(' ');
             var command = commandArray[0].Replace("/", "");
             switch (command)

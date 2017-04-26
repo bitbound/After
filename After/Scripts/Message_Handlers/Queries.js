@@ -6,35 +6,30 @@ var After;
         (function (Queries) {
             function HandleStatUpdate(jsonMessage) {
                 After.Me[jsonMessage.Stat] = jsonMessage.Amount;
-                After.Me.UpdateStatsUI();
+                After.Game.UpdateStatsUI();
             }
             Queries.HandleStatUpdate = HandleStatUpdate;
             function HandlePlayerUpdate(jsonMessage) {
                 for (var stat in jsonMessage.Player) {
                     After.Me[stat] = jsonMessage.Player[stat];
                 }
-                After.Me.UpdateStatsUI();
+                After.Game.UpdateStatsUI();
             }
             Queries.HandlePlayerUpdate = HandlePlayerUpdate;
             function HandleFirstLoad(jsonMessage) {
                 for (var stat in jsonMessage.Player) {
                     After.Me[stat] = jsonMessage.Player[stat];
                 }
+                After.Drawing.AnimateParticles();
                 jsonMessage.Souls.forEach(function (value, index) {
-                    var soul = new After.Models.Game.Soul();
-                    for (var stat in value) {
-                        soul[stat] = value[stat];
-                    }
+                    var soul = After.Models.Game.Soul.Create(value);
                     After.World_Data.Souls.push(soul);
                 });
                 jsonMessage.Areas.forEach(function (value, index) {
-                    var area = new After.Models.Game.Area(value.XCoord, value.YCoord, value.ZCoord);
-                    for (var prop in value) {
-                        area[prop] = value[prop];
-                    }
+                    var area = After.Models.Game.Area.Create(value);
                     After.World_Data.Areas.push(area);
                 });
-                After.Me.UpdateStatsUI();
+                After.Game.UpdateStatsUI();
                 After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
             }
             Queries.HandleFirstLoad = HandleFirstLoad;

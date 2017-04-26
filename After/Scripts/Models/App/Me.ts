@@ -3,11 +3,24 @@
         constructor() {
             this.IsCharging = false;
             this.IsMoving = false;
+            this.Particles = new Array<After.Models.Game.Particle>();
+            this.Height = 1;
         }
         CharacterID: number;
         Name: string;
         Color: string;
-        CurrentXYZ: string;
+        get CurrentXYZ() {
+            if (typeof this.XCoord == "undefined" || typeof this.YCoord == "undefined" || typeof this.ZCoord == "undefined") {
+                return null;
+            }
+            return this.XCoord.toString() + "," + this.YCoord.toString() + "," + this.ZCoord;
+        };
+        set CurrentXYZ(XYZ: string) {
+            var locArray = XYZ.split(",");
+            this.XCoord = Number(locArray[0]);
+            this.YCoord = Number(locArray[1]);
+            this.ZCoord = locArray[2];
+        };
         XCoord: number;
         YCoord: number;
         ZCoord: string;
@@ -26,6 +39,28 @@
         MaxWillpowerModifier: number;
         ViewDistance: number;
 
+        // *** Visual Properties Only ***//
+        Height: number;
+        ParentBounds: {
+            top: number,
+            right: number,
+            bottom: number,
+            left: number
+        };
+        Particles: Array<After.Models.Game.Particle>;
+        ParticleInterval: number;
+        ParticleBounds: {
+            top: number,
+            right: number,
+            bottom: number,
+            left: number
+        };
+        ParticleWanderTo: {
+            x: number,
+            y: number
+        }
+
+        // *** Functions *** //
         StartCharging() {
             var request = {
                 "Category": "Events",
@@ -46,15 +81,6 @@
                 request.Type = "StartCharging";
             }
             After.Connection.Socket.send(JSON.stringify(request));
-        };
-        UpdateStatsUI() {
-            $("#divEnergyAmount").text(After.Me.CurrentEnergy);
-            $("#divChargeAmount").text(After.Me.CurrentCharge);
-            $("#divWillpowerAmount").text(After.Me.CurrentWillpower);
-            $("#svgEnergy").css("width", (After.Me.CurrentEnergy / After.Me.MaxEnergy * 100) + "%");
-            $("#svgCharge").css("width", (After.Me.CurrentCharge / After.Me.MaxCharge * 100) + "%");
-            $("#svgWillpower").css("width", (After.Me.CurrentWillpower / After.Me.MaxWillpower * 100) + "%");
-            // TODO: Percentages to increase/decrease bars.
         };
         Move(strDirection: string) {
             var request = {

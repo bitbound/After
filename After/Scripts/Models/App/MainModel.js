@@ -6,6 +6,7 @@ var After;
     After.Canvas = new After.Models.App.Canvas();
     After.Connection = new After.Models.App.Connection();
     After.Drawing = new After.Models.App.Drawing();
+    After.Game = new After.Models.App.Game();
     After.Me = new After.Models.App.Me();
     After.Settings = new After.Models.App.Settings();
     After.Utilities = new After.Models.App.Utilities();

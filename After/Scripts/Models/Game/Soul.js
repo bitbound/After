@@ -11,11 +11,26 @@ var After;
                     this.XCoord = 0;
                     this.YCoord = 0;
                     this.ZCoord = "0";
-                    this.Height = 1;
                     this.Color = "gray";
-                    this.Particles = new Array();
                 }
                 ;
+                get CurrentXYZ() {
+                    return this.XCoord.toString() + "," + this.YCoord.toString() + "," + this.ZCoord;
+                }
+                ;
+                set CurrentXYZ(XYZ) {
+                    var locArray = XYZ.split(",");
+                    this.XCoord = Number(locArray[0]);
+                    this.YCoord = Number(locArray[1]);
+                    this.ZCoord = locArray[2];
+                }
+                static Create(DynamicSoul) {
+                    var soul = new After.Models.Game.Soul();
+                    for (var stat in DynamicSoul) {
+                        soul[stat] = DynamicSoul[stat];
+                    }
+                    return soul;
+                }
             }
             Game.Soul = Soul;
         })(Game = Models.Game || (Models.Game = {}));

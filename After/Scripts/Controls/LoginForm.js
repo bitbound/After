@@ -7,6 +7,9 @@ After.Temp.Login.Init = function () {
             $("#inputUsername").val(localStorage["Username"]);
             $("#inputPassword").val("**********");
         }
+        $("#inputPassword").on("input", function () {
+            localStorage.removeItem("AuthenticationToken");
+        })
     });
     After.Connection.Init();
     After.Temp.Login.TryLogin = function () {

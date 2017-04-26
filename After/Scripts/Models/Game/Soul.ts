@@ -6,9 +6,7 @@
             this.XCoord = 0;
             this.YCoord = 0;
             this.ZCoord = "0";
-            this.Height = 1;
             this.Color = "gray";
-            this.Particles = new Array<Particle>();
         };
         Type: string;
         CharacterID: number;
@@ -16,27 +14,22 @@
         XCoord: number;
         YCoord: number;
         ZCoord: string;
-        CurrentXYZ: string;
-        Height: number;
-        CrowdScale: number;
-        ParentBounds: {
-            top: number,
-            right: number,
-            bottom: number,
-            left: number
+        get CurrentXYZ() {
+            return this.XCoord.toString() + "," + this.YCoord.toString() + "," + this.ZCoord;
         };
-        Particles: Array<Particle>;
-        ParticleInterval: number;
-        ParticleBounds: {
-            top: number,
-            right: number,
-            bottom: number,
-            left: number
-        };
-        ParticleWanderTo: {
-            x: number,
-            y: number
+        set CurrentXYZ(XYZ: string) {
+            var locArray = XYZ.split(",");
+            this.XCoord = Number(locArray[0]);
+            this.YCoord = Number(locArray[1]);
+            this.ZCoord = locArray[2];
         }
         Color: string;
+        static Create(DynamicSoul: any) : Soul {
+            var soul = new After.Models.Game.Soul();
+            for (var stat in DynamicSoul) {
+                soul[stat] = DynamicSoul[stat];
+            }
+            return soul;
+        }
     }
 }

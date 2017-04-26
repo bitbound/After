@@ -19,6 +19,11 @@
     //    }
     //    throw e;
     //});
+    window.onbeforeunload = function () {
+        if (After.Connection.Socket.readyState == 1) {
+            return "Are you sure you want to leave without logging out first?";
+        }
+    };
     After.Temp.W = document.documentElement.clientWidth;
     After.Temp.H = document.documentElement.clientHeight;
     $(window).on("resize", function (e) {

@@ -63,15 +63,11 @@ namespace After
             {
                 return;
             }
-            if (Player?.CurrentLocation != null)
-            {
-                Player.CurrentLocation.Occupants.Remove(Player);
-            }
             dynamic message = new
             {
                 Category = "Accounts",
                 Type = "Disconnected",
-                Username = Player?.Name,
+                Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
             World.SaveChanges();
@@ -86,15 +82,11 @@ namespace After
             {
                 return;
             }
-            if (Player?.CurrentLocation != null)
-            {
-                Player.CurrentLocation.Occupants.Remove(Player);
-            }
             dynamic message = new
             {
                 Category = "Accounts",
                 Type = "Disconnected",
-                Username = Player?.Name,
+                Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
             World.SaveChanges();

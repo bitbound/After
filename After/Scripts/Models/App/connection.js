@@ -13,21 +13,6 @@ var After;
                     return After.Connection.Socket;
                 }
                 ;
-                SendChat(e) {
-                    var strMessage = $("#inputChatInput").val();
-                    if (strMessage == "") {
-                        return;
-                    }
-                    var jsonMessage = {
-                        "Category": "Messages",
-                        "Type": "Chat",
-                        "Channel": $("#selectChatChannel").val(),
-                        "Message": strMessage
-                    };
-                    After.Connection.Socket.send(JSON.stringify(jsonMessage));
-                    $("#inputChatInput").val("");
-                }
-                ;
                 SetHandlers() {
                     After.Connection.Socket.onopen = function () {
                         console.log("Connected.");

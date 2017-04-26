@@ -19,9 +19,9 @@ namespace After.Message_Handlers
             jsonMessage.Player = SH.Player.ConvertToMe();
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
-            foreach (var area in SH.Player.CurrentLocation.GetNearbyLocations(SH.Player.ViewDistance))
+            foreach (var area in SH.Player.GetCurrentLocation(SH).GetNearbyLocations(SH))
             {
-                foreach (var character in area.Occupants)
+                foreach (var character in SH.World.Characters.Where(p => p.CurrentXYZ == area.LocationID))
                 {
                     if (character is Player && !(character as Player).IsLoggedIn())
                     {
@@ -29,7 +29,6 @@ namespace After.Message_Handlers
                     }
                     souls.Add(character.ConvertToSoul());
                 }
-
                 areas.Add(area.ConvertToArea());
             }
             jsonMessage.Souls = souls;

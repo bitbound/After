@@ -13,6 +13,13 @@ var After;
                     this.Color = "gray";
                     this.IsSelected = false;
                 }
+                static Create(DynamicArea) {
+                    var area = new After.Models.Game.Area(DynamicArea.XCoord, DynamicArea.YCoord, DynamicArea.ZCoord);
+                    for (var prop in DynamicArea) {
+                        area[prop] = DynamicArea[prop];
+                    }
+                    return area;
+                }
             }
             Game.Area = Area;
         })(Game = Models.Game || (Models.Game = {}));

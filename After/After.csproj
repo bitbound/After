@@ -267,6 +267,7 @@
     <Content Include="Properties\PublishProfiles\Production.pubxml.user" />
     <Content Include="scripts\Controls\CreateAccount.js" />
     <Content Include="scripts\Controls\CreateCharacter.js" />
+    <TypeScriptCompile Include="scripts\Controls\Game.ts" />
     <Content Include="scripts\Controls\Game.js" />
     <Content Include="scripts\Controls\Intro.js" />
     <Content Include="scripts\Controls\LoginForm.js" />
@@ -275,6 +276,7 @@
     <Content Include="scripts\jQuery\jquery-3.1.0.js" />
     <Content Include="scripts\jQuery\jquery-3.1.0.min.js" />
     <Content Include="packages.config" />
+    <Content Include="scripts\Controls\Game.js.map" />
     <None Include="scripts\jQuery\jquery-3.1.1-vsdoc.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />
@@ -288,6 +290,7 @@
     <Content Include="scripts\Models\App\Canvas.js" />
     <Content Include="scripts\Models\App\Connection.js" />
     <Content Include="scripts\Models\App\Drawing.js" />
+    <Content Include="scripts\Models\App\Game.js" />
     <Content Include="scripts\Models\App\MainModel.js" />
     <Content Include="scripts\Models\App\Me.js" />
     <Content Include="scripts\Models\App\Settings.js" />
@@ -296,6 +299,7 @@
     <Content Include="scripts\Models\Game\Bases\Selectable.js" />
     <Content Include="scripts\Models\Game\Particle.js" />
     <Content Include="scripts\Models\Game\Soul.js" />
+    <Content Include="scripts\Models\App\Game.js.map" />
     <None Include="scripts\_references.js" />
     <Content Include="Styles.css" />
     <Content Include="Web.config" />
@@ -313,7 +317,6 @@
     <Content Include="manifest.json" />
     <None Include="Properties\PublishProfiles\Localhost.pubxml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
-    <Content Include="scripts\Controls\Game.js.map" />
     <Content Include="scripts\jQuery\jquery-3.1.1.min.map" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.map" />
     <Content Include="scripts\Message_Handlers\Accounts.js.map" />
@@ -342,7 +345,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="scripts\Controls\Game.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Accounts.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Events.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Messages.ts" />
@@ -351,12 +353,14 @@
     <TypeScriptCompile Include="scripts\Models\App\Canvas.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Connection.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Drawing.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Game.ts" />
     <TypeScriptCompile Include="scripts\Models\App\MainModel.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Me.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Settings.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Utilities.ts" />
     <TypeScriptCompile Include="scripts\Models\Game\Area.ts" />
     <TypeScriptCompile Include="scripts\Models\Game\Bases\Selectable.ts" />
+    <TypeScriptCompile Include="scripts\Models\Game\FreeParticle.ts" />
     <TypeScriptCompile Include="scripts\Models\Game\Particle.ts" />
     <TypeScriptCompile Include="scripts\Models\Game\Soul.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />

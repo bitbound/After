@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Web.Helpers;
 
 namespace After.Models
 {
@@ -34,31 +35,17 @@ namespace After.Models
         public DateTime? LastVisited { get; set; }
         public string LastVisitedBy { get; set; }
         public long InvestedWillpower { get; set; }
-        public List<Character> Occupants
+        public List<Character> GetOccupants(Socket_Handler SH)
         {
-            get
+            var characters = SH.World.Characters.Where(p => p.CurrentXYZ == this.LocationID);
+            if (characters != null)
             {
-                using (var world = new World())
-                {
-                    var occupants = new List<Character>();
-                    var npcs = world.NPCs.Where(n => n.CurrentXYZ == this.LocationID);
-                    if (npcs != null)
-                    {
-                        occupants.AddRange(npcs);
-                    }
-                    var hostiles = world.Hostiles.Where(h => h.CurrentXYZ == this.LocationID);
-                    if (hostiles != null)
-                    {
-                        occupants.AddRange(hostiles);
-                    }
-                    var players = world.Players.Where(p => p.CurrentXYZ == this.LocationID);
-                    if (players != null)
-                    {
-                        occupants.AddRange(players);
-                    }
-                    return occupants;
-                }
+                return characters.ToList();
             }
+            else
+            {
+                return null;
+            };
         }
         public bool IsInnerVoid { get; set; }
         public long OwnerID { get; set; }
@@ -78,9 +65,9 @@ namespace After.Models
                 }
             }
         }
-        public bool ContainsOccupant(Character CharacterObject)
+        public bool ContainsOccupant(Character CharacterObject, Socket_Handler SH)
         {
-            return Occupants.ToList().Exists(cha => cha.CharacterID == CharacterObject.CharacterID);
+            return GetOccupants(SH).ToList().Exists(cha => cha.CharacterID == CharacterObject.CharacterID);
         }
         public double GetDistanceFrom(Location FromLocation)
         {
@@ -93,14 +80,49 @@ namespace After.Models
                 Math.Pow(FromLocation.YCoord - YCoord, 2)
             );
         }
-        public List<Location> GetNearbyLocations(double Distance)
+        public List<Location> GetNearbyLocations(Socket_Handler SH)
         {
-            using (var world = new World())
+            var locations = SH.World.Locations.Where(l => l.ZCoord == this.ZCoord &&
+                Math.Abs(l.XCoord - this.XCoord) <= SH.Player.ViewDistance &&
+                Math.Abs(l.YCoord - this.YCoord) <= SH.Player.ViewDistance);
+            return locations?.ToList();
+        }
+        public List<Socket_Handler> GetNearbyPlayers(Socket_Handler SH)
+        {
+            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().Where(sock => sock.Player.GetCurrentLocation(SH).GetDistanceFrom(this) <= sock.Player.ViewDistance).ToList();
+        }
+        public void CharacterArrives(Character CharacterObject, Socket_Handler SH)
+        {
+            CharacterObject.CurrentXYZ = LocationID;
+            SH.World.SaveChanges();
+            var soul = CharacterObject.ConvertToSoul();
+            var nearbyPlayers = GetNearbyPlayers(SH);
+            var request = Json.Encode(new
             {
-                var locations = world.Locations.Where(l => l.ZCoord == this.ZCoord &&
-                    Math.Abs(l.XCoord - this.XCoord) <= Distance &&
-                    Math.Abs(l.YCoord - this.YCoord) <= Distance);
-                return locations?.ToList();
+                Category = "Events",
+                Type = "CharacterArrives",
+                Soul = soul
+            });
+            foreach (var player in nearbyPlayers)
+            {
+                player.Send(request);
+            }
+        }
+        public void CharacterLeaves(Character CharacterObject, Socket_Handler SH)
+        {
+            var soul = CharacterObject.ConvertToSoul();
+            var nearbyPlayers = GetNearbyPlayers(SH);
+            CharacterObject.CurrentXYZ = null;
+            SH.World.SaveChanges();
+            var request = Json.Encode(new
+            {
+                Category = "Events",
+                Type = "CharacterLeaves",
+                Soul = soul
+            });
+            foreach (var player in nearbyPlayers)
+            {
+                player.Send(request);
             }
         }
         public dynamic ConvertToArea()

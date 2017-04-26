@@ -252,41 +252,21 @@
         RemoveLoading() {
             $("#divLoadingFrame").remove();
         };
-        Animate(Object: any, Property: string, ToValue: number, MsTransition: number) {
+        Animate(Object: any, Property: string, FromValue: number, ToValue: number, MsTransition: number) {
             if (typeof Object[Property] != "number") {
                 console.log("Property is not of type number.");
                 return;
             }
-            var fromValue = Object[Property];
-            var totalChange = ToValue - fromValue;
-            var frames = 20 * (MsTransition / 1000);
-            var changePerFrame = totalChange / frames;
-            var animateCount = 0;
-            while (typeof After.Temp["AnimateIntervals" + animateCount] != "undefined")
+            var totalChange = ToValue - FromValue;
+            for (var i = 0; i < MsTransition; i = i + 20)
             {
-                animateCount++;
+                window.setTimeout(function (currentTime) {
+                    Object[Property] = FromValue + (currentTime / MsTransition * totalChange);
+                    if (currentTime >= MsTransition) {
+                        Object[Property] = ToValue;
+                    }
+                }, i, i)
             }
-            After.Temp["AnimateIntervals" + animateCount] = window.setInterval(function (Object, Property, changePerFrame, ToValue, animateCount) {
-                if (changePerFrame > 0) {
-                    Object[Property] = Math.min(Object[Property] + changePerFrame, ToValue);
-                    if (Object[Property] >= ToValue) {
-                        Object[Property] = ToValue;
-                        window.clearInterval(After.Temp["AnimateIntervals" + animateCount]);
-                        After.Temp["AnimateIntervals" + animateCount] = undefined;
-                        return;
-                    }
-                }
-                else
-                {
-                    Object[Property] = Math.max(Object[Property] + changePerFrame, ToValue);
-                    if (Object[Property] <= ToValue) {
-                        Object[Property] = ToValue;
-                        window.clearInterval(After.Temp["AnimateIntervals" + animateCount]);
-                        After.Temp["AnimateIntervals" + animateCount] = undefined;
-                        return;
-                    }
-                }
-            }, 50, Object, Property, changePerFrame, ToValue, animateCount)
         }
     }
 }

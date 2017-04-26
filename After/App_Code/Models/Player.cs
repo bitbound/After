@@ -45,14 +45,15 @@ namespace After.Models
         }
         public dynamic ConvertToMe()
         {
+            var location = CurrentXYZ.Split(',');
             return new
             {
                 CharacterID = this.CharacterID,
                 Name = this.Name,
                 Color = this.Color,
-                XCoord = this.CurrentLocation.XCoord,
-                YCoord = this.CurrentLocation.YCoord,
-                ZCoord = this.CurrentLocation.ZCoord,
+                XCoord = location[0],
+                YCoord = location[1],
+                ZCoord = location[2],
                 CurrentXYZ = this.CurrentXYZ,
                 CoreEnergy = this.CoreEnergy,
                 CoreEnergyPeak = this.CoreEnergyPeak,

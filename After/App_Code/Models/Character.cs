@@ -97,16 +97,9 @@ namespace After.Models
             }
         }
         public string PreviousXYZ { get; set; }
-        [ScriptIgnore]
-        public Location CurrentLocation
+        public Location GetCurrentLocation(Socket_Handler SH)
         {
-            get
-            {
-                using (var world = new World())
-                {
-                    return world.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
-                }
-            }
+            return SH.World.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
         }
         public string CurrentXYZ { get; set; }
         public double ViewDistance { get; set; } = 2;
@@ -137,14 +130,15 @@ namespace After.Models
 
         public dynamic ConvertToSoul()
         {
+            var location = CurrentXYZ.Split(',');
             return new
             {
                 CharacterID = this.CharacterID,
                 Name = this.Name,
                 Color = this.Color,
-                XCoord = this.CurrentLocation.XCoord,
-                YCoord = this.CurrentLocation.YCoord,
-                ZCoord = this.CurrentLocation.ZCoord,
+                XCoord = location[0],
+                YCoord = location[1],
+                ZCoord = location[2],
                 CurrentXYZ = this.CurrentXYZ
             };
         }

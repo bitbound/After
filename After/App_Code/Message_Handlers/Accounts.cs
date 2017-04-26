@@ -44,6 +44,7 @@ namespace After.Message_Handlers
                     Type = "Connected",
                     Username = SH.Player.Name
                 }));
+                SH.Player.GetCurrentLocation(SH).CharacterArrives(SH.Player, SH);
             }
         }
         public static void HandleLogon(dynamic jsonMessage, Socket_Handler SH)
@@ -83,9 +84,10 @@ namespace After.Message_Handlers
                 existing.Close();
                 jsonMessage.Note = "LoginElsewhere";
             }
-            if (SH.Player.CurrentLocation == null)
+            if (SH.Player.CurrentXYZ == null)
             {
                 SH.Player.CurrentXYZ = "0,0,0";
+                SH.World.SaveChanges();
             }
             SH.Authenticated = true;
             SH.Player.IsCharging = false;
@@ -101,6 +103,7 @@ namespace After.Message_Handlers
                 Type = "Connected",
                 Username = SH.Player.Name
             }));
+            SH.Player.GetCurrentLocation(SH).CharacterArrives(SH.Player, SH);
         }
     }
 }

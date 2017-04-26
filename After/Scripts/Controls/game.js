@@ -2,9 +2,8 @@ var After;
 (function (After) {
     var Controls;
     (function (Controls) {
-        var Game;
-        (function (Game) {
-            function Init() {
+        Controls.Game = {
+            Init: function () {
                 var query = {
                     "Category": "Queries",
                     "Type": "PlayerUpdate"
@@ -22,10 +21,8 @@ var After;
                         After.Controls.Game.Load();
                     });
                 });
-            }
-            Game.Init = Init;
-            ;
-            function Load() {
+            },
+            Load: function () {
                 $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
                 // TODO: First load.
                 var query = {
@@ -251,7 +248,7 @@ var After;
                 };
                 $("#divChatInput").keypress(function (e) {
                     if (e.keyCode == 13) {
-                        After.Connection.SendChat(e);
+                        After.Game.SendChat(e);
                     }
                     else if (e.keyCode == 27) {
                         $("#divChatInput").blur();
@@ -259,7 +256,7 @@ var After;
                     ;
                 });
                 $("#buttonChatSubmit").click(function (e) {
-                    After.Connection.SendChat(e);
+                    After.Game.SendChat(e);
                 });
                 $("#buttonCharge").click(function (e) {
                     $("#buttonCharge").attr("disabled", "true");
@@ -752,38 +749,12 @@ var After;
                     e.preventDefault();
                     $(e.currentTarget).removeClass("hover");
                 });
-                After.Controls.Game.PositionSideTabs();
-            }
-            Game.Load = Load;
-            ;
-            function ToggleProperty(e) {
-                var request = {
-                    "Category": "Settings",
-                    "Type": "ChangeSetting",
-                    "Property": e.currentTarget.getAttribute("prop")
-                };
-                if ($(e.currentTarget).attr("on") == "false") {
-                    $(e.currentTarget).attr("on", "true");
-                    request["Value"] = true;
-                }
-                else {
-                    $(e.currentTarget).attr("on", "false");
-                    request["Value"] = false;
-                }
-                After.Connection.Socket.send(JSON.stringify(request));
-            }
-            Game.ToggleProperty = ToggleProperty;
-            ;
-            function PositionSideTabs() {
-                var top = 0;
-                $("#divSideTabs").find(".side-tab-icon:visible").each(function (index, elem) {
-                    elem.style.top = String(top) + "px";
-                    top += 65;
+                $(".switch-outer").on("click", function (e) {
+                    After.Game.ToggleProperty(e);
                 });
+                After.Game.PositionSideTabs();
             }
-            Game.PositionSideTabs = PositionSideTabs;
-            ;
-        })(Game = Controls.Game || (Controls.Game = {}));
+        };
     })(Controls = After.Controls || (After.Controls = {}));
 })(After || (After = {}));
 //# sourceMappingURL=Game.js.map

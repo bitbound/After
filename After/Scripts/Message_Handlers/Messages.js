@@ -18,11 +18,7 @@ var After;
                         $("#divChatMessageWindow").append("<br/>");
                         break;
                     case "System":
-                        var spanMessage = document.createElement("span");
-                        spanMessage.style.color = "whitesmoke";
-                        spanMessage.innerText = jsonMessage.Message;
-                        $("#divChatMessageWindow").append(spanMessage);
-                        $("#divChatMessageWindow").append("<br/>");
+                        After.Game.AddChatMessage(jsonMessage.Message, "whitesmoke");
                         break;
                     default:
                         break;

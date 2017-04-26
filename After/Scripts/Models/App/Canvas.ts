@@ -75,16 +75,16 @@
                 if (ResetZoom) {
                     var toX = (X * 100) + (After.Canvas.Element.width / 2) - 50;
                     var toY = (Y * 100) + (After.Canvas.Element.height / 2) - 50;
-                    After.Utilities.Animate(After.Canvas, "OffsetX", toX, 500);
-                    After.Utilities.Animate(After.Canvas, "OffsetY", toY, 500);
-                    After.Utilities.Animate(After.Canvas, "ZoomScale", 1, 500);
+                    After.Utilities.Animate(After.Canvas, "OffsetX", After.Canvas.OffsetX, toX, 500);
+                    After.Utilities.Animate(After.Canvas, "OffsetY", After.Canvas.OffsetY, toY, 500);
+                    After.Utilities.Animate(After.Canvas, "ZoomScale", After.Canvas.ZoomScale, 1, 500);
                 }
                 else
                 {
                     var toX = (X * 100 * After.Canvas.ZoomScale) + (After.Canvas.Element.width / 2 / After.Canvas.ZoomScale) - (100 * After.Canvas.ZoomScale / 2);
                     var toY = (Y * 100 * After.Canvas.ZoomScale) + (After.Canvas.Element.height / 2 / After.Canvas.ZoomScale) - (100 * After.Canvas.ZoomScale / 2);
-                    After.Utilities.Animate(After.Canvas, "OffsetX", toX, 500);
-                    After.Utilities.Animate(After.Canvas, "OffsetY", toY, 500);
+                    After.Utilities.Animate(After.Canvas, "OffsetX", After.Canvas.OffsetX, toX, 500);
+                    After.Utilities.Animate(After.Canvas, "OffsetY", After.Canvas.OffsetY, toY, 500);
                 }
             }
             else {
