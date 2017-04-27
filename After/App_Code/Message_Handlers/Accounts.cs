@@ -29,7 +29,8 @@ namespace After.Message_Handlers
                     Color = jsonMessage.Color,
                     Password = Crypto.HashPassword(jsonMessage.Password),
                     // TODO: Add void area interaction.
-                    CurrentXYZ = "0,0,0"
+                    CurrentXYZ = "0,0,0",
+                    MovementState = Character.MovementStates.Ready
                 };
                 Socket_Handler.SocketCollection.Add(SH);
                 SH.Player.AuthenticationToken = Guid.NewGuid().ToString();
@@ -87,11 +88,11 @@ namespace After.Message_Handlers
             if (SH.Player.CurrentXYZ == null)
             {
                 SH.Player.CurrentXYZ = "0,0,0";
-                SH.World.SaveChanges();
             }
             SH.Authenticated = true;
             SH.Player.IsCharging = false;
             SH.Player.CurrentCharge = 0;
+            SH.Player.MovementState = Character.MovementStates.Ready;
             Socket_Handler.SocketCollection.Add(SH);
             jsonMessage.Result = "ok";
             SH.Player.AuthenticationToken = Guid.NewGuid().ToString();

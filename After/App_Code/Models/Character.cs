@@ -86,25 +86,13 @@ namespace After.Models
                 return CurrentWillpower / MaxWillpower;
             }
         }
-        public Location PreviousLocation
-        {
-            get
-            {
-                using (var world = new World())
-                {
-                    return world.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
-                }
-            }
-        }
         public string PreviousXYZ { get; set; }
-        public Location GetCurrentLocation(Socket_Handler SH)
-        {
-            return SH.World.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
-        }
+       
         public string CurrentXYZ { get; set; }
         public double ViewDistance { get; set; } = 2;
 
         public bool IsCharging { get; set; }
+        public string Interactions { get; set; }
 
         public MovementStates MovementState { get; set; }
 
@@ -126,8 +114,14 @@ namespace After.Models
         {
             return false;
         }
-        public string Interactions { get; set; }
-
+        public Location GetCurrentLocation(Socket_Handler SH)
+        {
+            return SH.World.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+        }
+        public Location GetPreviousLocation(Socket_Handler SH)
+        {
+            return SH.World.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
+        }
         public dynamic ConvertToSoul()
         {
             var location = CurrentXYZ.Split(',');

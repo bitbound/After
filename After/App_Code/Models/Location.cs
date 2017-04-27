@@ -51,18 +51,15 @@ namespace After.Models
         public long OwnerID { get; set; }
         public string Interactions { get; set; }
 
-        public static bool Exists(string XYZ)
+        public static bool Exists(string XYZ, Socket_Handler SH)
         {
-            using (var world = new World())
+            if (SH.World.Locations.FirstOrDefault(loc => loc.LocationID == XYZ) != null)
             {
-                if (world.Locations.FirstOrDefault(loc => loc.LocationID == XYZ) != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         public bool ContainsOccupant(Character CharacterObject, Socket_Handler SH)
@@ -94,7 +91,8 @@ namespace After.Models
         public void CharacterArrives(Character CharacterObject, Socket_Handler SH)
         {
             CharacterObject.CurrentXYZ = LocationID;
-            SH.World.SaveChanges();
+            LastVisited = DateTime.Now;
+            LastVisitedBy = SH.Player.Name;
             var soul = CharacterObject.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers(SH);
             var request = Json.Encode(new
@@ -113,7 +111,6 @@ namespace After.Models
             var soul = CharacterObject.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers(SH);
             CharacterObject.CurrentXYZ = null;
-            SH.World.SaveChanges();
             var request = Json.Encode(new
             {
                 Category = "Events",

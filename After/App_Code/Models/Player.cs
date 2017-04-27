@@ -43,6 +43,10 @@ namespace After.Models
         {
             return Socket_Handler.SocketCollection.Any(sh => (sh as Socket_Handler)?.Player?.Name == Name);
         }
+        public Socket_Handler GetSocketHandler()
+        {
+            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().FirstOrDefault(sh => sh?.Player?.CharacterID == CharacterID);
+        }
         public dynamic ConvertToMe()
         {
             var location = CurrentXYZ.Split(',');

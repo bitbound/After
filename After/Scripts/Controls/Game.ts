@@ -750,19 +750,20 @@ namespace After.Controls {
             });
 
             $(".dpad-direction").on("touchmove", function (e) {
-                e.preventDefault();
+                //e.preventDefault();
             });
             $(".dpad-direction").on("click", function (e) {
                 After.Me.Move($(e.currentTarget).attr("move-direction"));
-            });
-            $(".dpad-direction").on("touchstart", function (e) {
-                e.preventDefault();
-                $(e.currentTarget).addClass("hover");
-            });
-            $(".dpad-direction").on("touchend", function (e) {
-                e.preventDefault();
                 $(e.currentTarget).removeClass("hover");
             });
+            //$(".dpad-direction").on("touchstart", function (e) {
+            //    e.preventDefault();
+            //    $(e.currentTarget).addClass("hover");
+            //});
+            //$(".dpad-direction").on("touchend", function (e) {
+            //    e.preventDefault();
+            //    $(e.currentTarget).removeClass("hover");
+            //});
             $(".switch-outer").on("click", function (e) {
                 After.Game.ToggleProperty(e);
             });

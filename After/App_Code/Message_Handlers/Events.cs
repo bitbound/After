@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 
@@ -63,6 +64,10 @@ namespace After.Message_Handlers
         }
         public static void HandlePlayerMove(dynamic JsonMessage, Socket_Handler SH)
         {
+            if (SH.Player.MovementState != Models.Character.MovementStates.Ready)
+            {
+                return;
+            }
             var destArray = SH.Player.CurrentXYZ.Split(',');
             var xChange = 0;
             var yChange = 0;
@@ -88,6 +93,8 @@ namespace After.Message_Handlers
             var dest = SH.World.Locations.Find($"{destArray[0]},{destArray[1]},{destArray[2]}");
             if (dest != null)
             {
+                // TODO: Check if blocked.
+                SH.Player.MovementState = Models.Character.MovementStates.Moving;
                 var soul = SH.Player.ConvertToSoul();
                 var currentLocation = SH.Player.GetCurrentLocation(SH);
                 var distance = currentLocation.GetDistanceFrom(dest);
@@ -114,9 +121,16 @@ namespace After.Message_Handlers
                 {
                     player.Send(request);
                 }
-                Thread.Sleep((int)(Math.Round(travelTime)));
-                SH.Player.CurrentXYZ = dest.LocationID;
-                dest.CharacterArrives(SH.Player, SH);
+                Task.Run(() => {
+                    Thread.Sleep((int)(Math.Round(travelTime)));
+                    SH.Player.CurrentXYZ = dest.LocationID;
+                    dest.CharacterArrives(SH.Player, SH);
+                    SH.Player.MovementState = Models.Character.MovementStates.Ready;
+                });
+            }
+            else
+            {
+                
             }
         }
     }
