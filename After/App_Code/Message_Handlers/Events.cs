@@ -91,47 +91,7 @@ namespace After.Message_Handlers
             destArray[0] = (double.Parse(destArray[0]) + xChange).ToString();
             destArray[1] = (double.Parse(destArray[1]) + yChange).ToString();
             var dest = SH.World.Locations.Find($"{destArray[0]},{destArray[1]},{destArray[2]}");
-            if (dest != null)
-            {
-                // TODO: Check if blocked.
-                SH.Player.MovementState = Models.Character.MovementStates.Moving;
-                var soul = SH.Player.ConvertToSoul();
-                var currentLocation = SH.Player.GetCurrentLocation(SH);
-                var distance = currentLocation.GetDistanceFrom(dest);
-                var travelTime = distance * 1000;
-                var nearbyPlayers = currentLocation.GetNearbyPlayers(SH);
-                foreach (var player in dest.GetNearbyPlayers(SH))
-                {
-                    if (!nearbyPlayers.Contains(player))
-                    {
-                        nearbyPlayers.Add(player);
-                    }
-                }
-                currentLocation.CharacterLeaves(SH.Player, SH);
-                var request = Json.Encode(new
-                {
-                    Category = "Events",
-                    Type = "PlayerMove",
-                    Soul = soul,
-                    From = currentLocation.LocationID,
-                    To = dest.LocationID,
-                    TravelTime = travelTime
-                });
-                foreach (var player in nearbyPlayers)
-                {
-                    player.Send(request);
-                }
-                Task.Run(() => {
-                    Thread.Sleep((int)(Math.Round(travelTime)));
-                    SH.Player.CurrentXYZ = dest.LocationID;
-                    dest.CharacterArrives(SH.Player, SH);
-                    SH.Player.MovementState = Models.Character.MovementStates.Ready;
-                });
-            }
-            else
-            {
-                
-            }
+            SH.Player.Move(SH.World, dest);
         }
     }
 }

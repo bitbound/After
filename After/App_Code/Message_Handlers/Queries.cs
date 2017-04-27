@@ -19,7 +19,7 @@ namespace After.Message_Handlers
             jsonMessage.Player = SH.Player.ConvertToMe();
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
-            foreach (var area in SH.Player.GetCurrentLocation(SH).GetNearbyLocations(SH))
+            foreach (var area in SH.Player.GetCurrentLocation(SH.World).GetNearbyLocations(SH.World, SH.Player))
             {
                 foreach (var character in SH.World.Characters.Where(p => p.CurrentXYZ == area.LocationID))
                 {

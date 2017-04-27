@@ -45,7 +45,7 @@ namespace After.Message_Handlers
                     Type = "Connected",
                     Username = SH.Player.Name
                 }));
-                SH.Player.GetCurrentLocation(SH).CharacterArrives(SH.Player, SH);
+                SH.Player.GetCurrentLocation(SH.World).CharacterArrives(SH.World, SH.Player);
             }
         }
         public static void HandleLogon(dynamic jsonMessage, Socket_Handler SH)
@@ -104,7 +104,7 @@ namespace After.Message_Handlers
                 Type = "Connected",
                 Username = SH.Player.Name
             }));
-            SH.Player.GetCurrentLocation(SH).CharacterArrives(SH.Player, SH);
+            SH.Player.GetCurrentLocation(SH.World).CharacterArrives(SH.World, SH.Player);
         }
     }
 }

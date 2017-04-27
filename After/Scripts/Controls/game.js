@@ -246,6 +246,9 @@ var After;
                     }
                     e.preventDefault();
                 };
+                After.Canvas.Element.oncontextmenu = function (e) {
+                    return false;
+                };
                 $("#divChatInput").keypress(function (e) {
                     if (e.keyCode == 13) {
                         After.Game.SendChat(e);
@@ -475,13 +478,21 @@ var After;
                         };
                     }
                 });
+                $("#divActionButton").on("click", function (e) {
+                    After.Me.Move($(e.currentTarget).attr("move-direction"));
+                });
                 $("#divActionButton").on("touchstart", function (e) {
                     e.preventDefault();
                     $(e.currentTarget).addClass("hover");
+                    $(e.currentTarget).prop("click", true);
                 });
                 $("#divActionButton").on("touchend", function (e) {
                     e.preventDefault();
                     $(e.currentTarget).removeClass("hover");
+                    if ($(e.currentTarget).prop("click") == true) {
+                        After.Me.Move($(e.currentTarget).attr("move-direction"));
+                        $(e.currentTarget).removeProp("click");
+                    }
                 });
                 $(".thumb-control").on("mousedown", function (e) {
                     e.preventDefault();
@@ -736,20 +747,25 @@ var After;
                     };
                 });
                 $(".dpad-direction").on("touchmove", function (e) {
-                    //e.preventDefault();
+                    e.preventDefault();
+                    $(e.currentTarget).removeProp("click");
                 });
                 $(".dpad-direction").on("click", function (e) {
                     After.Me.Move($(e.currentTarget).attr("move-direction"));
-                    $(e.currentTarget).removeClass("hover");
                 });
-                //$(".dpad-direction").on("touchstart", function (e) {
-                //    e.preventDefault();
-                //    $(e.currentTarget).addClass("hover");
-                //});
-                //$(".dpad-direction").on("touchend", function (e) {
-                //    e.preventDefault();
-                //    $(e.currentTarget).removeClass("hover");
-                //});
+                $(".dpad-direction").on("touchstart", function (e) {
+                    e.preventDefault();
+                    $(e.currentTarget).addClass("hover");
+                    $(e.currentTarget).prop("click", true);
+                });
+                $(".dpad-direction").on("touchend", function (e) {
+                    e.preventDefault();
+                    $(e.currentTarget).removeClass("hover");
+                    if ($(e.currentTarget).prop("click") == true) {
+                        After.Me.Move($(e.currentTarget).attr("move-direction"));
+                        $(e.currentTarget).removeProp("click");
+                    }
+                });
                 $(".switch-outer").on("click", function (e) {
                     After.Game.ToggleProperty(e);
                 });

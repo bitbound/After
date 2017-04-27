@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Helpers;
 using System.Web.Script.Serialization;
 
 namespace After.Models
@@ -114,13 +117,58 @@ namespace After.Models
         {
             return false;
         }
-        public Location GetCurrentLocation(Socket_Handler SH)
+        public Location GetCurrentLocation(World Context)
         {
-            return SH.World.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+            return Context.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
         }
-        public Location GetPreviousLocation(Socket_Handler SH)
+        public Location GetPreviousLocation(World Context)
         {
-            return SH.World.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
+            return Context.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
+        }
+
+        public void Move(World Context, Location ToLocation)
+        {
+            if (ToLocation != null)
+            {
+                // TODO: Check if blocked.
+                MovementState = MovementStates.Moving;
+                var soul = ConvertToSoul();
+                var currentLocation = GetCurrentLocation(Context);
+                var distance = currentLocation.GetDistanceFrom(ToLocation);
+                var travelTime = distance * 1000;
+                var nearbyPlayers = currentLocation.GetNearbyPlayers(Context, this);
+                foreach (var player in ToLocation.GetNearbyPlayers(Context, this))
+                {
+                    if (!nearbyPlayers.Contains(player))
+                    {
+                        nearbyPlayers.Add(player);
+                    }
+                }
+                currentLocation.CharacterLeaves(Context, this);
+                var request = Json.Encode(new
+                {
+                    Category = "Events",
+                    Type = "PlayerMove",
+                    Soul = soul,
+                    From = currentLocation.LocationID,
+                    To = ToLocation.LocationID,
+                    TravelTime = travelTime
+                });
+                foreach (var player in nearbyPlayers)
+                {
+                    player.Send(request);
+                }
+                Task.Run(() => {
+                    Thread.Sleep((int)(Math.Round(travelTime)));
+                    CurrentXYZ = ToLocation.LocationID;
+                    ToLocation.CharacterArrives(Context, this);
+                    MovementState = MovementStates.Ready;
+                });
+            }
+            else
+            {
+
+            }
         }
         public dynamic ConvertToSoul()
         {

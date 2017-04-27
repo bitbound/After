@@ -35,9 +35,9 @@ namespace After.Models
         public DateTime? LastVisited { get; set; }
         public string LastVisitedBy { get; set; }
         public long InvestedWillpower { get; set; }
-        public List<Character> GetOccupants(Socket_Handler SH)
+        public List<Character> GetOccupants(World Context)
         {
-            var characters = SH.World.Characters.Where(p => p.CurrentXYZ == this.LocationID);
+            var characters = Context.Characters.Where(p => p.CurrentXYZ == this.LocationID);
             if (characters != null)
             {
                 return characters.ToList();
@@ -62,9 +62,9 @@ namespace After.Models
                 return false;
             }
         }
-        public bool ContainsOccupant(Character CharacterObject, Socket_Handler SH)
+        public bool ContainsOccupant(World Context, Character CharacterObject)
         {
-            return GetOccupants(SH).ToList().Exists(cha => cha.CharacterID == CharacterObject.CharacterID);
+            return GetOccupants(Context).ToList().Exists(cha => cha.CharacterID == CharacterObject.CharacterID);
         }
         public double GetDistanceFrom(Location FromLocation)
         {
@@ -77,24 +77,24 @@ namespace After.Models
                 Math.Pow(FromLocation.YCoord - YCoord, 2)
             );
         }
-        public List<Location> GetNearbyLocations(Socket_Handler SH)
+        public List<Location> GetNearbyLocations(World Context, Character CharacterObject)
         {
-            var locations = SH.World.Locations.Where(l => l.ZCoord == this.ZCoord &&
-                Math.Abs(l.XCoord - this.XCoord) <= SH.Player.ViewDistance &&
-                Math.Abs(l.YCoord - this.YCoord) <= SH.Player.ViewDistance);
+            var locations = Context.Locations.Where(l => l.ZCoord == this.ZCoord &&
+                Math.Abs(l.XCoord - this.XCoord) <= CharacterObject.ViewDistance &&
+                Math.Abs(l.YCoord - this.YCoord) <= CharacterObject.ViewDistance);
             return locations?.ToList();
         }
-        public List<Socket_Handler> GetNearbyPlayers(Socket_Handler SH)
+        public List<Socket_Handler> GetNearbyPlayers(World Context, Character CharacterObject)
         {
-            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().Where(sock => sock.Player.GetCurrentLocation(SH).GetDistanceFrom(this) <= sock.Player.ViewDistance).ToList();
+            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().Where(sock => sock.Player.GetCurrentLocation(Context).GetDistanceFrom(this) <= sock.Player.ViewDistance).ToList();
         }
-        public void CharacterArrives(Character CharacterObject, Socket_Handler SH)
+        public void CharacterArrives(World Context, Character CharacterObject)
         {
             CharacterObject.CurrentXYZ = LocationID;
             LastVisited = DateTime.Now;
-            LastVisitedBy = SH.Player.Name;
+            LastVisitedBy = CharacterObject.Name;
             var soul = CharacterObject.ConvertToSoul();
-            var nearbyPlayers = GetNearbyPlayers(SH);
+            var nearbyPlayers = GetNearbyPlayers(Context, CharacterObject);
             var request = Json.Encode(new
             {
                 Category = "Events",
@@ -106,10 +106,10 @@ namespace After.Models
                 player.Send(request);
             }
         }
-        public void CharacterLeaves(Character CharacterObject, Socket_Handler SH)
+        public void CharacterLeaves(World Context, Character CharacterObject)
         {
             var soul = CharacterObject.ConvertToSoul();
-            var nearbyPlayers = GetNearbyPlayers(SH);
+            var nearbyPlayers = GetNearbyPlayers(Context, CharacterObject);
             CharacterObject.CurrentXYZ = null;
             var request = Json.Encode(new
             {
