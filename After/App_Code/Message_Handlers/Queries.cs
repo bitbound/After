@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 
@@ -9,17 +11,21 @@ namespace After.Message_Handlers
 {
     public static class Queries
     {
-        public static void HandlePlayerUpdate(dynamic jsonMessage, Socket_Handler SH)
+        public static void HandlePlayerUpdate(dynamic JsonMessage, Socket_Handler SH)
         {
-            jsonMessage.Player = SH.Player;
-            SH.Send(Json.Encode(jsonMessage));
+            JsonMessage.Player = SH.Player.ConvertToMe();
+            SH.Send(Json.Encode(JsonMessage));
         }
-        public static void HandleFirstLoad(dynamic jsonMessage, Socket_Handler SH)
+        public static void HandleRefreshView(dynamic JsonMessage, Socket_Handler SH)
         {
-            jsonMessage.Player = SH.Player.ConvertToMe();
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
-            foreach (var area in SH.Player.GetCurrentLocation(SH.World).GetNearbyLocations(SH.World, SH.Player))
+            var location = SH.Player.GetCurrentLocation(SH.World);
+            if (location == null)
+            {
+                return;
+            }
+            foreach (var area in location.GetNearbyLocations(SH.World, SH.Player))
             {
                 foreach (var character in SH.World.Characters.Where(p => p.CurrentXYZ == area.LocationID))
                 {
@@ -31,9 +37,13 @@ namespace After.Message_Handlers
                 }
                 areas.Add(area.ConvertToArea());
             }
-            jsonMessage.Souls = souls;
-            jsonMessage.Areas = areas;
-            SH.Send(Json.Encode(jsonMessage));
+            JsonMessage.Souls = souls;
+            JsonMessage.Areas = areas;
+            SH.Send(Json.Encode(JsonMessage));
+        }
+        public static void HandleRememberLocations(dynamic JsonMessage, Socket_Handler SH)
+        {
+
         }
     }
 }

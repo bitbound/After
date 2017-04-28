@@ -268,5 +268,16 @@
                 }, i, i)
             }
         }
+        GetDistanceBetween(XYZ1: string, XYZ2: string): number {
+            var xyz1Arr = XYZ1.split(",");
+            var xyz2Arr = XYZ2.split(",");
+            if (xyz1Arr[2] != xyz2Arr[2]) {
+                return Number.MAX_VALUE;
+            }
+            return Math.sqrt(
+                Math.pow(Number(xyz1Arr[0]) - Number(xyz2Arr[0]), 2) +
+                Math.pow(Number(xyz1Arr[1]) - Number(xyz2Arr[1]), 2)
+            );
+        }
     }
 }

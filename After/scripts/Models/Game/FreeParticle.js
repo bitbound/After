@@ -5,6 +5,8 @@ var After;
         var Game;
         (function (Game) {
             class FreeParticle {
+                constructor() {
+                }
             }
             Game.FreeParticle = FreeParticle;
         })(Game = Models.Game || (Models.Game = {}));

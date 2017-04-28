@@ -43,10 +43,12 @@
     };
     export function HandleCharacterArrives(JsonMessage) {
         if (JsonMessage.Soul.CharacterID == After.Me.CharacterID) {
-            //After.Me.CurrentXYZ = JsonMessage.Soul.CurrentXYZ;
-            //After.Me.XCoord = JsonMessage.Soul.XCoord;
-            //After.Me.YCoord = JsonMessage.Soul.YCoord;
-            //After.Me.ZCoord = JsonMessage.Soul.ZCoord;
+            After.Me.CurrentXYZ = JsonMessage.Soul.CurrentXYZ;
+            var query = {
+                "Category": "Queries",
+                "Type": "RefreshView"
+            };
+            After.Connection.Socket.send(JSON.stringify(query));
         }
         else {
             var soul = After.Models.Game.Soul.Create(JsonMessage.Soul);
@@ -57,13 +59,7 @@
         }
     };
     export function HandleCharacterLeaves(JsonMessage) {
-        if (JsonMessage.Soul.CharacterID == After.Me.CharacterID) {
-            //After.Me.CurrentXYZ = null;
-            //After.Me.XCoord = null;
-            //After.Me.YCoord = null;
-            //After.Me.ZCoord = null;
-        }
-        else
+        if (JsonMessage.Soul.CharacterID != After.Me.CharacterID) 
         {
             var index = After.World_Data.Souls.findIndex((value, index) => {
                 return value.CharacterID == JsonMessage.Soul.CharacterID;
@@ -77,13 +73,45 @@
     export function HandlePlayerMove(JsonMessage) {
         if (JsonMessage.Soul.CharacterID == After.Me.CharacterID) {
             var dest = JsonMessage.To.split(",");
-            //$(After.Me).animate({ XCoord: Number(dest[0]) }, Number(JsonMessage.TravelTime));
-            //$(After.Me).animate({ YCoord: Number(dest[1]) }, Number(JsonMessage.TravelTime));
-            After.Utilities.Animate(After.Me, "XCoord", After.Me.XCoord, Number(dest[0]), Number(JsonMessage.TravelTime));
-            After.Utilities.Animate(After.Me, "YCoord", After.Me.YCoord, Number(dest[1]), Number(JsonMessage.TravelTime));
+            var from = JsonMessage.From.split(",");
+            After.Utilities.Animate(After.Me, "XCoord", Number(from[0]), Number(dest[0]), Number(JsonMessage.TravelTime));
+            After.Utilities.Animate(After.Me, "YCoord", Number(from[1]), Number(dest[1]), Number(JsonMessage.TravelTime));
+            if (After.Settings.FollowPlayer) {
+                for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 20) {
+                    window.setTimeout(function () {
+                        After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, false);
+                    }, i)
+                }
+            }
         }
         else {
-            
+            for (var i = 0; i < 50; i++) {
+                var part = new After.Models.Game.FreeParticle();
+                part.Color = JsonMessage.Soul.Color;
+                var from = JsonMessage.From.split(",");
+                var dest = JsonMessage.To.split(",");
+                part.XCoord = Utilities.GetRandom(Number(from[0]) + .25, Number(from[0]) + .75, false);
+                part.YCoord = Utilities.GetRandom(Number(from[1]) + .25, Number(from[1]) + .50, false);
+                part.ZCoord = from[3];
+                window.setTimeout(function (part) {
+                    After.World_Data.FreeParticles.push(part);
+                    After.Utilities.Animate(part, "XCoord", part.XCoord, Number(dest[0]) + .5, Number(JsonMessage.TravelTime));
+                    After.Utilities.Animate(part, "YCoord", part.YCoord, Number(dest[1]) + .5, Number(JsonMessage.TravelTime));
+                    window.setTimeout(function (part) {
+                        var index = After.World_Data.FreeParticles.findIndex((value) => value == part);
+                        After.World_Data.FreeParticles.splice(index, 1);
+                    }, Number(JsonMessage.TravelTime), part);
+                }, i * 5, part)
+            }
+        }
+    }
+    export function HandleAreaCreated(JsonMessage) {
+        After.World_Data.Areas.push(After.Models.Game.Area.Create(JsonMessage.Area));
+    }
+    export function HandleAreaRemoved(JsonMessage) {
+        var index = After.World_Data.Areas.findIndex(area => area.LocationID == JsonMessage.Area.LocationID);
+        if (index > -1) {
+            After.World_Data.Areas.splice(index, 1);
         }
     }
 }

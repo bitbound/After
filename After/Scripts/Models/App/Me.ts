@@ -10,12 +10,18 @@
         Name: string;
         Color: string;
         get CurrentXYZ() {
-            if (typeof this.XCoord == "undefined" || typeof this.YCoord == "undefined" || typeof this.ZCoord == "undefined") {
+            if (this.XCoord == null || this.YCoord == null || this.ZCoord == null) {
                 return null;
             }
             return this.XCoord.toString() + "," + this.YCoord.toString() + "," + this.ZCoord;
         };
         set CurrentXYZ(XYZ: string) {
+            if (XYZ == null) {
+                this.XCoord = null;
+                this.YCoord = null;
+                this.ZCoord = null;
+                return;
+            }
             var locArray = XYZ.split(",");
             this.XCoord = Number(locArray[0]);
             this.YCoord = Number(locArray[1]);
@@ -60,7 +66,7 @@
             y: number
         }
 
-        // *** Functions *** //
+        // *** Event Functions *** //
         StartCharging() {
             var request = {
                 "Category": "Events",
@@ -89,6 +95,11 @@
                 "Direction": strDirection.toUpperCase()
             };
             After.Connection.Socket.send(JSON.stringify(request));
+        }
+
+        //*** Utility Functions ***//
+        GetCurrentLocation() :After.Models.Game.Area {
+            return After.World_Data.Areas.find((value) => { return value.LocationID == After.Me.CurrentXYZ; });
         }
     }
 }

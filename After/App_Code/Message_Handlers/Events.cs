@@ -17,6 +17,8 @@ namespace After.Message_Handlers
             SH.Send(Json.Encode(JsonMessage));
             SH.Player.IsCharging = true;
             var timer = new System.Timers.Timer(100);
+            var startTime = DateTime.Now;
+            var startValue = SH.Player.CurrentCharge;
             timer.Elapsed += (sen, arg) => {
                 if (SH.Player.IsCharging == false)
                 {
@@ -24,7 +26,7 @@ namespace After.Message_Handlers
                     (sen as System.Timers.Timer).Dispose();
                     return;
                 }
-                SH.Player.CurrentCharge = Math.Min(SH.Player.MaxCharge, SH.Player.CurrentCharge + (SH.Player.MaxCharge * 0.01));
+                SH.Player.CurrentCharge = Math.Min(SH.Player.MaxCharge, Math.Round(startValue + (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * SH.Player.MaxCharge));
                 dynamic update = new
                 {
                     Category = "Queries",
@@ -43,6 +45,8 @@ namespace After.Message_Handlers
             SH.Send(Json.Encode(JsonMessage));
             SH.Player.IsCharging = false;
             var timer = new System.Timers.Timer(100);
+            var startTime = DateTime.Now;
+            var startValue = SH.Player.CurrentCharge;
             timer.Elapsed += (sen, arg) => {
                 if (SH.Player.IsCharging == true || SH.Player.CurrentCharge == 0)
                 {
@@ -50,7 +54,7 @@ namespace After.Message_Handlers
                     (sen as System.Timers.Timer).Dispose();
                     return;
                 }
-                SH.Player.CurrentCharge = Math.Max(0, SH.Player.CurrentCharge - (SH.Player.MaxCharge * 0.01));
+                SH.Player.CurrentCharge = Math.Max(0, Math.Round(startValue - (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * SH.Player.MaxCharge));
                 dynamic update = new
                 {
                     Category = "Queries",
@@ -68,7 +72,6 @@ namespace After.Message_Handlers
             {
                 return;
             }
-            var destArray = SH.Player.CurrentXYZ.Split(',');
             var xChange = 0;
             var yChange = 0;
             string dir = JsonMessage.Direction.ToUpper();
@@ -88,10 +91,12 @@ namespace After.Message_Handlers
             {
                 xChange--;
             }
-            destArray[0] = (double.Parse(destArray[0]) + xChange).ToString();
-            destArray[1] = (double.Parse(destArray[1]) + yChange).ToString();
-            var dest = SH.World.Locations.Find($"{destArray[0]},{destArray[1]},{destArray[2]}");
-            SH.Player.Move(SH.World, dest);
+            var currentXYZ = SH.Player.CurrentXYZ.Split(',');
+            var destXYZ = new string[3];
+            destXYZ[0] = (double.Parse(currentXYZ[0]) + xChange).ToString();
+            destXYZ[1] = (double.Parse(currentXYZ[1]) + yChange).ToString();
+            destXYZ[2] = currentXYZ[2];
+            SH.Player.Move(SH.World, destXYZ);
         }
     }
 }

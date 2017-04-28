@@ -104,6 +104,11 @@ namespace After.Message_Handlers
                 Type = "Connected",
                 Username = SH.Player.Name
             }));
+            var location = SH.Player.GetCurrentLocation(SH.World);
+            if (location == null)
+            {
+                SH.Player.CurrentXYZ = "0,0,0";
+            }
             SH.Player.GetCurrentLocation(SH.World).CharacterArrives(SH.World, SH.Player);
         }
     }

@@ -7,6 +7,7 @@
             this.ZCoord = ZCoord;
             this.Color = "gray";
             this.IsSelected = false;
+            this.Opacity = 1;
         }
         Type: string;
         XCoord: number;
@@ -18,6 +19,7 @@
         Description: string;
         InvestedWillpower: number;
         IsSelected: boolean;
+        Opacity: number;
         static Create(DynamicArea: any): Area {
             var area = new After.Models.Game.Area(DynamicArea.XCoord, DynamicArea.YCoord, DynamicArea.ZCoord);
             for (var prop in DynamicArea) {

@@ -24,7 +24,17 @@ namespace After.Controls {
             // TODO: First load.
             var query = {
                 "Category": "Queries",
-                "Type": "FirstLoad"
+                "Type": "PlayerUpdate"
+            };
+            After.Connection.Socket.send(JSON.stringify(query));
+            query = {
+                "Category": "Queries",
+                "Type": "RememberLocations"
+            };
+            After.Connection.Socket.send(JSON.stringify(query));
+            query = {
+                "Category": "Queries",
+                "Type": "RefreshView"
             };
             After.Connection.Socket.send(JSON.stringify(query));
             After.Canvas.Element = document.getElementById("canvasMap") as HTMLCanvasElement;
@@ -43,6 +53,8 @@ namespace After.Controls {
             }
 
             window.requestAnimationFrame(After.Drawing.DrawCanvas);
+            After.Drawing.AnimateParticles();
+            After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
 
             window.onresize = function () {
                 After.Canvas.Element.width = document.documentElement.clientWidth;

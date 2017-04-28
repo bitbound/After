@@ -14,4 +14,5 @@
 namespace After.World_Data {
     export const Areas = new Array<After.Models.Game.Area>();
     export const Souls = new Array<After.Models.Game.Soul>();
+    export const FreeParticles = new Array<After.Models.Game.FreeParticle>();
 }

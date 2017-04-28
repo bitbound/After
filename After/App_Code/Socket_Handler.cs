@@ -5,6 +5,9 @@ using System.IO;
 using After.Models;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Data.Entity;
 
 /// <summary>
 /// Summary description for WebSocketHandler
@@ -18,6 +21,7 @@ namespace After
         public bool Authenticated { get; set; }
         public Player Player { get; set; }
         public World World { get; set; } = new World();
+        public World Backup { get; set; }
         public Socket_Handler()
         {
 
@@ -33,10 +37,9 @@ namespace After
             {
                 throw new Exception("Category or Type is null within Socket_Handler.OnMessage.");
             }
-
             string category = jsonMessage.Category;
             string type = jsonMessage.Type;
-
+            
             if (!Authenticated)
             {
                 if (category != "Accounts" || (type != "Logon" && type != "AccountCreation"))
@@ -48,9 +51,11 @@ namespace After
             var methodHandler = Type.GetType("After.Message_Handlers." + category).GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
             if (methodHandler != null)
             {
+                World = new World();
                 methodHandler.Invoke(null, new object[] { jsonMessage, this });
+                Utilities.SaveTheWorld(World);
             }
-            World.SaveChanges();
+
         }
 
         public override void OnClose()
@@ -70,7 +75,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            World.SaveChanges();
+            Utilities.SaveTheWorld(World);
         }
         public override void OnError()
         {
@@ -89,7 +94,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            World.SaveChanges();
+            Utilities.SaveTheWorld(World);
         }
     }
 }

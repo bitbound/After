@@ -15,6 +15,7 @@ var After;
                         After.Canvas.Context2D.fillStyle = 'rgba(0,0,0,' + alpha + ')';
                         After.Canvas.Context2D.fillRect(0, 0, After.Canvas.Element.width, After.Canvas.Element.height);
                         After.Drawing.DrawAreas();
+                        After.Drawing.DrawFreeParticles();
                         After.Drawing.DrawSoul();
                         After.Canvas.FPSStack.push(Date.now());
                         while (Date.now() - After.Canvas.FPSStack[0] > 1000) {
@@ -53,6 +54,7 @@ var After;
                             After.Canvas.Context2D.arc(50 * scale, 50 * scale, 50 * scale, 0, Math.PI * 2);
                             After.Canvas.Context2D.fill();
                         }
+                        After.Canvas.Context2D.globalAlpha = value.Opacity;
                         // Scale Y to make arcs ellipses.
                         After.Canvas.Context2D.scale(1, .5);
                         After.Canvas.Context2D.translate(0, 50 * scale);
@@ -62,8 +64,10 @@ var After;
                         After.Canvas.Context2D.arc(50 * scale, 58 * scale, 30 * scale, 0, Math.PI * 2);
                         After.Canvas.Context2D.fill();
                         // Bridge space between bottom and top ellipse.
-                        After.Canvas.Context2D.fillRect(20 * scale, 50 * scale, 4 * scale, 8 * scale);
-                        After.Canvas.Context2D.fillRect(76 * scale, 50 * scale, 4 * scale, 8 * scale);
+                        if (value.Opacity == 1) {
+                            After.Canvas.Context2D.fillRect(20 * scale, 50 * scale, 4 * scale, 8 * scale);
+                            After.Canvas.Context2D.fillRect(76 * scale, 50 * scale, 4 * scale, 8 * scale);
+                        }
                         // Draw top ellipse with gradient.
                         var gradient = After.Canvas.Context2D.createLinearGradient(50 * scale, 0, 50 * scale, 100 * scale);
                         gradient.addColorStop(0, value.Color);
@@ -76,12 +80,52 @@ var After;
                     });
                 }
                 ;
+                DrawFreeParticles() {
+                    var c2d = After.Canvas.Context2D;
+                    var zs = After.Canvas.ZoomScale;
+                    c2d.save();
+                    for (var i = 0; i < After.World_Data.FreeParticles.length; i++) {
+                        var part = After.World_Data.FreeParticles[i];
+                        // Draw particle.
+                        c2d.fillStyle = part.Color;
+                        c2d.beginPath();
+                        var partX = ((part.XCoord * 100) + After.Canvas.OffsetX) * After.Canvas.ZoomScale;
+                        var partY = ((part.YCoord * 100) + After.Canvas.OffsetY) * After.Canvas.ZoomScale;
+                        c2d.arc(partX, partY, .5 * zs, 0, Math.PI * 2);
+                        c2d.strokeStyle = "dimgray";
+                        c2d.lineWidth = .25 * zs;
+                        ;
+                        c2d.stroke();
+                        c2d.fill();
+                        // Draw shadow.
+                        c2d.fillStyle = "dimgray";
+                        c2d.globalAlpha = .1;
+                        c2d.beginPath();
+                        c2d.arc(partX + (3 * zs), partY + (10 * zs), .75 * zs, 0, Math.PI * 2);
+                        c2d.fill();
+                        c2d.globalAlpha = 1;
+                        c2d.restore();
+                        c2d.shadowOffsetX = 0;
+                        c2d.shadowOffsetY = 0;
+                        c2d.shadowBlur = 0;
+                    }
+                }
+                ;
                 DrawSoul() {
                     var c2d = After.Canvas.Context2D;
                     var zs = After.Canvas.ZoomScale;
                     c2d.save();
                     for (var i = 0; i < After.Me.Particles.length; i++) {
                         var part = After.Me.Particles[i];
+                        // Get the xy coordinate of area's top-left corner.
+                        var parentX = ((After.Me.XCoord * 100) + After.Canvas.OffsetX) * After.Canvas.ZoomScale;
+                        var parentY = ((After.Me.YCoord * 100) + After.Canvas.OffsetY) * After.Canvas.ZoomScale;
+                        After.Me.ParentBounds = {
+                            left: parentX,
+                            top: parentY,
+                            right: parentX + (100 * After.Canvas.ZoomScale),
+                            bottom: parentY + (100 * After.Canvas.ZoomScale),
+                        };
                         // Draw particle.
                         c2d.fillStyle = After.Me.Color;
                         c2d.beginPath();
@@ -113,15 +157,6 @@ var After;
                             return;
                         }
                         var soul = After.Me;
-                        // Get the xy coordinate of area's top-left corner.
-                        var parentX = ((soul.XCoord * 100) + After.Canvas.OffsetX) * After.Canvas.ZoomScale;
-                        var parentY = ((soul.YCoord * 100) + After.Canvas.OffsetY) * After.Canvas.ZoomScale;
-                        soul.ParentBounds = {
-                            left: parentX,
-                            top: parentY,
-                            right: parentX + (100 * After.Canvas.ZoomScale),
-                            bottom: parentY + (100 * After.Canvas.ZoomScale),
-                        };
                         var particleDiameter = 20;
                         // Set bounds within which particles will move.
                         if (typeof soul.ParticleBounds == "undefined") {

@@ -5,6 +5,9 @@ var After;
         var App;
         (function (App) {
             class Settings {
+                constructor() {
+                    this.FollowPlayer = true;
+                }
             }
             App.Settings = Settings;
         })(App = Models.App || (Models.App = {}));

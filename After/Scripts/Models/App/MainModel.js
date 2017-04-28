@@ -16,6 +16,7 @@ var After;
     (function (World_Data) {
         World_Data.Areas = new Array();
         World_Data.Souls = new Array();
+        World_Data.FreeParticles = new Array();
     })(World_Data = After.World_Data || (After.World_Data = {}));
 })(After || (After = {}));
 //# sourceMappingURL=MainModel.js.map

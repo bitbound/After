@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Timers;
 using System.Web.Helpers;
 
 namespace After.Models
@@ -37,10 +38,10 @@ namespace After.Models
         public long InvestedWillpower { get; set; }
         public List<Character> GetOccupants(World Context)
         {
-            var characters = Context.Characters.Where(p => p.CurrentXYZ == this.LocationID);
-            if (characters != null)
+            var characters = Context.Characters.Where(p => p.CurrentXYZ == this.LocationID).ToList();
+            if (characters.Count > 0)
             {
-                return characters.ToList();
+                return characters;
             }
             else
             {
@@ -51,7 +52,9 @@ namespace After.Models
         public long OwnerID { get; set; }
         public string Interactions { get; set; }
 
-        public static bool Exists(string XYZ, Socket_Handler SH)
+
+        //*** Utility Methods ***//
+        public bool Exists(string XYZ, Socket_Handler SH)
         {
             if (SH.World.Locations.FirstOrDefault(loc => loc.LocationID == XYZ) != null)
             {
@@ -84,9 +87,9 @@ namespace After.Models
                 Math.Abs(l.YCoord - this.YCoord) <= CharacterObject.ViewDistance);
             return locations?.ToList();
         }
-        public List<Socket_Handler> GetNearbyPlayers(World Context, Character CharacterObject)
+        public List<Socket_Handler> GetNearbyPlayers(World Context)
         {
-            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().Where(sock => sock.Player.GetCurrentLocation(Context).GetDistanceFrom(this) <= sock.Player.ViewDistance).ToList();
+            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().Where(sock => sock.Player.GetCurrentLocation(Context)?.GetDistanceFrom(this) <= sock.Player.ViewDistance).ToList();
         }
         public void CharacterArrives(World Context, Character CharacterObject)
         {
@@ -94,7 +97,7 @@ namespace After.Models
             LastVisited = DateTime.Now;
             LastVisitedBy = CharacterObject.Name;
             var soul = CharacterObject.ConvertToSoul();
-            var nearbyPlayers = GetNearbyPlayers(Context, CharacterObject);
+            var nearbyPlayers = GetNearbyPlayers(Context);
             var request = Json.Encode(new
             {
                 Category = "Events",
@@ -109,7 +112,7 @@ namespace After.Models
         public void CharacterLeaves(World Context, Character CharacterObject)
         {
             var soul = CharacterObject.ConvertToSoul();
-            var nearbyPlayers = GetNearbyPlayers(Context, CharacterObject);
+            var nearbyPlayers = GetNearbyPlayers(Context);
             CharacterObject.CurrentXYZ = null;
             var request = Json.Encode(new
             {

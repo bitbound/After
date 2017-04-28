@@ -15,15 +15,25 @@ var After;
                 }
                 ;
                 get CurrentXYZ() {
+                    if (this.XCoord == null || this.YCoord == null || this.ZCoord == null) {
+                        return null;
+                    }
                     return this.XCoord.toString() + "," + this.YCoord.toString() + "," + this.ZCoord;
                 }
                 ;
                 set CurrentXYZ(XYZ) {
+                    if (XYZ == null) {
+                        this.XCoord = null;
+                        this.YCoord = null;
+                        this.ZCoord = null;
+                        return;
+                    }
                     var locArray = XYZ.split(",");
                     this.XCoord = Number(locArray[0]);
                     this.YCoord = Number(locArray[1]);
                     this.ZCoord = locArray[2];
                 }
+                ;
                 static Create(DynamicSoul) {
                     var soul = new After.Models.Game.Soul();
                     for (var stat in DynamicSoul) {
