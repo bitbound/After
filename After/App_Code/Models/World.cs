@@ -10,6 +10,7 @@ namespace After.Models
 {
     public class World : DbContext
     {
+        public static World Current { get; set; } = new World();
         public World()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<World, After.Migrations.Configuration>());

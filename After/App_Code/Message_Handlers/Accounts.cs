@@ -13,7 +13,7 @@ namespace After.Message_Handlers
         public static void HandleAccountCreation(dynamic jsonMessage, Socket_Handler SH)
         {
             string name = jsonMessage.Username;
-            if (SH.World.Players.FirstOrDefault((p => p.Name == name)) != null)
+            if (World.Current.Players.FirstOrDefault((p => p.Name == name)) != null)
             {
                 jsonMessage.Result = "exists";
                 jsonMessage.Password = null;
@@ -23,7 +23,7 @@ namespace After.Message_Handlers
             else
             {
                 SH.Authenticated = true;
-                SH.Player = new Player()
+                var player = new Player()
                 {
                     Name = name,
                     Color = jsonMessage.Color,
@@ -32,9 +32,11 @@ namespace After.Message_Handlers
                     CurrentXYZ = "0,0,0",
                     MovementState = Character.MovementStates.Ready
                 };
+                player.AuthenticationToken = Guid.NewGuid().ToString();
                 Socket_Handler.SocketCollection.Add(SH);
-                SH.Player.AuthenticationToken = Guid.NewGuid().ToString();
-                SH.World.Players.Add(SH.Player);
+                World.Current.Players.Add(player);
+                World.Current.SaveChanges();
+                SH.CharacterID = World.Current.Players.FirstOrDefault(p => p.Name == name).CharacterID;
                 jsonMessage.Result = "ok";
                 jsonMessage.Password = null;
                 jsonMessage.AuthenticationToken = SH.Player.AuthenticationToken;
@@ -45,13 +47,13 @@ namespace After.Message_Handlers
                     Type = "Connected",
                     Username = SH.Player.Name
                 }));
-                SH.Player.GetCurrentLocation(SH.World).CharacterArrives(SH.World, SH.Player);
+                SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
             }
         }
         public static void HandleLogon(dynamic jsonMessage, Socket_Handler SH)
         {
             var playerName = (string)jsonMessage.Username;
-            SH.Player = SH.World.Players.FirstOrDefault(p => p.Name == playerName);
+            SH.CharacterID = World.Current.Players.FirstOrDefault(p => p.Name == playerName).CharacterID;
             if (SH.Player == null)
             {
                 jsonMessage.Result = "failed";
@@ -104,12 +106,12 @@ namespace After.Message_Handlers
                 Type = "Connected",
                 Username = SH.Player.Name
             }));
-            var location = SH.Player.GetCurrentLocation(SH.World);
+            var location = SH.Player.GetCurrentLocation();
             if (location == null)
             {
                 SH.Player.CurrentXYZ = "0,0,0";
             }
-            SH.Player.GetCurrentLocation(SH.World).CharacterArrives(SH.World, SH.Player);
+            SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
         }
     }
 }

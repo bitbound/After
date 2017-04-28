@@ -19,9 +19,14 @@ namespace After
     {
         public static WebSocketCollection SocketCollection { get; set; } = new WebSocketCollection();
         public bool Authenticated { get; set; }
-        public Player Player { get; set; }
-        public World World { get; set; } = new World();
-        public World Backup { get; set; }
+        public long CharacterID { get; set; }
+        public Player Player
+        {
+            get
+            {
+                return World.Current.Players.FirstOrDefault(player => player.CharacterID == CharacterID);
+            }
+        }
         public Socket_Handler()
         {
 
@@ -51,11 +56,9 @@ namespace After
             var methodHandler = Type.GetType("After.Message_Handlers." + category).GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
             if (methodHandler != null)
             {
-                World = new World();
                 methodHandler.Invoke(null, new object[] { jsonMessage, this });
-                Utilities.SaveTheWorld(World);
+                Utilities.SaveTheWorld();
             }
-
         }
 
         public override void OnClose()
@@ -75,7 +78,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            Utilities.SaveTheWorld(World);
+            Utilities.SaveTheWorld();
         }
         public override void OnError()
         {
@@ -94,7 +97,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            Utilities.SaveTheWorld(World);
+            Utilities.SaveTheWorld();
         }
     }
 }

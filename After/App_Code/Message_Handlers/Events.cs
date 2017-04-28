@@ -96,7 +96,7 @@ namespace After.Message_Handlers
             destXYZ[0] = (double.Parse(currentXYZ[0]) + xChange).ToString();
             destXYZ[1] = (double.Parse(currentXYZ[1]) + yChange).ToString();
             destXYZ[2] = currentXYZ[2];
-            SH.Player.Move(SH.World, destXYZ);
+            SH.Player.Move(destXYZ);
         }
     }
 }

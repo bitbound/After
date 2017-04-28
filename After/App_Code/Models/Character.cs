@@ -117,13 +117,17 @@ namespace After.Models
         {
             return false;
         }
-        public Location GetCurrentLocation(World Context)
+        public Location GetCurrentLocation()
         {
-            if (CurrentXYZ == null)
+            while (CurrentXYZ == null)
             {
-                return null;
+                Thread.Sleep(500);
             }
-            var location = Context.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+            var location = World.Current.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+            if (location == null)
+            {
+                location = World.Current.CreateTempLocation(CurrentXYZ.Split(','));
+            }
             return location;
         }
         public Location GetPreviousLocation(World Context)
@@ -131,13 +135,13 @@ namespace After.Models
             return Context.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
         }
 
-        public void Move(World Context, string[] ToXYZ)
+        public void Move(string[] ToXYZ)
         {
             dynamic request;
-            var toLocation = Context.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
+            var toLocation = World.Current.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
             if (toLocation == null)
             {
-                toLocation = Context.CreateTempLocation(ToXYZ);
+                toLocation = World.Current.CreateTempLocation(ToXYZ);
                 var area = toLocation.ConvertToArea();
                 request = new
                 {
@@ -145,7 +149,7 @@ namespace After.Models
                     Type = "AreaCreated",
                     Area = area
                 };
-                foreach (var player in toLocation.GetNearbyPlayers(Context))
+                foreach (var player in toLocation.GetNearbyPlayers())
                 {
                     player.Send(Json.Encode(request));
                 }
@@ -154,22 +158,18 @@ namespace After.Models
             // TODO: Check if blocked.
             MovementState = MovementStates.Moving;
             var soul = ConvertToSoul();
-            var currentLocation = GetCurrentLocation(Context);
-            if (currentLocation == null)
-            {
-                return;
-            }
+            var currentLocation = GetCurrentLocation();
             var distance = currentLocation.GetDistanceFrom(toLocation);
             var travelTime = distance * 1000;
-            var nearbyPlayers = currentLocation.GetNearbyPlayers(Context);
-            foreach (var player in toLocation.GetNearbyPlayers(Context))
+            var nearbyPlayers = currentLocation.GetNearbyPlayers();
+            foreach (var player in toLocation.GetNearbyPlayers())
             {
                 if (!nearbyPlayers.Contains(player))
                 {
                     nearbyPlayers.Add(player);
                 }
             }
-            currentLocation.CharacterLeaves(Context, this);
+            currentLocation.CharacterLeaves(this);
             request = Json.Encode(new
             {
                 Category = "Events",
@@ -186,7 +186,7 @@ namespace After.Models
             Task.Run(() => {
                 Thread.Sleep((int)(Math.Round(travelTime)));
                 CurrentXYZ = toLocation.LocationID;
-                toLocation.CharacterArrives(Context, this);
+                toLocation.CharacterArrives(this);
                 MovementState = MovementStates.Ready;
             });
         }

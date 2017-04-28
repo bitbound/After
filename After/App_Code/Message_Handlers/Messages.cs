@@ -16,7 +16,7 @@ namespace After.Message_Handlers
                 return;
             }
             jsonMessage.Username = SH.Player.Name;
-            SH.World.Messages.Add(new Message()
+            World.Current.Messages.Add(new Message()
             {
                 Sender = SH.Player.Name,
                 Content = jsonMessage.Message,

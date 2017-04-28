@@ -20,14 +20,29 @@ namespace After.Message_Handlers
         {
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
-            var location = SH.Player.GetCurrentLocation(SH.World);
+            var location = SH.Player.GetCurrentLocation();
             if (location == null)
             {
                 return;
             }
-            foreach (var area in location.GetNearbyLocations(SH.World, SH.Player))
+            foreach (var area in location.GetNearbyLocations(SH.Player))
             {
-                foreach (var character in SH.World.Characters.Where(p => p.CurrentXYZ == area.LocationID))
+                if (area.IsStatic == false && DateTime.Now - area.LastVisited > TimeSpan.FromMinutes(1))
+                {
+                    var request = new
+                    {
+                        Category = "Events",
+                        Type = "AreaRemoved",
+                        Area = area.ConvertToArea()
+                    };
+                    foreach (var player in area.GetNearbyPlayers())
+                    {
+                        player.Send(Json.Encode(request));
+                    }
+                    World.Current.Locations.Remove(area);
+                    continue;
+                }
+                foreach (var character in World.Current.Characters.Where(p => p.CurrentXYZ == area.LocationID))
                 {
                     if (character is Player && !(character as Player).IsLoggedIn())
                     {

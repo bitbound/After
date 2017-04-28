@@ -19,198 +19,164 @@ namespace After
 {
     public static class Utilities
     {
-        public static System.Timers.Timer AreaCleanupTimer { get; set; } = new System.Timers.Timer(600000);
         public static void StartUp()
         {
-            using (var world = new After.Models.World())
+            if (!World.Current.Locations.Any(l => l.LocationID == "0,0,0"))
             {
-                if (!world.Locations.Any(l => l.LocationID == "0,0,0"))
+                World.Current.Locations.Add(new Location()
                 {
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = 0,
-                        YCoord = 0,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = -2,
-                        YCoord = 0,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
+                    XCoord = 0,
+                    YCoord = 0,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = -2,
+                    YCoord = 0,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
 
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = -1,
-                        YCoord = 0,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = 1,
-                        YCoord = 0,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = 2,
-                        YCoord = 0,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = -1,
-                        YCoord = -1,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = 1,
-                        YCoord = -1,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = 0,
-                        YCoord = -2,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = -3,
-                        YCoord = 1,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = -4,
-                        YCoord = 2,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = 3,
-                        YCoord = 1,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                    world.Locations.Add(new Location()
-                    {
-                        XCoord = 4,
-                        YCoord = 2,
-                        ZCoord = "0",
-                        IsStatic = true,
-                        Title = "After Commons",
-                        Description = "This is the center of nothing and the start of everything.",
-                        Color = "lightsteelblue"
-                    });
-                }
-                foreach (var loc in world.Locations)
+                });
+                World.Current.Locations.Add(new Location()
                 {
-                    if (!loc.IsStatic)
-                    {
-                        world.Locations.Remove(loc);
-                    }
-                }
-                world.SaveChanges();
-                AreaCleanupTimer.Elapsed += AreaCleanupTimer_Elapsed;
-                AreaCleanupTimer.Start();
+                    XCoord = -1,
+                    YCoord = 0,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = 1,
+                    YCoord = 0,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = 2,
+                    YCoord = 0,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = -1,
+                    YCoord = -1,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = 1,
+                    YCoord = -1,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = 0,
+                    YCoord = -2,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = -3,
+                    YCoord = 1,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = -4,
+                    YCoord = 2,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = 3,
+                    YCoord = 1,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
+                World.Current.Locations.Add(new Location()
+                {
+                    XCoord = 4,
+                    YCoord = 2,
+                    ZCoord = "0",
+                    IsStatic = true,
+                    Title = "After Commons",
+                    Description = "This is the center of nothing and the start of everything.",
+                    Color = "lightsteelblue"
+                });
             }
+            foreach (var loc in World.Current.Locations)
+            {
+                if (!loc.IsStatic)
+                {
+                    World.Current.Locations.Remove(loc);
+                }
+            }
+            World.Current.SaveChanges();
         }
         public static dynamic Clone(dynamic JsonData)
         {
             var strData = Json.Encode(JsonData);
             return Json.Decode(strData);
         }
-        public static void SaveTheWorld(World Context)
+        public static void SaveTheWorld()
         {
             try
             {
-                Context.SaveChanges();
+                World.Current.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
             {
                 ex.Entries.Single().Reload();
-                Task.Run(() => {
-                    Thread.Sleep(100);
-                    SaveTheWorld(Context);
+                Task.Run(() =>
+                {
+                    Thread.Sleep(500);
+                    SaveTheWorld();
                 });
             }
-        }
-        public static void AreaCleanupTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            using (var world = new World())
+            catch
             {
-                var removeList = new List<Location>();
-                foreach (var loc in world.Locations)
-                {
-                    if (loc.IsStatic == true || loc.GetOccupants(world) != null)
-                    {
-                        continue;
-                    }
-                    if (!loc.LastVisited.HasValue || DateTime.Now - loc.LastVisited > TimeSpan.FromMinutes(1))
-                    {
-                        removeList.Add(loc);
-                        var request = new
-                        {
-                            Category = "Events",
-                            Type = "AreaRemoved",
-                            Area = loc.ConvertToArea()
-                        };
-                        foreach (var player in loc.GetNearbyPlayers(world))
-                        {
-                            player.Send(Json.Encode(request));
-                        }
-                    }
-                }
-                if (removeList.Count > 0)
-                {
-                    world.Locations.RemoveRange(removeList);
-                    SaveTheWorld(world);
-                }
+                World.Current = new World();
             }
         }
     }
