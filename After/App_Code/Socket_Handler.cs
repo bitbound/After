@@ -19,12 +19,12 @@ namespace After
     {
         public static WebSocketCollection SocketCollection { get; set; } = new WebSocketCollection();
         public bool Authenticated { get; set; }
-        public long CharacterID { get; set; }
+        public string Name { get; set; }
         public Player Player
         {
             get
             {
-                return World.Current.Players.FirstOrDefault(player => player.CharacterID == CharacterID);
+                return World.Current.Players.Find(Name);
             }
         }
         public Socket_Handler()
@@ -57,7 +57,6 @@ namespace After
             if (methodHandler != null)
             {
                 methodHandler.Invoke(null, new object[] { jsonMessage, this });
-                Utilities.SaveTheWorld();
             }
         }
 
@@ -78,7 +77,6 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            Utilities.SaveTheWorld();
         }
         public override void OnError()
         {
@@ -97,7 +95,6 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            Utilities.SaveTheWorld();
         }
     }
 }

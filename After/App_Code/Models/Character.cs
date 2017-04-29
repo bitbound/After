@@ -10,7 +10,7 @@ using System.Web.Script.Serialization;
 
 namespace After.Models
 {
-    public class Character
+    public class Character : StorageLists.StorageItem
     {
         public Character()
         {
@@ -20,8 +20,19 @@ namespace After.Models
             CurrentCharge = 0;
             CurrentWillpower = 100;
         }
-        public long CharacterID { get; set; }
-        public string Name { get; set; }
+        public string Type { get; set; }
+        public string StorageID { get; set; }
+        public string Name
+        {
+            get
+            {
+                return StorageID;
+            }
+            set
+            {
+                StorageID = value;
+            }
+        }
         public string Color { get; set; } = "gray";
         public string PortraitUri { get; set; }
         public double CoreEnergyPeak { get; set; }
@@ -109,6 +120,7 @@ namespace After.Models
             Dialog
         }
         public string Flags { get; set; }
+        public DateTime LastAccessed { get; set; }
         public bool IsHostile()
         {
             return false;
@@ -123,7 +135,7 @@ namespace After.Models
             {
                 Thread.Sleep(500);
             }
-            var location = World.Current.Locations.FirstOrDefault(l => l.LocationID == CurrentXYZ);
+            var location = World.Current.Locations.Find(CurrentXYZ);
             if (location == null)
             {
                 location = World.Current.CreateTempLocation(CurrentXYZ.Split(','));
@@ -132,9 +144,40 @@ namespace After.Models
         }
         public Location GetPreviousLocation(World Context)
         {
-            return Context.Locations.FirstOrDefault(l => l.LocationID == PreviousXYZ);
+            return Context.Locations.Find(PreviousXYZ);
         }
-
+        public List<Location> GetVisibleLocations()
+        {
+            var location = World.Current.Locations.Find(CurrentXYZ);
+            if (location == null)
+            {
+                return null;
+            }
+            List<Location> visibleList = new List<Location>();
+            for (var x = location.XCoord - ViewDistance; x <= location.XCoord + ViewDistance; x++)
+            {
+                for (var y = location.YCoord - ViewDistance; y <= location.YCoord + ViewDistance; y++)
+                {
+                    if (Math.Sqrt(
+                        Math.Pow(x - location.XCoord, 2) +
+                        Math.Pow(y - location.YCoord, 2)
+                    ) <= ViewDistance)
+                    {
+                        var locationID = $"{x.ToString()},{y.ToString()},{location.ZCoord}";
+                        if (World.Current.Locations.Exists(locationID))
+                            visibleList.Add(World.Current.Locations.Find(locationID));
+                    }
+                }
+            }
+            if (visibleList.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return visibleList;
+            }
+        }
         public void Move(string[] ToXYZ)
         {
             dynamic request;
@@ -156,9 +199,9 @@ namespace After.Models
             }
             
             // TODO: Check if blocked.
-            MovementState = MovementStates.Moving;
             var soul = ConvertToSoul();
             var currentLocation = GetCurrentLocation();
+            MovementState = MovementStates.Moving;
             var distance = currentLocation.GetDistanceFrom(toLocation);
             var travelTime = distance * 1000;
             var nearbyPlayers = currentLocation.GetNearbyPlayers();
@@ -175,8 +218,8 @@ namespace After.Models
                 Category = "Events",
                 Type = "PlayerMove",
                 Soul = soul,
-                From = currentLocation.LocationID,
-                To = toLocation.LocationID,
+                From = currentLocation.StorageID,
+                To = toLocation.StorageID,
                 TravelTime = travelTime
             });
             foreach (var player in nearbyPlayers)
@@ -185,7 +228,7 @@ namespace After.Models
             }
             Task.Run(() => {
                 Thread.Sleep((int)(Math.Round(travelTime)));
-                CurrentXYZ = toLocation.LocationID;
+                CurrentXYZ = toLocation.StorageID;
                 toLocation.CharacterArrives(this);
                 MovementState = MovementStates.Ready;
             });
@@ -195,7 +238,6 @@ namespace After.Models
             var location = CurrentXYZ.Split(',');
             return new
             {
-                CharacterID = this.CharacterID,
                 Name = this.Name,
                 Color = this.Color,
                 XCoord = location[0],

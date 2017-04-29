@@ -4,15 +4,15 @@ var After;
     (function (Message_Handlers) {
         var Accounts;
         (function (Accounts) {
-            function HandleAccountCreation(jsonMessage) {
-                if (jsonMessage.Result == "ok") {
+            function HandleAccountCreation(JsonMessage) {
+                if (JsonMessage.Result == "ok") {
                     if (localStorage["RememberMe"] == "true") {
-                        localStorage["AuthenticationToken"] = jsonMessage.AuthenticationToken;
+                        localStorage["AuthenticationToken"] = JsonMessage.AuthenticationToken;
                     }
                     After.Controls.Game.Init();
                 }
                 else {
-                    if (jsonMessage.Result == "exists") {
+                    if (JsonMessage.Result == "exists") {
                         $("#divLoginStatus").hide();
                         $("#divLoginStatus").text("That account name already exists.");
                         $("#divLoginStatus").fadeIn();
@@ -23,24 +23,24 @@ var After;
             }
             Accounts.HandleAccountCreation = HandleAccountCreation;
             ;
-            function HandleLogon(jsonMessage) {
-                if (jsonMessage.Result == "ok") {
-                    if (jsonMessage.Note == "LoginElsewhere") {
+            function HandleLogon(JsonMessage) {
+                if (JsonMessage.Result == "ok") {
+                    if (JsonMessage.Note == "LoginElsewhere") {
                         After.Utilities.ShowDialog("Your account was logged in from another location and was forced off by this login session.<br/><br/>If that wasn't you, you should change your password immediately.", "black", "OK", null);
                     }
                     if (localStorage["RememberMe"] == "true") {
-                        localStorage["AuthenticationToken"] = jsonMessage.AuthenticationToken;
+                        localStorage["AuthenticationToken"] = JsonMessage.AuthenticationToken;
                     }
                     After.Controls.Game.Init();
                 }
-                else if (jsonMessage.Result == "failed") {
+                else if (JsonMessage.Result == "failed") {
                     $("#divLoginStatus").hide();
                     $("#divLoginStatus").text("Incorrect username or password.");
                     $("#divLoginStatus").fadeIn();
                     $("#buttonLogin").removeAttr("disabled");
                     return;
                 }
-                else if (jsonMessage.Result == "expired") {
+                else if (JsonMessage.Result == "expired") {
                     $("#divLoginStatus").hide();
                     $("#divLoginStatus").text("Session expired.  Please log in again.");
                     $("#divLoginStatus").fadeIn();
@@ -54,26 +54,37 @@ var After;
             }
             Accounts.HandleLogon = HandleLogon;
             ;
-            function HandleConnected(jsonMessage) {
+            function HandleConnected(JsonMessage) {
                 var spanMessage = document.createElement("span");
                 spanMessage.style.color = "whitesmoke";
-                spanMessage.innerText = jsonMessage.Username + " has connected.";
+                spanMessage.innerText = JsonMessage.Username + " has connected.";
                 $("#divChatMessageWindow").append(spanMessage);
                 $("#divChatMessageWindow").append("<br/>");
             }
             Accounts.HandleConnected = HandleConnected;
-            function HandleDisconnected(jsonMessage) {
+            function HandleDisconnected(JsonMessage) {
                 var spanMessage = document.createElement("span");
                 spanMessage.style.color = "whitesmoke";
-                spanMessage.innerText = jsonMessage.Username + " has disconnected.";
+                spanMessage.innerText = JsonMessage.Username + " has disconnected.";
                 $("#divChatMessageWindow").append(spanMessage);
                 $("#divChatMessageWindow").append("<br/>");
             }
             Accounts.HandleDisconnected = HandleDisconnected;
-            function HandleLoginElsewhere(jsonMessage) {
+            function HandleLoginElsewhere(JsonMessage) {
                 After.Utilities.ShowDialog("Your were disconnected because your account was logged in from another location.<br/><br/>If this wasn't you, you should change your password immediately.", "black", "OK", null);
             }
             Accounts.HandleLoginElsewhere = HandleLoginElsewhere;
+            function HandleRetrieveSettings(JsonMessage) {
+                for (var setting in JsonMessage.Settings) {
+                    After.Settings[setting] = JsonMessage.Settings[setting];
+                }
+                for (var setting in After.Settings) {
+                    if (typeof After.Settings[setting] == 'boolean') {
+                        $('#divSideTabs div[prop="' + setting + '"]').attr("on", After.Settings[setting]);
+                    }
+                }
+            }
+            Accounts.HandleRetrieveSettings = HandleRetrieveSettings;
         })(Accounts = Message_Handlers.Accounts || (Message_Handlers.Accounts = {}));
     })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));

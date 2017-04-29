@@ -18,7 +18,7 @@ var After;
             Queries.HandlePlayerUpdate = HandlePlayerUpdate;
             function HandleRefreshView(JsonMessage) {
                 JsonMessage.Souls.forEach(function (value) {
-                    var index = After.World_Data.Souls.findIndex((soul) => { return soul.CharacterID == value.CharacterID; });
+                    var index = After.World_Data.Souls.findIndex((soul) => { return soul.Name == value.Name; });
                     var soul = After.Models.Game.Soul.Create(value);
                     if (index == -1) {
                         After.World_Data.Souls.push(soul);
@@ -27,15 +27,14 @@ var After;
                         After.World_Data.Souls[index] = soul;
                     }
                 });
+                After.World_Data.Areas.forEach(function (value, index) {
+                    if (After.Utilities.GetDistanceBetween(value.LocationID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {
+                        After.World_Data.Areas.splice(index, 1);
+                    }
+                });
                 JsonMessage.Areas.forEach(function (value) {
-                    var index = After.World_Data.Areas.findIndex((area) => { return area.LocationID == value.LocationID; });
                     var area = After.Models.Game.Area.Create(value);
-                    if (index == -1) {
-                        After.World_Data.Areas.push(area);
-                    }
-                    else {
-                        After.World_Data.Areas[index] = area;
-                    }
+                    After.World_Data.Areas.push(area);
                 });
                 After.World_Data.Areas.forEach(function (value) {
                     if (After.Utilities.GetDistanceBetween(value.LocationID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {

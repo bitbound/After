@@ -6,7 +6,6 @@ var After;
         (function (Game) {
             class Soul {
                 constructor() {
-                    this.Type = "Soul";
                     this.Name = "";
                     this.XCoord = 0;
                     this.YCoord = 0;

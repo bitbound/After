@@ -1,15 +1,12 @@
 ﻿namespace After.Models.Game {
     export class Soul {
         constructor() {
-            this.Type = "Soul";
             this.Name = "";
             this.XCoord = 0;
             this.YCoord = 0;
             this.ZCoord = "0";
             this.Color = "gray";
         };
-        Type: string;
-        CharacterID: number;
         Name: string;
         XCoord: number;
         YCoord: number;

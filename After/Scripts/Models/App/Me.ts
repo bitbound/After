@@ -6,7 +6,6 @@
             this.Particles = new Array<After.Models.Game.Particle>();
             this.Height = 1;
         }
-        CharacterID: number;
         Name: string;
         Color: string;
         get CurrentXYZ() {

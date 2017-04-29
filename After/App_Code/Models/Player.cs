@@ -13,6 +13,7 @@ namespace After.Models
         }
         public string Password { get; set; }
         public string AuthenticationToken { get; set; }
+        public Settings Settings { get; set; } = new Settings();
         public bool IsAdmin { get; set; }
 
         public bool AdminFlagged { get; set; }
@@ -21,7 +22,7 @@ namespace After.Models
         public bool Banned { get; set; }
         public int BadPasswordCount { get; set; } = 0;
         public bool LockedOut { get; set; }
-        public DateTime? LockoutTime { get; set; }
+        public DateTime LockoutTime { get; set; }
         public AccountTypes AccountType { get; set; }
 
         public string LastIP { get; set; }
@@ -45,14 +46,13 @@ namespace After.Models
         }
         public Socket_Handler GetSocketHandler()
         {
-            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().FirstOrDefault(sh => sh?.Player?.CharacterID == CharacterID);
+            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().FirstOrDefault(sh => sh?.Player?.Name == Name);
         }
         public dynamic ConvertToMe()
         {
             var location = CurrentXYZ.Split(',');
             return new
             {
-                CharacterID = this.CharacterID,
                 Name = this.Name,
                 Color = this.Color,
                 XCoord = location[0],

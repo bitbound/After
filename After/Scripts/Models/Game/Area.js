@@ -6,14 +6,15 @@ var After;
         (function (Game) {
             class Area {
                 constructor(XCoord, YCoord, ZCoord) {
-                    this.Type = "Area";
                     this.XCoord = XCoord;
                     this.YCoord = YCoord;
                     this.ZCoord = ZCoord;
                     this.Color = "gray";
                     this.IsSelected = false;
                     this.Opacity = 1;
+                    this.Occupants = new Array();
                 }
+                //*** Utility Functions ***//
                 static Create(DynamicArea) {
                     var area = new After.Models.Game.Area(DynamicArea.XCoord, DynamicArea.YCoord, DynamicArea.ZCoord);
                     for (var prop in DynamicArea) {

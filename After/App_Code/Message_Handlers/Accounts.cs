@@ -13,7 +13,7 @@ namespace After.Message_Handlers
         public static void HandleAccountCreation(dynamic jsonMessage, Socket_Handler SH)
         {
             string name = jsonMessage.Username;
-            if (World.Current.Players.FirstOrDefault((p => p.Name == name)) != null)
+            if (World.Current.Players.Exists(name))
             {
                 jsonMessage.Result = "exists";
                 jsonMessage.Password = null;
@@ -35,8 +35,7 @@ namespace After.Message_Handlers
                 player.AuthenticationToken = Guid.NewGuid().ToString();
                 Socket_Handler.SocketCollection.Add(SH);
                 World.Current.Players.Add(player);
-                World.Current.SaveChanges();
-                SH.CharacterID = World.Current.Players.FirstOrDefault(p => p.Name == name).CharacterID;
+                SH.Name = name;
                 jsonMessage.Result = "ok";
                 jsonMessage.Password = null;
                 jsonMessage.AuthenticationToken = SH.Player.AuthenticationToken;
@@ -53,8 +52,8 @@ namespace After.Message_Handlers
         public static void HandleLogon(dynamic jsonMessage, Socket_Handler SH)
         {
             var playerName = (string)jsonMessage.Username;
-            SH.CharacterID = World.Current.Players.FirstOrDefault(p => p.Name == playerName).CharacterID;
-            if (SH.Player == null)
+            SH.Name = playerName;
+            if (!World.Current.Players.Exists(SH.Name))
             {
                 jsonMessage.Result = "failed";
                 SH.Send(Json.Encode(jsonMessage));
@@ -112,6 +111,16 @@ namespace After.Message_Handlers
                 SH.Player.CurrentXYZ = "0,0,0";
             }
             SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
+        }
+        public static void HandleChangeSetting(dynamic JsonMessage, Socket_Handler SH)
+        {
+            string prop = JsonMessage.Property;
+            SH.Player.Settings.GetType().GetProperty(prop).SetValue(SH.Player.Settings, JsonMessage.Value);
+        }
+        public static void HandleRetrieveSettings(dynamic JsonMessage, Socket_Handler SH)
+        {
+            JsonMessage.Settings = SH.Player.Settings;
+            SH.Send(Json.Encode(JsonMessage));
         }
     }
 }

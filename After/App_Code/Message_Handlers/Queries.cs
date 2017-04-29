@@ -25,7 +25,7 @@ namespace After.Message_Handlers
             {
                 return;
             }
-            foreach (var area in location.GetNearbyLocations(SH.Player))
+            foreach (var area in SH.Player.GetVisibleLocations())
             {
                 if (area.IsStatic == false && DateTime.Now - area.LastVisited > TimeSpan.FromMinutes(1))
                 {
@@ -39,11 +39,20 @@ namespace After.Message_Handlers
                     {
                         player.Send(Json.Encode(request));
                     }
-                    World.Current.Locations.Remove(area);
+                    World.Current.Locations.Remove(area.StorageID);
                     continue;
                 }
-                foreach (var character in World.Current.Characters.Where(p => p.CurrentXYZ == area.LocationID))
+                foreach (var occupant in area.Occupants)
                 {
+                    Character character = World.Current.NPCs.Find(occupant);
+                    if (character == null)
+                    {
+                        character = World.Current.Players.Find(occupant);
+                        if (character == null)
+                        {
+                            continue;
+                        }
+                    }
                     if (character is Player && !(character as Player).IsLoggedIn())
                     {
                         continue;

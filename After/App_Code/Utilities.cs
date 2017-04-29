@@ -1,4 +1,5 @@
 ﻿using After.Models;
+using StorageLists;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -21,7 +22,7 @@ namespace After
     {
         public static void StartUp()
         {
-            if (!World.Current.Locations.Any(l => l.LocationID == "0,0,0"))
+            if (!World.Current.Locations.Exists("0,0,0"))
             {
                 World.Current.Locations.Add(new Location()
                 {
@@ -145,39 +146,11 @@ namespace After
                     Color = "lightsteelblue"
                 });
             }
-            foreach (var loc in World.Current.Locations)
-            {
-                if (!loc.IsStatic)
-                {
-                    World.Current.Locations.Remove(loc);
-                }
-            }
-            World.Current.SaveChanges();
         }
         public static dynamic Clone(dynamic JsonData)
         {
             var strData = Json.Encode(JsonData);
             return Json.Decode(strData);
-        }
-        public static void SaveTheWorld()
-        {
-            try
-            {
-                World.Current.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                ex.Entries.Single().Reload();
-                Task.Run(() =>
-                {
-                    Thread.Sleep(500);
-                    SaveTheWorld();
-                });
-            }
-            catch
-            {
-                World.Current = new World();
-            }
         }
     }
 }

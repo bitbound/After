@@ -132,7 +132,6 @@
     <Content Include="App_Code\Message_Handlers\Messages.cs" />
     <Content Include="App_Code\Message_Handlers\Queries.cs" />
     <Content Include="App_Code\Models\Character.cs" />
-    <Content Include="App_Code\Models\Hostile.cs" />
     <Content Include="App_Code\Models\InnerVoid.cs" />
     <Content Include="App_Code\Models\Location.cs" />
     <Content Include="App_Code\Models\Message.cs" />
@@ -141,8 +140,9 @@
     <Content Include="App_Code\Models\World.cs" />
     <Content Include="App_Code\Socket_Handler.cs" />
     <Content Include="App_Code\Utilities.cs" />
-    <Content Include="App_Code\Migrations\Configuration.cs" />
-    <Content Include="App_Code\Message_Handlers\Settings.cs" />
+    <Content Include="App_Code\Storage\StorageList.cs" />
+    <Content Include="App_Code\Storage\StorageItem.cs" />
+    <Content Include="App_Code\Models\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

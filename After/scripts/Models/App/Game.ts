@@ -13,10 +13,11 @@
             // TODO: Percentages to increase/decrease bars.
         };
         ToggleProperty(e) {
+            var prop = e.currentTarget.getAttribute("prop");
             var request = {
-                "Category": "Settings",
+                "Category": "Accounts",
                 "Type": "ChangeSetting",
-                "Property": e.currentTarget.getAttribute("prop")
+                "Property": prop
             }
             if ($(e.currentTarget).attr("on") == "false") {
                 $(e.currentTarget).attr("on", "true");
@@ -27,6 +28,7 @@
                 request["Value"] = false;
             }
             After.Connection.Socket.send(JSON.stringify(request));
+            After.Settings[prop] = request["Value"];
         };
         PositionSideTabs() {
             var top = 0;

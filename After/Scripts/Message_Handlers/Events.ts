@@ -42,7 +42,7 @@
         After.Me.IsCharging = false;
     };
     export function HandleCharacterArrives(JsonMessage) {
-        if (JsonMessage.Soul.CharacterID == After.Me.CharacterID) {
+        if (JsonMessage.Soul.Name == After.Me.Name) {
             After.Me.CurrentXYZ = JsonMessage.Soul.CurrentXYZ;
             var query = {
                 "Category": "Queries",
@@ -59,10 +59,10 @@
         }
     };
     export function HandleCharacterLeaves(JsonMessage) {
-        if (JsonMessage.Soul.CharacterID != After.Me.CharacterID) 
+        if (JsonMessage.Soul.Name != After.Me.Name) 
         {
             var index = After.World_Data.Souls.findIndex((value, index) => {
-                return value.CharacterID == JsonMessage.Soul.CharacterID;
+                return value.Name == JsonMessage.Soul.Name;
             })
             After.World_Data.Souls.splice(index, 1);
             if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
@@ -71,7 +71,7 @@
         }
     };
     export function HandlePlayerMove(JsonMessage) {
-        if (JsonMessage.Soul.CharacterID == After.Me.CharacterID) {
+        if (JsonMessage.Soul.Name == After.Me.Name) {
             var dest = JsonMessage.To.split(",");
             var from = JsonMessage.From.split(",");
             After.Utilities.Animate(After.Me, "XCoord", Number(from[0]), Number(dest[0]), Number(JsonMessage.TravelTime));
