@@ -143,6 +143,7 @@
     <Content Include="App_Code\Storage\StorageList.cs" />
     <Content Include="App_Code\Storage\StorageItem.cs" />
     <Content Include="App_Code\Models\Settings.cs" />
+    <Content Include="App_Code\Models\AuthenticationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

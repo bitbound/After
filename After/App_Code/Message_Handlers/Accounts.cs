@@ -32,13 +32,13 @@ namespace After.Message_Handlers
                     CurrentXYZ = "0,0,0",
                     MovementState = Character.MovementStates.Ready
                 };
-                player.AuthenticationToken = Guid.NewGuid().ToString();
+                player.AuthenticationTokens.Add(new AuthenticationToken() { Token = Guid.NewGuid().ToString(), LastUsed = DateTime.Now });
                 Socket_Handler.SocketCollection.Add(SH);
                 World.Current.Players.Add(player);
                 SH.Name = name;
                 jsonMessage.Result = "ok";
                 jsonMessage.Password = null;
-                jsonMessage.AuthenticationToken = SH.Player.AuthenticationToken;
+                jsonMessage.AuthenticationToken = SH.Player.AuthenticationTokens;
                 SH.Send(Json.Encode(jsonMessage));
                 Socket_Handler.SocketCollection.Broadcast(Json.Encode(new
                 {
@@ -59,13 +59,25 @@ namespace After.Message_Handlers
                 SH.Send(Json.Encode(jsonMessage));
                 return;
             }
-            else if (SH.Player.AuthenticationToken != null && jsonMessage.AuthenticationToken != null)
+            else if (SH.Player.AuthenticationTokens.Count > 0 && jsonMessage.AuthenticationToken != null)
             {
-                if (SH.Player.AuthenticationToken != jsonMessage.AuthenticationToken)
+                for (var i = SH.Player.AuthenticationTokens.Count - 1; i >= 0; i--)
+                {
+                    var token = SH.Player.AuthenticationTokens[i];
+                    if (DateTime.Now - token.LastUsed > TimeSpan.FromDays(30))
+                    {
+                        SH.Player.AuthenticationTokens.Remove(token);
+                    }
+                }
+                if (!SH.Player.AuthenticationTokens.Exists(at=>at.Token == jsonMessage.AuthenticationToken))
                 {
                     jsonMessage.Result = "expired";
                     SH.Send(Json.Encode(jsonMessage));
                     return;
+                }
+                else
+                {
+                    SH.Player.AuthenticationTokens.RemoveAll(at => at.Token == jsonMessage.AuthenicationToken);
                 }
             }
             else if (!Crypto.VerifyHashedPassword(SH.Player.Password, jsonMessage.Password))
@@ -96,8 +108,9 @@ namespace After.Message_Handlers
             SH.Player.MovementState = Character.MovementStates.Ready;
             Socket_Handler.SocketCollection.Add(SH);
             jsonMessage.Result = "ok";
-            SH.Player.AuthenticationToken = Guid.NewGuid().ToString();
-            jsonMessage.AuthenticationToken = SH.Player.AuthenticationToken;
+            var newToken = new AuthenticationToken() { Token = Guid.NewGuid().ToString(), LastUsed = DateTime.Now };
+            SH.Player.AuthenticationTokens.Add(newToken);
+            jsonMessage.AuthenticationToken = newToken.Token;
             SH.Send(Json.Encode(jsonMessage));
             Socket_Handler.SocketCollection.Broadcast(Json.Encode(new
             {

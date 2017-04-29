@@ -11,7 +11,6 @@ After.Temp.Login.Init = function () {
             localStorage.removeItem("AuthenticationToken");
         })
     });
-    After.Connection.Init();
     After.Temp.Login.TryLogin = function () {
         if (After.Connection.Socket.readyState != WebSocket.OPEN) {
             alert("Could not connect to the server.  Make sure your browser supports WebSockets.");

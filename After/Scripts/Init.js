@@ -2,23 +2,24 @@
     if (window.location.href.search("localhost") > -1) {
         After.Debug = true;
     };
-    //$(window).on("error", function (e) {
-    //    var error = {
-    //        Message: e.originalEvent.message,
-    //        TimeStamp: e.originalEvent.timeStamp,
-    //        Line: e.originalEvent.lineno,
-    //        Column: e.originalEvent.colno,
-    //        StackTrace: e.originalEvent.error.stack
-    //    }
-    //    $.post(window.location.origin + "/Services/ErrorReporting.cshtml", JSON.stringify(error));
-    //    if (After.Debug) {
-    //        alert("Unhandled Error: " + JSON.stringify(error));
-    //    }
-    //    else {
-    //        console.log("Unhandled Error: " + JSON.stringify(error));
-    //    }
-    //    throw e;
-    //});
+    window.onerror = function (message, source, lineno, colno, error) {
+        var error = {
+            Name: error.name,
+            Message: message,
+            TimeStamp: new Date().toString(),
+            Line: lineno,
+            Column: colno,
+            StackTrace: error.stack
+        }
+        $.post(window.location.origin + "/Services/ErrorReporting.cshtml", JSON.stringify(error));
+        if (After.Debug) {
+            alert("Unhandled Error: " + JSON.stringify(error));
+        }
+        else {
+            console.log("Unhandled Error: " + JSON.stringify(error));
+        }
+        return true;
+    };
     window.onbeforeunload = function () {
         if (After.Connection.Socket.readyState == 1) {
             return "Are you sure you want to leave without logging out first?";
@@ -50,5 +51,6 @@
             };
         };
     });
+    After.Connection.SetHandlers();
     After.Temp.Splash.Init();
 });

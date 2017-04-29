@@ -12,7 +12,7 @@ namespace After.Models
            
         }
         public string Password { get; set; }
-        public string AuthenticationToken { get; set; }
+        public List<AuthenticationToken> AuthenticationTokens { get; set; } = new List<AuthenticationToken>();
         public Settings Settings { get; set; } = new Settings();
         public bool IsAdmin { get; set; }
 
