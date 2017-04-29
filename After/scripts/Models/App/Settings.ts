@@ -1,13 +1,11 @@
 ﻿namespace After.Models.App {
     export class Settings {
         FollowPlayer: boolean = true;
-
-        private dPad: boolean = true;
         public get DPad() {
-            return this.dPad;
+            return Boolean($('#divSideTabs div[prop="DPad"]').attr("on"));
         }
-        public set DPad(value) {
-            this.dPad = value;
+        public set DPad(value:boolean) {
+            $('#divSideTabs div[prop="DPad"]').attr("on", String(value));
             if (value) {
                 $("#divDPad").show();
                 this.Joystick = false;
@@ -25,15 +23,13 @@
                 $("#divDPad").hide();
             }
         }
-        private joystick: boolean = false;
         public get Joystick() {
-            return this.joystick;
+            return Boolean($('#divSideTabs div[prop="Joystick"]').attr("on"));
         }
-        public set Joystick(value) {
-            this.joystick = value;
+        public set Joystick(value:boolean) {
+            $('#divSideTabs div[prop="Joystick"]').attr("on", String(value));
             if (value) {
                 $("#divJoystick").show();
-                this.DPad = false;
                 $('#divSideTabs div[prop="DPad"]').attr("on", "false");
                 var request = {
                     "Category": "Accounts",

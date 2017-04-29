@@ -7,14 +7,12 @@ var After;
             class Settings {
                 constructor() {
                     this.FollowPlayer = true;
-                    this.dPad = true;
-                    this.joystick = false;
                 }
                 get DPad() {
-                    return this.dPad;
+                    return Boolean($('#divSideTabs div[prop="DPad"]').attr("on"));
                 }
                 set DPad(value) {
-                    this.dPad = value;
+                    $('#divSideTabs div[prop="DPad"]').attr("on", String(value));
                     if (value) {
                         $("#divDPad").show();
                         this.Joystick = false;
@@ -32,13 +30,12 @@ var After;
                     }
                 }
                 get Joystick() {
-                    return this.joystick;
+                    return Boolean($('#divSideTabs div[prop="Joystick"]').attr("on"));
                 }
                 set Joystick(value) {
-                    this.joystick = value;
+                    $('#divSideTabs div[prop="Joystick"]').attr("on", String(value));
                     if (value) {
                         $("#divJoystick").show();
-                        this.DPad = false;
                         $('#divSideTabs div[prop="DPad"]').attr("on", "false");
                         var request = {
                             "Category": "Accounts",
