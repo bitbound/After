@@ -77,22 +77,27 @@
             </div>
             <div class="tab-outerframe">
                 <div class="tab-innerframe">
-                    <div style="height:30px">
-                        <div class="vertical-middle">Follow Player:</div>
-                        <div class="switch-outer" prop="FollowPlayer">
-                            <div class="switch-inner"></div>
-                        </div>
+                    <div class="side-tab-item-header">
+                        Interface
                     </div>
-                    <div style="height:30px">
-                        <div class="vertical-middle">D-Pad:</div>
-                        <div class="switch-outer" prop="DPad">
-                            <div class="switch-inner"></div>
+                    <div class="side-tab-item-group">
+                        <div class="side-tab-item">
+                            <div class="vertical-middle">Follow Player:</div>
+                            <div class="switch-outer" prop="FollowPlayer">
+                                <div class="switch-inner"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div style="height:30px">
-                        <div class="vertical-middle">Joystick:</div>
-                        <div class="switch-outer" prop="Joystick">
-                            <div class="switch-inner"></div>
+                        <div class="side-tab-item">
+                            <div class="vertical-middle">D-Pad:</div>
+                            <div class="switch-outer" prop="DPad">
+                                <div class="switch-inner"></div>
+                            </div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="vertical-middle">Joystick:</div>
+                            <div class="switch-outer" prop="Joystick">
+                                <div class="switch-inner"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -431,6 +436,23 @@
             height: 25px;
             width: 25px;
             margin-top: 5px;
+        }
+        .side-tab-item-header {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 5px 0;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .side-tab-item-header:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        .side-tab-item-group {
+
+        }
+        .side-tab-item {
+            height: 35px;
         }
         .side-tab-frame .switch-outer {
             float: right;

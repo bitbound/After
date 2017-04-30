@@ -31,7 +31,31 @@ var After;
                             if (Callback) {
                                 Callback();
                             }
+                        }, function () {
+                            // Error callback.
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
+                            if (Callback) {
+                                Callback();
+                            }
                         });
+                    };
+                    request.onerror = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
+                    };
+                    request.ontimeout = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
                     };
                     request.send();
                 }
@@ -58,7 +82,31 @@ var After;
                             if (Callback) {
                                 Callback();
                             }
+                        }, function () {
+                            // Error callback.
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
+                            if (Callback) {
+                                Callback();
+                            }
                         });
+                    };
+                    request.onerror = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
+                    };
+                    request.ontimeout = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
                     };
                     request.send();
                 }
@@ -92,7 +140,31 @@ var After;
                             if (Callback) {
                                 Callback();
                             }
+                        }, function () {
+                            // Error callback.
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
+                            if (Callback) {
+                                Callback();
+                            }
                         });
+                    };
+                    request.onerror = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
+                    };
+                    request.ontimeout = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
                     };
                     request.send();
                 }
@@ -119,7 +191,31 @@ var After;
                             if (Callback) {
                                 Callback();
                             }
+                        }, function () {
+                            // Error callback.
+                            if (ShowLoading) {
+                                After.Utilities.RemoveLoading();
+                            }
+                            if (Callback) {
+                                Callback();
+                            }
                         });
+                    };
+                    request.onerror = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
+                    };
+                    request.ontimeout = function () {
+                        if (ShowLoading) {
+                            After.Utilities.RemoveLoading();
+                        }
+                        if (Callback) {
+                            Callback();
+                        }
                     };
                     request.send();
                 }

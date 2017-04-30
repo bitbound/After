@@ -30,6 +30,7 @@
             $('#divSideTabs div[prop="Joystick"]').attr("on", String(value));
             if (value) {
                 $("#divJoystick").show();
+                this.DPad = false;
                 $('#divSideTabs div[prop="DPad"]').attr("on", "false");
                 var request = {
                     "Category": "Accounts",

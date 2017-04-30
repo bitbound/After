@@ -786,6 +786,9 @@ var After;
                 $(".switch-outer").on("click", function (e) {
                     After.Game.ToggleProperty(e);
                 });
+                $(".side-tab-item-header").on("click", function (e) {
+                    $(e.currentTarget).next(".side-tab-item-group").slideToggle();
+                });
                 After.Game.PositionSideTabs();
             }
         };

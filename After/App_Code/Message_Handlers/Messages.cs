@@ -18,6 +18,8 @@ namespace After.Message_Handlers
             jsonMessage.Username = SH.Player.Name;
             World.Current.Messages.Add(new Message()
             {
+                StorageID = $"{SH.Player.Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
+                LastAccessed = DateTime.Now,
                 Sender = SH.Player.Name,
                 Content = jsonMessage.Message,
                 Recipient = jsonMessage?.Recipent,

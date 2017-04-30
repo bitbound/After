@@ -11,6 +11,10 @@
     void Application_End(object sender, EventArgs e)
     {
         //  Code that runs on application shutdown
+        After.Models.World.Current.Locations.StoreAll();
+        After.Models.World.Current.Players.StoreAll();
+        After.Models.World.Current.NPCs.StoreAll();
+        After.Models.World.Current.Messages.StoreAll();
     }
 
     void Application_Error(object sender, EventArgs e)

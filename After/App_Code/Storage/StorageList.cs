@@ -22,7 +22,7 @@ namespace StorageLists
         /// <summary>
         /// Items in memory.  This will not return persisted items that haven't been loaded into memory.
         /// </summary>
-        public Dictionary<string, T> Storage { get; set; } = new Dictionary<string, T>();
+        public SortedList<string, T> Storage { get; set; } = new SortedList<string, T>();
 
         /// <summary>
         /// Timer that will persist items in Storage every interval.
@@ -221,6 +221,16 @@ namespace StorageLists
                         PersistErrorAction.Invoke();
                     }
                 }
+            }
+        }
+        /// <summary>
+        /// Store all items in Storage, provided they pass the persistence filter.
+        /// </summary>
+        public void StoreAll()
+        {
+            for (var i = Storage.Count - 1; i >= 0; i--)
+            {
+                Store(Storage.Keys[i]);
             }
         }
         /// <summary>

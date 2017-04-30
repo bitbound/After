@@ -87,6 +87,12 @@ var After;
                     var from = JsonMessage.From.split(",");
                     After.Utilities.Animate(After.Me, "XCoord", Number(from[0]), Number(dest[0]), Number(JsonMessage.TravelTime));
                     After.Utilities.Animate(After.Me, "YCoord", Number(from[1]), Number(dest[1]), Number(JsonMessage.TravelTime));
+                    for (var i = 0; i < After.Me.Particles.length; i++) {
+                        window.setTimeout(function (i) {
+                            After.Utilities.Animate(After.Me.Particles[i], "CurrentX", After.Me.Particles[i].CurrentX, 0, Number(JsonMessage.TravelTime * .75));
+                            After.Utilities.Animate(After.Me.Particles[i], "CurrentY", After.Me.Particles[i].CurrentY, 0, Number(JsonMessage.TravelTime * .75));
+                        }, 5, i);
+                    }
                     if (After.Settings.FollowPlayer) {
                         for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 20) {
                             window.setTimeout(function () {

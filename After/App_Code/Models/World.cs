@@ -21,6 +21,7 @@ namespace After.Models
             NPCs.FolderPath = server.MapPath("~/App_Data/World_Data/NPCs");
             Messages.FolderPath = server.MapPath("~/App_Data/World_Data/Messages");
             Locations.PersistenceFilter = new Predicate<Location>(loc => loc.IsStatic == true);
+            Messages.PersistenceFilter = new Predicate<Message>(mes => Messages.Storage.IndexOfValue(mes) > 50);
         }
         public StorageList<Player> Players { get; set; } = new StorageList<Player>();
         public StorageList<Location> Locations { get; set; } = new StorageList<Location>();

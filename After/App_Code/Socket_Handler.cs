@@ -77,6 +77,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
+            World.Current.Players.Store(Player.StorageID);
         }
         public override void OnError()
         {
@@ -95,6 +96,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
+            World.Current.Players.Store(Player.StorageID);
         }
     }
 }
