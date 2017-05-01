@@ -70,17 +70,28 @@
             }
         }
     };
-    export function HandlePlayerMove(JsonMessage) {
+    export async function HandlePlayerMove(JsonMessage) {
         if (JsonMessage.Soul.Name == After.Me.Name) {
+            After.Me.IsMoving = true;
             var dest = JsonMessage.To.split(",");
             var from = JsonMessage.From.split(",");
-            After.Utilities.Animate(After.Me, "XCoord", Number(from[0]), Number(dest[0]), Number(JsonMessage.TravelTime));
-            After.Utilities.Animate(After.Me, "YCoord", Number(from[1]), Number(dest[1]), Number(JsonMessage.TravelTime));
+            $(After.Me).animate({
+                "XCoord": Number(dest[0]),
+                "YCoord": Number(dest[1])
+            }, Number(JsonMessage.TravelTime));
             for (var i = 0; i < After.Me.Particles.length; i++) {
-                window.setTimeout(function (i) {
-                    After.Utilities.Animate(After.Me.Particles[i], "CurrentX", After.Me.Particles[i].CurrentX, 0, Number(JsonMessage.TravelTime * .75));
-                    After.Utilities.Animate(After.Me.Particles[i], "CurrentY", After.Me.Particles[i].CurrentY, 0, Number(JsonMessage.TravelTime * .75));
-                }, 5, i)
+                var x = After.Utilities.GetRandom(-5, 5, true);
+                var y = After.Utilities.GetRandom(-5, 5, true);
+                After.Me.Particles[i].FromX = x;
+                After.Me.Particles[i].ToX = x;
+                After.Me.Particles[i].FromY = y;
+                After.Me.Particles[i].ToY = y;
+                $(After.Me.Particles[i]).animate({
+                    "CurrentX": x,
+                    "CurrentY": y
+                }, Number(JsonMessage.TravelTime), function () {
+                    After.Me.IsMoving = false;
+                })
             }
             if (After.Settings.FollowPlayer) {
                 for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 20) {
@@ -99,15 +110,14 @@
                 part.XCoord = Utilities.GetRandom(Number(from[0]) + .25, Number(from[0]) + .75, false);
                 part.YCoord = Utilities.GetRandom(Number(from[1]) + .25, Number(from[1]) + .50, false);
                 part.ZCoord = from[3];
-                window.setTimeout(function (part) {
-                    After.World_Data.FreeParticles.push(part);
-                    After.Utilities.Animate(part, "XCoord", part.XCoord, Number(dest[0]) + .5, Number(JsonMessage.TravelTime));
-                    After.Utilities.Animate(part, "YCoord", part.YCoord, Number(dest[1]) + .5, Number(JsonMessage.TravelTime));
-                    window.setTimeout(function (part) {
-                        var index = After.World_Data.FreeParticles.findIndex((value) => value == part);
-                        After.World_Data.FreeParticles.splice(index, 1);
-                    }, Number(JsonMessage.TravelTime), part);
-                }, i * 5, part)
+                After.World_Data.FreeParticles.push(part);
+                $(part).animate({
+                    "XCoord": Number(dest[0]) + .5,
+                    "YCoord": Number(dest[1]) + .5
+                }, Number(JsonMessage.TravelTime), function () {
+                    var index = After.World_Data.FreeParticles.findIndex((value) => value == part);
+                    After.World_Data.FreeParticles.splice(index, 1);
+                });
             }
         }
     }

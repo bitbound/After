@@ -59,16 +59,9 @@ namespace After.Message_Handlers
                 SH.Send(Json.Encode(jsonMessage));
                 return;
             }
-            else if (SH.Player.AuthenticationTokens.Count > 0 && jsonMessage.AuthenticationToken != null)
+            SH.Player.AuthenticationTokens.RemoveAll(at => DateTime.Now - at.LastUsed > TimeSpan.FromDays(30));
+            if (SH.Player.AuthenticationTokens.Count > 0 && jsonMessage.AuthenticationToken != null)
             {
-                for (var i = SH.Player.AuthenticationTokens.Count - 1; i >= 0; i--)
-                {
-                    var token = SH.Player.AuthenticationTokens[i];
-                    if (DateTime.Now - token.LastUsed > TimeSpan.FromDays(30))
-                    {
-                        SH.Player.AuthenticationTokens.Remove(token);
-                    }
-                }
                 if (!SH.Player.AuthenticationTokens.Exists(at=>at.Token == jsonMessage.AuthenticationToken))
                 {
                     jsonMessage.Result = "expired";

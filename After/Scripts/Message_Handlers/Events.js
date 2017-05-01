@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var After;
 (function (After) {
     var Message_Handlers;
@@ -82,45 +90,57 @@ var After;
             Events.HandleCharacterLeaves = HandleCharacterLeaves;
             ;
             function HandlePlayerMove(JsonMessage) {
-                if (JsonMessage.Soul.Name == After.Me.Name) {
-                    var dest = JsonMessage.To.split(",");
-                    var from = JsonMessage.From.split(",");
-                    After.Utilities.Animate(After.Me, "XCoord", Number(from[0]), Number(dest[0]), Number(JsonMessage.TravelTime));
-                    After.Utilities.Animate(After.Me, "YCoord", Number(from[1]), Number(dest[1]), Number(JsonMessage.TravelTime));
-                    for (var i = 0; i < After.Me.Particles.length; i++) {
-                        window.setTimeout(function (i) {
-                            After.Utilities.Animate(After.Me.Particles[i], "CurrentX", After.Me.Particles[i].CurrentX, 0, Number(JsonMessage.TravelTime * .75));
-                            After.Utilities.Animate(After.Me.Particles[i], "CurrentY", After.Me.Particles[i].CurrentY, 0, Number(JsonMessage.TravelTime * .75));
-                        }, 5, i);
-                    }
-                    if (After.Settings.FollowPlayer) {
-                        for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 20) {
-                            window.setTimeout(function () {
-                                After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, false);
-                            }, i);
+                return __awaiter(this, void 0, void 0, function* () {
+                    if (JsonMessage.Soul.Name == After.Me.Name) {
+                        After.Me.IsMoving = true;
+                        var dest = JsonMessage.To.split(",");
+                        var from = JsonMessage.From.split(",");
+                        $(After.Me).animate({
+                            "XCoord": Number(dest[0]),
+                            "YCoord": Number(dest[1])
+                        }, Number(JsonMessage.TravelTime));
+                        for (var i = 0; i < After.Me.Particles.length; i++) {
+                            var x = After.Utilities.GetRandom(-5, 5, true);
+                            var y = After.Utilities.GetRandom(-5, 5, true);
+                            After.Me.Particles[i].FromX = x;
+                            After.Me.Particles[i].ToX = x;
+                            After.Me.Particles[i].FromY = y;
+                            After.Me.Particles[i].ToY = y;
+                            $(After.Me.Particles[i]).animate({
+                                "CurrentX": x,
+                                "CurrentY": y
+                            }, Number(JsonMessage.TravelTime), function () {
+                                After.Me.IsMoving = false;
+                            });
+                        }
+                        if (After.Settings.FollowPlayer) {
+                            for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 20) {
+                                window.setTimeout(function () {
+                                    After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, false);
+                                }, i);
+                            }
                         }
                     }
-                }
-                else {
-                    for (var i = 0; i < 50; i++) {
-                        var part = new After.Models.Game.FreeParticle();
-                        part.Color = JsonMessage.Soul.Color;
-                        var from = JsonMessage.From.split(",");
-                        var dest = JsonMessage.To.split(",");
-                        part.XCoord = After.Utilities.GetRandom(Number(from[0]) + .25, Number(from[0]) + .75, false);
-                        part.YCoord = After.Utilities.GetRandom(Number(from[1]) + .25, Number(from[1]) + .50, false);
-                        part.ZCoord = from[3];
-                        window.setTimeout(function (part) {
+                    else {
+                        for (var i = 0; i < 50; i++) {
+                            var part = new After.Models.Game.FreeParticle();
+                            part.Color = JsonMessage.Soul.Color;
+                            var from = JsonMessage.From.split(",");
+                            var dest = JsonMessage.To.split(",");
+                            part.XCoord = After.Utilities.GetRandom(Number(from[0]) + .25, Number(from[0]) + .75, false);
+                            part.YCoord = After.Utilities.GetRandom(Number(from[1]) + .25, Number(from[1]) + .50, false);
+                            part.ZCoord = from[3];
                             After.World_Data.FreeParticles.push(part);
-                            After.Utilities.Animate(part, "XCoord", part.XCoord, Number(dest[0]) + .5, Number(JsonMessage.TravelTime));
-                            After.Utilities.Animate(part, "YCoord", part.YCoord, Number(dest[1]) + .5, Number(JsonMessage.TravelTime));
-                            window.setTimeout(function (part) {
+                            $(part).animate({
+                                "XCoord": Number(dest[0]) + .5,
+                                "YCoord": Number(dest[1]) + .5
+                            }, Number(JsonMessage.TravelTime), function () {
                                 var index = After.World_Data.FreeParticles.findIndex((value) => value == part);
                                 After.World_Data.FreeParticles.splice(index, 1);
-                            }, Number(JsonMessage.TravelTime), part);
-                        }, i * 5, part);
+                            });
+                        }
                     }
-                }
+                });
             }
             Events.HandlePlayerMove = HandlePlayerMove;
             function HandleAreaCreated(JsonMessage) {

@@ -163,7 +163,7 @@
         };
         AnimateParticles() {
             this.ParticleInterval = window.setInterval(function () {
-                if (After.Me.CurrentXYZ == null) {
+                if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
                     return;
                 }
                 var soul = After.Me;
