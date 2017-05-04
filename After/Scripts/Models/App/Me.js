@@ -10,6 +10,7 @@ var After;
                     this.IsMoving = false;
                     this.Particles = new Array();
                     this.Height = 1;
+                    this.Powers = new Array();
                 }
                 get CurrentXYZ() {
                     if (this.XCoord == null || this.YCoord == null || this.ZCoord == null) {
@@ -31,6 +32,57 @@ var After;
                     this.ZCoord = locArray[2];
                 }
                 ;
+                get CoreEnergy() {
+                    return Number($("#divCoreEnergy").text());
+                }
+                set CoreEnergy(value) {
+                    $("#divCoreEnergy").text(value);
+                }
+                get CurrentEnergy() {
+                    return Number($("#divEnergyAmount").text());
+                }
+                ;
+                set CurrentEnergy(value) {
+                    $("#divEnergyAmount").text(value);
+                    $("#svgEnergy").css("width", (After.Me.CurrentEnergy / After.Me.MaxEnergy * 100) + "%");
+                }
+                ;
+                get MaxEnergyModifier() {
+                    return Number($("#divEnergyMod").text());
+                }
+                set MaxEnergyModifier(value) {
+                    $("#divEnergyMod").text(value);
+                }
+                get CurrentCharge() {
+                    return Number($("#divChargeAmount").text());
+                }
+                ;
+                set CurrentCharge(value) {
+                    $("#divChargeAmount").text(value);
+                    $("#svgCharge").css("width", (After.Me.CurrentCharge / After.Me.MaxCharge * 100) + "%");
+                }
+                ;
+                get MaxChargeModifier() {
+                    return Number($("#divChargeMod").text());
+                }
+                set MaxChargeModifier(value) {
+                    $("#divChargeMod").text(value);
+                }
+                get CurrentWillpower() {
+                    return Number($("#divWillpowerAmount").text());
+                }
+                ;
+                set CurrentWillpower(value) {
+                    $("#divWillpowerAmount").text(value);
+                    $("#svgWillpower").css("width", (After.Me.CurrentWillpower / After.Me.MaxWillpower * 100) + "%");
+                }
+                ;
+                get MaxWillpowerModifier() {
+                    return Number($("#divWillpowerMod").text());
+                }
+                set MaxWillpowerModifier(value) {
+                    $("#divWillpowerMod").text(value);
+                }
                 // *** Event Functions *** //
                 StartCharging() {
                     var request = {

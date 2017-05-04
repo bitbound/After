@@ -22,14 +22,5 @@
         //*** Visual Only Properties ***//
         IsSelected: boolean;
         Opacity: number;
-
-        //*** Utility Functions ***//
-        static Create(DynamicArea: any): Area {
-            var area = new After.Models.Game.Area(DynamicArea.XCoord, DynamicArea.YCoord, DynamicArea.ZCoord);
-            for (var prop in DynamicArea) {
-                area[prop] = DynamicArea[prop];
-            }
-            return area;
-        }
     }
 }

@@ -5,6 +5,7 @@
             this.IsMoving = false;
             this.Particles = new Array<After.Models.Game.Particle>();
             this.Height = 1;
+            this.Powers = new Array<After.Models.Game.Power>();
         }
         Name: string;
         Color: string;
@@ -31,18 +32,57 @@
         ZCoord: string;
         IsCharging: boolean;
         IsMoving: boolean;
-        CoreEnergy: number;
+        get CoreEnergy() {
+            return Number($("#divCoreEnergy").text());
+        }
+        set CoreEnergy(value: number) {
+            $("#divCoreEnergy").text(value);
+        }
         CoreEnergyPeak: number;
-        CurrentEnergy: number;
+        get CurrentEnergy() {
+            return Number($("#divEnergyAmount").text());
+        };
+        set CurrentEnergy(value: number) {
+            $("#divEnergyAmount").text(value);
+            $("#svgEnergy").css("width", (After.Me.CurrentEnergy / After.Me.MaxEnergy * 100) + "%");
+        };
         MaxEnergy: number;
-        MaxEnergyModifier: number;
-        CurrentCharge: number;
+        get MaxEnergyModifier() {
+            return Number($("#divEnergyMod").text());
+        }
+        set MaxEnergyModifier(value: number) {
+            $("#divEnergyMod").text(value);
+        }
+        get CurrentCharge() {
+            return Number($("#divChargeAmount").text());
+        };
+        set CurrentCharge(value: number) {
+            $("#divChargeAmount").text(value);
+            $("#svgCharge").css("width", (After.Me.CurrentCharge / After.Me.MaxCharge * 100) + "%");
+        };
         MaxCharge: number;
-        MaxChargeModifier: number;
-        CurrentWillpower: number;
+        get MaxChargeModifier() {
+            return Number($("#divChargeMod").text());
+        }
+        set MaxChargeModifier(value: number) {
+            $("#divChargeMod").text(value);
+        }
+        get CurrentWillpower() {
+            return Number($("#divWillpowerAmount").text());
+        };
+        set CurrentWillpower(value: number) {
+            $("#divWillpowerAmount").text(value);
+            $("#svgWillpower").css("width", (After.Me.CurrentWillpower / After.Me.MaxWillpower * 100) + "%");
+        };
         MaxWillpower: number;
-        MaxWillpowerModifier: number;
+        get MaxWillpowerModifier() {
+            return Number($("#divWillpowerMod").text());
+        }
+        set MaxWillpowerModifier(value: number) {
+            $("#divWillpowerMod").text(value);
+        }
         ViewDistance: number;
+        Powers: Array<After.Models.Game.Power>;
 
         // *** Visual Properties Only ***//
         Height: number;

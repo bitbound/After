@@ -32,7 +32,6 @@
         <div class="tab-outerframe">
             <div class="tab-innerframe"></div>
         </div>
-        
     </div>
 
 
@@ -44,7 +43,29 @@
                 <span>Character</span>
             </div>
             <div class="tab-outerframe">
-                <div class="tab-innerframe"></div>
+                <div class="tab-innerframe">
+                    <div class="side-tab-item-header">
+                        Attributes
+                    </div>
+                    <div class="side-tab-item-group" hidden>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Core Energy:</div>
+                            <div id="divCoreEnergy" class="side-tab-value"></div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Energy Mod:</div>
+                            <div id="divEnergyMod" class="side-tab-value"></div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Charge Mod:</div>
+                            <div id="divChargeMod" class="side-tab-value"></div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Willpower Mod:</div>
+                            <div id="divWillpowerMod" class="side-tab-value"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -80,22 +101,22 @@
                     <div class="side-tab-item-header">
                         Interface
                     </div>
-                    <div class="side-tab-item-group">
+                    <div class="side-tab-item-group" hidden>
                         <div class="side-tab-item">
-                            <div class="vertical-middle">Follow Player:</div>
-                            <div class="switch-outer" prop="FollowPlayer">
+                            <div class="side-tab-key">Follow Player:</div>
+                            <div class="switch-outer side-tab-value" prop="FollowPlayer">
                                 <div class="switch-inner"></div>
                             </div>
                         </div>
                         <div class="side-tab-item">
-                            <div class="vertical-middle">D-Pad:</div>
-                            <div class="switch-outer" prop="DPad">
+                            <div class="side-tab-key">D-Pad:</div>
+                            <div class="switch-outer side-tab-value" prop="DPad">
                                 <div class="switch-inner"></div>
                             </div>
                         </div>
                         <div class="side-tab-item">
-                            <div class="vertical-middle">Joystick:</div>
-                            <div class="switch-outer" prop="Joystick">
+                            <div class="side-tab-key">Joystick:</div>
+                            <div class="switch-outer side-tab-value" prop="Joystick">
                                 <div class="switch-inner"></div>
                             </div>
                         </div>
@@ -452,10 +473,23 @@
 
         }
         .side-tab-item {
-            height: 35px;
+            height: 30px;
         }
-        .side-tab-frame .switch-outer {
-            float: right;
+        .side-tab-key {
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .side-tab-value {
+            float:right;
+            clear:right;
+        }
+        .side-tab-power {
+            cursor: pointer;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .side-tab-power:hover {
+            background-color: rgba(255,255,255,.5);
         }
         #divActionButton {
             position: absolute;

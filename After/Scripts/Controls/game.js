@@ -24,7 +24,6 @@ var After;
             },
             Load: function () {
                 $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
-                // TODO: First load.
                 var query = {
                     "Category": "Accounts",
                     "Type": "RetrieveSettings"
@@ -43,6 +42,11 @@ var After;
                 query = {
                     "Category": "Queries",
                     "Type": "RefreshView"
+                };
+                After.Connection.Socket.send(JSON.stringify(query));
+                query = {
+                    "Category": "Queries",
+                    "Type": "GetPowers"
                 };
                 After.Connection.Socket.send(JSON.stringify(query));
                 After.Canvas.Element = document.getElementById("canvasMap");

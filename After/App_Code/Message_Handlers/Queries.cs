@@ -69,5 +69,10 @@ namespace After.Message_Handlers
         {
 
         }
+        public static void HandleGetPowers(dynamic JsonMessage, Socket_Handler SH)
+        {
+            JsonMessage.Powers = SH.Player.Powers;
+            SH.Send(Json.Encode(JsonMessage));
+        }
     }
 }

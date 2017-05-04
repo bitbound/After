@@ -30,12 +30,5 @@
             this.ZCoord = locArray[2];
         };
         Color: string;
-        static Create(DynamicSoul: any) : Soul {
-            var soul = new After.Models.Game.Soul();
-            for (var stat in DynamicSoul) {
-                soul[stat] = DynamicSoul[stat];
-            }
-            return soul;
-        }
     }
 }

@@ -7,8 +7,9 @@ using System.Data.Entity.Migrations;
 using System.Web.Helpers;
 using StorageLists;
 using System.Web;
+using After.Models;
 
-namespace After.Models
+namespace After
 {
     public class World
     {

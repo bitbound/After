@@ -104,9 +104,11 @@ namespace After.Models
        
         public string CurrentXYZ { get; set; }
         public double ViewDistance { get; set; } = 2;
-
+       
         public bool IsCharging { get; set; }
-        public string Interactions { get; set; }
+        public List<string> Interactions { get; set; } = new List<string>();
+
+        public List<Power> Powers { get; set; } = new List<Power>();
 
         public MovementStates MovementState { get; set; }
 
@@ -119,16 +121,8 @@ namespace After.Models
             Combat,
             Dialog
         }
-        public string Flags { get; set; }
+        public List<string> Flags { get; set; }
         public DateTime LastAccessed { get; set; }
-        public bool IsHostile()
-        {
-            return false;
-        }
-        public bool IsHostile(Character ToCharacter)
-        {
-            return false;
-        }
         public Location GetCurrentLocation()
         {
             while (CurrentXYZ == null)

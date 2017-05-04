@@ -3,6 +3,7 @@ using StorageLists;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
@@ -20,131 +21,16 @@ namespace After
 {
     public static class Utilities
     {
+        public static string App_Data { get; set; } = HttpContext.Current.Server.MapPath("~/App_Data/");
         public static void StartUp()
         {
             if (!World.Current.Locations.Exists("0,0,0"))
             {
-                World.Current.Locations.Add(new Location()
+                var strLocations = File.ReadAllText(Path.Combine(Utilities.App_Data, "Game_Data\\Base\\Locations.json"));
+                foreach (var location in Json.Decode<List<Location>>(strLocations))
                 {
-                    XCoord = 0,
-                    YCoord = 0,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = -2,
-                    YCoord = 0,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = -1,
-                    YCoord = 0,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = 1,
-                    YCoord = 0,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = 2,
-                    YCoord = 0,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = -1,
-                    YCoord = -1,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = 1,
-                    YCoord = -1,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = 0,
-                    YCoord = -2,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = -3,
-                    YCoord = 1,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = -4,
-                    YCoord = 2,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = 3,
-                    YCoord = 1,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
-                World.Current.Locations.Add(new Location()
-                {
-                    XCoord = 4,
-                    YCoord = 2,
-                    ZCoord = "0",
-                    IsStatic = true,
-                    Title = "After Commons",
-                    Description = "This is the center of nothing and the start of everything.",
-                    Color = "lightsteelblue"
-                });
+                    World.Current.Locations.Add(location);
+                }
             }
         }
         public static dynamic Clone(dynamic JsonData)

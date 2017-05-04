@@ -137,23 +137,17 @@
     <Content Include="App_Code\Models\Message.cs" />
     <Content Include="App_Code\Models\NPC.cs" />
     <Content Include="App_Code\Models\Player.cs" />
-    <Content Include="App_Code\Models\World.cs" />
+    <Content Include="App_Code\World.cs" />
     <Content Include="App_Code\Socket_Handler.cs" />
     <Content Include="App_Code\Utilities.cs" />
     <Content Include="App_Code\Storage\StorageList.cs" />
     <Content Include="App_Code\Storage\StorageItem.cs" />
     <Content Include="App_Code\Models\Settings.cs" />
     <Content Include="App_Code\Models\AuthenticationToken.cs" />
+    <Content Include="App_Code\Models\Power.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\ClientErrors\2017-03-13.txt" />
-    <Content Include="App_Data\ClientErrors\2017-03-22.txt" />
-    <Content Include="App_Data\ClientErrors\2017-03-24.txt" />
-    <Content Include="App_Data\World.mdf" />
-    <Content Include="App_Data\World_log.ldf">
-      <DependentUpon>World.mdf</DependentUpon>
-    </Content>
     <Content Include="Assets\Images\A-128.png" />
     <Content Include="Assets\Images\A-512.png" />
     <Content Include="Assets\Images\A.png" />
@@ -269,7 +263,6 @@
     <Content Include="scripts\Controls\CreateAccount.js" />
     <Content Include="scripts\Controls\CreateCharacter.js" />
     <TypeScriptCompile Include="scripts\Controls\Game.ts" />
-    <Content Include="scripts\Controls\Game.js" />
     <Content Include="scripts\Controls\Intro.js" />
     <Content Include="scripts\Controls\LoginForm.js" />
     <Content Include="scripts\Controls\Splash.js" />
@@ -277,30 +270,14 @@
     <Content Include="scripts\jQuery\jquery-3.1.0.js" />
     <Content Include="scripts\jQuery\jquery-3.1.0.min.js" />
     <Content Include="packages.config" />
-    <Content Include="scripts\Controls\Game.js.map" />
+    <Content Include="App_Data\Game_Data\Base\Locations.json" />
+    <Content Include="App_Data\Game_Data\Base\Powers.json" />
     <None Include="scripts\jQuery\jquery-3.1.1-vsdoc.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.js" />
-    <Content Include="scripts\Message_Handlers\Accounts.js" />
-    <Content Include="scripts\Message_Handlers\Events.js" />
-    <Content Include="scripts\Message_Handlers\Messages.js" />
-    <Content Include="scripts\Message_Handlers\Queries.js" />
-    <Content Include="scripts\Models\App\Audio.js" />
-    <Content Include="scripts\Models\App\Canvas.js" />
-    <Content Include="scripts\Models\App\Connection.js" />
-    <Content Include="scripts\Models\App\Drawing.js" />
-    <Content Include="scripts\Models\App\Game.js" />
-    <Content Include="scripts\Models\App\MainModel.js" />
-    <Content Include="scripts\Models\App\Me.js" />
-    <Content Include="scripts\Models\App\Settings.js" />
-    <Content Include="scripts\Models\App\Utilities.js" />
-    <Content Include="scripts\Models\Game\Area.js" />
     <Content Include="scripts\Models\Game\Bases\Selectable.js" />
-    <Content Include="scripts\Models\Game\Particle.js" />
-    <Content Include="scripts\Models\Game\Soul.js" />
-    <Content Include="scripts\Models\App\Game.js.map" />
     <None Include="scripts\_references.js" />
     <Content Include="Styles.css" />
     <Content Include="Web.config" />
@@ -320,22 +297,7 @@
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <Content Include="scripts\jQuery\jquery-3.1.1.min.map" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.map" />
-    <Content Include="scripts\Message_Handlers\Accounts.js.map" />
-    <Content Include="scripts\Message_Handlers\Events.js.map" />
-    <Content Include="scripts\Message_Handlers\Messages.js.map" />
-    <Content Include="scripts\Message_Handlers\Queries.js.map" />
-    <Content Include="scripts\Models\App\Audio.js.map" />
-    <Content Include="scripts\Models\App\Canvas.js.map" />
-    <Content Include="scripts\Models\App\Connection.js.map" />
-    <Content Include="scripts\Models\App\Drawing.js.map" />
-    <Content Include="scripts\Models\App\MainModel.js.map" />
-    <Content Include="scripts\Models\App\Me.js.map" />
-    <Content Include="scripts\Models\App\Settings.js.map" />
-    <Content Include="scripts\Models\App\Utilities.js.map" />
-    <Content Include="scripts\Models\Game\Area.js.map" />
     <Content Include="scripts\Models\Game\Bases\Selectable.js.map" />
-    <Content Include="scripts\Models\Game\Particle.js.map" />
-    <Content Include="scripts\Models\Game\Soul.js.map" />
     <Content Include="Services\ErrorReporting.cshtml" />
     <Content Include="tsconfig.json" />
     <None Include="Web.Debug.config">
@@ -346,11 +308,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="scripts\DataBind.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Accounts.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Events.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Messages.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Queries.ts" />
-    <TypeScriptCompile Include="scripts\Models\App\Audio.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Canvas.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Connection.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Drawing.ts" />
@@ -363,6 +325,7 @@
     <TypeScriptCompile Include="scripts\Models\Game\Bases\Selectable.ts" />
     <TypeScriptCompile Include="scripts\Models\Game\FreeParticle.ts" />
     <TypeScriptCompile Include="scripts\Models\Game\Particle.ts" />
+    <TypeScriptCompile Include="scripts\Models\Game\Power.ts" />
     <TypeScriptCompile Include="scripts\Models\Game\Soul.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>

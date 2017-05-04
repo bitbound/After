@@ -37,10 +37,6 @@ button:active {
 .font-sansserif {
      font-family: Gill Sans, Gill Sans MT, Calibri, Trebuchet MS, sans-serif;
 }
-.vertical-middle {
-    vertical-align: middle;
-    display: inline-block;
-}
 .particle {
     height: 2px;
     width: 2px;                                      

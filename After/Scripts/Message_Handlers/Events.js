@@ -67,9 +67,8 @@ var After;
                     After.Connection.Socket.send(JSON.stringify(query));
                 }
                 else {
-                    var soul = After.Models.Game.Soul.Create(JsonMessage.Soul);
-                    After.World_Data.Souls.push(soul);
-                    if (soul.CurrentXYZ == After.Me.CurrentXYZ) {
+                    After.World_Data.Souls.push(JsonMessage.Soul);
+                    if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
                         After.Game.AddChatMessage(JsonMessage.Soul.Name + " has arrived.", "whitesmoke");
                     }
                 }
@@ -144,7 +143,7 @@ var After;
             }
             Events.HandlePlayerMove = HandlePlayerMove;
             function HandleAreaCreated(JsonMessage) {
-                After.World_Data.Areas.push(After.Models.Game.Area.Create(JsonMessage.Area));
+                After.World_Data.Areas.push(JsonMessage.Area);
             }
             Events.HandleAreaCreated = HandleAreaCreated;
             function HandleAreaRemoved(JsonMessage) {

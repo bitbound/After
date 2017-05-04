@@ -1,4 +1,4 @@
-@{
+﻿@{
     if (!Request.IsSecureConnection && !Request.IsLocal)
     {
         Response.RedirectPermanent("https://after-game.net", true);
@@ -30,11 +30,13 @@
     </script>
 </head>
 <body>
+    <script src="~/scripts/DataBind.js"></script>
     <script src="~/scripts/Models/Game/Bases/Selectable.js"></script>
     <script src="~/scripts/Models/Game/Particle.js"></script>
     <script src="~/scripts/Models/Game/FreeParticle.js"></script>
     <script src="~/scripts/Models/Game/Area.js"></script>
     <script src="~/scripts/Models/Game/Soul.js"></script>
+    <script src="~/scripts/Models/Game/Power.js"></script>
     <script src="~/scripts/Models/App/Audio.js"></script>
     <script src="~/scripts/Models/App/Canvas.js"></script>
     <script src="~/scripts/Models/App/Game.js"></script>

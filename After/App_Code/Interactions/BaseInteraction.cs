@@ -11,9 +11,7 @@ namespace After.Interactions
                 return this.GetType().Namespace;
             }
         }
-        public string InteractionID { get; set; }
         public Triggers Trigger { get; set; }
-
         public enum Triggers
         {
             OnEnter,

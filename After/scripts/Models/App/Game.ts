@@ -65,5 +65,27 @@
             After.Connection.Socket.send(JSON.stringify(jsonMessage));
             $("#inputChatInput").val("");
         };
+        AddPower(e) {
+            if ($("#divPowersFrame .tab-innerframe #divPowersCategory-" + e.Category).length == 0) {
+                var header = document.createElement("div");
+                header.id = "divPowersCategory-" + e.Category;
+                header.classList.add("side-tab-item-header");
+                header.innerHTML = e.Category;
+                $("#divPowersFrame .tab-innerframe").append(header);
+                var itemGroup = document.createElement("div");
+                itemGroup.classList.add("side-tab-item-group");
+                itemGroup.hidden = true;
+                $("#divPowersFrame .tab-innerframe").append(itemGroup);
+                $("#divPowersFrame .tab-innerframe #divPowersCategory-" + e.Category).click(function (e) {
+                    $(e.currentTarget).next(".side-tab-item-group").slideToggle();
+                })
+            }
+            var item = document.createElement("div");
+            item.id = "divPower-" + e.Name;
+            item.classList.add("side-tab-power");
+            item.title = e.Description;
+            item.innerHTML = e.Name;
+            $("#divPowersFrame .tab-innerframe #divPowersCategory-" + e.Category).next(".side-tab-item-group").append(item);
+        }
     }
 }

@@ -33,13 +33,6 @@ var After;
                     this.ZCoord = locArray[2];
                 }
                 ;
-                static Create(DynamicSoul) {
-                    var soul = new After.Models.Game.Soul();
-                    for (var stat in DynamicSoul) {
-                        soul[stat] = DynamicSoul[stat];
-                    }
-                    return soul;
-                }
             }
             Game.Soul = Soul;
         })(Game = Models.Game || (Models.Game = {}));
