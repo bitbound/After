@@ -1,0 +1,10 @@
+[
+  {
+    "Name": "Teleport",
+    "Description": "Quickly travel to a known remote area.",
+    "Category": "Movement",
+    "MinRange": 2,
+    "MaxRange": -1,
+    "Targets": [ 3 ]
+  }
+]
