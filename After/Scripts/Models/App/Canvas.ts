@@ -3,7 +3,7 @@
         constructor() {
             this.OffsetX = 0;
             this.OffsetY = 0;
-            this.CurrentZ = 0;
+            this.CurrentZ = "0";
             this.ZoomScale = 1;
             this.ScaleChange = 1;
             this.InertiaX = 0;
@@ -23,7 +23,14 @@
         SelectedObject: After.Models.Bases.Selectable;
         OffsetX: number;
         OffsetY: number;
-        CurrentZ: number;
+        get CenterCoordinate():string {
+            var xTotal = After.Canvas.Element.clientWidth / 2 / After.Canvas.ZoomScale - After.Canvas.OffsetX;
+            var yTotal = After.Canvas.Element.clientHeight / 2 / After.Canvas.ZoomScale - After.Canvas.OffsetY;
+            var xCoord = Math.floor(xTotal / 100);
+            var yCoord = Math.floor(yTotal / 100);
+            return String(xCoord) + "," + String(yCoord) + "," + After.Canvas.CurrentZ;
+        };
+        CurrentZ: string;
         ZoomScale: number;
         ScaleChange: number;
         InertiaX: number;

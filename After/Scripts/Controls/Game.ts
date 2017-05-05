@@ -48,8 +48,8 @@ namespace After.Controls {
             };
             After.Connection.Socket.send(JSON.stringify(query));
             After.Canvas.Element = document.getElementById("canvasMap") as HTMLCanvasElement;
-            After.Canvas.Context2D = After.Canvas.Element.getContext("2d"),
-                After.Canvas.Element.width = document.documentElement.clientWidth;
+            After.Canvas.Context2D = After.Canvas.Element.getContext("2d");
+            After.Canvas.Element.width = document.documentElement.clientWidth;
             After.Canvas.Element.height = document.documentElement.clientHeight;
 
             $("#divGame").animate({ opacity: 1 }, 1000);
@@ -59,7 +59,7 @@ namespace After.Controls {
             $("#divIntro").remove();
             $("#divCreateAccount").remove();
             if (After.Debug) {
-                $("#divFPS").show();
+                $("#divDebug").show();
             }
 
             window.requestAnimationFrame(After.Drawing.DrawCanvas);

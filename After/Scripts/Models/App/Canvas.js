@@ -8,7 +8,7 @@ var After;
                 constructor() {
                     this.OffsetX = 0;
                     this.OffsetY = 0;
-                    this.CurrentZ = 0;
+                    this.CurrentZ = "0";
                     this.ZoomScale = 1;
                     this.ScaleChange = 1;
                     this.InertiaX = 0;
@@ -23,6 +23,14 @@ var After;
                     this.InertiaStack = new Array();
                     this.FPSStack = new Array();
                 }
+                get CenterCoordinate() {
+                    var xTotal = After.Canvas.Element.clientWidth / 2 / After.Canvas.ZoomScale - After.Canvas.OffsetX;
+                    var yTotal = After.Canvas.Element.clientHeight / 2 / After.Canvas.ZoomScale - After.Canvas.OffsetY;
+                    var xCoord = Math.floor(xTotal / 100);
+                    var yCoord = Math.floor(yTotal / 100);
+                    return String(xCoord) + "," + String(yCoord) + "," + After.Canvas.CurrentZ;
+                }
+                ;
                 SelectPoint(e) {
                     // TODO: Select object based on coords.
                     var xTotal = e.clientX / After.Canvas.ZoomScale - After.Canvas.OffsetX;

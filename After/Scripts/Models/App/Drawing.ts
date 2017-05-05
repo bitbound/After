@@ -22,7 +22,7 @@
                 };
 
                 if (After.Debug) {
-                    document.getElementById("divFPS").innerHTML = "FPS: " + After.Canvas.FPSStack.length + "<br/> W: " + After.Temp.W + " / H: " + After.Temp.H + "<br/>Scale: " + After.Canvas.ZoomScale.toFixed(2) + "<br/>OffsetX: " + After.Canvas.OffsetX.toFixed(2) + "<br/>OffsetY: " + After.Canvas.OffsetY.toFixed(2);
+                    document.getElementById("divDebug").innerHTML = "FPS: " + After.Canvas.FPSStack.length + "<br/> W: " + After.Temp.W + " / H: " + After.Temp.H + "<br/>Scale: " + After.Canvas.ZoomScale.toFixed(2) + "<br/>OffsetX: " + After.Canvas.OffsetX.toFixed(2) + "<br/>OffsetY: " + After.Canvas.OffsetY.toFixed(2) + "<br/>Center XYZ:" + After.Canvas.CenterCoordinate;
                 }
 
                 window.requestAnimationFrame(After.Drawing.DrawCanvas);
