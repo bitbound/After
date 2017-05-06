@@ -10,7 +10,7 @@ using System.Web.Script.Serialization;
 
 namespace After.Models
 {
-    public class Character : StorageLists.StorageItem
+    public class Character : StorageLists.IStorageItem
     {
         public Character()
         {
@@ -174,6 +174,10 @@ namespace After.Models
         }
         public void Move(string[] ToXYZ)
         {
+            if (IsCharging)
+            {
+                StopCharging();
+            }
             dynamic request;
             var toLocation = World.Current.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
             if (toLocation == null)
@@ -226,6 +230,62 @@ namespace After.Models
                 toLocation.CharacterArrives(this);
                 MovementState = MovementStates.Ready;
             });
+        }
+        public void StartCharging()
+        {
+            IsCharging = true;
+            var timer = new System.Timers.Timer(100);
+            var startTime = DateTime.Now;
+            var startValue = CurrentCharge;
+            timer.Elapsed += (sen, arg) => {
+                if (IsCharging == false)
+                {
+                    (sen as System.Timers.Timer).Stop();
+                    (sen as System.Timers.Timer).Dispose();
+                    return;
+                }
+                CurrentCharge = Math.Min(MaxCharge, Math.Round(startValue + (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * MaxCharge));
+                dynamic update = new
+                {
+                    Category = "Queries",
+                    Type = "StatUpdate",
+                    Stat = "CurrentCharge",
+                    Amount = CurrentCharge
+                };
+                if (this is Player)
+                {
+                    (this as Player).GetSocketHandler().Send(Json.Encode(update));
+                }
+            };
+            timer.Start();
+        }
+        public void StopCharging()
+        {
+            IsCharging = false;
+            var timer = new System.Timers.Timer(100);
+            var startTime = DateTime.Now;
+            var startValue = CurrentCharge;
+            timer.Elapsed += (sen, arg) => {
+                if (IsCharging == true || CurrentCharge == 0)
+                {
+                    (sen as System.Timers.Timer).Stop();
+                    (sen as System.Timers.Timer).Dispose();
+                    return;
+                }
+                CurrentCharge = Math.Max(0, Math.Round(startValue - (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * MaxCharge));
+                dynamic update = new
+                {
+                    Category = "Queries",
+                    Type = "StatUpdate",
+                    Stat = "CurrentCharge",
+                    Amount = CurrentCharge
+                };
+                if (this is Player)
+                {
+                    (this as Player).GetSocketHandler().Send(Json.Encode(update));
+                }
+            };
+            timer.Start();
         }
         public dynamic ConvertToSoul()
         {

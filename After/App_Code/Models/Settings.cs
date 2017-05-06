@@ -7,8 +7,8 @@ namespace After.Models
 {
     public class Settings
     {
-        public bool FollowPlayer { get; set; }
-        public bool DPad { get; set; }
-        public bool Joystick { get; set; }
+        public bool FollowPlayer { get; set; } = true;
+        public bool DPad { get; set; } = true;
+        public bool Joystick { get; set; } = false;
     }
 }

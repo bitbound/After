@@ -12,59 +12,15 @@ namespace After.Message_Handlers
     {
         public static void HandleStartCharging(dynamic JsonMessage, Socket_Handler SH)
         {
-            // TODO: Checks.
             JsonMessage.Result = "ok";
             SH.Send(Json.Encode(JsonMessage));
-            SH.Player.IsCharging = true;
-            var timer = new System.Timers.Timer(100);
-            var startTime = DateTime.Now;
-            var startValue = SH.Player.CurrentCharge;
-            timer.Elapsed += (sen, arg) => {
-                if (SH.Player.IsCharging == false)
-                {
-                    (sen as System.Timers.Timer).Stop();
-                    (sen as System.Timers.Timer).Dispose();
-                    return;
-                }
-                SH.Player.CurrentCharge = Math.Min(SH.Player.MaxCharge, Math.Round(startValue + (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * SH.Player.MaxCharge));
-                dynamic update = new
-                {
-                    Category = "Queries",
-                    Type = "StatUpdate",
-                    Stat = "CurrentCharge",
-                    Amount = SH.Player.CurrentCharge
-                };
-                SH.Send(Json.Encode(update));
-            };
-            timer.Start();
+            SH.Player.StartCharging();
         }
         public static void HandleStopCharging(dynamic JsonMessage, Socket_Handler SH)
         {
-            // TODO: Checks.
             JsonMessage.Result = "ok";
             SH.Send(Json.Encode(JsonMessage));
-            SH.Player.IsCharging = false;
-            var timer = new System.Timers.Timer(100);
-            var startTime = DateTime.Now;
-            var startValue = SH.Player.CurrentCharge;
-            timer.Elapsed += (sen, arg) => {
-                if (SH.Player.IsCharging == true || SH.Player.CurrentCharge == 0)
-                {
-                    (sen as System.Timers.Timer).Stop();
-                    (sen as System.Timers.Timer).Dispose();
-                    return;
-                }
-                SH.Player.CurrentCharge = Math.Max(0, Math.Round(startValue - (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * SH.Player.MaxCharge));
-                dynamic update = new
-                {
-                    Category = "Queries",
-                    Type = "StatUpdate",
-                    Stat = "CurrentCharge",
-                    Amount = SH.Player.CurrentCharge
-                };
-                SH.Send(Json.Encode(update));
-            };
-            timer.Start();
+            SH.Player.StopCharging();
         }
         public static void HandlePlayerMove(dynamic JsonMessage, Socket_Handler SH)
         {

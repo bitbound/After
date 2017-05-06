@@ -9,7 +9,7 @@ using System.Web.Helpers;
 
 namespace After.Models
 {
-    public class Location : StorageLists.StorageItem
+    public class Location : StorageLists.IStorageItem
     {
         public double XCoord { get; set; }
         public double YCoord { get; set; }

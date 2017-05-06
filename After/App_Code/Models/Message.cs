@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace After.Models
 {
-    public class Message : StorageLists.StorageItem
+    public class Message : StorageLists.IStorageItem
     {
         public string StorageID { get; set; }
         public string Channel { get; set; }
