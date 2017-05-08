@@ -7,7 +7,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Data.Entity;
 
 /// <summary>
 /// Summary description for WebSocketHandler

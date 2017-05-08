@@ -13,9 +13,9 @@ var After;
                 }
                 else {
                     if (JsonMessage.Result == "exists") {
-                        $("#divLoginStatus").hide();
-                        $("#divLoginStatus").text("That account name already exists.");
-                        $("#divLoginStatus").fadeIn();
+                        $("#divCreateAccountStatus").hide();
+                        $("#divCreateAccountStatus").text("That account name already exists.");
+                        $("#divCreateAccountStatus").fadeIn();
                         return;
                     }
                 }

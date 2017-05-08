@@ -11,6 +11,18 @@ var After;
                     this.Particles = new Array();
                     this.Height = 1;
                     this.Powers = new Array();
+                    var top = After.Utilities.GetRandom(-25, 25, true);
+                    var left = After.Utilities.GetRandom(-25, 15, true);
+                    this.ParticleBounds = {
+                        left: left,
+                        top: top,
+                        right: left + 20,
+                        bottom: top + 20
+                    };
+                    this.ParticleWanderTo = {
+                        x: After.Utilities.GetRandom(-25, 15, true),
+                        y: After.Utilities.GetRandom(-30, -5, true)
+                    };
                 }
                 get CurrentXYZ() {
                     if (this.XCoord == null || this.YCoord == null || this.ZCoord == null) {

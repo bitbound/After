@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Web.Helpers;
 using StorageLists;
 using System.Web;

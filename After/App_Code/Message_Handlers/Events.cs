@@ -12,14 +12,18 @@ namespace After.Message_Handlers
     {
         public static void HandleStartCharging(dynamic JsonMessage, Socket_Handler SH)
         {
-            JsonMessage.Result = "ok";
-            SH.Send(Json.Encode(JsonMessage));
+            if (SH.Player.MovementState != Models.Character.MovementStates.Ready)
+            {
+                return;
+            }
             SH.Player.StartCharging();
         }
         public static void HandleStopCharging(dynamic JsonMessage, Socket_Handler SH)
         {
-            JsonMessage.Result = "ok";
-            SH.Send(Json.Encode(JsonMessage));
+            if (SH.Player.MovementState != Models.Character.MovementStates.Ready)
+            {
+                return;
+            }
             SH.Player.StopCharging();
         }
         public static void HandlePlayerMove(dynamic JsonMessage, Socket_Handler SH)

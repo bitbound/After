@@ -6,6 +6,18 @@
             this.Particles = new Array<After.Models.Game.Particle>();
             this.Height = 1;
             this.Powers = new Array<After.Models.Game.Power>();
+            var top = After.Utilities.GetRandom(-25, 25, true);
+            var left = After.Utilities.GetRandom(-25, 15, true);
+            this.ParticleBounds = {
+                left: left,
+                top: top,
+                right: left + 20,
+                bottom: top + 20
+            }
+            this.ParticleWanderTo = {
+                x: After.Utilities.GetRandom(-25, 15, true),
+                y: After.Utilities.GetRandom(-30, -5, true)
+            }
         }
         Name: string;
         Color: string;

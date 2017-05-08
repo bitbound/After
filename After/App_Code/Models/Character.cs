@@ -233,6 +233,17 @@ namespace After.Models
         }
         public void StartCharging()
         {
+            if (this is Player)
+            {
+                var request = new
+                {
+                    Category = "Events",
+                    Type = "StartCharging",
+                    Result = "ok"
+
+                };
+                (this as Player).GetSocketHandler().Send(Json.Encode(request));
+            }
             IsCharging = true;
             var timer = new System.Timers.Timer(100);
             var startTime = DateTime.Now;
@@ -261,6 +272,17 @@ namespace After.Models
         }
         public void StopCharging()
         {
+            if (this is Player)
+            {
+                var request = new
+                {
+                    Category = "Events",
+                    Type = "StopCharging",
+                    Result = "ok"
+
+                };
+                (this as Player).GetSocketHandler().Send(Json.Encode(request));
+            }
             IsCharging = false;
             var timer = new System.Timers.Timer(100);
             var startTime = DateTime.Now;

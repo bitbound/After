@@ -152,121 +152,210 @@ var After;
                 }
                 ;
                 AnimateParticles() {
-                    this.ParticleInterval = window.setInterval(function () {
-                        if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
-                            return;
+                    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
+                        window.setTimeout(After.Drawing.AnimateParticles, 20);
+                        return;
+                    }
+                    var me = After.Me;
+                    // Make particles wander in the area.
+                    if (Math.round(me.ParticleBounds.left) != Math.round(me.ParticleWanderTo.x)) {
+                        var change = (me.ParticleWanderTo.x - me.ParticleBounds.left) / Math.abs((me.ParticleWanderTo.x - me.ParticleBounds.left));
+                        me.ParticleBounds.left += .1 * change;
+                    }
+                    else {
+                        me.ParticleWanderTo.x = After.Utilities.GetRandom(-25, 15, true);
+                    }
+                    if (Math.round(me.ParticleBounds.top) != Math.round(me.ParticleWanderTo.y)) {
+                        var change = (me.ParticleWanderTo.y - me.ParticleBounds.top) / Math.abs((me.ParticleWanderTo.y - me.ParticleBounds.top));
+                        me.ParticleBounds.top += .1 * change;
+                    }
+                    else {
+                        me.ParticleWanderTo.y = After.Utilities.GetRandom(-30, -5, true);
+                    }
+                    me.ParticleBounds.right = me.ParticleBounds.left + 20;
+                    me.ParticleBounds.bottom = me.ParticleBounds.top + 20;
+                    var pb = me.ParticleBounds;
+                    // Populate missing particles.
+                    if (me.Particles.length < 50) {
+                        for (var i2 = me.Particles.length; i2 < 50; i2++) {
+                            var part = new After.Models.Game.Particle();
+                            part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                            part.FromX = part.CurrentX;
+                            part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                            ;
+                            part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                            part.FromY = part.CurrentY;
+                            part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                            ;
+                            me.Particles.push(part);
                         }
-                        var soul = After.Me;
-                        var particleDiameter = 20;
-                        // Set bounds within which particles will move.
-                        if (typeof soul.ParticleBounds == "undefined") {
-                            var top = After.Utilities.GetRandom(-25, 25, true);
-                            var left = After.Utilities.GetRandom(-25, 15, true);
-                            soul.ParticleBounds = {
-                                left: left,
-                                top: top,
-                                right: left + particleDiameter,
-                                bottom: top + particleDiameter
-                            };
-                            soul.ParticleWanderTo = {
-                                x: After.Utilities.GetRandom(-25, 15, true),
-                                y: After.Utilities.GetRandom(-30, -5, true)
-                            };
-                        }
-                        // Make particles wander in the area.
-                        if (Math.round(soul.ParticleBounds.left) != Math.round(soul.ParticleWanderTo.x)) {
-                            var change = (soul.ParticleWanderTo.x - soul.ParticleBounds.left) / Math.abs((soul.ParticleWanderTo.x - soul.ParticleBounds.left));
-                            soul.ParticleBounds.left += .1 * change;
-                        }
-                        else {
-                            soul.ParticleWanderTo.x = After.Utilities.GetRandom(-25, 15, true);
-                        }
-                        if (Math.round(soul.ParticleBounds.top) != Math.round(soul.ParticleWanderTo.y)) {
-                            var change = (soul.ParticleWanderTo.y - soul.ParticleBounds.top) / Math.abs((soul.ParticleWanderTo.y - soul.ParticleBounds.top));
-                            soul.ParticleBounds.top += .1 * change;
-                        }
-                        else {
-                            soul.ParticleWanderTo.y = After.Utilities.GetRandom(-30, -5, true);
-                        }
-                        soul.ParticleBounds.right = soul.ParticleBounds.left + particleDiameter;
-                        soul.ParticleBounds.bottom = soul.ParticleBounds.top + particleDiameter;
-                        var pb = soul.ParticleBounds;
-                        // Populate missing particles.
-                        if (soul.Particles.length < 50) {
-                            for (var i2 = soul.Particles.length; i2 < 50; i2++) {
-                                var part = new After.Models.Game.Particle();
-                                part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                                part.FromX = part.CurrentX;
+                        ;
+                    }
+                    // Apply movement to individual particles.
+                    for (var i2 = 0; i2 < me.Particles.length; i2++) {
+                        var part = me.Particles[i2];
+                        // Get new destination if ToX/Y is reached.
+                        if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
+                            part.FromX = part.ToX;
+                            do {
                                 part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                                ;
-                                part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                                part.FromY = part.CurrentY;
+                            } while (part.FromX == part.ToX);
+                        }
+                        else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
+                            part.FromX = part.ToX;
+                            do {
+                                part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                            } while (part.FromX == part.ToX);
+                        }
+                        if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
+                            part.FromY = part.ToY;
+                            do {
                                 part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                                ;
-                                soul.Particles.push(part);
-                            }
-                            ;
+                            } while (part.FromY == part.ToY);
                         }
-                        // Apply movement to individual particles.
-                        for (var i2 = 0; i2 < soul.Particles.length; i2++) {
-                            var part = soul.Particles[i2];
-                            // Get new destination if ToX/Y is reached.
-                            if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
-                                part.FromX = part.ToX;
-                                do {
-                                    part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                                } while (part.FromX == part.ToX);
-                            }
-                            else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
-                                part.FromX = part.ToX;
-                                do {
-                                    part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                                } while (part.FromX == part.ToX);
-                            }
-                            if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
-                                part.FromY = part.ToY;
-                                do {
-                                    part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                                } while (part.FromY == part.ToY);
-                            }
-                            else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
-                                part.FromY = part.ToY;
-                                do {
-                                    part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                                } while (part.FromY == part.ToY);
-                            }
-                            // Change x value with ease-in-out motion.
-                            var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
-                            var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
-                            var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
-                            var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
-                            if (part.ToX > part.CurrentX) {
-                                part.CurrentX += changeX;
-                            }
-                            else if (part.ToX < part.CurrentX) {
-                                part.CurrentX -= changeX;
-                            }
-                            ;
-                            if (isFinite(part.CurrentX) == false) {
-                                part.CurrentX = part.ToX;
-                            }
-                            // Change y value with ease-in-out motion.
-                            var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
-                            var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
-                            var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
-                            var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
-                            if (part.ToY > part.CurrentY) {
-                                part.CurrentY += changeY;
-                            }
-                            else if (part.ToY < part.CurrentY) {
-                                part.CurrentY -= changeY;
-                            }
-                            ;
-                            if (isFinite(part.CurrentY) == false) {
-                                part.CurrentY = part.ToY;
-                            }
+                        else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
+                            part.FromY = part.ToY;
+                            do {
+                                part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                            } while (part.FromY == part.ToY);
                         }
-                    }, 20);
+                        // Change x value with ease-in-out motion.
+                        var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
+                        var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
+                        var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
+                        var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
+                        if (part.ToX > part.CurrentX) {
+                            part.CurrentX += changeX;
+                        }
+                        else if (part.ToX < part.CurrentX) {
+                            part.CurrentX -= changeX;
+                        }
+                        ;
+                        if (isFinite(part.CurrentX) == false) {
+                            part.CurrentX = part.ToX;
+                        }
+                        // Change y value with ease-in-out motion.
+                        var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
+                        var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
+                        var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
+                        var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
+                        if (part.ToY > part.CurrentY) {
+                            part.CurrentY += changeY;
+                        }
+                        else if (part.ToY < part.CurrentY) {
+                            part.CurrentY -= changeY;
+                        }
+                        ;
+                        if (isFinite(part.CurrentY) == false) {
+                            part.CurrentY = part.ToY;
+                        }
+                    }
+                    //this.ParticleInterval = window.setInterval(function () {
+                    //    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
+                    //        return;
+                    //    }
+                    //    var soul = After.Me;
+                    //    var 20 = 20;
+                    //    // Set bounds within which particles will move.
+                    //    if (typeof soul.ParticleBounds == "undefined") {
+                    //        var top = After.Utilities.GetRandom(-25, 25, true);
+                    //        var left = After.Utilities.GetRandom(-25, 15, true);
+                    //        soul.ParticleBounds = {
+                    //            left: left,
+                    //            top: top,
+                    //            right: left + 20,
+                    //            bottom: top + 20
+                    //        }
+                    //        soul.ParticleWanderTo = {
+                    //            x: After.Utilities.GetRandom(-25, 15, true),
+                    //            y: After.Utilities.GetRandom(-30, -5, true)
+                    //        }
+                    //    }
+                    //    // Make particles wander in the area.
+                    //    if (Math.round(soul.ParticleBounds.left) != Math.round(soul.ParticleWanderTo.x)) {
+                    //        var change = (soul.ParticleWanderTo.x - soul.ParticleBounds.left) / Math.abs((soul.ParticleWanderTo.x - soul.ParticleBounds.left));
+                    //        soul.ParticleBounds.left += .1 * change;
+                    //    }
+                    //    else {
+                    //        soul.ParticleWanderTo.x = After.Utilities.GetRandom(-25, 15, true);
+                    //    }
+                    //    if (Math.round(soul.ParticleBounds.top) != Math.round(soul.ParticleWanderTo.y)) {
+                    //        var change = (soul.ParticleWanderTo.y - soul.ParticleBounds.top) / Math.abs((soul.ParticleWanderTo.y - soul.ParticleBounds.top));
+                    //        soul.ParticleBounds.top += .1 * change;
+                    //    }
+                    //    else {
+                    //        soul.ParticleWanderTo.y = After.Utilities.GetRandom(-30, -5, true);
+                    //    }
+                    //    soul.ParticleBounds.right = soul.ParticleBounds.left + 20;
+                    //    soul.ParticleBounds.bottom = soul.ParticleBounds.top + 20;
+                    //    var pb = soul.ParticleBounds;
+                    //    // Populate missing particles.
+                    //    if (soul.Particles.length < 50) {
+                    //        for (var i2 = soul.Particles.length; i2 < 50; i2++) {
+                    //            var part = new After.Models.Game.Particle();
+                    //            part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                    //            part.FromX = part.CurrentX;
+                    //            part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);;
+                    //            part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                    //            part.FromY = part.CurrentY;
+                    //            part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);;
+                    //            soul.Particles.push(part);
+                    //        };
+                    //    }
+                    //    // Apply movement to individual particles.
+                    //    for (var i2 = 0; i2 < soul.Particles.length; i2++) {
+                    //        var part = soul.Particles[i2];
+                    //        // Get new destination if ToX/Y is reached.
+                    //        if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
+                    //            part.FromX = part.ToX;
+                    //            do {
+                    //                part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                    //            } while (part.FromX == part.ToX);
+                    //        } else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
+                    //            part.FromX = part.ToX;
+                    //            do {
+                    //                part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                    //            } while (part.FromX == part.ToX);
+                    //        }
+                    //        if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
+                    //            part.FromY = part.ToY;
+                    //            do {
+                    //                part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                    //            } while (part.FromY == part.ToY);
+                    //        } else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
+                    //            part.FromY = part.ToY;
+                    //            do {
+                    //                part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                    //            } while (part.FromY == part.ToY);
+                    //        }
+                    //        // Change x value with ease-in-out motion.
+                    //        var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
+                    //        var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
+                    //        var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
+                    //        var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
+                    //        if (part.ToX > part.CurrentX) {
+                    //            part.CurrentX += changeX;
+                    //        } else if (part.ToX < part.CurrentX) {
+                    //            part.CurrentX -= changeX;
+                    //        };
+                    //        if (isFinite(part.CurrentX) == false) {
+                    //            part.CurrentX = part.ToX;
+                    //        }
+                    //        // Change y value with ease-in-out motion.
+                    //        var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
+                    //        var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
+                    //        var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
+                    //        var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
+                    //        if (part.ToY > part.CurrentY) {
+                    //            part.CurrentY += changeY;
+                    //        } else if (part.ToY < part.CurrentY) {
+                    //            part.CurrentY -= changeY;
+                    //        };
+                    //        if (isFinite(part.CurrentY) == false) {
+                    //            part.CurrentY = part.ToY;
+                    //        }
+                    //    }
+                    //}, 20)
                 }
             }
             App.Drawing = Drawing;
