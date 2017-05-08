@@ -161,6 +161,49 @@
                 c2d.shadowBlur = 0;
             };
         };
+        WanderParticles() {
+            if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
+                window.setTimeout(After.Drawing.WanderParticles, 20);
+                return;
+            }
+            var me = After.Me;
+
+            var left = After.Utilities.GetRandom(-25, 15, true);
+            var top = After.Utilities.GetRandom(-30, -5, true);
+            // Make particles wander in the area.
+            $(me.ParticleBounds).animate({
+                left: left, 
+                top: top,
+                right: left + 20,
+                bottom: top + 20
+            }, 5000, function () {
+                After.Me.ParticleBounds.right = me.ParticleBounds.left + 20;
+                After.Me.ParticleBounds.bottom = me.ParticleBounds.top + 20;
+                After.Drawing.WanderParticles();
+            })
+
+            
+        };
+        AnimateParticle(Particle: After.Models.Game.Particle) {
+            if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
+                window.setTimeout(After.Drawing.AnimateParticle(Particle), 20);
+                return;
+            }
+            // Get new destination if ToX/Y is reached.
+            var pb = After.Me.ParticleBounds;
+            var toX = After.Utilities.GetRandom(pb.left, pb.right, false);
+            var toY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+            var distance = Math.sqrt(
+                Math.pow(Particle.CurrentX - toX, 2) +
+                Math.pow(Particle.CurrentY - toY, 2)
+            );
+            $(Particle).animate({
+                CurrentX: toX,
+                CurrentY: toY
+            }, distance * 125, function () {
+                After.Drawing.AnimateParticle(Particle);
+            });
+        };
         AnimateParticles() {
             if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
                 window.setTimeout(After.Drawing.AnimateParticles, 20);
@@ -169,31 +212,10 @@
             var me = After.Me;
 
 
-            // Make particles wander in the area.
-            if (Math.round(me.ParticleBounds.left) != Math.round(me.ParticleWanderTo.x)) {
-                var change = (me.ParticleWanderTo.x - me.ParticleBounds.left) / Math.abs((me.ParticleWanderTo.x - me.ParticleBounds.left));
-                me.ParticleBounds.left += .1 * change;
-            }
-            else {
-                me.ParticleWanderTo.x = After.Utilities.GetRandom(-25, 15, true);
-            }
-
-            if (Math.round(me.ParticleBounds.top) != Math.round(me.ParticleWanderTo.y)) {
-                var change = (me.ParticleWanderTo.y - me.ParticleBounds.top) / Math.abs((me.ParticleWanderTo.y - me.ParticleBounds.top));
-                me.ParticleBounds.top += .1 * change;
-            }
-            else {
-                me.ParticleWanderTo.y = After.Utilities.GetRandom(-30, -5, true);
-            }
-
-            me.ParticleBounds.right = me.ParticleBounds.left + 20;
-            me.ParticleBounds.bottom = me.ParticleBounds.top + 20;
-
-
             var pb = me.ParticleBounds;
             // Populate missing particles.
             if (me.Particles.length < 50) {
-                for (var i2 = me.Particles.length; i2 < 50; i2++) {
+                for (var i = me.Particles.length; i < 50; i++) {
                     var part = new After.Models.Game.Particle();
                     part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
                     part.FromX = part.CurrentX;
@@ -204,62 +226,10 @@
                     me.Particles.push(part);
                 };
             }
-
+            After.Drawing.WanderParticles();
             // Apply movement to individual particles.
-            for (var i2 = 0; i2 < me.Particles.length; i2++) {
-                var part = me.Particles[i2];
-
-                // Get new destination if ToX/Y is reached.
-                if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
-                    part.FromX = part.ToX;
-                    do {
-                        part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                    } while (part.FromX == part.ToX);
-                } else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
-                    part.FromX = part.ToX;
-                    do {
-                        part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                    } while (part.FromX == part.ToX);
-                }
-                if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
-                    part.FromY = part.ToY;
-                    do {
-                        part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                    } while (part.FromY == part.ToY);
-                } else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
-                    part.FromY = part.ToY;
-                    do {
-                        part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                    } while (part.FromY == part.ToY);
-                }
-
-                // Change x value with ease-in-out motion.
-                var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
-                var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
-                var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
-                var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
-                if (part.ToX > part.CurrentX) {
-                    part.CurrentX += changeX;
-                } else if (part.ToX < part.CurrentX) {
-                    part.CurrentX -= changeX;
-                };
-                if (isFinite(part.CurrentX) == false) {
-                    part.CurrentX = part.ToX;
-                }
-
-                // Change y value with ease-in-out motion.
-                var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
-                var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
-                var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
-                var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
-                if (part.ToY > part.CurrentY) {
-                    part.CurrentY += changeY;
-                } else if (part.ToY < part.CurrentY) {
-                    part.CurrentY -= changeY;
-                };
-                if (isFinite(part.CurrentY) == false) {
-                    part.CurrentY = part.ToY;
-                }
+            for (var i = 0; i < me.Particles.length; i++) {
+                After.Drawing.AnimateParticle(me.Particles[i]);
             }
             //this.ParticleInterval = window.setInterval(function () {
             //    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
