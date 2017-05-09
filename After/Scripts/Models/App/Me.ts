@@ -150,7 +150,7 @@
 
         //*** Utility Functions ***//
         GetCurrentLocation() :After.Models.Game.Area {
-            return After.World_Data.Areas.find((value) => { return value.LocationID == After.Me.CurrentXYZ; });
+            return After.World_Data.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
         }
     }
 }

@@ -59,7 +59,10 @@ namespace After.Message_Handlers
                 SH.Send(Json.Encode(jsonMessage));
                 return;
             }
-            SH.Player.AuthenticationTokens.RemoveAll(at => DateTime.Now - at.LastUsed > TimeSpan.FromDays(30));
+            while (SH.Player.AuthenticationTokens.Count > 10)
+            {
+                SH.Player.AuthenticationTokens.RemoveAt(0);
+            }
             if (SH.Player.AuthenticationTokens.Count > 0 && jsonMessage.AuthenticationToken != null)
             {
                 if (!SH.Player.AuthenticationTokens.Exists(at=>at.Token == jsonMessage.AuthenticationToken))
@@ -91,10 +94,7 @@ namespace After.Message_Handlers
                 existing.Close();
                 jsonMessage.Note = "LoginElsewhere";
             }
-            if (SH.Player.CurrentXYZ == null)
-            {
-                SH.Player.CurrentXYZ = "0,0,0";
-            }
+
             SH.Authenticated = true;
             SH.Player.IsCharging = false;
             SH.Player.CurrentCharge = 0;
@@ -111,22 +111,11 @@ namespace After.Message_Handlers
                 Type = "Connected",
                 Username = SH.Player.Name
             }));
-            var location = SH.Player.GetCurrentLocation();
-            if (location == null)
-            {
-                SH.Player.CurrentXYZ = "0,0,0";
-            }
-            SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
         }
         public static void HandleChangeSetting(dynamic JsonMessage, Socket_Handler SH)
         {
             string prop = JsonMessage.Property;
             SH.Player.Settings.GetType().GetProperty(prop).SetValue(SH.Player.Settings, JsonMessage.Value);
-        }
-        public static void HandleRetrieveSettings(dynamic JsonMessage, Socket_Handler SH)
-        {
-            JsonMessage.Settings = SH.Player.Settings;
-            SH.Send(Json.Encode(JsonMessage));
         }
     }
 }

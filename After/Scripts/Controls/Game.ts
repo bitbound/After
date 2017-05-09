@@ -1,18 +1,13 @@
 namespace After.Controls {
     export const Game = {
         Init: function () {
-            var query = {
-                "Category": "Queries",
-                "Type": "PlayerUpdate"
-            };
-            After.Connection.Socket.send(JSON.stringify(query));
             $("#divLogin").animate({ opacity: 0 }, 1000, function () {
                 $("#divLogin").hide();
                 $.get("/Controls/Game.html", function (data) {
                     $(document.body).append(data);
                     var spanMessage = document.createElement("span");
                     spanMessage.style.color = "whitesmoke";
-                    spanMessage.innerHTML = "Welcome to After!";
+                    spanMessage.innerHTML = "Welcome to After!<br/><br/>This game is in the beginning stages of development.  Check out the dev blog for updates!";
                     $("#divChatMessageWindow").append(spanMessage);
                     $("#divChatMessageWindow").append("<br/>");
                     After.Controls.Game.Load();
@@ -20,33 +15,8 @@ namespace After.Controls {
             });
         },
         Load: function () {
-            $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
+            $("#viewport").attr("content", "width=device-width, user-scalable=no, initial-scale=0.75, maximum-scale=0.75");
             
-            var query = {
-                "Category": "Accounts",
-                "Type": "RetrieveSettings"
-            };
-            After.Connection.Socket.send(JSON.stringify(query));
-            query = {
-                "Category": "Queries",
-                "Type": "PlayerUpdate"
-            };
-            After.Connection.Socket.send(JSON.stringify(query));
-            query = {
-                "Category": "Queries",
-                "Type": "RememberLocations"
-            };
-            After.Connection.Socket.send(JSON.stringify(query));
-            query = {
-                "Category": "Queries",
-                "Type": "RefreshView"
-            };
-            After.Connection.Socket.send(JSON.stringify(query));
-            query = {
-                "Category": "Queries",
-                "Type": "GetPowers"
-            };
-            After.Connection.Socket.send(JSON.stringify(query));
             After.Canvas.Element = document.getElementById("canvasMap") as HTMLCanvasElement;
             After.Canvas.Context2D = After.Canvas.Element.getContext("2d");
             After.Canvas.Element.width = document.documentElement.clientWidth;
@@ -62,9 +32,11 @@ namespace After.Controls {
                 $("#divDebug").show();
             }
 
-            window.requestAnimationFrame(After.Drawing.DrawCanvas);
-            After.Drawing.AnimateParticles();
-            After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
+            var query = {
+                "Category": "Queries",
+                "Type": "FirstLoad"
+            };
+            After.Connection.Socket.send(JSON.stringify(query));
 
             window.onresize = function () {
                 After.Canvas.Element.width = document.documentElement.clientWidth;
@@ -306,6 +278,7 @@ namespace After.Controls {
                 After.Temp.ActiveIcon = $(e.currentTarget);
                 After.Temp.ActiveFrame = $(e.currentTarget).parent();
                 After.Temp.StartHeight = After.Temp.ActiveFrame.height();
+                After.Temp.StartLeft = Number(After.Temp.ActiveFrame.css("left").replace("px", ""));
                 $("#inputChatInput").blur();
 
                 window.onmousemove = function (e) {
@@ -315,15 +288,20 @@ namespace After.Controls {
                         var newHeight = After.Temp.StartHeight - (e.clientY - After.Temp.StartPoint.clientY);
                         if (newHeight > document.body.clientHeight * .6) {
                             After.Temp.ActiveFrame.height(document.body.clientHeight * .6);
-
                         }
                         else if (newHeight > 0) {
                             After.Temp.ActiveFrame.height(newHeight);
-
                         }
                         else if (newHeight <= 0) {
                             After.Temp.ActiveFrame.css("z-index", 0);
                             After.Temp.ActiveFrame.height(0);
+                        }
+                        var newLeft = After.Temp.StartLeft + e.clientX - After.Temp.StartPoint.clientX;
+                        if (newLeft > 10) {
+                            After.Temp.ActiveFrame.css("left", newLeft + "px");
+                        }
+                        else {
+                            After.Temp.ActiveFrame.css("left", "10px");
                         }
                     }
                 };
@@ -364,6 +342,7 @@ namespace After.Controls {
                     After.Temp.ActiveIcon = $(e.currentTarget);
                     After.Temp.ActiveFrame = $(e.currentTarget).parent();
                     After.Temp.StartHeight = After.Temp.ActiveFrame.height();
+                    After.Temp.StartLeft = Number(After.Temp.ActiveFrame.css("left").replace("px", ""));
                     After.Temp.LastTouch = e.touches[0];
 
                     window.ontouchmove = function (e) {
@@ -383,6 +362,13 @@ namespace After.Controls {
                             else if (newHeight <= 0) {
                                 After.Temp.ActiveFrame.css("z-index", 0);
                                 After.Temp.ActiveFrame.height(0);
+                            }
+                            var newLeft = After.Temp.StartLeft + e.touches[0].clientX - After.Temp.StartPoint.clientX;
+                            if (newLeft > 10) {
+                                After.Temp.ActiveFrame.css("left", newLeft + "px");
+                            }
+                            else {
+                                After.Temp.ActiveFrame.css("left", "10px");
                             }
                         }
                     };

@@ -157,9 +157,9 @@ namespace After.Models
                         Math.Pow(y - location.YCoord, 2)
                     ) <= ViewDistance)
                     {
-                        var locationID = $"{x.ToString()},{y.ToString()},{location.ZCoord}";
-                        if (World.Current.Locations.Exists(locationID))
-                            visibleList.Add(World.Current.Locations.Find(locationID));
+                        var storageID = $"{x.ToString()},{y.ToString()},{location.ZCoord}";
+                        if (World.Current.Locations.Exists(storageID))
+                            visibleList.Add(World.Current.Locations.Find(storageID));
                     }
                 }
             }
@@ -266,6 +266,16 @@ namespace After.Models
                 if (this is Player)
                 {
                     (this as Player).GetSocketHandler().Send(Json.Encode(update));
+                }
+                foreach (var player in World.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p.Name != Name))
+                {
+                    dynamic request = new
+                    {
+                        Category = "Events",
+                        Type = "CharacterCharging",
+                        Location = CurrentXYZ
+                    };
+                    player.Send(Json.Encode(request));
                 }
             };
             timer.Start();

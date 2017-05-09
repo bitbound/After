@@ -83,7 +83,8 @@ namespace After.Models
             var soul = CharacterObject.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers();
             CharacterObject.CurrentXYZ = null;
-            Occupants.Remove(CharacterObject.Name);
+            CharacterObject.PreviousXYZ = this.StorageID;
+            Occupants.RemoveAll(name=>name == CharacterObject.Name);
             var request = Json.Encode(new
             {
                 Category = "Events",
@@ -102,7 +103,7 @@ namespace After.Models
                 XCoord = this.XCoord,
                 YCoord = this.YCoord,
                 ZCoord = this.ZCoord,
-                LocationID = this.StorageID,
+                StorageID = this.StorageID,
                 Color = this.Color,
                 Title = this.Title,
                 Description = this.Description,

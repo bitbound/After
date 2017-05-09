@@ -20,7 +20,26 @@
     void Application_Error(object sender, EventArgs e)
     {
         // Code that runs when an unhandled error occurs
-
+        var filePath = System.IO.Path.Combine(Server.MapPath("~/App_Data/Errors/"), DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString().PadLeft(2, '0'), DateTime.Now.Day.ToString().PadLeft(2, '0') + ".txt");
+        if (!System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(filePath)))
+        {
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(filePath));
+        }
+        var exError = Server.GetLastError();
+        while (exError != null)
+        {
+            var jsonError = new
+            {
+                Timestamp = DateTime.Now.ToString(),
+                Message = exError?.Message,
+                InnerEx = exError?.InnerException?.Message,
+                Source = exError?.Source,
+                StackTrace = exError?.StackTrace,
+            };
+            var error = System.Web.Helpers.Json.Encode(jsonError) + Environment.NewLine;
+            System.IO.File.AppendAllText(filePath, error);
+            exError = exError.InnerException;
+        }
     }
 
     void Session_Start(object sender, EventArgs e)

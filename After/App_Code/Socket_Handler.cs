@@ -77,6 +77,7 @@ namespace After
             };
             SocketCollection.Broadcast(Json.Encode(message));
             World.Current.Players.Store(Player.StorageID);
+            Player.GetCurrentLocation()?.CharacterLeaves(Player);
         }
         public override void OnError()
         {
@@ -96,6 +97,7 @@ namespace After
             };
             SocketCollection.Broadcast(Json.Encode(message));
             World.Current.Players.Store(Player.StorageID);
+            Player.GetCurrentLocation()?.CharacterLeaves(Player);
         }
     }
 }

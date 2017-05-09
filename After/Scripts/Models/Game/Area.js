@@ -11,7 +11,7 @@ var After;
                     this.ZCoord = ZCoord;
                     this.Color = "gray";
                     this.IsSelected = false;
-                    this.Opacity = 1;
+                    this.IsVisible = false;
                     this.Occupants = new Array();
                 }
             }
@@ -19,4 +19,3 @@ var After;
         })(Game = Models.Game || (Models.Game = {}));
     })(Models = After.Models || (After.Models = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Area.js.map

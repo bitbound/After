@@ -137,6 +137,8 @@
     <Content Include="Assets\Images\Icons\Ellipsis_16x.png" />
     <Content Include="Assets\Images\Icons\Ellipsis_inverse_16x.png" />
     <Content Include="Assets\Images\Icons\gear_32xLG.png" />
+    <Content Include="Assets\Images\Icons\Interactive.png" />
+    <Content Include="Assets\Images\Icons\InteractiveColor.png" />
     <Content Include="Assets\Images\Icons\Message_16xLG.png" />
     <Content Include="Assets\Images\Icons\MoveGlyph_16x.png" />
     <Content Include="Assets\Images\Icons\Package_64x.png" />
@@ -177,7 +179,6 @@
     <Content Include="Assets\Sounds\SoundCredits.txt" />
     <Content Include="Assets\Sounds\urupin__heartbeat.mp3" />
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
     <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
     <Content Include="bin\Microsoft.WebSockets.dll" />
     <Content Include="bin\StorageLists.dll" />
@@ -199,6 +200,7 @@
     <Content Include="scripts\Controls\CreateAccount.js" />
     <Content Include="scripts\Controls\CreateCharacter.js" />
     <TypeScriptCompile Include="scripts\Controls\Game.ts" />
+    <Content Include="scripts\Controls\Game.js" />
     <Content Include="scripts\Controls\Intro.js" />
     <Content Include="scripts\Controls\LoginForm.js" />
     <Content Include="scripts\Controls\Splash.js" />
@@ -213,8 +215,26 @@
     <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.js" />
-    <Content Include="scripts\Models\Game\Bases\Selectable.js" />
     <None Include="scripts\_references.js" />
+    <Content Include="scripts\Message_Handlers\Accounts.js" />
+    <Content Include="scripts\Message_Handlers\Events.js" />
+    <Content Include="scripts\Message_Handlers\Messages.js" />
+    <Content Include="scripts\Message_Handlers\Queries.js" />
+    <Content Include="scripts\Models\App\Audio.js" />
+    <Content Include="scripts\Models\App\Canvas.js" />
+    <Content Include="scripts\Models\App\Connection.js" />
+    <Content Include="scripts\Models\App\Drawing.js" />
+    <Content Include="scripts\Models\App\Game.js" />
+    <Content Include="scripts\Models\App\MainModel.js" />
+    <Content Include="scripts\Models\App\Me.js" />
+    <Content Include="scripts\Models\App\Settings.js" />
+    <Content Include="scripts\Models\App\Utilities.js" />
+    <Content Include="scripts\Models\Game\Area.js" />
+    <Content Include="scripts\Models\Game\Bases\Selectable.js" />
+    <Content Include="scripts\Models\Game\FreeParticle.js" />
+    <Content Include="scripts\Models\Game\Particle.js" />
+    <Content Include="scripts\Models\Game\Power.js" />
+    <Content Include="scripts\Models\Game\Soul.js" />
     <Content Include="Styles.css" />
     <Content Include="Web.config" />
     <Content Include="default.cshtml" />
@@ -223,7 +243,6 @@
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <Content Include="scripts\jQuery\jquery-3.1.1.min.map" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.map" />
-    <Content Include="scripts\Models\Game\Bases\Selectable.js.map" />
     <Content Include="Services\ErrorReporting.cshtml" />
     <Content Include="tsconfig.json" />
     <None Include="Web.Debug.config">
@@ -234,11 +253,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="scripts\DataBind.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Accounts.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Events.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Messages.ts" />
     <TypeScriptCompile Include="scripts\Message_Handlers\Queries.ts" />
+    <TypeScriptCompile Include="scripts\Models\App\Audio.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Canvas.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Connection.ts" />
     <TypeScriptCompile Include="scripts\Models\App\Drawing.ts" />

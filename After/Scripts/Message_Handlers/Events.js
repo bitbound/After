@@ -51,6 +51,7 @@ var After;
                 // TODO: Else...
             }
             Events.HandleStartCharging = HandleStartCharging;
+            ;
             function HandleStopCharging(JsonMessage) {
                 $("#buttonCharge").removeAttr("disabled");
                 After.Me.IsCharging = false;
@@ -68,6 +69,10 @@ var After;
                 }
                 else {
                     After.World_Data.Souls.push(JsonMessage.Soul);
+                    var index = After.World_Data.Areas.findIndex((value, index) => {
+                        return value.StorageID == JsonMessage.Soul.CurrentXYZ;
+                    });
+                    After.World_Data.Areas[index].Occupants.push(JsonMessage.Soul.Name);
                     if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
                         After.Game.AddChatMessage(JsonMessage.Soul.Name + " has arrived.", "whitesmoke");
                     }
@@ -77,10 +82,17 @@ var After;
             ;
             function HandleCharacterLeaves(JsonMessage) {
                 if (JsonMessage.Soul.Name != After.Me.Name) {
-                    var index = After.World_Data.Souls.findIndex((value, index) => {
+                    var soulIndex = After.World_Data.Souls.findIndex((value, index) => {
                         return value.Name == JsonMessage.Soul.Name;
                     });
-                    After.World_Data.Souls.splice(index, 1);
+                    var areaIndex = After.World_Data.Areas.findIndex((value, index) => {
+                        return value.StorageID == JsonMessage.Soul.CurrentXYZ;
+                    });
+                    var occupantIndex = After.World_Data.Areas[areaIndex].Occupants.findIndex((value) => {
+                        return value == JsonMessage.Soul.Name;
+                    });
+                    After.World_Data.Areas[areaIndex].Occupants.splice(occupantIndex, 1);
+                    After.World_Data.Souls.splice(soulIndex, 1);
                     if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
                         After.Game.AddChatMessage(JsonMessage.Soul.Name + " has left.", "whitesmoke");
                     }
@@ -147,13 +159,29 @@ var After;
             }
             Events.HandleAreaCreated = HandleAreaCreated;
             function HandleAreaRemoved(JsonMessage) {
-                var index = After.World_Data.Areas.findIndex(area => area.LocationID == JsonMessage.Area.LocationID);
+                var index = After.World_Data.Areas.findIndex(area => area.StorageID == JsonMessage.Area.LocationID);
                 if (index > -1) {
                     After.World_Data.Areas.splice(index, 1);
                 }
             }
             Events.HandleAreaRemoved = HandleAreaRemoved;
+            function HandleCharacterCharging(JsonMessage) {
+                var location = JsonMessage.Location.split(",");
+                var fp = new After.Models.Game.FreeParticle();
+                fp.Color = "white";
+                fp.XCoord = Number(location[0]) + After.Utilities.GetRandom(0, .99, false);
+                fp.YCoord = Number(location[1]) + After.Utilities.GetRandom(0, .99, false);
+                fp.ZCoord = location[2];
+                After.World_Data.FreeParticles.push(fp);
+                $(fp).animate({
+                    XCoord: Number(location[0]) + .5,
+                    YCoord: Number(location[1]) + .5
+                }, 750, function () {
+                    var index = After.World_Data.FreeParticles.findIndex(part => part == fp);
+                    After.World_Data.FreeParticles.splice(index, 1);
+                });
+            }
+            Events.HandleCharacterCharging = HandleCharacterCharging;
         })(Events = Message_Handlers.Events || (Message_Handlers.Events = {}));
     })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Events.js.map

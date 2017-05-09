@@ -1,18 +1,19 @@
 ﻿{
+  "id":  "After",
   "name": "After",
   "short_name": "After",
-  "start_url": ".",
+  "start_url": "https://after-game.net",
   "display": "standalone",
   "background_color": "black",
   "description": "A MUD-like, infinite-progression, online RPG.",
   "icons": [
     {
-      "src": "/Assets/Images/A-128.png",
+      "src": "https://after-game.net/Assets/Images/A-128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "/Assets/Images/A-512.png",
+      "src": "https://after-game.net/Assets/Images/A-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

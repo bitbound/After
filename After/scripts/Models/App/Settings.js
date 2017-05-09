@@ -55,4 +55,3 @@ var After;
         })(App = Models.App || (Models.App = {}));
     })(Models = After.Models || (After.Models = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Settings.js.map

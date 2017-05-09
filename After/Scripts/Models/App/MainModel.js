@@ -19,4 +19,3 @@ var After;
         World_Data.FreeParticles = new Array();
     })(World_Data = After.World_Data || (After.World_Data = {}));
 })(After || (After = {}));
-//# sourceMappingURL=MainModel.js.map

@@ -10,4 +10,3 @@ var After;
         })(Game = Models.Game || (Models.Game = {}));
     })(Models = After.Models || (After.Models = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Particle.js.map

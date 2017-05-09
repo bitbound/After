@@ -4,18 +4,13 @@ var After;
     (function (Controls) {
         Controls.Game = {
             Init: function () {
-                var query = {
-                    "Category": "Queries",
-                    "Type": "PlayerUpdate"
-                };
-                After.Connection.Socket.send(JSON.stringify(query));
                 $("#divLogin").animate({ opacity: 0 }, 1000, function () {
                     $("#divLogin").hide();
                     $.get("/Controls/Game.html", function (data) {
                         $(document.body).append(data);
                         var spanMessage = document.createElement("span");
                         spanMessage.style.color = "whitesmoke";
-                        spanMessage.innerHTML = "Welcome to After!";
+                        spanMessage.innerHTML = "Welcome to After!<br/><br/>This game is in the beginning stages of development.  Check out the dev blog for updates!";
                         $("#divChatMessageWindow").append(spanMessage);
                         $("#divChatMessageWindow").append("<br/>");
                         After.Controls.Game.Load();
@@ -23,32 +18,7 @@ var After;
                 });
             },
             Load: function () {
-                $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
-                var query = {
-                    "Category": "Accounts",
-                    "Type": "RetrieveSettings"
-                };
-                After.Connection.Socket.send(JSON.stringify(query));
-                query = {
-                    "Category": "Queries",
-                    "Type": "PlayerUpdate"
-                };
-                After.Connection.Socket.send(JSON.stringify(query));
-                query = {
-                    "Category": "Queries",
-                    "Type": "RememberLocations"
-                };
-                After.Connection.Socket.send(JSON.stringify(query));
-                query = {
-                    "Category": "Queries",
-                    "Type": "RefreshView"
-                };
-                After.Connection.Socket.send(JSON.stringify(query));
-                query = {
-                    "Category": "Queries",
-                    "Type": "GetPowers"
-                };
-                After.Connection.Socket.send(JSON.stringify(query));
+                $("#viewport").attr("content", "width=device-width, user-scalable=no, initial-scale=0.75, maximum-scale=0.75");
                 After.Canvas.Element = document.getElementById("canvasMap");
                 After.Canvas.Context2D = After.Canvas.Element.getContext("2d");
                 After.Canvas.Element.width = document.documentElement.clientWidth;
@@ -62,9 +32,11 @@ var After;
                 if (After.Debug) {
                     $("#divDebug").show();
                 }
-                window.requestAnimationFrame(After.Drawing.DrawCanvas);
-                After.Drawing.AnimateParticles();
-                After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
+                var query = {
+                    "Category": "Queries",
+                    "Type": "FirstLoad"
+                };
+                After.Connection.Socket.send(JSON.stringify(query));
                 window.onresize = function () {
                     After.Canvas.Element.width = document.documentElement.clientWidth;
                     After.Canvas.Element.height = document.documentElement.clientHeight;
@@ -299,6 +271,7 @@ var After;
                     After.Temp.ActiveIcon = $(e.currentTarget);
                     After.Temp.ActiveFrame = $(e.currentTarget).parent();
                     After.Temp.StartHeight = After.Temp.ActiveFrame.height();
+                    After.Temp.StartLeft = Number(After.Temp.ActiveFrame.css("left").replace("px", ""));
                     $("#inputChatInput").blur();
                     window.onmousemove = function (e) {
                         e.preventDefault();
@@ -314,6 +287,13 @@ var After;
                             else if (newHeight <= 0) {
                                 After.Temp.ActiveFrame.css("z-index", 0);
                                 After.Temp.ActiveFrame.height(0);
+                            }
+                            var newLeft = After.Temp.StartLeft + e.clientX - After.Temp.StartPoint.clientX;
+                            if (newLeft > 10) {
+                                After.Temp.ActiveFrame.css("left", newLeft + "px");
+                            }
+                            else {
+                                After.Temp.ActiveFrame.css("left", "10px");
                             }
                         }
                     };
@@ -355,6 +335,7 @@ var After;
                         After.Temp.ActiveIcon = $(e.currentTarget);
                         After.Temp.ActiveFrame = $(e.currentTarget).parent();
                         After.Temp.StartHeight = After.Temp.ActiveFrame.height();
+                        After.Temp.StartLeft = Number(After.Temp.ActiveFrame.css("left").replace("px", ""));
                         After.Temp.LastTouch = e.touches[0];
                         window.ontouchmove = function (e) {
                             e.preventDefault();
@@ -373,6 +354,13 @@ var After;
                                 else if (newHeight <= 0) {
                                     After.Temp.ActiveFrame.css("z-index", 0);
                                     After.Temp.ActiveFrame.height(0);
+                                }
+                                var newLeft = After.Temp.StartLeft + e.touches[0].clientX - After.Temp.StartPoint.clientX;
+                                if (newLeft > 10) {
+                                    After.Temp.ActiveFrame.css("left", newLeft + "px");
+                                }
+                                else {
+                                    After.Temp.ActiveFrame.css("left", "10px");
                                 }
                             }
                         };
@@ -798,4 +786,3 @@ var After;
         };
     })(Controls = After.Controls || (After.Controls = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Game.js.map

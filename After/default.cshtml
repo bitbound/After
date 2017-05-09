@@ -23,14 +23,6 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <link href="~/Styles.css" rel="stylesheet" />
     <script src="~/scripts/jQuery/jquery-3.1.1.min.js"></script>
-    <script>
-        try {
-            $ = jQuery = module.exports;
-        } catch (e) { }
-    </script>
-</head>
-<body>
-    <script src="~/scripts/DataBind.js"></script>
     <script src="~/scripts/Models/Game/Bases/Selectable.js"></script>
     <script src="~/scripts/Models/Game/Particle.js"></script>
     <script src="~/scripts/Models/Game/FreeParticle.js"></script>
@@ -46,16 +38,19 @@
     <script src="~/scripts/Models/App/Me.js"></script>
     <script src="~/scripts/Models/App/Settings.js"></script>
     <script src="~/scripts/Models/App/MainModel.js"></script>
+    <script src="~/scripts/Message_Handlers/Accounts.js"></script>
+    <script src="~/scripts/Message_Handlers/Events.js"></script>
+    <script src="~/scripts/Message_Handlers/Messages.js"></script>
+    <script src="~/scripts/Message_Handlers/Queries.js"></script>
     <script src="~/scripts/Controls/CreateAccount.js"></script>
     <script src="~/scripts/Controls/CreateCharacter.js"></script>
     <script src="~/scripts/Controls/Intro.js"></script>
     <script src="~/scripts/Controls/LoginForm.js"></script>
     <script src="~/scripts/Controls/Game.js"></script>
     <script src="~/scripts/Controls/Splash.js"></script>
-    <script src="~/scripts/Message_Handlers/Accounts.js"></script>
-    <script src="~/scripts/Message_Handlers/Events.js"></script>
-    <script src="~/scripts/Message_Handlers/Messages.js"></script>
-    <script src="~/scripts/Message_Handlers/Queries.js"></script>
+</head>
+<body>
+   
     <script defer src="~/scripts/Init.js"></script>
 </body>
 </html>

@@ -4,12 +4,11 @@
     };
     window.onerror = function (message, source, lineno, colno, error) {
         var error = {
-            Name: error.name,
             Message: message,
             TimeStamp: new Date().toString(),
             Line: lineno,
             Column: colno,
-            StackTrace: error.stack
+            Error: error
         }
         $.post(window.location.origin + "/Services/ErrorReporting.cshtml", JSON.stringify(error));
         if (After.Debug) {

@@ -74,18 +74,6 @@ var After;
                 After.Utilities.ShowDialog("Your were disconnected because your account was logged in from another location.<br/><br/>If this wasn't you, you should change your password immediately.", "black", "OK", null);
             }
             Accounts.HandleLoginElsewhere = HandleLoginElsewhere;
-            function HandleRetrieveSettings(JsonMessage) {
-                for (var setting in JsonMessage.Settings) {
-                    After.Settings[setting] = JsonMessage.Settings[setting];
-                }
-                for (var setting in After.Settings) {
-                    if (typeof After.Settings[setting] == 'boolean') {
-                        $('#divSideTabs div[prop="' + setting + '"]').attr("on", After.Settings[setting]);
-                    }
-                }
-            }
-            Accounts.HandleRetrieveSettings = HandleRetrieveSettings;
         })(Accounts = Message_Handlers.Accounts || (Message_Handlers.Accounts = {}));
     })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Accounts.js.map

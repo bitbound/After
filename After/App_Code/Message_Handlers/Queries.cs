@@ -67,12 +67,41 @@ namespace After.Message_Handlers
         }
         public static void HandleRememberLocations(dynamic JsonMessage, Socket_Handler SH)
         {
-
+            // TODO
         }
         public static void HandleGetPowers(dynamic JsonMessage, Socket_Handler SH)
         {
             JsonMessage.Powers = SH.Player.Powers;
+            JsonMessage.IsAdmin = SH.Player.IsAdmin;
             SH.Send(Json.Encode(JsonMessage));
+        }
+        public static void HandleFirstLoad(dynamic JsonMessage, Socket_Handler SH)
+        {
+            if (String.IsNullOrWhiteSpace(SH.Player.CurrentXYZ))
+            {
+                if (String.IsNullOrWhiteSpace(SH.Player.PreviousXYZ))
+                {
+                    SH.Player.CurrentXYZ = "0,0,0";
+                }
+                else
+                {
+                    SH.Player.CurrentXYZ = SH.Player.PreviousXYZ;
+                }
+            }
+            JsonMessage.Settings = SH.Player.Settings;
+            JsonMessage.Player = SH.Player.ConvertToMe();
+            JsonMessage.Powers = SH.Player.Powers;
+            JsonMessage.IsAdmin = SH.Player.IsAdmin;
+            SH.Send(Json.Encode(JsonMessage));
+
+            // TODO: Remembered locations.
+
+            var location = SH.Player.GetCurrentLocation();
+            if (location == null)
+            {
+                SH.Player.CurrentXYZ = "0,0,0";
+            }
+            SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
         }
     }
 }

@@ -6,13 +6,13 @@
             this.ZCoord = ZCoord;
             this.Color = "gray";
             this.IsSelected = false;
-            this.Opacity = 1;
+            this.IsVisible = false;
             this.Occupants = new Array<string>();
         }
         XCoord: number;
         YCoord: number;
         ZCoord: string;
-        LocationID: string;
+        StorageID: string;
         Color: string;
         Title: string;
         Description: string;
@@ -21,6 +21,6 @@
 
         //*** Visual Only Properties ***//
         IsSelected: boolean;
-        Opacity: number;
+        IsVisible: boolean;
     }
 }

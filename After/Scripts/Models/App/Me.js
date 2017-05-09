@@ -129,11 +129,10 @@ var After;
                 }
                 //*** Utility Functions ***//
                 GetCurrentLocation() {
-                    return After.World_Data.Areas.find((value) => { return value.LocationID == After.Me.CurrentXYZ; });
+                    return After.World_Data.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
                 }
             }
             App.Me = Me;
         })(App = Models.App || (Models.App = {}));
     })(Models = After.Models || (After.Models = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Me.js.map

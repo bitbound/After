@@ -6,6 +6,8 @@ var After;
         (function (App) {
             class Drawing {
                 constructor() {
+                    this.AreaInteractIcon = document.createElement("img");
+                    this.AreaInteractIcon.src = "/Assets/Images/Icons/InteractiveColor.png";
                 }
                 DrawCanvas() {
                     try {
@@ -54,7 +56,12 @@ var After;
                             After.Canvas.Context2D.arc(50 * scale, 50 * scale, 50 * scale, 0, Math.PI * 2);
                             After.Canvas.Context2D.fill();
                         }
-                        After.Canvas.Context2D.globalAlpha = value.Opacity;
+                        if (value.IsVisible) {
+                            After.Canvas.Context2D.globalAlpha = 1;
+                        }
+                        else {
+                            After.Canvas.Context2D.globalAlpha = .1;
+                        }
                         // Scale Y to make arcs ellipses.
                         After.Canvas.Context2D.scale(1, .5);
                         After.Canvas.Context2D.translate(0, 50 * scale);
@@ -64,7 +71,7 @@ var After;
                         After.Canvas.Context2D.arc(50 * scale, 58 * scale, 30 * scale, 0, Math.PI * 2);
                         After.Canvas.Context2D.fill();
                         // Bridge space between bottom and top ellipse.
-                        if (value.Opacity == 1) {
+                        if (value.IsVisible) {
                             After.Canvas.Context2D.fillRect(20 * scale, 50 * scale, 4 * scale, 8 * scale);
                             After.Canvas.Context2D.fillRect(76 * scale, 50 * scale, 4 * scale, 8 * scale);
                         }
@@ -76,6 +83,29 @@ var After;
                         After.Canvas.Context2D.beginPath();
                         After.Canvas.Context2D.arc(50 * scale, 50 * scale, 30 * scale, 0, Math.PI * 2);
                         After.Canvas.Context2D.fill();
+                        // Draw interact button.
+                        After.Canvas.Context2D.fillStyle = "gray";
+                        After.Canvas.Context2D.strokeStyle = "white";
+                        After.Canvas.Context2D.lineWidth = .25 * scale;
+                        After.Canvas.Context2D.beginPath();
+                        After.Canvas.Context2D.arc(50 * scale, 66 * scale, 7 * scale, 0, Math.PI * 2);
+                        After.Canvas.Context2D.fill();
+                        After.Canvas.Context2D.stroke();
+                        After.Canvas.Context2D.drawImage(After.Drawing.AreaInteractIcon, 45 * scale, 61 * scale, 10 * scale, 10 * scale);
+                        After.Canvas.Context2D.scale(1, 2);
+                        // Draw area info.
+                        if (value.IsVisible) {
+                            After.Canvas.Context2D.strokeStyle = "white";
+                            var fontSize = 6 * scale;
+                            After.Canvas.Context2D.font = String(fontSize) + "px sans-serif";
+                            var text = "X: " + String(value.XCoord) + ", Y: " + String(value.YCoord);
+                            After.Canvas.Context2D.fillText(text, 30 * scale, 55 * scale, 60 * scale);
+                            After.Canvas.Context2D.drawImage($("#divCharacterIconBorder img")[0], 30 * scale, 60 * scale, 8 * scale, 8 * scale);
+                            After.Canvas.Context2D.fillText(": " + String(value.Occupants.length), 38 * scale, 67 * scale, 50 * scale);
+                        }
+                        // Draw interaction button.
+                        if (value.StorageID == After.Me.CurrentXYZ) {
+                        }
                         After.Canvas.Context2D.restore();
                     });
                 }
@@ -94,7 +124,6 @@ var After;
                         c2d.arc(partX, partY, .5 * zs, 0, Math.PI * 2);
                         c2d.strokeStyle = "dimgray";
                         c2d.lineWidth = .25 * zs;
-                        ;
                         c2d.stroke();
                         c2d.fill();
                         // Draw shadow.
@@ -151,184 +180,124 @@ var After;
                     ;
                 }
                 ;
-                WanderParticles() {
-                    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
-                        window.setTimeout(After.Drawing.WanderParticles, 20);
-                        return;
-                    }
-                    var me = After.Me;
-                    var left = After.Utilities.GetRandom(-25, 15, true);
-                    var top = After.Utilities.GetRandom(-30, -5, true);
-                    // Make particles wander in the area.
-                    $(me.ParticleBounds).animate({
-                        left: left,
-                        top: top,
-                        right: left + 20,
-                        bottom: top + 20
-                    }, 5000, function () {
-                        After.Me.ParticleBounds.right = me.ParticleBounds.left + 20;
-                        After.Me.ParticleBounds.bottom = me.ParticleBounds.top + 20;
-                        After.Drawing.WanderParticles();
-                    });
-                }
-                ;
-                AnimateParticle(Particle) {
-                    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
-                        window.setTimeout(After.Drawing.AnimateParticle(Particle), 20);
-                        return;
-                    }
-                    // Get new destination if ToX/Y is reached.
-                    var pb = After.Me.ParticleBounds;
-                    var toX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                    var toY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                    var distance = Math.sqrt(Math.pow(Particle.CurrentX - toX, 2) +
-                        Math.pow(Particle.CurrentY - toY, 2));
-                    $(Particle).animate({
-                        CurrentX: toX,
-                        CurrentY: toY
-                    }, distance * 125, function () {
-                        After.Drawing.AnimateParticle(Particle);
-                    });
-                }
-                ;
                 AnimateParticles() {
-                    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
-                        window.setTimeout(After.Drawing.AnimateParticles, 20);
-                        return;
-                    }
-                    var me = After.Me;
-                    var pb = me.ParticleBounds;
-                    // Populate missing particles.
-                    if (me.Particles.length < 50) {
-                        for (var i = me.Particles.length; i < 50; i++) {
-                            var part = new After.Models.Game.Particle();
-                            part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                            part.FromX = part.CurrentX;
-                            part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                            ;
-                            part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                            part.FromY = part.CurrentY;
-                            part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                            ;
-                            me.Particles.push(part);
+                    this.ParticleInterval = window.setInterval(function () {
+                        if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
+                            return;
                         }
-                        ;
-                    }
-                    After.Drawing.WanderParticles();
-                    // Apply movement to individual particles.
-                    for (var i = 0; i < me.Particles.length; i++) {
-                        After.Drawing.AnimateParticle(me.Particles[i]);
-                    }
-                    //this.ParticleInterval = window.setInterval(function () {
-                    //    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
-                    //        return;
-                    //    }
-                    //    var soul = After.Me;
-                    //    var 20 = 20;
-                    //    // Set bounds within which particles will move.
-                    //    if (typeof soul.ParticleBounds == "undefined") {
-                    //        var top = After.Utilities.GetRandom(-25, 25, true);
-                    //        var left = After.Utilities.GetRandom(-25, 15, true);
-                    //        soul.ParticleBounds = {
-                    //            left: left,
-                    //            top: top,
-                    //            right: left + 20,
-                    //            bottom: top + 20
-                    //        }
-                    //        soul.ParticleWanderTo = {
-                    //            x: After.Utilities.GetRandom(-25, 15, true),
-                    //            y: After.Utilities.GetRandom(-30, -5, true)
-                    //        }
-                    //    }
-                    //    // Make particles wander in the area.
-                    //    if (Math.round(soul.ParticleBounds.left) != Math.round(soul.ParticleWanderTo.x)) {
-                    //        var change = (soul.ParticleWanderTo.x - soul.ParticleBounds.left) / Math.abs((soul.ParticleWanderTo.x - soul.ParticleBounds.left));
-                    //        soul.ParticleBounds.left += .1 * change;
-                    //    }
-                    //    else {
-                    //        soul.ParticleWanderTo.x = After.Utilities.GetRandom(-25, 15, true);
-                    //    }
-                    //    if (Math.round(soul.ParticleBounds.top) != Math.round(soul.ParticleWanderTo.y)) {
-                    //        var change = (soul.ParticleWanderTo.y - soul.ParticleBounds.top) / Math.abs((soul.ParticleWanderTo.y - soul.ParticleBounds.top));
-                    //        soul.ParticleBounds.top += .1 * change;
-                    //    }
-                    //    else {
-                    //        soul.ParticleWanderTo.y = After.Utilities.GetRandom(-30, -5, true);
-                    //    }
-                    //    soul.ParticleBounds.right = soul.ParticleBounds.left + 20;
-                    //    soul.ParticleBounds.bottom = soul.ParticleBounds.top + 20;
-                    //    var pb = soul.ParticleBounds;
-                    //    // Populate missing particles.
-                    //    if (soul.Particles.length < 50) {
-                    //        for (var i2 = soul.Particles.length; i2 < 50; i2++) {
-                    //            var part = new After.Models.Game.Particle();
-                    //            part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                    //            part.FromX = part.CurrentX;
-                    //            part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);;
-                    //            part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                    //            part.FromY = part.CurrentY;
-                    //            part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);;
-                    //            soul.Particles.push(part);
-                    //        };
-                    //    }
-                    //    // Apply movement to individual particles.
-                    //    for (var i2 = 0; i2 < soul.Particles.length; i2++) {
-                    //        var part = soul.Particles[i2];
-                    //        // Get new destination if ToX/Y is reached.
-                    //        if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
-                    //            part.FromX = part.ToX;
-                    //            do {
-                    //                part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                    //            } while (part.FromX == part.ToX);
-                    //        } else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
-                    //            part.FromX = part.ToX;
-                    //            do {
-                    //                part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                    //            } while (part.FromX == part.ToX);
-                    //        }
-                    //        if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
-                    //            part.FromY = part.ToY;
-                    //            do {
-                    //                part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                    //            } while (part.FromY == part.ToY);
-                    //        } else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
-                    //            part.FromY = part.ToY;
-                    //            do {
-                    //                part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                    //            } while (part.FromY == part.ToY);
-                    //        }
-                    //        // Change x value with ease-in-out motion.
-                    //        var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
-                    //        var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
-                    //        var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
-                    //        var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
-                    //        if (part.ToX > part.CurrentX) {
-                    //            part.CurrentX += changeX;
-                    //        } else if (part.ToX < part.CurrentX) {
-                    //            part.CurrentX -= changeX;
-                    //        };
-                    //        if (isFinite(part.CurrentX) == false) {
-                    //            part.CurrentX = part.ToX;
-                    //        }
-                    //        // Change y value with ease-in-out motion.
-                    //        var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
-                    //        var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
-                    //        var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
-                    //        var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
-                    //        if (part.ToY > part.CurrentY) {
-                    //            part.CurrentY += changeY;
-                    //        } else if (part.ToY < part.CurrentY) {
-                    //            part.CurrentY -= changeY;
-                    //        };
-                    //        if (isFinite(part.CurrentY) == false) {
-                    //            part.CurrentY = part.ToY;
-                    //        }
-                    //    }
-                    //}, 20)
+                        var soul = After.Me;
+                        // Set bounds within which particles will move.
+                        if (typeof soul.ParticleBounds == "undefined") {
+                            var top = After.Utilities.GetRandom(-25, 25, true);
+                            var left = After.Utilities.GetRandom(-25, 15, true);
+                            soul.ParticleBounds = {
+                                left: left,
+                                top: top,
+                                right: left + 20,
+                                bottom: top + 20
+                            };
+                            soul.ParticleWanderTo = {
+                                x: After.Utilities.GetRandom(-25, 15, true),
+                                y: After.Utilities.GetRandom(-30, -5, true)
+                            };
+                        }
+                        // Make particles wander in the area.
+                        if (Math.round(soul.ParticleBounds.left) != Math.round(soul.ParticleWanderTo.x)) {
+                            var change = (soul.ParticleWanderTo.x - soul.ParticleBounds.left) / Math.abs((soul.ParticleWanderTo.x - soul.ParticleBounds.left));
+                            soul.ParticleBounds.left += .1 * change;
+                        }
+                        else {
+                            soul.ParticleWanderTo.x = After.Utilities.GetRandom(-25, 15, true);
+                        }
+                        if (Math.round(soul.ParticleBounds.top) != Math.round(soul.ParticleWanderTo.y)) {
+                            var change = (soul.ParticleWanderTo.y - soul.ParticleBounds.top) / Math.abs((soul.ParticleWanderTo.y - soul.ParticleBounds.top));
+                            soul.ParticleBounds.top += .1 * change;
+                        }
+                        else {
+                            soul.ParticleWanderTo.y = After.Utilities.GetRandom(-30, -5, true);
+                        }
+                        soul.ParticleBounds.right = soul.ParticleBounds.left + 20;
+                        soul.ParticleBounds.bottom = soul.ParticleBounds.top + 20;
+                        var pb = soul.ParticleBounds;
+                        // Populate missing particles.
+                        if (soul.Particles.length < 50) {
+                            for (var i2 = soul.Particles.length; i2 < 50; i2++) {
+                                var part = new After.Models.Game.Particle();
+                                part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                                part.FromX = part.CurrentX;
+                                part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                                ;
+                                part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                                part.FromY = part.CurrentY;
+                                part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                                ;
+                                soul.Particles.push(part);
+                            }
+                            ;
+                        }
+                        // Apply movement to individual particles.
+                        for (var i2 = 0; i2 < soul.Particles.length; i2++) {
+                            var part = soul.Particles[i2];
+                            // Get new destination if ToX/Y is reached.
+                            if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
+                                part.FromX = part.ToX;
+                                do {
+                                    part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                                } while (part.FromX == part.ToX);
+                            }
+                            else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
+                                part.FromX = part.ToX;
+                                do {
+                                    part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                                } while (part.FromX == part.ToX);
+                            }
+                            if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
+                                part.FromY = part.ToY;
+                                do {
+                                    part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                                } while (part.FromY == part.ToY);
+                            }
+                            else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
+                                part.FromY = part.ToY;
+                                do {
+                                    part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                                } while (part.FromY == part.ToY);
+                            }
+                            // Change x value with ease-in-out motion.
+                            var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
+                            var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
+                            var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
+                            var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
+                            if (part.ToX > part.CurrentX) {
+                                part.CurrentX += changeX;
+                            }
+                            else if (part.ToX < part.CurrentX) {
+                                part.CurrentX -= changeX;
+                            }
+                            ;
+                            if (isFinite(part.CurrentX) == false) {
+                                part.CurrentX = part.ToX;
+                            }
+                            // Change y value with ease-in-out motion.
+                            var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
+                            var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
+                            var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
+                            var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
+                            if (part.ToY > part.CurrentY) {
+                                part.CurrentY += changeY;
+                            }
+                            else if (part.ToY < part.CurrentY) {
+                                part.CurrentY -= changeY;
+                            }
+                            ;
+                            if (isFinite(part.CurrentY) == false) {
+                                part.CurrentY = part.ToY;
+                            }
+                        }
+                    }, 20);
                 }
             }
             App.Drawing = Drawing;
         })(App = Models.App || (Models.App = {}));
     })(Models = After.Models || (After.Models = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Drawing.js.map

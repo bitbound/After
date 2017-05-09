@@ -1,6 +1,9 @@
 ﻿namespace After.Models.App {
     export class Connection {
-        Socket: WebSocket = new WebSocket(location.origin.replace("http", "ws"));
+        constructor() {
+            this.Socket = new WebSocket(location.origin.replace("http", "ws"));
+        }
+        Socket: WebSocket;
         SetHandlers() {
             After.Connection.Socket.onopen = function () {
                 console.log("Connected.");
