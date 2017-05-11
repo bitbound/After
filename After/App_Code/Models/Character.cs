@@ -1,4 +1,3 @@
-using After.Interactions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -101,12 +100,37 @@ namespace After.Models
             }
         }
         public string PreviousXYZ { get; set; }
-       
-        public string CurrentXYZ { get; set; }
+        public double? XCoord { get; set; }
+        public double? YCoord { get; set; }
+        public string ZCoord { get; set; }
+        public string CurrentXYZ
+        {
+            get
+            {
+                if (XCoord == null || YCoord == null || ZCoord == null)
+                {
+                    return null;
+                }
+                return $"{XCoord},{YCoord},{ZCoord}";
+            }
+            set
+            {
+                if (value == null)
+                {
+                    XCoord = null;
+                    YCoord = null;
+                    ZCoord = null;
+                    return;
+                }
+                var locArray = value.Split(',');
+                this.XCoord = double.Parse(locArray[0]);
+                this.YCoord = double.Parse(locArray[1]);
+                this.ZCoord = locArray[2];
+            }
+        }
         public double ViewDistance { get; set; } = 2;
        
         public bool IsCharging { get; set; }
-        public List<string> Interactions { get; set; } = new List<string>();
 
         public List<Power> Powers { get; set; } = new List<Power>();
 
@@ -122,6 +146,7 @@ namespace After.Models
             Dialog
         }
         public List<string> Flags { get; set; }
+        public Dictionary<string, System.Timers.Timer> Timers { get; set; } = new Dictionary<string, System.Timers.Timer>();
         public DateTime LastAccessed { get; set; }
         public Location GetCurrentLocation()
         {
@@ -183,7 +208,7 @@ namespace After.Models
             if (toLocation == null)
             {
                 toLocation = World.Current.CreateTempLocation(ToXYZ);
-                var area = toLocation.ConvertToArea();
+                var area = toLocation.ConvertToArea(true);
                 request = new
                 {
                     Category = "Events",
@@ -245,6 +270,12 @@ namespace After.Models
                 (this as Player).GetSocketHandler().Send(Json.Encode(request));
             }
             IsCharging = true;
+            if (Timers.ContainsKey("ChargeTimer"))
+            {
+                Timers["ChargeTimer"].Close();
+                Timers["ChargeTimer"].Dispose();
+                Timers.Remove("ChargeTimer");
+            }
             var timer = new System.Timers.Timer(100);
             var startTime = DateTime.Now;
             var startValue = CurrentCharge;
@@ -253,19 +284,29 @@ namespace After.Models
                 {
                     (sen as System.Timers.Timer).Stop();
                     (sen as System.Timers.Timer).Dispose();
+                    Timers.Remove("ChargeTimer");
                     return;
                 }
-                CurrentCharge = Math.Min(MaxCharge, Math.Round(startValue + (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * MaxCharge));
-                dynamic update = new
-                {
-                    Category = "Queries",
-                    Type = "StatUpdate",
-                    Stat = "CurrentCharge",
-                    Amount = CurrentCharge
-                };
+                
                 if (this is Player)
                 {
-                    (this as Player).GetSocketHandler().Send(Json.Encode(update));
+                    var handler = (this as Player).GetSocketHandler();
+                    if (handler == null)
+                    {
+                        (sen as System.Timers.Timer).Stop();
+                        (sen as System.Timers.Timer).Dispose();
+                        Timers.Remove("ChargeTimer");
+                        return;
+                    }
+                    CurrentCharge = Math.Min(MaxCharge, Math.Round(startValue + (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * MaxCharge));
+                    dynamic update = new
+                    {
+                        Category = "Queries",
+                        Type = "StatUpdate",
+                        Stat = "CurrentCharge",
+                        Amount = CurrentCharge
+                    };
+                    handler.Send(Json.Encode(update));
                 }
                 foreach (var player in World.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p.Name != Name))
                 {
@@ -278,6 +319,7 @@ namespace After.Models
                     player.Send(Json.Encode(request));
                 }
             };
+            Timers.Add("ChargeTimer", timer);
             timer.Start();
         }
         public void StopCharging()
@@ -293,6 +335,12 @@ namespace After.Models
                 };
                 (this as Player).GetSocketHandler().Send(Json.Encode(request));
             }
+            if (Timers.ContainsKey("ChargeTimer"))
+            {
+                Timers["ChargeTimer"].Close();
+                Timers["ChargeTimer"].Dispose();
+                Timers.Remove("ChargeTimer");
+            }
             IsCharging = false;
             var timer = new System.Timers.Timer(100);
             var startTime = DateTime.Now;
@@ -302,21 +350,31 @@ namespace After.Models
                 {
                     (sen as System.Timers.Timer).Stop();
                     (sen as System.Timers.Timer).Dispose();
+                    Timers.Remove("ChargeTimer");
                     return;
                 }
-                CurrentCharge = Math.Max(0, Math.Round(startValue - (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * MaxCharge));
-                dynamic update = new
-                {
-                    Category = "Queries",
-                    Type = "StatUpdate",
-                    Stat = "CurrentCharge",
-                    Amount = CurrentCharge
-                };
                 if (this is Player)
                 {
+                    var handler = (this as Player).GetSocketHandler();
+                    if (handler == null)
+                    {
+                        (sen as System.Timers.Timer).Stop();
+                        (sen as System.Timers.Timer).Dispose();
+                        Timers.Remove("ChargeTimer");
+                        return;
+                    }
+                    CurrentCharge = Math.Max(0, Math.Round(startValue - (DateTime.Now - startTime).TotalMilliseconds / 100 * .01 * MaxCharge));
+                    dynamic update = new
+                    {
+                        Category = "Queries",
+                        Type = "StatUpdate",
+                        Stat = "CurrentCharge",
+                        Amount = CurrentCharge
+                    };
                     (this as Player).GetSocketHandler().Send(Json.Encode(update));
                 }
             };
+            Timers.Add("ChargeTimer", timer);
             timer.Start();
         }
         public dynamic ConvertToSoul()

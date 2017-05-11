@@ -35,7 +35,6 @@
                 }, 1000, part);
             }, 100);
         }
-        // TODO: Else...
     };
     export function HandleStopCharging(JsonMessage) {
         $("#buttonCharge").removeAttr("disabled");
@@ -115,7 +114,7 @@
         }
         else {
             for (var i = 0; i < 50; i++) {
-                var part = new After.Models.Game.FreeParticle();
+                var part = new After.Models.FreeParticle();
                 part.Color = JsonMessage.Soul.Color;
                 var from = JsonMessage.From.split(",");
                 var dest = JsonMessage.To.split(",");
@@ -144,7 +143,7 @@
     }
     export function HandleCharacterCharging(JsonMessage) {
         var location = JsonMessage.Location.split(",");
-        var fp = new After.Models.Game.FreeParticle();
+        var fp = new After.Models.FreeParticle();
         fp.Color = "white";
         fp.XCoord = Number(location[0]) + After.Utilities.GetRandom(0, .99, false);
         fp.YCoord = Number(location[1]) + After.Utilities.GetRandom(0, .99, false);

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Web;
 
 /// <summary>
 /// Summary description for WebSocketHandler
@@ -32,7 +33,6 @@ namespace After
         }
         public override void OnOpen()
         {
-            
         }
         public override void OnMessage(string message)
         {
@@ -55,7 +55,33 @@ namespace After
             var methodHandler = Type.GetType("After.Message_Handlers." + category).GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
             if (methodHandler != null)
             {
-                methodHandler.Invoke(null, new object[] { jsonMessage, this });
+                try
+                {
+                    methodHandler.Invoke(null, new object[] { jsonMessage, this });
+                }
+                catch (Exception ex)
+                {
+                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data/Errors/"), DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString().PadLeft(2, '0'), DateTime.Now.Day.ToString().PadLeft(2, '0') + ".txt");
+                    if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+                    {
+                        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(filePath));
+                    }
+                    var exError = ex;
+                    while (exError != null)
+                    {
+                        var jsonError = new
+                        {
+                            Timestamp = DateTime.Now.ToString(),
+                            Message = exError?.Message,
+                            InnerEx = exError?.InnerException?.Message,
+                            Source = exError?.Source,
+                            StackTrace = exError?.StackTrace,
+                        };
+                        var error = System.Web.Helpers.Json.Encode(jsonError) + Environment.NewLine;
+                        File.AppendAllText(filePath, error);
+                        exError = exError.InnerException;
+                    }
+                }
             }
         }
 
@@ -78,6 +104,11 @@ namespace After
             SocketCollection.Broadcast(Json.Encode(message));
             World.Current.Players.Store(Player.StorageID);
             Player.GetCurrentLocation()?.CharacterLeaves(Player);
+            foreach (var timer in Player.Timers)
+            {
+                timer.Value.Stop();
+                timer.Value.Dispose();
+            }
         }
         public override void OnError()
         {
@@ -98,6 +129,11 @@ namespace After
             SocketCollection.Broadcast(Json.Encode(message));
             World.Current.Players.Store(Player.StorageID);
             Player.GetCurrentLocation()?.CharacterLeaves(Player);
+            foreach (var timer in Player.Timers)
+            {
+                timer.Value.Stop();
+                timer.Value.Dispose();
+            }
         }
     }
 }

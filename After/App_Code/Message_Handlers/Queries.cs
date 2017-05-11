@@ -33,7 +33,7 @@ namespace After.Message_Handlers
                     {
                         Category = "Events",
                         Type = "AreaRemoved",
-                        Area = area.ConvertToArea()
+                        Area = area.ConvertToArea(true)
                     };
                     foreach (var player in area.GetNearbyPlayers())
                     {
@@ -59,16 +59,13 @@ namespace After.Message_Handlers
                     }
                     souls.Add(character.ConvertToSoul());
                 }
-                areas.Add(area.ConvertToArea());
+                areas.Add(area.ConvertToArea(true));
             }
             JsonMessage.Souls = souls;
             JsonMessage.Areas = areas;
             SH.Send(Json.Encode(JsonMessage));
         }
-        public static void HandleRememberLocations(dynamic JsonMessage, Socket_Handler SH)
-        {
-            // TODO
-        }
+
         public static void HandleGetPowers(dynamic JsonMessage, Socket_Handler SH)
         {
             JsonMessage.Powers = SH.Player.Powers;
@@ -94,14 +91,51 @@ namespace After.Message_Handlers
             JsonMessage.IsAdmin = SH.Player.IsAdmin;
             SH.Send(Json.Encode(JsonMessage));
 
-            // TODO: Remembered locations.
-
             var location = SH.Player.GetCurrentLocation();
             if (location == null)
             {
                 SH.Player.CurrentXYZ = "0,0,0";
             }
             SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
+        }
+        public static void HandleMapUpdate(dynamic JsonMessage, Socket_Handler SH)
+        {
+            if (SH.Player.CurrentXYZ == null)
+            {
+                return;
+            }
+            var visibleLocations = SH.Player.GetVisibleLocations();
+            for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)
+            {
+                for (var y = JsonMessage.YMin; y <= JsonMessage.YMax; y++)
+                {
+                    var location = World.Current.Locations.Find($"{x},{y},{SH.Player.ZCoord}");
+                    var landmark = World.Current.Landmarks.Find($"{x},{y},{SH.Player.ZCoord}");
+                    if (location != null)
+                    {
+                        if (!visibleLocations.Contains(location))
+                        {
+                            var request = new
+                            {
+                                Category = "Queries",
+                                Type = "MapUpdate",
+                                Area = location.ConvertToArea(false)
+                            };
+                            SH.Send(Json.Encode(request));
+                        }
+                    }
+                    if (landmark != null)
+                    {
+                        var request = new
+                        {
+                            Category = "Queries",
+                            Type = "MapUpdate",
+                            Landmark = landmark.ConvertToDynamic()
+                        };
+                        SH.Send(Json.Encode(request));
+                    }
+                }
+            }
         }
     }
 }

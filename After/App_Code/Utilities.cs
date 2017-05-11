@@ -31,6 +31,14 @@ namespace After
                     World.Current.Locations.Add(location);
                 }
             }
+            if (!World.Current.Landmarks.Exists("0,-2,0"))
+            {
+                var strLandmarks = File.ReadAllText(Path.Combine(Utilities.App_Data, "Game_Data\\Base\\Landmarks.json"));
+                foreach (var landmark in Json.Decode<List<Landmark>>(strLandmarks))
+                {
+                    World.Current.Landmarks.Add(landmark);
+                }
+            }
         }
         public static dynamic Clone(dynamic JsonData)
         {

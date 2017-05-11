@@ -13,7 +13,7 @@ After.Temp.Login.Init = function () {
     });
     After.Temp.Login.TryLogin = function () {
         if (After.Connection.Socket.readyState != WebSocket.OPEN) {
-            alert("Could not connect to the server.  Make sure your browser supports WebSockets.");
+            alert("Could not connect to the server.  Try refreshing the page.  If the issue persists, make sure you're using the latest version of Edge, Chrome, or Firefox.");
             return;
         };
         var strUsername = $("#inputUsername").val();

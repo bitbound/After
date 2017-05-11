@@ -1,4 +1,3 @@
-using After.Interactions;
 using System;
 using System.Collections.Generic;
 
@@ -15,6 +14,5 @@ namespace After.Models
 
         public List<Location> AreaInformation { get; set; } = new List<Location>();
 
-        public List<BaseInteraction> Interactions { get; set; } = new List<BaseInteraction>();
     }
 }

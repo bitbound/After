@@ -43,10 +43,6 @@ var After;
                 });
             }
             Queries.HandleRefreshView = HandleRefreshView;
-            function HandleRememberLocations(JsonMessage) {
-                // TODO
-            }
-            Queries.HandleRememberLocations = HandleRememberLocations;
             function HandleGetPowers(JsonMessage) {
                 $("#divPowersFrame .tab-innerframe").html("");
                 for (var i = 0; i < JsonMessage.Powers.length; i++) {
@@ -75,6 +71,10 @@ var After;
                 for (var stat in JsonMessage.Player) {
                     After.Me[stat] = JsonMessage.Player[stat];
                 }
+                // Iterate twice for properties that rely on other properties.  Lazy solution.
+                for (var stat in JsonMessage.Player) {
+                    After.Me[stat] = JsonMessage.Player[stat];
+                }
                 // Get powers.
                 $("#divPowersFrame .tab-innerframe").html("");
                 for (var i = 0; i < JsonMessage.Powers.length; i++) {
@@ -91,8 +91,29 @@ var After;
                 window.requestAnimationFrame(After.Drawing.DrawCanvas);
                 After.Drawing.AnimateParticles();
                 After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
+                After.Canvas.UpdateMap();
             }
             Queries.HandleFirstLoad = HandleFirstLoad;
+            function HandleMapUpdate(JsonMessage) {
+                if (JsonMessage.Area) {
+                    var index = After.World_Data.Areas.findIndex((value) => {
+                        return value.StorageID == JsonMessage.Area.StorageID;
+                    });
+                    if (index == -1) {
+                        JsonMessage.Area.IsVisible = false;
+                        After.World_Data.Areas.push(JsonMessage.Area);
+                    }
+                }
+                if (JsonMessage.Landmark) {
+                    var index = After.World_Data.Landmarks.findIndex((value) => {
+                        return value.StorageID == JsonMessage.Landmark.StorageID;
+                    });
+                    if (index == -1) {
+                        After.World_Data.Landmarks.push(JsonMessage.Landmark);
+                    }
+                }
+            }
+            Queries.HandleMapUpdate = HandleMapUpdate;
         })(Queries = Message_Handlers.Queries || (Message_Handlers.Queries = {}));
     })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));

@@ -143,7 +143,7 @@
         </div>
         <div class="tab-outerframe">
             <div class="tab-innerframe" style="overflow:hidden; border:1px solid gray">
-                <svg id="svgDPad" height="120px" width="120px" >
+                <svg id="svgDPad" height="120px" width="120px">
                     <rect x="78.6" y="11.4" move-direction="ne" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
                     <rect x="11.4" y="78.6" move-direction="sw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
                     <rect x="11.4" y="11.4" move-direction="nw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
@@ -160,6 +160,7 @@
                     <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,22.8645L 86.5289,26.4L 93.6,33.4711L 97.1355,22.8645 Z " class="dpad-triangle" />
                     <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 22.8645,97.1355L 33.4711,93.6L 26.4,86.5289L 22.8645,97.1355 Z " class="dpad-triangle" />
                     <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,97.1355L 93.6,86.5289L 86.5289,93.6L 97.1355,97.1355 Z " class="dpad-triangle" />
+                    <circle id="circleDPadMiddle" cx="50%" cy="50%" r="10" fill="#969696"></circle>
                 </svg>
             </div>
         </div>
@@ -193,7 +194,7 @@
         </div>
         <div>
             <div style="position:absolute; left:0; width:33%; text-align:center">
-                <svg id="svgEnergy" style="height:60px; width:100%">
+                <svg id="svgEnergy" style="height:60px; width:0">
                     <defs>
                         <radialGradient id="gradientEnergy" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                             <stop offset="0%" style="stop-color:white;" />
@@ -215,7 +216,7 @@
             </div>
 
             <div id="divCharge" style="position:absolute; left:33.1%; width:33%; text-align:center; display:none">
-                <svg id="svgCharge" style="height:60px; width:100%; cursor:pointer">
+                <svg id="svgCharge" style="height:60px; width:0; cursor:pointer">
                     <defs>
                         <radialGradient id="gradientCharge" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                             <stop offset="0%" style="stop-color:white;" />
@@ -233,7 +234,7 @@
             </div>
 
             <div style="position:absolute; left:66.2%; width:33%; text-align:center">
-                <svg id="svgWillpower" style="height:60px; width:100%">
+                <svg id="svgWillpower" style="height:60px; width:0">
                     <defs>
                         <radialGradient id="gradientWillpower" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                             <stop offset="0%" style="stop-color:white;" />

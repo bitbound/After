@@ -19,6 +19,7 @@ namespace After
             Players.FolderPath = server.MapPath("~/App_Data/World_Data/Players");
             NPCs.FolderPath = server.MapPath("~/App_Data/World_Data/NPCs");
             Messages.FolderPath = server.MapPath("~/App_Data/World_Data/Messages");
+            Landmarks.FolderPath = server.MapPath("~/App_Data/World_Data/Landmarks");
             Locations.PersistenceFilter = new Predicate<Location>(loc => loc.IsStatic == true);
             Messages.PersistenceFilter = new Predicate<Message>(mes => Messages.Storage.IndexOfValue(mes) > 50);
         }
@@ -26,6 +27,7 @@ namespace After
         public StorageList<Location> Locations { get; set; } = new StorageList<Location>();
         public StorageList<NPC> NPCs { get; set; } = new StorageList<NPC>();
         public StorageList<Message> Messages { get; set; } = new StorageList<Message>();
+        public StorageList<Landmark> Landmarks { get; set; } = new StorageList<Landmark>();
 
         public Location CreateTempLocation(string[] XYZ)
         {

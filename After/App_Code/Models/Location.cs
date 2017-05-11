@@ -1,4 +1,4 @@
-using After.Interactions;
+using After.App_Code.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -39,7 +39,7 @@ namespace After.Models
         public List<string> Occupants { get; set; } = new List<string>();
         public bool IsInnerVoid { get; set; }
         public long OwnerID { get; set; }
-        public string Interactions { get; set; }
+        public List<Script> Scripts { get; set; }
         public DateTime LastAccessed { get; set; }
 
 
@@ -96,20 +96,35 @@ namespace After.Models
                 player.Send(request);
             }
         }
-        public dynamic ConvertToArea()
+        public dynamic ConvertToArea(bool IsVisible)
         {
-            return new
+            if (IsVisible)
             {
-                XCoord = this.XCoord,
-                YCoord = this.YCoord,
-                ZCoord = this.ZCoord,
-                StorageID = this.StorageID,
-                Color = this.Color,
-                Title = this.Title,
-                Description = this.Description,
-                InvestedWillpower = this.InvestedWillpower,
-                Occupants = this.Occupants
-            };
+                return new
+                {
+                    XCoord = this.XCoord,
+                    YCoord = this.YCoord,
+                    ZCoord = this.ZCoord,
+                    StorageID = this.StorageID,
+                    Color = this.Color,
+                    Title = this.Title,
+                    Occupants = this.Occupants,
+                    Description = this.Description,
+                    InvestedWillpower = this.InvestedWillpower
+                };
+            }
+            else
+            {
+                return new
+                {
+                    XCoord = this.XCoord,
+                    YCoord = this.YCoord,
+                    ZCoord = this.ZCoord,
+                    StorageID = this.StorageID,
+                    Color = this.Color,
+                    Title = this.Title
+                };
+            }
         }
     }
 }
