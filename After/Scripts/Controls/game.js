@@ -502,22 +502,6 @@ var After;
                         };
                     }
                 });
-                $("#divActionButton").on("click", function (e) {
-                    After.Me.Move($(e.currentTarget).attr("move-direction"));
-                });
-                $("#divActionButton").on("touchstart", function (e) {
-                    e.preventDefault();
-                    $(e.currentTarget).addClass("hover");
-                    $(e.currentTarget).prop("click", true);
-                });
-                $("#divActionButton").on("touchend", function (e) {
-                    e.preventDefault();
-                    $(e.currentTarget).removeClass("hover");
-                    if ($(e.currentTarget).prop("click") == true) {
-                        After.Me.Move($(e.currentTarget).attr("move-direction"));
-                        $(e.currentTarget).removeProp("click");
-                    }
-                });
                 $(".thumb-control").on("mousedown", function (e) {
                     e.preventDefault();
                     After.Temp.Dragging = true;
