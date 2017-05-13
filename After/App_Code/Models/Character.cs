@@ -150,16 +150,11 @@ namespace After.Models
         public DateTime LastAccessed { get; set; }
         public Location GetCurrentLocation()
         {
-            while (CurrentXYZ == null)
+            if (CurrentXYZ == null)
             {
-                Thread.Sleep(500);
+                return null;
             }
-            var location = World.Current.Locations.Find(CurrentXYZ);
-            if (location == null)
-            {
-                location = World.Current.CreateTempLocation(CurrentXYZ.Split(','));
-            }
-            return location;
+            return World.Current.Locations.Find(CurrentXYZ);
         }
         public Location GetPreviousLocation(World Context)
         {
@@ -217,6 +212,10 @@ namespace After.Models
             // TODO: Check if blocked.
             var soul = ConvertToSoul();
             var currentLocation = GetCurrentLocation();
+            if (currentLocation == null)
+            {
+                return;
+            }
             MovementState = MovementStates.Moving;
             var distance = currentLocation.GetDistanceFrom(toLocation);
             var travelTime = distance * 1000;

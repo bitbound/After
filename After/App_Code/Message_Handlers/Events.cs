@@ -34,7 +34,8 @@ namespace After.Message_Handlers
             }
             var xChange = 0;
             var yChange = 0;
-            string dir = JsonMessage.Direction.ToUpper();
+            var dir = (string)JsonMessage.Direction;
+            dir = dir.ToUpper();
             if (dir.Contains("N"))
             {
                 yChange--;

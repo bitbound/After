@@ -84,17 +84,16 @@ namespace After.Message_Handlers
                     SH.Player.CurrentXYZ = SH.Player.PreviousXYZ;
                 }
             }
+            if (!World.Current.Locations.Exists(SH.Player.CurrentXYZ))
+            {
+                SH.Player.CurrentXYZ = "0,0,0";
+            }
             JsonMessage.Settings = SH.Player.Settings;
             JsonMessage.Player = SH.Player.ConvertToMe();
             JsonMessage.Powers = SH.Player.Powers;
             JsonMessage.AccountType = SH.Player.AccountType;
             SH.Send(Json.Encode(JsonMessage));
 
-            var location = SH.Player.GetCurrentLocation();
-            if (location == null)
-            {
-                SH.Player.CurrentXYZ = "0,0,0";
-            }
             SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
         }
         public static void HandleMapUpdate(dynamic JsonMessage, Socket_Handler SH)

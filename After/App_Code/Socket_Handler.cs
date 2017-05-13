@@ -24,6 +24,10 @@ namespace After
         {
             get
             {
+                if (Name == null)
+                {
+                    return null;
+                }
                 return World.Current.Players.Find(Name);
             }
         }

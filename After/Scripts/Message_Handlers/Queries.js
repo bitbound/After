@@ -141,7 +141,8 @@ var After;
                         "background-color": "rgba(255,255,255, .75)",
                         "text-align": "center",
                         "cursor": "pointer",
-                        "font-weight": "bold"
+                        "font-weight": "bold",
+                        "user-select": "none"
                     });
                     action.classList.add("font-sansserif");
                     action.setAttribute("targetxyz", JsonMessage.TargetXYZ);
@@ -167,6 +168,11 @@ var After;
                 }
                 document.body.appendChild(divActionList);
                 $(window).one("click", function () {
+                    window.setTimeout(function () {
+                        $(divActionList).remove();
+                    }, 250);
+                });
+                $(window).one("touchstart", function () {
                     window.setTimeout(function () {
                         $(divActionList).remove();
                     }, 250);
