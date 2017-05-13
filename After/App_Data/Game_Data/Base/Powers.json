@@ -1,10 +1,20 @@
 [
   {
     "Name": "Teleport",
-    "Description": "Quickly travel to a known remote area.",
+    "Description": "Travel directly to a remote area, although somewhat slowly.",
     "Category": "Movement",
     "MinRange": 2,
-    "MaxRange": -1,
-    "Targets": [ 3 ]
+    "MaxRange": 1.7976931348623157E+308,
+    "CanCrossZCoord": false,
+    "TargetList": [ 3 ]
+  },
+  {
+    "Name": "Translocate",
+    "Description": "Instantly appear in another area.",
+    "Category": "Movement",
+    "MinRange": 0,
+    "MaxRange": 1.7976931348623157E+308,
+    "CanCrossZCoord": true,
+    "TargetList": [ 3 ]
   }
 ]

@@ -8,6 +8,7 @@
         Category: string;
         MinRange: number;
         MaxRange: number;
+        CanCrossZCoord: boolean;
         TargetList: Array<Targets>;
     }
     enum Targets {

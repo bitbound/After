@@ -33,12 +33,12 @@ namespace After.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsStatic { get; set; }
+        public bool IsPermanent { get; set; }
         public DateTime LastVisited { get; set; }
         public string LastVisitedBy { get; set; }
         public long InvestedWillpower { get; set; }
         public List<string> Occupants { get; set; } = new List<string>();
-        public bool IsInnerVoid { get; set; }
-        public long OwnerID { get; set; }
+        public string OwnerID { get; set; }
         public List<Script> Scripts { get; set; }
         public DateTime LastAccessed { get; set; }
 

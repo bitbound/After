@@ -226,6 +226,7 @@
             divOuter.appendChild(divMessage);
             divOuter.appendChild(buttonAction);
             $(document.body).append(divOuter);
+            $(buttonAction).focus();
         };
         ShowLoading() {
             var frame = document.createElement("div");

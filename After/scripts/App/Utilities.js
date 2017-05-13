@@ -233,6 +233,7 @@ var After;
                 divOuter.appendChild(divMessage);
                 divOuter.appendChild(buttonAction);
                 $(document.body).append(divOuter);
+                $(buttonAction).focus();
             }
             ;
             ShowLoading() {

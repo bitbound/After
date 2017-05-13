@@ -1,4 +1,4 @@
-After.Temp = After.Temp || {};
+﻿After.Temp = After.Temp || {};
 After.Temp.Splash = {
     RaiseParticle: function () {
         try {
@@ -33,7 +33,7 @@ After.Temp.Splash = {
                 }
             }, 100);
         }
-        catch (ex) { }
+        catch (ex) {}
     },
     Init: function () {
         $.get("/Controls/Splash.html", function (data) {
@@ -45,7 +45,7 @@ After.Temp.Splash = {
                 After.Temp.Splash.RaiseParticle();
             });
             $('#imgPlay').click(function () {
-                $("#divSplash").fadeOut('slow', function () {
+                $("#divSplash").fadeOut('slow',function () {
                     $("#divSplash").remove();
                     After.Audio.StopLoop();
                     After.Temp.Login.Init();
@@ -66,7 +66,7 @@ After.Temp.Splash = {
                         });
                     });
                 });
-            });
+            })
         });
     }
-};
+}

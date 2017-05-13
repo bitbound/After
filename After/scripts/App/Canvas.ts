@@ -76,8 +76,14 @@
                 window.setTimeout(function (area) {
                     area.IsInteractButtonDepressed = false;
                 }, 500, area);
+                var request = {
+                    "Category": "Queries",
+                    "Type": "GetAreaActions",
+                    "TargetXYZ": area.StorageID
+                };
+                After.Connection.Socket.send(JSON.stringify(request));
+                After.Temp.ButtonPoint = e;
                 return;
-                // TODO: Call for available actions.
             }
             if (After.Canvas.SelectedObject != undefined && After.Canvas.SelectedObject == area)
             {

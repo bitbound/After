@@ -46,7 +46,7 @@ namespace After
             
             if (!Authenticated)
             {
-                if (category != "Accounts" || (type != "Logon" && type != "AccountCreation"))
+                if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
                 {
                     Close();
                     return;
@@ -61,26 +61,7 @@ namespace After
                 }
                 catch (Exception ex)
                 {
-                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data/Errors/"), DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString().PadLeft(2, '0'), DateTime.Now.Day.ToString().PadLeft(2, '0') + ".txt");
-                    if (!Directory.Exists(Path.GetDirectoryName(filePath)))
-                    {
-                        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(filePath));
-                    }
-                    var exError = ex;
-                    while (exError != null)
-                    {
-                        var jsonError = new
-                        {
-                            Timestamp = DateTime.Now.ToString(),
-                            Message = exError?.Message,
-                            InnerEx = exError?.InnerException?.Message,
-                            Source = exError?.Source,
-                            StackTrace = exError?.StackTrace,
-                        };
-                        var error = System.Web.Helpers.Json.Encode(jsonError) + Environment.NewLine;
-                        File.AppendAllText(filePath, error);
-                        exError = exError.InnerException;
-                    }
+                    After.Utilities.WriteError(ex);
                 }
             }
         }

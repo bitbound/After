@@ -22,7 +22,6 @@ var After;
                 if (XYZ == null) {
                     this.XCoord = null;
                     this.YCoord = null;
-                    this.ZCoord = null;
                     return;
                 }
                 var locArray = XYZ.split(",");

@@ -69,7 +69,6 @@ namespace After.Message_Handlers
         public static void HandleGetPowers(dynamic JsonMessage, Socket_Handler SH)
         {
             JsonMessage.Powers = SH.Player.Powers;
-            JsonMessage.IsAdmin = SH.Player.IsAdmin;
             SH.Send(Json.Encode(JsonMessage));
         }
         public static void HandleFirstLoad(dynamic JsonMessage, Socket_Handler SH)
@@ -88,7 +87,7 @@ namespace After.Message_Handlers
             JsonMessage.Settings = SH.Player.Settings;
             JsonMessage.Player = SH.Player.ConvertToMe();
             JsonMessage.Powers = SH.Player.Powers;
-            JsonMessage.IsAdmin = SH.Player.IsAdmin;
+            JsonMessage.AccountType = SH.Player.AccountType;
             SH.Send(Json.Encode(JsonMessage));
 
             var location = SH.Player.GetCurrentLocation();
@@ -100,10 +99,6 @@ namespace After.Message_Handlers
         }
         public static void HandleMapUpdate(dynamic JsonMessage, Socket_Handler SH)
         {
-            if (SH.Player.CurrentXYZ == null)
-            {
-                return;
-            }
             var visibleLocations = SH.Player.GetVisibleLocations();
             for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)
             {
@@ -135,6 +130,38 @@ namespace After.Message_Handlers
                         SH.Send(Json.Encode(request));
                     }
                 }
+            }
+        }
+        public static void HandleGetAreaActions(dynamic JsonMessage, Socket_Handler SH)
+        {
+            var actionList = new List<string>();
+            Location target = World.Current.Locations.Find(JsonMessage.TargetXYZ);
+            var distance = target.GetDistanceFrom(World.Current.Locations.Find(SH.Player.CurrentXYZ));
+            if (distance == 0)
+            {
+                actionList.Add("Explore Here");
+                if (!target.IsStatic || target.OwnerID != SH.Player.StorageID)
+                {
+                    actionList.Add("Take Control");
+                }
+            }
+            else if (distance < 2)
+            {
+                actionList.Add("Move Here");
+                if (target.OwnerID == SH.Player.StorageID)
+                {
+                    actionList.Add("Change Area");
+                }
+                actionList.Add("Uncreate");
+            }
+            foreach (var power in SH.Player.Powers.FindAll(p=> p.TargetList.Contains(Power.Targets.Location) && distance >= p.MinRange && distance <= p.MaxRange))
+            {
+                actionList.Add(power.Name);
+            }
+            if (actionList.Count > 0)
+            {
+                JsonMessage.Actions = actionList;
+                SH.Send(Json.Encode(JsonMessage));
             }
         }
     }

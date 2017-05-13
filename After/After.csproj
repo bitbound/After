@@ -26,7 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -116,7 +116,9 @@
     <Reference Include="System.Reflection.Metadata, Version=1.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
     </Reference>
@@ -216,6 +218,7 @@
     <Content Include="App_Code\Models\Power.cs" />
     <Content Include="App_Code\Models\Script.cs" />
     <Content Include="App_Code\Models\Landmark.cs" />
+    <Content Include="App_Code\Message_Handlers\Admin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +226,7 @@
     <Content Include="Assets\Images\A-512.png" />
     <Content Include="Assets\Images\A.png" />
     <Content Include="Assets\Images\AfterTitle.png" />
+    <Content Include="Assets\Images\AfterTitleLogo.png" />
     <Content Include="Assets\Images\DevBlog.png" />
     <Content Include="Assets\Images\Enter.png" />
     <Content Include="Assets\Images\freesound_logo_small.png" />
@@ -289,17 +293,16 @@
     <Content Include="Controls\Intro.html" />
     <Content Include="Controls\LoginForm.html" />
     <Content Include="Controls\Splash.html" />
+    <Content Include="Docs\PasswordResetTemplate.html" />
     <Content Include="Global.asax" />
     <Content Include="Properties\PublishProfiles\Localhost.pubxml.user" />
     <Content Include="Properties\PublishProfiles\Production.pubxml.user" />
-    <Content Include="scripts\Controls\CreateAccount.js" />
-    <Content Include="scripts\Controls\CreateCharacter.js" />
+    <TypeScriptCompile Include="scripts\Controls\CreateAccount.ts" />
+    <TypeScriptCompile Include="scripts\Controls\CreateCharacter.ts" />
     <TypeScriptCompile Include="scripts\Controls\Game.ts" />
-    <Content Include="scripts\Controls\Game.js" />
-    <Content Include="scripts\Controls\Intro.js" />
-    <Content Include="scripts\Controls\LoginForm.js" />
-    <Content Include="scripts\Controls\Splash.js" />
-    <Content Include="scripts\Init.js" />
+    <TypeScriptCompile Include="scripts\Controls\Intro.ts" />
+    <TypeScriptCompile Include="scripts\Controls\LoginForm.ts" />
+    <TypeScriptCompile Include="scripts\Controls\Splash.ts" />
     <Content Include="scripts\jQuery\jquery-3.1.0.js" />
     <Content Include="scripts\jQuery\jquery-3.1.0.min.js" />
     <Content Include="App_Data\Game_Data\Base\Locations.json" />
@@ -311,26 +314,7 @@
     <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.js" />
-    <None Include="scripts\_references.js" />
-    <Content Include="scripts\Message_Handlers\Accounts.js" />
-    <Content Include="scripts\Message_Handlers\Events.js" />
-    <Content Include="scripts\Message_Handlers\Messages.js" />
-    <Content Include="scripts\Message_Handlers\Queries.js" />
-    <Content Include="scripts\App\Audio.js" />
-    <Content Include="scripts\App\Canvas.js" />
-    <Content Include="scripts\App\Connection.js" />
-    <Content Include="scripts\App\Drawing.js" />
-    <Content Include="scripts\App\Game.js" />
-    <Content Include="scripts\App\MainModel.js" />
-    <Content Include="scripts\App\Me.js" />
-    <Content Include="scripts\App\Settings.js" />
-    <Content Include="scripts\App\Utilities.js" />
-    <Content Include="scripts\Models\Area.js" />
     <Content Include="scripts\Models\Bases\Selectable.js" />
-    <Content Include="scripts\Models\FreeParticle.js" />
-    <Content Include="scripts\Models\Particle.js" />
-    <Content Include="scripts\Models\Power.js" />
-    <Content Include="scripts\Models\Soul.js" />
     <Content Include="Styles.css" />
     <Content Include="Web.config" />
     <Content Include="default.cshtml" />
@@ -358,7 +342,7 @@
     <TypeScriptCompile Include="scripts\App\Connection.ts" />
     <TypeScriptCompile Include="scripts\App\Drawing.ts" />
     <TypeScriptCompile Include="scripts\App\Game.ts" />
-    <TypeScriptCompile Include="scripts\App\MainModel.ts" />
+    <TypeScriptCompile Include="scripts\App\Init.ts" />
     <TypeScriptCompile Include="scripts\App\Me.ts" />
     <TypeScriptCompile Include="scripts\App\Settings.ts" />
     <TypeScriptCompile Include="scripts\App\Utilities.ts" />
@@ -369,6 +353,7 @@
     <TypeScriptCompile Include="scripts\Models\Particle.ts" />
     <TypeScriptCompile Include="scripts\Models\Power.ts" />
     <TypeScriptCompile Include="scripts\Models\Soul.ts" />
+    <TypeScriptCompile Include="scripts\App\Temp.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>

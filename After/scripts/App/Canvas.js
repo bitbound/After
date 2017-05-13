@@ -61,6 +61,13 @@ var After;
                     window.setTimeout(function (area) {
                         area.IsInteractButtonDepressed = false;
                     }, 500, area);
+                    var request = {
+                        "Category": "Queries",
+                        "Type": "GetAreaActions",
+                        "TargetXYZ": area.StorageID
+                    };
+                    After.Connection.Socket.send(JSON.stringify(request));
+                    After.Temp.ButtonPoint = e;
                     return;
                 }
                 if (After.Canvas.SelectedObject != undefined && After.Canvas.SelectedObject == area) {
@@ -148,6 +155,7 @@ var After;
                         }
                         After.Canvas.OffsetX += (After.Canvas.InertiaX / After.Canvas.ZoomScale);
                         After.Canvas.OffsetY += (After.Canvas.InertiaY / After.Canvas.ZoomScale);
+                        //After.Canvas.UpdateMap();
                     }
                     else {
                         After.Canvas.InertiaX = 0;

@@ -100,6 +100,7 @@ namespace After.Models
             }
         }
         public string PreviousXYZ { get; set; }
+        public string FutureXYZ { get; set; }
         public double? XCoord { get; set; }
         public double? YCoord { get; set; }
         public string ZCoord { get; set; }
@@ -119,7 +120,6 @@ namespace After.Models
                 {
                     XCoord = null;
                     YCoord = null;
-                    ZCoord = null;
                     return;
                 }
                 var locArray = value.Split(',');
@@ -167,12 +167,12 @@ namespace After.Models
         }
         public List<Location> GetVisibleLocations()
         {
-            var location = World.Current.Locations.Find(CurrentXYZ);
-            if (location == null)
-            {
-                return null;
-            }
             List<Location> visibleList = new List<Location>();
+            if (CurrentXYZ == null)
+            {
+                return visibleList;
+            }
+            var location = World.Current.Locations.Find(CurrentXYZ);
             for (var x = location.XCoord - ViewDistance; x <= location.XCoord + ViewDistance; x++)
             {
                 for (var y = location.YCoord - ViewDistance; y <= location.YCoord + ViewDistance; y++)
@@ -188,14 +188,7 @@ namespace After.Models
                     }
                 }
             }
-            if (visibleList.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return visibleList;
-            }
+            return visibleList;
         }
         public void Move(string[] ToXYZ)
         {
@@ -236,6 +229,7 @@ namespace After.Models
                 }
             }
             currentLocation.CharacterLeaves(this);
+            FutureXYZ = toLocation.StorageID;
             request = Json.Encode(new
             {
                 Category = "Events",
@@ -252,6 +246,7 @@ namespace After.Models
             Task.Run(() => {
                 Thread.Sleep((int)(Math.Round(travelTime)));
                 CurrentXYZ = toLocation.StorageID;
+                FutureXYZ = null;
                 toLocation.CharacterArrives(this);
                 MovementState = MovementStates.Ready;
             });

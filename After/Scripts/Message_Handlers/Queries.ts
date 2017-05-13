@@ -77,7 +77,7 @@
             After.Me.Powers.push(JsonMessage.Powers[i]);
             After.Game.AddPower(JsonMessage.Powers[i]);
         }
-        if (JsonMessage.IsAdmin) {
+        if (JsonMessage.AccountType == 3) {
             $("#divAdminFrame").removeAttr("hidden");
         }
         else {
@@ -108,5 +108,72 @@
                 After.World_Data.Landmarks.push(JsonMessage.Landmark);
             }
         }
+    }
+    export function HandleGetAreaActions(JsonMessage) {
+        var point = (After.Temp.ButtonPoint as MouseEvent | Touch);
+        var divActionList = document.createElement("div");
+        $(divActionList).css({
+            "position": "fixed",
+            "display": "none",
+            "border": "1px solid lightgray"
+        })
+        if (point.clientX <= document.documentElement.clientWidth / 2) {
+            divActionList.style.left = point.clientX + "px";
+        }
+        else {
+            divActionList.style.right = (document.documentElement.clientWidth - point.clientX) + "px";
+        }
+        if (point.clientY <= document.documentElement.clientHeight / 2) {
+            divActionList.style.top = point.clientY + "px";
+        }
+        else {
+            divActionList.style.bottom = (document.documentElement.clientHeight - point.clientY) + "px";
+        }
+        for (var i = 0; i < JsonMessage.Actions.length; i++) {
+            var action = document.createElement("div");
+            $(action).css({
+                "padding": "10px",
+                "background-color": "rgba(255,255,255, .75)",
+                "text-align": "center",
+                "cursor": "pointer",
+                "font-weight": "bold"
+            })
+            action.classList.add("font-sansserif");
+            action.setAttribute("targetxyz", JsonMessage.TargetXYZ);
+            $(action).hover(function (e) {
+                $(e.currentTarget).css("background-color", "white");
+            }, function (e) {
+                $(e.currentTarget).css("background-color", "rgba(255,255,255, .75)");
+            })
+            action.innerHTML = JsonMessage.Actions[i];
+            action.onclick = function (e) {
+                var xyz = (e.currentTarget as HTMLDivElement).getAttribute("targetxyz");
+                var action = (e.currentTarget as HTMLDivElement).innerHTML;
+                var request = {
+                    "Category": "Events",
+                    "Type": "DoAreaAction",
+                    "TargetXYZ": xyz,
+                    "Action": action
+                }
+                After.Connection.Socket.send(JSON.stringify(request));
+                // TODO: Handle this on other end.
+            }
+            divActionList.appendChild(action);
+        }
+        document.body.appendChild(divActionList);
+        $(window).one("click", function () {
+            window.setTimeout(function () {
+                $(divActionList).remove();
+            }, 250);
+        });
+        $(divActionList).mouseout(function () {
+            window.setTimeout(function () {
+                if ($(divActionList).is(":hover") == false) {
+                    $(divActionList).remove();
+                }
+            }, 1000)
+        })
+        $(divActionList).fadeIn();
+        
     }
 }

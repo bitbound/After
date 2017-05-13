@@ -45,5 +45,29 @@ namespace After
             var strData = Json.Encode(JsonData);
             return Json.Decode(strData);
         }
+
+        public static void WriteError(Exception Ex)
+        {
+            var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data/Errors/"), DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString().PadLeft(2, '0'), DateTime.Now.Day.ToString().PadLeft(2, '0') + ".txt");
+            if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            }
+            var exError = Ex;
+            while (exError != null)
+            {
+                var jsonError = new
+                {
+                    Timestamp = DateTime.Now.ToString(),
+                    Message = exError?.Message,
+                    InnerEx = exError?.InnerException?.Message,
+                    Source = exError?.Source,
+                    StackTrace = exError?.StackTrace,
+                };
+                var error = Json.Encode(jsonError) + Environment.NewLine;
+                File.AppendAllText(filePath, error);
+                exError = exError.InnerException;
+            }
+        }
     }
 }
