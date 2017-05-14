@@ -180,6 +180,10 @@
             }, 20);
         }
         UpdateMap() {
+            if (After.Temp.MapUpdatePending) {
+                return;
+            }
+            After.Temp.MapUpdatePending = true;
             var centerCoord = After.Canvas.CenterCoordinate;
             if (After.Temp.PreviousCenter != centerCoord) {
                 var xMin = Math.floor(-After.Canvas.OffsetX / 100);

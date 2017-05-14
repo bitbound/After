@@ -108,6 +108,9 @@
                 After.World_Data.Landmarks.push(JsonMessage.Landmark);
             }
         }
+        if (JsonMessage.Completed) {
+            After.Temp.MapUpdatePending = false;
+        }
     }
     export function HandleGetAreaActions(JsonMessage) {
         var point = (After.Temp.ButtonPoint as MouseEvent | Touch);

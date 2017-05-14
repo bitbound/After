@@ -112,6 +112,9 @@ var After;
                         After.World_Data.Landmarks.push(JsonMessage.Landmark);
                     }
                 }
+                if (JsonMessage.Completed) {
+                    After.Temp.MapUpdatePending = false;
+                }
             }
             Queries.HandleMapUpdate = HandleMapUpdate;
             function HandleGetAreaActions(JsonMessage) {

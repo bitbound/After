@@ -130,6 +130,13 @@ namespace After.Message_Handlers
                     }
                 }
             }
+            var done = new
+            {
+                Category = "Queries",
+                Type = "MapUpdate",
+                Completed = true
+            };
+            SH.Send(Json.Encode(done));
         }
         public static void HandleGetAreaActions(dynamic JsonMessage, Socket_Handler SH)
         {
