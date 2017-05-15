@@ -170,7 +170,6 @@
                     }
                     After.Canvas.OffsetX += (After.Canvas.InertiaX / After.Canvas.ZoomScale);
                     After.Canvas.OffsetY += (After.Canvas.InertiaY / After.Canvas.ZoomScale);
-                    //After.Canvas.UpdateMap();
                 }
                 else {
                     After.Canvas.InertiaX = 0;
@@ -183,9 +182,9 @@
             if (After.Temp.MapUpdatePending) {
                 return;
             }
-            After.Temp.MapUpdatePending = true;
             var centerCoord = After.Canvas.CenterCoordinate;
             if (After.Temp.PreviousCenter != centerCoord) {
+                After.Temp.MapUpdatePending = true;
                 var xMin = Math.floor(-After.Canvas.OffsetX / 100);
                 var xMax = Math.ceil((After.Canvas.Element.clientWidth / After.Canvas.ZoomScale - After.Canvas.OffsetX) / 100);
                 var yMin = Math.floor(-After.Canvas.OffsetY / 100);

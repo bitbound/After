@@ -88,7 +88,6 @@
         window.requestAnimationFrame(After.Drawing.DrawCanvas);
         After.Drawing.AnimateParticles();
         After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
-        After.Canvas.UpdateMap();
     }
     export function HandleMapUpdate(JsonMessage) {
         if (JsonMessage.Area) {

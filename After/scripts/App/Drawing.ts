@@ -236,7 +236,10 @@
             };
         };
         AnimateParticles() {
+            After.Temp.LastIntervalTime = Date.now() - 20;
             this.ParticleInterval = window.setInterval(function () {
+                var moveAdjust = (Date.now() - After.Temp.LastIntervalTime) / 20;
+                After.Temp.LastIntervalTime = Date.now();
                 if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
                     return;
                 }
@@ -282,7 +285,7 @@
                 var pb = soul.ParticleBounds;
                 // Populate missing particles.
                 if (soul.Particles.length < 50) {
-                    for (var i2 = soul.Particles.length; i2 < 50; i2++) {
+                    for (var i = soul.Particles.length; i < 50; i++) {
                         var part = new After.Models.Particle();
                         part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
                         part.FromX = part.CurrentX;
@@ -295,8 +298,8 @@
                 }
 
                 // Apply movement to individual particles.
-                for (var i2 = 0; i2 < soul.Particles.length; i2++) {
-                    var part = soul.Particles[i2];
+                for (var i = 0; i < soul.Particles.length; i++) {
+                    var part = soul.Particles[i];
 
                     // Get new destination if ToX/Y is reached.
                     if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
@@ -328,9 +331,9 @@
                     var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
                     var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
                     if (part.ToX > part.CurrentX) {
-                        part.CurrentX += changeX;
+                        part.CurrentX += changeX * moveAdjust;
                     } else if (part.ToX < part.CurrentX) {
-                        part.CurrentX -= changeX;
+                        part.CurrentX -= changeX * moveAdjust;
                     };
                     if (isFinite(part.CurrentX) == false) {
                         part.CurrentX = part.ToX;
@@ -342,9 +345,9 @@
                     var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
                     var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
                     if (part.ToY > part.CurrentY) {
-                        part.CurrentY += changeY;
+                        part.CurrentY += changeY * moveAdjust;
                     } else if (part.ToY < part.CurrentY) {
-                        part.CurrentY -= changeY;
+                        part.CurrentY -= changeY * moveAdjust;
                     };
                     if (isFinite(part.CurrentY) == false) {
                         part.CurrentY = part.ToY;
