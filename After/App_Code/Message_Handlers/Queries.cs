@@ -96,47 +96,49 @@ namespace After.Message_Handlers
 
             SH.Player.GetCurrentLocation().CharacterArrives(SH.Player);
         }
-        public static void HandleMapUpdate(dynamic JsonMessage, Socket_Handler SH)
+        public static async Task HandleMapUpdate(dynamic JsonMessage, Socket_Handler SH)
         {
-            var visibleLocations = SH.Player.GetVisibleLocations();
-            for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)
-            {
-                for (var y = JsonMessage.YMin; y <= JsonMessage.YMax; y++)
+            await Task.Run(()=>{
+                var visibleLocations = SH.Player.GetVisibleLocations();
+                for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)
                 {
-                    var location = World.Current.Locations.Find($"{x},{y},{SH.Player.ZCoord}");
-                    var landmark = World.Current.Landmarks.Find($"{x},{y},{SH.Player.ZCoord}");
-                    if (location != null)
+                    for (var y = JsonMessage.YMin; y <= JsonMessage.YMax; y++)
                     {
-                        if (!visibleLocations.Contains(location))
+                        var location = World.Current.Locations.Find($"{x},{y},{SH.Player.ZCoord}");
+                        var landmark = World.Current.Landmarks.Find($"{x},{y},{SH.Player.ZCoord}");
+                        if (location != null)
+                        {
+                            if (!visibleLocations.Contains(location))
+                            {
+                                var request = new
+                                {
+                                    Category = "Queries",
+                                    Type = "MapUpdate",
+                                    Area = location.ConvertToArea(false)
+                                };
+                                SH.Send(Json.Encode(request));
+                            }
+                        }
+                        if (landmark != null)
                         {
                             var request = new
                             {
                                 Category = "Queries",
                                 Type = "MapUpdate",
-                                Area = location.ConvertToArea(false)
+                                Landmark = landmark.ConvertToDynamic()
                             };
                             SH.Send(Json.Encode(request));
                         }
                     }
-                    if (landmark != null)
-                    {
-                        var request = new
-                        {
-                            Category = "Queries",
-                            Type = "MapUpdate",
-                            Landmark = landmark.ConvertToDynamic()
-                        };
-                        SH.Send(Json.Encode(request));
-                    }
                 }
-            }
-            var done = new
-            {
-                Category = "Queries",
-                Type = "MapUpdate",
-                Completed = true
-            };
-            SH.Send(Json.Encode(done));
+                var done = new
+                {
+                    Category = "Queries",
+                    Type = "MapUpdate",
+                    Completed = true
+                };
+                SH.Send(Json.Encode(done));
+            });
         }
         public static void HandleGetAreaActions(dynamic JsonMessage, Socket_Handler SH)
         {

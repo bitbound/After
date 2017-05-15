@@ -238,7 +238,7 @@
         AnimateParticles() {
             After.Temp.LastIntervalTime = Date.now() - 20;
             this.ParticleInterval = window.setInterval(function () {
-                var moveAdjust = (Date.now() - After.Temp.LastIntervalTime) / 20;
+                var moveAdjust = Math.min((Date.now() - After.Temp.LastIntervalTime) / 20, 20);
                 After.Temp.LastIntervalTime = Date.now();
                 if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
                     return;

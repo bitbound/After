@@ -77,8 +77,8 @@ namespace After.Controls {
                     scaleChange = -1;
                 };
                 scaleChange = scaleChange * .2 * After.Canvas.ZoomScale;
-                if (After.Canvas.ZoomScale + scaleChange < .01) {
-                    After.Canvas.ZoomScale = .01;
+                if (After.Canvas.ZoomScale + scaleChange < .1) {
+                    After.Canvas.ZoomScale = .1;
                     return;
                 }
                 else if (After.Canvas.ZoomScale + scaleChange > 100) {
@@ -196,8 +196,8 @@ namespace After.Controls {
 
                     After.Canvas.OffsetX = After.Canvas.StartOffsetX + tranPanX;
                     After.Canvas.OffsetY = After.Canvas.StartOffsetY + tranPanY;
-                    if (After.Canvas.ZoomScale + scaleChange < .01) {
-                        After.Canvas.ZoomScale = .01;
+                    if (After.Canvas.ZoomScale + scaleChange < .1) {
+                        After.Canvas.ZoomScale = .1;
                         return;
                     }
                     else if (After.Canvas.ZoomScale + scaleChange > 100) {

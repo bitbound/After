@@ -79,8 +79,8 @@ var After;
                     }
                     ;
                     scaleChange = scaleChange * .2 * After.Canvas.ZoomScale;
-                    if (After.Canvas.ZoomScale + scaleChange < .01) {
-                        After.Canvas.ZoomScale = .01;
+                    if (After.Canvas.ZoomScale + scaleChange < .1) {
+                        After.Canvas.ZoomScale = .1;
                         return;
                     }
                     else if (After.Canvas.ZoomScale + scaleChange > 100) {
@@ -197,8 +197,8 @@ var After;
                         var scalePanY = (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.height * (yCenter / After.Canvas.Element.height)) / After.Canvas.ZoomScale;
                         After.Canvas.OffsetX = After.Canvas.StartOffsetX + tranPanX;
                         After.Canvas.OffsetY = After.Canvas.StartOffsetY + tranPanY;
-                        if (After.Canvas.ZoomScale + scaleChange < .01) {
-                            After.Canvas.ZoomScale = .01;
+                        if (After.Canvas.ZoomScale + scaleChange < .1) {
+                            After.Canvas.ZoomScale = .1;
                             return;
                         }
                         else if (After.Canvas.ZoomScale + scaleChange > 100) {

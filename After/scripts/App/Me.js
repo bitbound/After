@@ -129,6 +129,12 @@ var After;
             GetCurrentLocation() {
                 return After.World_Data.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
             }
+            BlowUp(Force) {
+                for (var i = 0; i < After.Me.Particles.length - 1; i++) {
+                    After.Me.Particles[i].CurrentX = After.Utilities.GetRandom(-Force, Force, true);
+                    After.Me.Particles[i].CurrentY = After.Utilities.GetRandom(-Force, Force, true);
+                }
+            }
         }
         App.Me = Me;
     })(App = After.App || (After.App = {}));
