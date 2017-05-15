@@ -4,7 +4,7 @@
         return;
     }
     var strError = new StreamReader(Request.InputStream).ReadToEnd();
-    var di = Directory.CreateDirectory(After.Utilities.App_Data + "ClientErrors");
+    var di = Directory.CreateDirectory(Server.MapPath("~/App_Data/" + "ClientErrors"));
     File.AppendAllText(di.FullName + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt", strError + Environment.NewLine + Environment.NewLine);
     Response.Write(strError);
 }

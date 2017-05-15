@@ -10,7 +10,7 @@ var After;
                         $(document.body).append(data);
                         var spanMessage = document.createElement("span");
                         spanMessage.style.color = "whitesmoke";
-                        spanMessage.innerText = "Welcome to After!";
+                        spanMessage.innerHTML = "Welcome to After!<br/><br/>This game is in the beginning stages of development.  Check out the dev blog for updates!";
                         $("#divChatMessageWindow").append(spanMessage);
                         $("#divChatMessageWindow").append("<br/>");
                         After.Controls.Game.Load();
@@ -18,16 +18,10 @@ var After;
                 });
             },
             Load: function () {
-                $("#viewport").attr("content", "width=device-width, user-scalable=no, initiale-scale=0.75, maximum-scale=0.75");
-                // TODO: First load.
-                var query = {
-                    "Category": "Queries",
-                    "Type": "FirstLoad"
-                };
-                After.Connection.Socket.send(JSON.stringify(query));
+                $("#viewport").attr("content", "width=device-width, user-scalable=no, initial-scale=0.75, maximum-scale=0.75");
                 After.Canvas.Element = document.getElementById("canvasMap");
-                After.Canvas.Context2D = After.Canvas.Element.getContext("2d"),
-                    After.Canvas.Element.width = document.documentElement.clientWidth;
+                After.Canvas.Context2D = After.Canvas.Element.getContext("2d");
+                After.Canvas.Element.width = document.documentElement.clientWidth;
                 After.Canvas.Element.height = document.documentElement.clientHeight;
                 $("#divGame").animate({ opacity: 1 }, 1000);
                 delete After.Temp.Intro;
@@ -36,9 +30,8 @@ var After;
                 $("#divIntro").remove();
                 $("#divCreateAccount").remove();
                 if (After.Debug) {
-                    $("#divFPS").show();
+                    $("#divDebug").show();
                 }
-                window.requestAnimationFrame(After.Drawing.DrawCanvas);
                 window.onresize = function () {
                     After.Canvas.Element.width = document.documentElement.clientWidth;
                     After.Canvas.Element.height = document.documentElement.clientHeight;
@@ -76,6 +69,7 @@ var After;
                     }
                 };
                 After.Canvas.Element.onwheel = function (e) {
+                    e.preventDefault();
                     var scaleChange = 0;
                     if (e.deltaY < 0) {
                         scaleChange = 1;
@@ -84,11 +78,18 @@ var After;
                         scaleChange = -1;
                     }
                     ;
-                    scaleChange = scaleChange * .1 * After.Canvas.Scale;
-                    After.Canvas.Scale += scaleChange;
-                    After.Canvas.OffsetX -= (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.width * (e.clientX / After.Canvas.Element.width)) / After.Canvas.Scale;
-                    After.Canvas.OffsetY -= (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.height * (e.clientY / After.Canvas.Element.height)) / After.Canvas.Scale;
-                    e.preventDefault();
+                    scaleChange = scaleChange * .2 * After.Canvas.ZoomScale;
+                    if (After.Canvas.ZoomScale + scaleChange < .1) {
+                        After.Canvas.ZoomScale = .1;
+                        return;
+                    }
+                    else if (After.Canvas.ZoomScale + scaleChange > 100) {
+                        After.Canvas.ZoomScale = 100;
+                        return;
+                    }
+                    After.Canvas.ZoomScale += scaleChange;
+                    After.Canvas.OffsetX -= (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.width * (e.clientX / After.Canvas.Element.width)) / After.Canvas.ZoomScale;
+                    After.Canvas.OffsetY -= (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.height * (e.clientY / After.Canvas.Element.height)) / After.Canvas.ZoomScale;
                 };
                 After.Canvas.Element.onclick = function (e) {
                     if (After.Canvas.StartDragX == e.clientX && After.Canvas.StartDragY == e.clientY) {
@@ -109,13 +110,13 @@ var After;
                 };
                 After.Canvas.Element.onmousemove = function (e) {
                     if (e.buttons == 1 && After.Canvas.IsPanning) {
-                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.clientX - After.Canvas.StartDragX) / After.Canvas.Scale);
-                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.clientY - After.Canvas.StartDragY) / After.Canvas.Scale);
+                        e.preventDefault();
+                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.clientX - After.Canvas.StartDragX) / After.Canvas.ZoomScale);
+                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.clientY - After.Canvas.StartDragY) / After.Canvas.ZoomScale);
                         After.Canvas.InertiaStack.push({ "Event": e, "Timestamp": (new Date().getTime()) });
                         while (After.Canvas.InertiaStack.length > 5) {
                             After.Canvas.InertiaStack.splice(0, 1);
                         }
-                        e.preventDefault();
                     }
                 };
                 After.Canvas.Element.onmouseup = function (e) {
@@ -163,9 +164,10 @@ var After;
                     e.preventDefault();
                 };
                 After.Canvas.Element.ontouchmove = function (e) {
+                    e.preventDefault();
                     if (e.touches.length == 1) {
-                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.touches[0].clientX - After.Canvas.StartDragX) / After.Canvas.Scale);
-                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.touches[0].clientY - After.Canvas.StartDragY) / After.Canvas.Scale);
+                        After.Canvas.OffsetX = After.Canvas.StartOffsetX + ((e.touches[0].clientX - After.Canvas.StartDragX) / After.Canvas.ZoomScale);
+                        After.Canvas.OffsetY = After.Canvas.StartOffsetY + ((e.touches[0].clientY - After.Canvas.StartDragY) / After.Canvas.ZoomScale);
                         After.Canvas.InertiaStack.push({ "Event": e.touches[0], "Timestamp": (new Date().getTime()) });
                         while (After.Canvas.InertiaStack.length > 5) {
                             After.Canvas.InertiaStack.splice(0, 1);
@@ -188,14 +190,22 @@ var After;
                         var lowerY = Math.min(e.touches[0].clientY, e.touches[1].clientY);
                         var distanceY = higherY - lowerY;
                         var distanceTotal = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-                        var scaleChange = (distanceTotal - After.Canvas.LastTouchDistance) * .0025 * After.Canvas.Scale;
-                        var tranPanX = (xCenter - After.Canvas.StartDragX) / After.Canvas.Scale;
-                        var tranPanY = (yCenter - After.Canvas.StartDragY) / After.Canvas.Scale;
-                        var scalePanX = (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.width * (xCenter / After.Canvas.Element.width)) / After.Canvas.Scale;
-                        var scalePanY = (scaleChange / After.Canvas.Scale) * (After.Canvas.Element.height * (yCenter / After.Canvas.Element.height)) / After.Canvas.Scale;
+                        var scaleChange = (distanceTotal - After.Canvas.LastTouchDistance) * .005 * After.Canvas.ZoomScale;
+                        var tranPanX = (xCenter - After.Canvas.StartDragX) / After.Canvas.ZoomScale;
+                        var tranPanY = (yCenter - After.Canvas.StartDragY) / After.Canvas.ZoomScale;
+                        var scalePanX = (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.width * (xCenter / After.Canvas.Element.width)) / After.Canvas.ZoomScale;
+                        var scalePanY = (scaleChange / After.Canvas.ZoomScale) * (After.Canvas.Element.height * (yCenter / After.Canvas.Element.height)) / After.Canvas.ZoomScale;
                         After.Canvas.OffsetX = After.Canvas.StartOffsetX + tranPanX;
                         After.Canvas.OffsetY = After.Canvas.StartOffsetY + tranPanY;
-                        After.Canvas.Scale += scaleChange;
+                        if (After.Canvas.ZoomScale + scaleChange < .1) {
+                            After.Canvas.ZoomScale = .1;
+                            return;
+                        }
+                        else if (After.Canvas.ZoomScale + scaleChange > 100) {
+                            After.Canvas.ZoomScale = 100;
+                            return;
+                        }
+                        After.Canvas.ZoomScale += scaleChange;
                         After.Canvas.OffsetX -= scalePanX;
                         After.Canvas.OffsetY -= scalePanY;
                         After.Canvas.StartOffsetX -= scalePanX;
@@ -205,7 +215,6 @@ var After;
                         After.Canvas.LastTouchPoint2 = e.touches[1];
                     }
                     ;
-                    e.preventDefault();
                 };
                 After.Canvas.Element.ontouchend = function (e) {
                     if (e.touches.length == 0) {
@@ -241,9 +250,12 @@ var After;
                     }
                     e.preventDefault();
                 };
+                After.Canvas.Element.oncontextmenu = function (e) {
+                    return false;
+                };
                 $("#divChatInput").keypress(function (e) {
                     if (e.keyCode == 13) {
-                        After.Connection.SendChat(e);
+                        After.Game.SendChat(e);
                     }
                     else if (e.keyCode == 27) {
                         $("#divChatInput").blur();
@@ -251,7 +263,7 @@ var After;
                     ;
                 });
                 $("#buttonChatSubmit").click(function (e) {
-                    After.Connection.SendChat(e);
+                    After.Game.SendChat(e);
                 });
                 $("#buttonCharge").click(function (e) {
                     $("#buttonCharge").attr("disabled", "true");
@@ -262,11 +274,15 @@ var After;
                 });
                 $(".bottom-tab-icon").mousedown(function (e) {
                     e.preventDefault();
+                    if (e.currentTarget.classList.contains("blinking")) {
+                        e.currentTarget.classList.remove("blinking");
+                    }
                     After.Temp.Dragging = true;
                     After.Temp.StartPoint = e;
                     After.Temp.ActiveIcon = $(e.currentTarget);
                     After.Temp.ActiveFrame = $(e.currentTarget).parent();
                     After.Temp.StartHeight = After.Temp.ActiveFrame.height();
+                    After.Temp.StartLeft = Number(After.Temp.ActiveFrame.css("left").replace("px", ""));
                     $("#inputChatInput").blur();
                     window.onmousemove = function (e) {
                         e.preventDefault();
@@ -282,6 +298,15 @@ var After;
                             else if (newHeight <= 0) {
                                 After.Temp.ActiveFrame.css("z-index", 0);
                                 After.Temp.ActiveFrame.height(0);
+                            }
+                            var newLeft = After.Temp.StartLeft + e.clientX - After.Temp.StartPoint.clientX;
+                            if (newLeft > 10) {
+                                if (newLeft < document.body.clientWidth - 60) {
+                                    After.Temp.ActiveFrame.css("left", newLeft + "px");
+                                }
+                            }
+                            else {
+                                After.Temp.ActiveFrame.css("left", "10px");
                             }
                         }
                     };
@@ -313,6 +338,9 @@ var After;
                 });
                 $(".bottom-tab-icon").on("touchstart", function (e) {
                     e.preventDefault();
+                    if (e.currentTarget.classList.contains("blinking")) {
+                        e.currentTarget.classList.remove("blinking");
+                    }
                     if (e.touches.length == 1) {
                         $(e.currentTarget).addClass("hover");
                         After.Temp.Dragging = true;
@@ -320,6 +348,7 @@ var After;
                         After.Temp.ActiveIcon = $(e.currentTarget);
                         After.Temp.ActiveFrame = $(e.currentTarget).parent();
                         After.Temp.StartHeight = After.Temp.ActiveFrame.height();
+                        After.Temp.StartLeft = Number(After.Temp.ActiveFrame.css("left").replace("px", ""));
                         After.Temp.LastTouch = e.touches[0];
                         window.ontouchmove = function (e) {
                             e.preventDefault();
@@ -338,6 +367,15 @@ var After;
                                 else if (newHeight <= 0) {
                                     After.Temp.ActiveFrame.css("z-index", 0);
                                     After.Temp.ActiveFrame.height(0);
+                                }
+                                var newLeft = After.Temp.StartLeft + e.touches[0].clientX - After.Temp.StartPoint.clientX;
+                                if (newLeft > 10) {
+                                    if (newLeft < document.body.clientWidth - 60) {
+                                        After.Temp.ActiveFrame.css("left", newLeft + "px");
+                                    }
+                                }
+                                else {
+                                    After.Temp.ActiveFrame.css("left", "10px");
                                 }
                             }
                         };
@@ -363,6 +401,9 @@ var After;
                 });
                 $(".side-tab-icon").mousedown(function (e) {
                     e.preventDefault();
+                    if (e.currentTarget.classList.contains("blinking")) {
+                        e.currentTarget.classList.remove("blinking");
+                    }
                     After.Temp.Dragging = true;
                     After.Temp.StartPoint = e;
                     After.Temp.ActiveIcon = $(e.currentTarget);
@@ -412,6 +453,9 @@ var After;
                 });
                 $(".side-tab-icon").on("touchstart", function (e) {
                     e.preventDefault();
+                    if (e.currentTarget.classList.contains("blinking")) {
+                        e.currentTarget.classList.remove("blinking");
+                    }
                     if (e.touches.length == 1) {
                         $(e.currentTarget).addClass("hover");
                         After.Temp.Dragging = true;
@@ -458,14 +502,6 @@ var After;
                         };
                     }
                 });
-                $("#divActionButton").on("touchstart", function (e) {
-                    e.preventDefault();
-                    $(e.currentTarget).addClass("hover");
-                });
-                $("#divActionButton").on("touchend", function (e) {
-                    e.preventDefault();
-                    $(e.currentTarget).removeClass("hover");
-                });
                 $(".thumb-control").on("mousedown", function (e) {
                     e.preventDefault();
                     After.Temp.Dragging = true;
@@ -473,6 +509,7 @@ var After;
                     After.Temp.ActiveIcon = $(e.currentTarget);
                     After.Temp.ActiveFrame = $(e.currentTarget).parent();
                     After.Temp.StartWidth = After.Temp.ActiveFrame.width();
+                    After.Temp.StartBottom = Number(After.Temp.ActiveFrame.css("bottom").replace("px", ""));
                     window.onmousemove = function (e) {
                         e.preventDefault();
                         if (After.Temp.Dragging) {
@@ -487,6 +524,15 @@ var After;
                             else if (newWidth <= 0) {
                                 After.Temp.ActiveFrame.css("z-index", 0);
                                 After.Temp.ActiveFrame.width(0);
+                            }
+                            var newBottom = After.Temp.StartBottom + After.Temp.StartPoint.clientY - e.clientY;
+                            if (newBottom > 85) {
+                                if (newBottom < document.body.clientHeight - 85) {
+                                    After.Temp.ActiveFrame.css("bottom", newBottom + "px");
+                                }
+                            }
+                            else {
+                                After.Temp.ActiveFrame.css("bottom", "85px");
                             }
                         }
                     };
@@ -534,6 +580,7 @@ var After;
                         After.Temp.ActiveIcon = $(e.currentTarget);
                         After.Temp.ActiveFrame = $(e.currentTarget).parent();
                         After.Temp.StartWidth = After.Temp.ActiveFrame.width();
+                        After.Temp.StartBottom = Number(After.Temp.ActiveFrame.css("bottom").replace("px", ""));
                         After.Temp.LastTouch = e.touches[0];
                         window.ontouchmove = function (e) {
                             e.preventDefault();
@@ -550,6 +597,15 @@ var After;
                                 else if (newWidth <= 0) {
                                     After.Temp.ActiveFrame.css("z-index", 0);
                                     After.Temp.ActiveFrame.width(0);
+                                }
+                                var newBottom = After.Temp.StartBottom + After.Temp.StartPoint.clientY - e.touches[0].clientY;
+                                if (newBottom > 85) {
+                                    if (newBottom < document.body.clientHeight - 85) {
+                                        After.Temp.ActiveFrame.css("bottom", newBottom + "px");
+                                    }
+                                }
+                                else {
+                                    After.Temp.ActiveFrame.css("bottom", "85px");
                                 }
                             }
                         };
@@ -639,10 +695,15 @@ var After;
                             After.Temp.JoystickManipulation = false;
                             window.ontouchmove = null;
                             window.ontouchend = null;
-                            $("#svgJoystick").animate({
-                                "margin-left": 0,
-                                "margin-top": 0,
-                            }, 500);
+                            if ($("#svgJoystick").css("margin-left") == "0px" && $("#svgJoystick").css("margin-top") == "0px") {
+                                After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, true);
+                            }
+                            else {
+                                $("#svgJoystick").animate({
+                                    "margin-left": "0",
+                                    "margin-top": "0",
+                                }, 500);
+                            }
                         };
                     }
                 });
@@ -702,10 +763,15 @@ var After;
                         window.onmousemove = null;
                         window.onmouseup = null;
                         window.onmouseleave = null;
-                        $("#svgJoystick").animate({
-                            "margin-left": 0,
-                            "margin-top": 0,
-                        }, 500);
+                        if ($("#svgJoystick").css("margin-left") == "0px" && $("#svgJoystick").css("margin-top") == "0px") {
+                            After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, true);
+                        }
+                        else {
+                            $("#svgJoystick").animate({
+                                "margin-left": "0",
+                                "margin-top": "0",
+                            }, 500);
+                        }
                     };
                     window.onmouseleave = function (e) {
                         After.Temp.JoystickManipulation = false;
@@ -718,22 +784,45 @@ var After;
                         }, 500);
                     };
                 });
+                $("#circleDPadMiddle").on("click", function (e) {
+                    After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, true);
+                });
                 $(".dpad-direction").on("touchmove", function (e) {
                     e.preventDefault();
+                    $(e.currentTarget).removeProp("click");
                 });
                 $(".dpad-direction").on("click", function (e) {
                     After.Me.Move($(e.currentTarget).attr("move-direction"));
                 });
-                After.Controls.Game.PositionSideTabs();
-            },
-            PositionSideTabs: function () {
-                var top = 0;
-                $("#divSideTabs").find(".side-tab-icon:visible").each(function (index, elem) {
-                    elem.style.top = String(top) + "px";
-                    top += 65;
+                $(".dpad-direction").on("touchstart", function (e) {
+                    e.preventDefault();
+                    $(e.currentTarget).addClass("hover");
+                    $(e.currentTarget).prop("click", true);
                 });
+                $(".dpad-direction").on("touchend", function (e) {
+                    e.preventDefault();
+                    $(e.currentTarget).removeClass("hover");
+                    if ($(e.currentTarget).prop("click") == true) {
+                        After.Me.Move($(e.currentTarget).attr("move-direction"));
+                        $(e.currentTarget).removeProp("click");
+                    }
+                });
+                $("#circleDPadMiddle").on("click", function (e) {
+                    After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, true);
+                });
+                $(".switch-outer").on("click", function (e) {
+                    After.Game.ToggleProperty(e);
+                });
+                $(".side-tab-item-header").on("click", function (e) {
+                    $(e.currentTarget).next(".side-tab-item-group").slideToggle();
+                });
+                After.Game.PositionSideTabs();
+                var query = {
+                    "Category": "Queries",
+                    "Type": "FirstLoad"
+                };
+                After.Connection.Socket.send(JSON.stringify(query));
             }
         };
     })(Controls = After.Controls || (After.Controls = {}));
 })(After || (After = {}));
-//# sourceMappingURL=Game.js.map

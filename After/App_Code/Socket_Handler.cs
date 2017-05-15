@@ -5,6 +5,9 @@ using System.IO;
 using After.Models;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Web;
 
 /// <summary>
 /// Summary description for WebSocketHandler
@@ -16,13 +19,24 @@ namespace After
     {
         public static WebSocketCollection SocketCollection { get; set; } = new WebSocketCollection();
         public bool Authenticated { get; set; }
-        public Player Player { get; set; }
+        public string Name { get; set; }
+        public Player Player
+        {
+            get
+            {
+                if (Name == null)
+                {
+                    return null;
+                }
+                return World.Current.Players.Find(Name);
+            }
+        }
         public Socket_Handler()
         {
+
         }
         public override void OnOpen()
         {
-            
         }
         public override void OnMessage(string message)
         {
@@ -31,13 +45,12 @@ namespace After
             {
                 throw new Exception("Category or Type is null within Socket_Handler.OnMessage.");
             }
-
             string category = jsonMessage.Category;
             string type = jsonMessage.Type;
-
+            
             if (!Authenticated)
             {
-                if (category != "Accounts" || (type != "Logon" && type != "AccountCreation"))
+                if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
                 {
                     Close();
                     return;
@@ -46,7 +59,14 @@ namespace After
             var methodHandler = Type.GetType("After.Message_Handlers." + category).GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
             if (methodHandler != null)
             {
-                methodHandler.Invoke(null, new object[] { jsonMessage, this });
+                try
+                {
+                    methodHandler.Invoke(null, new object[] { jsonMessage, this });
+                }
+                catch (Exception ex)
+                {
+                    After.Utilities.WriteError(ex);
+                }
             }
         }
 
@@ -60,16 +80,20 @@ namespace After
             {
                 return;
             }
-            if (Player?.CurrentLocation != null)
-            {
-                Player.CurrentLocation.Occupants.Remove(Player);
-            }
             dynamic message = new
             {
-                Type = "Logoff",
-                Username = Player?.Name,
+                Category = "Accounts",
+                Type = "Disconnected",
+                Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
+            World.Current.Players.Store(Player.StorageID);
+            Player.GetCurrentLocation()?.CharacterLeaves(Player);
+            foreach (var timer in Player.Timers)
+            {
+                timer.Value.Stop();
+                timer.Value.Dispose();
+            }
         }
         public override void OnError()
         {
@@ -81,16 +105,20 @@ namespace After
             {
                 return;
             }
-            if (Player?.CurrentLocation != null)
-            {
-                Player.CurrentLocation.Occupants.Remove(Player);
-            }
             dynamic message = new
             {
-                Type = "Logoff",
-                Username = Player?.Name,
+                Category = "Accounts",
+                Type = "Disconnected",
+                Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
+            World.Current.Players.Store(Player.StorageID);
+            Player.GetCurrentLocation()?.CharacterLeaves(Player);
+            foreach (var timer in Player.Timers)
+            {
+                timer.Value.Stop();
+                timer.Value.Dispose();
+            }
         }
     }
 }

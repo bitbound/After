@@ -44,10 +44,12 @@ button:active {
     position: absolute;
     background-color: white;
 }
+
 .transparent-menu {
     background-color: rgba(0, 0, 0, 0.75)
 }
 
+/*** Loading Frame ***/
 .loading-frame {
     position: fixed;
     background-color: rgba(0, 0, 0, 0.8);
@@ -88,6 +90,48 @@ button:active {
     to {
         opacity: 1;
     }
+}
+
+/***  Toggle Switch ***/
+.switch-outer {
+    height: 25px;
+    width: 45px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.switch-outer[on="true"] {
+    background-color: steelblue;
+    transition: .5s;
+}
+
+.switch-outer[on="false"] {
+    background-color: gray;
+    transition: .5s;
+}
+
+.switch-inner {
+    border-radius: 100%;
+    background-color: white;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.switch-outer[on="true"] .switch-inner {
+    margin-left: 24%;
+    transition: .5s;
+}
+
+.switch-outer[on="false"] .switch-inner {
+    margin-left: -24%;
+    transition: .5s;
 }
 
 @viewport {

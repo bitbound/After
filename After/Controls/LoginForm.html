@@ -10,11 +10,24 @@
         <br />
         <label class="font-sansserif" for="inputPassword">Password:</label><br />
         <input id="inputPassword" type="password"/>
+        <div id="divNewPassword" hidden>
+            <label class="font-sansserif" for="inputPassword">New Password:</label><br />
+            <input id="inputNewPassword" type="password" />
+            <br />
+            <label class="font-sansserif" for="inputPassword">Confirm New Password:</label><br />
+            <input id="inputConfirmNewPassword" type="password" />
+        </div>
         <br />
-        <div style="text-align:right; margin-top: 6px">
+        <div id="divRemember" class="font-sansserif">
+            <label>Remember Me</label>
+            <input id="checkRememberMe" type="checkbox" onchange="After.Temp.Login.RememberMeChanged(event)" />
+        </div>
+        <div style="text-align:right; margin-top: 10px">
             <button id="buttonLogin" type="button" onclick="After.Temp.Login.TryLogin()">Log In</button>
             <br />
-            <span onclick='After.Temp.Login.StartIntro()'>New player?  Click here!</span>
+            <span onclick='After.Temp.Login.StartIntro()' style="margin-top:10px">New player?  Click here!</span>
+            <br />
+            <span onclick='After.Temp.Login.ForgotPasswordClicked()'>Forgot password?</span>
         </div>
     </div>
     <div id="divLoginStatus" style="color: red; font-size: small; margin-top: 20px;"></div>
@@ -52,11 +65,14 @@
             color: Highlight;
             cursor: pointer;
             display: inline-block;
-            margin-top:10px;
         }
 
         #divLoginForm span:hover {
             color: white;
+        }
+        #divRemember {
+            font-size: .8em;
+            margin-top: 5px;
         }
     </style>
 </div>

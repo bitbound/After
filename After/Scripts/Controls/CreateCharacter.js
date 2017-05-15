@@ -1,4 +1,5 @@
-﻿After.Temp.CreateCharacter = After.Temp.CreateCharacter || {};
+After.Temp = After.Temp || {};
+After.Temp.CreateCharacter = After.Temp.CreateCharacter || {};
 After.Temp.CreateCharacter.Init = function () {
     var ATI = After.Temp.Intro || {};
     ATI.PreviewParticles = [];
@@ -9,9 +10,9 @@ After.Temp.CreateCharacter.Init = function () {
     After.Temp.Intro.canvasPreview.canvas.height = $("#canvasPreview").height();
     ATI.PreviewLeft = Math.round((ATI.canvasPreview.canvas.width / 2) - 50);
     ATI.PreviewTop = 0;
-    $(window).on("resize", function (e) {
+    var tempResize = function (e) {
         if ($("#divGame").is(":visible")) {
-            $(window).off("resize", e.handleObj.handler);
+            $(window).off("resize", tempResize);
             return;
         }
         ATI.canvasPreview.canvas.width = $("#canvasPreview").width();
@@ -20,7 +21,8 @@ After.Temp.CreateCharacter.Init = function () {
         if ($("#divCreateCharacter").is(":visible") == false) {
             ATI.PreviewTop = Math.round(ATI.canvasPreview.canvas.height * .25);
         }
-    });
+    };
+    $(window).on("resize", tempResize);
     for (var i = 0; i < 50; i++) {
         var canPre = document.getElementById("canvasPreview");
         var part = {};
@@ -31,13 +33,14 @@ After.Temp.CreateCharacter.Init = function () {
         part.FromY = part.CurrentY;
         part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
         ATI.PreviewParticles.push(part);
-    };
+    }
+    ;
     ATI.EvaluateColor = function () {
         $("#selectColor")[0].selectedIndex = 0;
         while (Number($("#inputRed").val()) + Number($("#inputGreen").val()) + Number($("#inputBlue").val()) < 125) {
-            $("#inputRed")[0].value++;
-            $("#inputGreen")[0].value++;
-            $("#inputBlue")[0].value++;
+            $("#inputRed")[0].value = String(Number($("#inputRed")[0].value) + 1);
+            $("#inputGreen")[0].value = String(Number($("#inputGreen")[0].value) + 1);
+            $("#inputBlue")[0].value = String(Number($("#inputBlue")[0].value) + 1);
         }
         ATI.SoulColor = "rgb(" + $("#inputRed").val() + ", " + $("#inputGreen").val() + ", " + $("#inputBlue").val() + ")";
     };
@@ -68,7 +71,7 @@ After.Temp.CreateCharacter.Init = function () {
             ATI.ShowFlybys = true;
             ATI.Narrate();
         });
-    }
+    };
     ATI.ColorSelected = function () {
         if ($("#selectColor").val() == "") {
             $("#inputRed").val(125);
@@ -83,7 +86,6 @@ After.Temp.CreateCharacter.Init = function () {
         $("#inputGreen").val(rgbColor.split(",")[1]);
         $("#inputBlue").val(rgbColor.replace(")", "").split(",")[2]);
     };
-
     ATI.PreviewInterval = window.setInterval(function () {
         var canvasPreview = ATI.canvasPreview;
         canvasPreview.save();
@@ -104,7 +106,8 @@ After.Temp.CreateCharacter.Init = function () {
                 if (ATI.Flybys[i].X < 0 || ATI.Flybys[i].Y < 0) {
                     ATI.Flybys.splice(i, 1);
                 }
-            };
+            }
+            ;
         }
         for (var i = 0; i < ATI.PreviewParticles.length; i++) {
             var part = ATI.PreviewParticles[i];
@@ -113,7 +116,8 @@ After.Temp.CreateCharacter.Init = function () {
                 do {
                     part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
                 } while (part.FromX == part.ToX);
-            } else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
+            }
+            else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
                 part.FromX = part.ToX;
                 do {
                     part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
@@ -124,54 +128,54 @@ After.Temp.CreateCharacter.Init = function () {
                 do {
                     part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
                 } while (part.FromY == part.ToY);
-            } else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
+            }
+            else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
                 part.FromY = part.ToY;
                 do {
                     part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
                 } while (part.FromY == part.ToY);
             }
-
             var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
             var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
             var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
             var changeX = .25 + (distanceFromEndX / halfwayX * 2);
             if (part.ToX > part.CurrentX) {
                 part.CurrentX += changeX;
-            } else if (part.ToX < part.CurrentX) {
+            }
+            else if (part.ToX < part.CurrentX) {
                 part.CurrentX -= changeX;
-            };
+            }
+            ;
             if (isFinite(part.CurrentX) == false) {
                 part.CurrentX = part.ToX;
             }
-
             var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
             var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
             var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
             var changeY = .25 + (distanceFromEndY / halfwayY * 2);
             if (part.ToY > part.CurrentY) {
                 part.CurrentY += changeY;
-            } else if (part.ToY < part.CurrentY) {
+            }
+            else if (part.ToY < part.CurrentY) {
                 part.CurrentY -= changeY;
-            };
+            }
+            ;
             if (isFinite(part.CurrentY) == false) {
                 part.CurrentY = part.ToY;
             }
-
             canvasPreview.fillStyle = ATI.SoulColor;
             canvasPreview.beginPath();
             canvasPreview.arc(part.CurrentX, part.CurrentY, 2, 0, Math.PI * 2);
             canvasPreview.fill();
         }
     }, 25);
-
     document.getElementById("selectColor").appendChild(document.createElement("option"));
     After.Utilities.ColorNames.forEach(function (value, index) {
         var option = document.createElement("option");
         option.innerHTML = value;
         option.value = value;
         option.style.color = value;
-
         document.getElementById("selectColor").appendChild(option);
     });
     $("#divCreateCharacter").animate({ "opacity": "1" }, 1000);
-}
+};

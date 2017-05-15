@@ -1,18 +1,20 @@
-using After.Interactions;
+using After.App_Code.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Timers;
+using System.Web.Helpers;
 
 namespace After.Models
 {
-    public class Location
+    public class Location : StorageLists.IStorageItem
     {
         public double XCoord { get; set; }
         public double YCoord { get; set; }
         public string ZCoord { get; set; }
-        public string LocationID
+        public string StorageID
         {
             get
             {
@@ -31,51 +33,17 @@ namespace After.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsStatic { get; set; }
-        public DateTime? LastVisited { get; set; }
+        public bool IsPermanent { get; set; }
+        public DateTime LastVisited { get; set; }
         public string LastVisitedBy { get; set; }
         public long InvestedWillpower { get; set; }
-        public List<Character> Occupants
-        {
-            get
-            {
-                var occupants = new List<Character>();
-                var npcs = World.Current.NPCs.Where(n => n.CurrentXYZ == this.LocationID);
-                if (npcs != null)
-                {
-                    occupants.AddRange(npcs);
-                }
-                var hostiles = World.Current.Hostiles.Where(h => h.CurrentXYZ == this.LocationID);
-                if (hostiles != null)
-                {
-                    occupants.AddRange(hostiles);
-                }
-                var players = World.Current.Players.Where(p => p.CurrentXYZ == this.LocationID);
-                if (players != null)
-                {
-                    occupants.AddRange(players);
-                }
-                return occupants;
-            }
-        }
-        public bool IsInnerVoid { get; set; }
-        public long OwnerID { get; set; }
-        public string Interactions { get; set; }
+        public List<string> Occupants { get; set; } = new List<string>();
+        public string OwnerID { get; set; }
+        public List<Script> Scripts { get; set; }
+        public DateTime LastAccessed { get; set; }
 
-        public static bool Exists(string XYZ)
-        {
-            if (World.Current.Locations.FirstOrDefault(loc => loc.LocationID == XYZ) != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public bool ContainsOccupant(Character CharacterObject)
-        {
-            return Occupants.ToList().Exists(cha => cha.CharacterID == CharacterObject.CharacterID);
-        }
+
+        //*** Utility Methods ***//
         public double GetDistanceFrom(Location FromLocation)
         {
             if (FromLocation.ZCoord != ZCoord)
@@ -87,12 +55,76 @@ namespace After.Models
                 Math.Pow(FromLocation.YCoord - YCoord, 2)
             );
         }
-        public List<Location> GetNearbyLocations(double Distance)
+        public List<Socket_Handler> GetNearbyPlayers()
         {
-            var locations = World.Current.Locations.Where(l => l.ZCoord == this.ZCoord &&
-            Math.Abs(l.XCoord - this.XCoord) <= Distance &&
-            Math.Abs(l.YCoord - this.YCoord) <= Distance);
-            return locations?.ToList();
+            return Socket_Handler.SocketCollection.Cast<Socket_Handler>().Where(sock => sock.Player.GetCurrentLocation()?.GetDistanceFrom(this) <= sock.Player.ViewDistance).ToList();
+        }
+        public void CharacterArrives(Character CharacterObject)
+        {
+            CharacterObject.CurrentXYZ = StorageID;
+            Occupants.Add(CharacterObject.Name);
+            LastVisited = DateTime.Now;
+            LastVisitedBy = CharacterObject.Name;
+            var soul = CharacterObject.ConvertToSoul();
+            var nearbyPlayers = GetNearbyPlayers();
+            var request = Json.Encode(new
+            {
+                Category = "Events",
+                Type = "CharacterArrives",
+                Soul = soul
+            });
+            foreach (var player in nearbyPlayers)
+            {
+                player.Send(request);
+            }
+        }
+        public void CharacterLeaves(Character CharacterObject)
+        {
+            var soul = CharacterObject.ConvertToSoul();
+            var nearbyPlayers = GetNearbyPlayers();
+            CharacterObject.CurrentXYZ = null;
+            CharacterObject.PreviousXYZ = this.StorageID;
+            Occupants.RemoveAll(name=>name == CharacterObject.Name);
+            var request = Json.Encode(new
+            {
+                Category = "Events",
+                Type = "CharacterLeaves",
+                Soul = soul
+            });
+            foreach (var player in nearbyPlayers)
+            {
+                player.Send(request);
+            }
+        }
+        public dynamic ConvertToArea(bool IsVisible)
+        {
+            if (IsVisible)
+            {
+                return new
+                {
+                    XCoord = this.XCoord,
+                    YCoord = this.YCoord,
+                    ZCoord = this.ZCoord,
+                    StorageID = this.StorageID,
+                    Color = this.Color,
+                    Title = this.Title,
+                    Occupants = this.Occupants,
+                    Description = this.Description,
+                    InvestedWillpower = this.InvestedWillpower
+                };
+            }
+            else
+            {
+                return new
+                {
+                    XCoord = this.XCoord,
+                    YCoord = this.YCoord,
+                    ZCoord = this.ZCoord,
+                    StorageID = this.StorageID,
+                    Color = this.Color,
+                    Title = this.Title
+                };
+            }
         }
     }
 }

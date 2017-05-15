@@ -5,30 +5,23 @@
     void Application_Start(object sender, EventArgs e)
     {
         // Code that runs on application startup
-        if (!After.Models.World.Current.Locations.Any(l=>l.LocationID == "0,0,0"))
-        {
-            After.Models.World.Current.Locations.Add(new After.Models.Location()
-            {
-                XCoord = 0,
-                YCoord = 0,
-                ZCoord = "0",
-                IsStatic = true,
-                Title = "After Commons",
-                Description = "This is the center of nothing and the start of everything.",
-                Color = "lightsteelblue"
-            });
-        }
+        After.Utilities.StartUp();
     }
 
     void Application_End(object sender, EventArgs e)
     {
         //  Code that runs on application shutdown
+        After.World.Current.Locations.StoreAll();
+        After.World.Current.Players.StoreAll();
+        After.World.Current.NPCs.StoreAll();
+        After.World.Current.Messages.StoreAll();
     }
 
     void Application_Error(object sender, EventArgs e)
     {
         // Code that runs when an unhandled error occurs
-
+        var exError = Server.GetLastError();
+        After.Utilities.WriteError(exError);
     }
 
     void Session_Start(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿<div id="divGame">
     <canvas id="canvasMap"></canvas>
-    <div id="divFPS"></div>
+    <div id="divDebug"></div>
 
     <div id="divChatFrame" class="bottom-tab-frame transparent-menu">
         <div id="divChatIconBorder" class="bottom-tab-icon transparent-menu font-sansserif">
@@ -13,6 +13,7 @@
             <div id="divChatInput">
                 <select id="selectChatChannel">
                     <option>Global</option>
+                    <option>Command</option>
                 </select>
                 <div id="divChatInputWrapper">
                     <input type="text" id="inputChatInput" />
@@ -22,7 +23,7 @@
         </div>
     </div>
 
-    <div id="divAdminFrame" class="bottom-tab-frame transparent-menu">
+    <div id="divAdminFrame" class="bottom-tab-frame transparent-menu" hidden>
         <div id="divAdminIconBorder" class="bottom-tab-icon transparent-menu font-sansserif">
             <img src="/Assets/Images/Icons/Security_Shields_Blank_32xLG.png" />
             <br />
@@ -31,11 +32,10 @@
         <div class="tab-outerframe">
             <div class="tab-innerframe"></div>
         </div>
-        
     </div>
 
 
-    <div id="divSideTabs">
+    <div id="divSideTabs" class="font-sansserif">
         <div id="divCharacterFrame" class="side-tab-frame transparent-menu">
             <div id="divCharacterIconBorder" class="side-tab-icon transparent-menu font-sansserif">
                 <img src="/Assets/Images/Icons/abstract-user-flat-4-300px.png" />
@@ -43,7 +43,29 @@
                 <span>Character</span>
             </div>
             <div class="tab-outerframe">
-                <div class="tab-innerframe"></div>
+                <div class="tab-innerframe">
+                    <div class="side-tab-item-header">
+                        Attributes
+                    </div>
+                    <div class="side-tab-item-group" hidden>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Core Energy:</div>
+                            <div id="divCoreEnergy" class="side-tab-value"></div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Energy Mod:</div>
+                            <div id="divEnergyMod" class="side-tab-value"></div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Charge Mod:</div>
+                            <div id="divChargeMod" class="side-tab-value"></div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Willpower Mod:</div>
+                            <div id="divWillpowerMod" class="side-tab-value"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -58,11 +80,11 @@
             </div>
         </div>
 
-        <div id="divNotesFrame" class="side-tab-frame transparent-menu">
-            <div id="divNotesIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+        <div id="divMemoriesFrame" class="side-tab-frame transparent-menu">
+            <div id="divMemoriesIconBorder" class="side-tab-icon transparent-menu font-sansserif">
                 <img src="/Assets/Images/Icons/PinnedItem_32x.png" />
                 <br />
-                <span>Notes</span>
+                <span>Memories</span>
             </div>
             <div class="tab-outerframe">
                 <div class="tab-innerframe"></div>
@@ -75,7 +97,31 @@
                 <span>Settings</span>
             </div>
             <div class="tab-outerframe">
-                <div class="tab-innerframe"></div>
+                <div class="tab-innerframe">
+                    <div class="side-tab-item-header">
+                        Interface
+                    </div>
+                    <div class="side-tab-item-group" hidden>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Follow Player:</div>
+                            <div class="switch-outer side-tab-value" prop="FollowPlayer">
+                                <div class="switch-inner"></div>
+                            </div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">D-Pad:</div>
+                            <div class="switch-outer side-tab-value" prop="DPad">
+                                <div class="switch-inner"></div>
+                            </div>
+                        </div>
+                        <div class="side-tab-item">
+                            <div class="side-tab-key">Joystick:</div>
+                            <div class="switch-outer side-tab-value" prop="Joystick">
+                                <div class="switch-inner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="divMoreTabsFrame" class="side-tab-frame transparent-menu">
@@ -97,7 +143,7 @@
         </div>
         <div class="tab-outerframe">
             <div class="tab-innerframe" style="overflow:hidden; border:1px solid gray">
-                <svg id="svgDPad" height="120px" width="120px" >
+                <svg id="svgDPad" height="120px" width="120px">
                     <rect x="78.6" y="11.4" move-direction="ne" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
                     <rect x="11.4" y="78.6" move-direction="sw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
                     <rect x="11.4" y="11.4" move-direction="nw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
@@ -114,6 +160,7 @@
                     <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,22.8645L 86.5289,26.4L 93.6,33.4711L 97.1355,22.8645 Z " class="dpad-triangle" />
                     <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 22.8645,97.1355L 33.4711,93.6L 26.4,86.5289L 22.8645,97.1355 Z " class="dpad-triangle" />
                     <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,97.1355L 93.6,86.5289L 86.5289,93.6L 97.1355,97.1355 Z " class="dpad-triangle" />
+                    <circle id="circleDPadMiddle" cx="50%" cy="50%" r="10" fill="#969696"></circle>
                 </svg>
             </div>
         </div>
@@ -132,12 +179,7 @@
                 </div>
             </div>
     </div>
-    
-    <div id="divActionButton" class="font-sansserif" >
-        <img src="/Assets/Images/Icons/pointer2.png" />
-        <br />
-        <span>Action</span>
-    </div>
+   
 
     <div id="divStatus" class="font-sansserif transparent-menu">
         <div style="height: 1em">
@@ -147,7 +189,7 @@
         </div>
         <div>
             <div style="position:absolute; left:0; width:33%; text-align:center">
-                <svg id="svgEnergy" style="height:60px; width:100%">
+                <svg id="svgEnergy" style="height:60px; width:0">
                     <defs>
                         <radialGradient id="gradientEnergy" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                             <stop offset="0%" style="stop-color:white;" />
@@ -169,7 +211,7 @@
             </div>
 
             <div id="divCharge" style="position:absolute; left:33.1%; width:33%; text-align:center; display:none">
-                <svg id="svgCharge" style="height:60px; width:100%; cursor:pointer">
+                <svg id="svgCharge" style="height:60px; width:0; cursor:pointer">
                     <defs>
                         <radialGradient id="gradientCharge" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                             <stop offset="0%" style="stop-color:white;" />
@@ -187,7 +229,7 @@
             </div>
 
             <div style="position:absolute; left:66.2%; width:33%; text-align:center">
-                <svg id="svgWillpower" style="height:60px; width:100%">
+                <svg id="svgWillpower" style="height:60px; width:0">
                     <defs>
                         <radialGradient id="gradientWillpower" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                             <stop offset="0%" style="stop-color:white;" />
@@ -218,7 +260,7 @@
             width: 100%;
         }
 
-        #divFPS {
+        #divDebug {
             position: absolute;
             top: 0;
             left: 0;
@@ -332,6 +374,23 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
+
+        /*** All Elements ***/
+        .blinking {
+            animation-name: blinking;
+            animation-direction: alternate-reverse;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            animation-duration: 1s;
+        }
+        @keyframes blinking {
+            from {
+                background-color: transparent;
+            }
+            to {
+                background-color: dimgray;
+            }
+        }
         /*** All Tabs ***/
         .tab-outerframe {
             position: absolute;
@@ -350,30 +409,16 @@
             bottom: 0;
             padding: 5px;
             overflow-y: auto;
+            overflow-x: hidden;
         }
         /*** Side Tabs ***/
         #divSideTabs {
             position: absolute;
             right: 0;
             top: 0;
-            bottom: 155px;
+            bottom: 80px;
             overflow: visible;
         }
-        /*#divCharacterIconBorder {
-            top: 0;
-        }
-        #divPowersIconBorder {
-            top: 65px;
-        }
-        #divNotesIconBorder {
-            top: 130px;
-        }
-        #divMoreTabsIconBorder {
-            top: 195px;
-        }
-        #divSettingsIconBorder {
-            top: 260px;
-        }*/
         .side-tab-frame {
             position: absolute;
             right: 0;
@@ -395,7 +440,8 @@
             text-align: center;
             position: absolute;
             left: -55px;
-            font-size: .8em;
+            font-size: .7em;
+            overflow: hidden;
         }
         .side-tab-icon:hover {
             background-color: dimgray;
@@ -408,36 +454,38 @@
             width: 25px;
             margin-top: 5px;
         }
-
-        #divActionButton {
-            position: absolute;
-            right: 0; 
-            bottom: 85px;
-            height: 60px;
-            width: 60px;
-            border-top-left-radius: 80%;
-            border-left: 3px solid white;
-            border-top: 3px solid white;
-            font-size: .8em;
-            cursor: default;
-            color: white;
+        .side-tab-item-header {
             text-align: center;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
+            font-size: 1.2em;
+            padding: 5px 0;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
         }
-        #divActionButton img {
-            margin-top: 10px;
-            margin-left: 5px;
-            height: 25px;
-            width: 25px
+
+        .side-tab-item-header:hover {
+            background-color: rgba(255, 255, 255, 0.5);
         }
-        #divActionButton:hover {
-            background-color: dimgray;
+        .side-tab-item-group {
+
         }
-        #divActionButton.hover {
-            background-color: dimgray;
+        .side-tab-item {
+            height: 30px;
+        }
+        .side-tab-key {
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .side-tab-value {
+            float:right;
+            clear:right;
+        }
+        .side-tab-power {
+            cursor: pointer;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .side-tab-power:hover {
+            background-color: rgba(255,255,255,.5);
         }
         /*** Bottom Tabs ***/
         #divChatIconBorder {
@@ -468,6 +516,7 @@
             position: absolute;
             top: -55px;
             font-size: .8em;
+            overflow: hidden;
         }
         .bottom-tab-icon:hover {
             background-color: dimgray;
@@ -496,13 +545,13 @@
         #selectChatChannel {
             position: absolute;
             left: 0;
-            width: 65px;
+            width: 85px;
             height: 25px;
         }
 
         #divChatInputWrapper {
             position: absolute;
-            left: 67px;
+            left: 87px;
             right: 80px;
         }
 
@@ -530,11 +579,15 @@
         }
 
         .pool-title {
-            position:absolute;
-            left:0;
-            width:33%;
-            text-align:center;
-            font-weight:bold
+            position: absolute;
+            left: 0;
+            width: 33%;
+            text-align: center;
+            font-weight: bold;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .pool-amount {
             display: inline-block;
@@ -542,13 +595,17 @@
             border-radius: 5px;
             background: rgba(0, 0, 0, .5);
             font-weight: bolder;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .anim-charge-button {
-            animation-name: particle-charge-button;
+            animation-name: anim-charge-button;
             animation-duration: 1s;
         }
-        @keyframes particle-charge-button {
+        @keyframes anim-charge-button {
             from {
                 opacity: 1;
             }

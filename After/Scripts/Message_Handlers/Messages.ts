@@ -6,14 +6,24 @@
                 spanMessage.style.color = "whitesmoke";
                 var spanChannel = document.createElement("span");
                 spanChannel.innerText = "(" + jsonMessage.Channel + ") " + jsonMessage.Username + ": ";
-                if (jsonMessage.Channel == "Global") {
-                    spanChannel.style.color = "seagreen";
-                }
+                spanChannel.style.color = "seagreen";
                 spanMessage.innerText = jsonMessage.Message;
                 $("#divChatMessageWindow").append(spanChannel);
                 $("#divChatMessageWindow").append(spanMessage);
                 $("#divChatMessageWindow").append("<br/>");
+                break;
+            case "System":
+                After.Game.AddChatMessage(jsonMessage.Message, "whitesmoke");
+                break;
             default:
+                break;
+        }
+        var divChat = document.getElementById("divChatMessageWindow");
+        if (divChat != null) {
+            if ($("#divChatMessageWindow").height() == 0) {
+                $("#divChatIconBorder").addClass("blinking");
+            }
+            divChat.scrollTop = divChat.scrollHeight;
         }
     };
 }

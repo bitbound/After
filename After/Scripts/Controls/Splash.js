@@ -1,4 +1,4 @@
-﻿After.Temp = After.Temp || {};
+After.Temp = After.Temp || {};
 After.Temp.Splash = {
     RaiseParticle: function () {
         try {
@@ -26,7 +26,6 @@ After.Temp.Splash = {
                 "background-color": "gray"
             }, 3000, function () {
                 $(part).remove();
-                delete part;
             });
             window.setTimeout(function () {
                 if ($("#divSplash").length > 0) {
@@ -34,25 +33,25 @@ After.Temp.Splash = {
                 }
             }, 100);
         }
-        catch (ex) {}
+        catch (ex) { }
     },
     Init: function () {
         $.get("/Controls/Splash.html", function (data) {
             $(document.body).append(data);
             $(document.body).one("click", function () {
+                $("#divLoadingFrame").remove();
                 $("img").css("opacity", 1);
                 After.Temp.Splash.Skipped = true;
                 After.Temp.Splash.RaiseParticle();
             });
             $('#imgPlay').click(function () {
-                $("#divSplash").fadeOut('slow',function () {
+                $("#divSplash").fadeOut('slow', function () {
                     $("#divSplash").remove();
                     After.Audio.StopLoop();
                     After.Temp.Login.Init();
                 });
             });
-            // TODO: Reduce size.  Have a loading screen.
-            After.Audio.LoopSound("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3", function () {
+            After.Audio.LoopSound("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3", true, function () {
                 if ($("#divSplash").length == 0) {
                     After.Audio.StopLoop();
                 }
@@ -67,7 +66,7 @@ After.Temp.Splash = {
                         });
                     });
                 });
-            })
+            });
         });
     }
-}
+};

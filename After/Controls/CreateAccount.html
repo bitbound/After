@@ -8,6 +8,11 @@
         <br />
         <input id="inputNewUsername" maxlength="25" type="text" />
         <br />
+        <label class="font-sansserif" for="inputEmail">Enter an Email Address:</label>
+        <img id="imgHelp" src="/Assets/Images/Icons/StatusHelp_grey_32xLG.png" onclick="After.Temp.Login.ShowEmailHelp()" />
+        <br />
+        <input id="inputEmail" type="email" placeholder="Optional." />
+        <br />
         <label class="font-sansserif" for="inputPassword">Enter a Password:</label>
         <br />
         <input id="inputNewPassword" maxlength="25" type="password" />
@@ -41,7 +46,12 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
-
+        #imgHelp {
+            width: 15px;
+            height: 15px;
+            margin-left: 10px;
+            cursor:pointer;
+        }
         .horizontalBeam {
             margin: auto;
             height: 3px;
