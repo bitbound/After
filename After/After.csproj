@@ -1,6 +1,7 @@
-﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.4\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.4\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -9,13 +10,14 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{06BCDA4B-9C36-4065-B0A2-DB3EC406F5D7}</ProjectGuid>
+    <ProjectGuid>{E3EC97D5-1C5C-4796-B7E2-AADA5CBDBEE8}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>After</RootNamespace>
     <AssemblyName>After</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -45,75 +47,196 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Scripting.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Scripting.Common.2.1.0\lib\netstandard1.3\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.4\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WebSockets, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.WebSockets.0.2.3.1\lib\net45\Microsoft.WebSockets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="StorageLists, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\StorageLists.1.1.0\lib\net452\StorageLists.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
+    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.FileVersionInfo.4.3.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.StackTrace.4.3.0\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection.Metadata, Version=1.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.4.3.0\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Thread, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XPath.4.3.0\lib\net46\System.Xml.XPath.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\ClientErrors\2017-03-13.txt" />
-    <Content Include="App_Data\World.mdf" />
-    <Content Include="App_Data\World_log.ldf">
-      <DependentUpon>World.mdf</DependentUpon>
-    </Content>
+    <Content Include="App_Code\Message_Handlers\Accounts.cs" />
+    <Content Include="App_Code\Message_Handlers\Events.cs" />
+    <Content Include="App_Code\Message_Handlers\Messages.cs" />
+    <Content Include="App_Code\Message_Handlers\Queries.cs" />
+    <Content Include="App_Code\Models\Character.cs" />
+    <Content Include="App_Code\Models\InnerVoid.cs" />
+    <Content Include="App_Code\Models\Location.cs" />
+    <Content Include="App_Code\Models\Message.cs" />
+    <Content Include="App_Code\Models\NPC.cs" />
+    <Content Include="App_Code\Models\Player.cs" />
+    <Content Include="App_Code\World.cs" />
+    <Content Include="App_Code\Socket_Handler.cs" />
+    <Content Include="App_Code\Utilities.cs" />
+    <Content Include="App_Code\Models\Settings.cs" />
+    <Content Include="App_Code\Models\AuthenticationToken.cs" />
+    <Content Include="App_Code\Models\Power.cs" />
+    <Content Include="App_Code\Models\Script.cs" />
+    <Content Include="App_Code\Models\Landmark.cs" />
+    <Content Include="App_Code\Message_Handlers\Admin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Assets\Images\A-128.png" />
     <Content Include="Assets\Images\A-512.png" />
     <Content Include="Assets\Images\A.png" />
     <Content Include="Assets\Images\AfterTitle.png" />
+    <Content Include="Assets\Images\AfterTitleLogo.png" />
     <Content Include="Assets\Images\DevBlog.png" />
+    <Content Include="Assets\Images\Enter.png" />
+    <Content Include="Assets\Images\freesound_logo_small.png" />
     <Content Include="Assets\Images\Icons\abstract-user-flat-4-300px.png" />
     <Content Include="Assets\Images\Icons\Asterisk_64x.png" />
     <Content Include="Assets\Images\Icons\draw-star-2.png" />
     <Content Include="Assets\Images\Icons\Ellipsis_16x.png" />
     <Content Include="Assets\Images\Icons\Ellipsis_inverse_16x.png" />
     <Content Include="Assets\Images\Icons\gear_32xLG.png" />
+    <Content Include="Assets\Images\Icons\Interactive.png" />
+    <Content Include="Assets\Images\Icons\InteractiveColor.png" />
     <Content Include="Assets\Images\Icons\Message_16xLG.png" />
     <Content Include="Assets\Images\Icons\MoveGlyph_16x.png" />
     <Content Include="Assets\Images\Icons\Package_64x.png" />
@@ -153,43 +276,54 @@
     <Content Include="Assets\Sounds\gameaudio_teleport-space-morph.mp3" />
     <Content Include="Assets\Sounds\SoundCredits.txt" />
     <Content Include="Assets\Sounds\urupin__heartbeat.mp3" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Microsoft.WebSockets.dll" />
+    <Content Include="bin\StorageLists.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
     <Content Include="Controls\CreateAccount.html" />
     <Content Include="Controls\CreateCharacter.html" />
     <Content Include="Controls\Game.html" />
     <Content Include="Controls\Intro.html" />
     <Content Include="Controls\LoginForm.html" />
     <Content Include="Controls\Splash.html" />
+    <Content Include="Docs\PasswordResetTemplate.html" />
     <Content Include="Global.asax" />
-    <Content Include="default.cshtml" />
-    <Content Include="Scripts\Models\App\Audio.js" />
-    <Content Include="Scripts\Models\App\Canvas.js.map" />
-    <Content Include="Scripts\Models\App\Connection.js.map" />
-    <Content Include="Scripts\Controls\Game.js.map" />
-    <Content Include="Scripts\Controls\Splash.js" />
-    <Content Include="Scripts\Models\App\Drawing.js.map" />
+    <Content Include="Properties\PublishProfiles\Localhost.pubxml.user" />
+    <Content Include="Properties\PublishProfiles\Production.pubxml.user" />
+    <TypeScriptCompile Include="scripts\Controls\CreateAccount.ts" />
+    <TypeScriptCompile Include="scripts\Controls\CreateCharacter.ts" />
+    <TypeScriptCompile Include="scripts\Controls\Game.ts" />
+    <TypeScriptCompile Include="scripts\Controls\Intro.ts" />
+    <TypeScriptCompile Include="scripts\Controls\LoginForm.ts" />
+    <TypeScriptCompile Include="scripts\Controls\Splash.ts" />
+    <Content Include="scripts\jQuery\jquery-3.1.0.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.0.min.js" />
+    <Content Include="App_Data\Game_Data\Base\Locations.json" />
+    <Content Include="App_Data\Game_Data\Base\Powers.json" />
     <Content Include="packages.config" />
+    <Content Include="App_Data\Game_Data\Base\Landmarks.json" />
+    <None Include="scripts\jQuery\jquery-3.1.1-vsdoc.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.slim.js" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.js" />
+    <Content Include="scripts\Models\Bases\Selectable.js" />
+    <Content Include="Styles.css" />
+    <Content Include="Web.config" />
+    <Content Include="default.cshtml" />
     <Content Include="manifest.json" />
-    <None Include="Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\Models\App\MainModel.js.map" />
-    <Content Include="Scripts\Models\Game\Area.js.map" />
-    <Content Include="Scripts\Models\Game\Bases\Selectable.js.map" />
-    <Content Include="Scripts\Models\Game\Particle.js.map" />
-    <Content Include="Scripts\Models\Game\Soul.js.map" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Accounts.ts" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Events.ts" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Messages.ts" />
-    <Content Include="Scripts\Models\App\Utilities.js.map" />
-    <Content Include="Services\ErrorReporting.cshtml" />
-    <Content Include="tsconfig.json" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.slim.min.map" />
-    <Content Include="Scripts\jQuery\jquery-3.1.1.min.map" />
     <None Include="Properties\PublishProfiles\Localhost.pubxml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
-    <Content Include="Scripts\Models\App\Audio.js.map" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.min.map" />
+    <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.map" />
+    <Content Include="Services\ErrorReporting.cshtml" />
+    <Content Include="tsconfig.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -198,66 +332,36 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\Models\App\Canvas.js" />
-    <Content Include="Scripts\Models\App\connection.js" />
-    <Content Include="Scripts\Controls\CreateAccount.js" />
-    <Content Include="Scripts\Controls\CreateCharacter.js" />
-    <Content Include="Scripts\Controls\game.js" />
-    <Content Include="Scripts\Controls\Intro.js" />
-    <Content Include="Scripts\Controls\LoginForm.js" />
-    <Content Include="Scripts\Models\App\Drawing.js" />
-    <Content Include="Scripts\Init.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.0.js" />
-    <Content Include="Scripts\jQuery\jquery-3.1.0.min.js" />
-    <Content Include="Scripts\Models\App\MainModel.js" />
-    <Content Include="Scripts\Models\Game\area.js" />
-    <Content Include="Scripts\Models\Game\Bases\Selectable.js" />
-    <Content Include="Scripts\Models\Game\Particle.js" />
-    <Content Include="Scripts\Models\Game\soul.js" />
-    <Content Include="Scripts\Models\App\Utilities.js" />
-    <None Include="Scripts\_references.js" />
-    <Content Include="Styles.css" />
-    <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_Code\Interactions\BaseInteraction.cs" />
-    <Content Include="App_Code\Interactions\Ferryman0.cs" />
-    <Content Include="App_Code\Interactions\IBaseInteraction.cs" />
-    <Content Include="App_Code\Models\Character.cs" />
-    <Content Include="App_Code\Models\InnerVoid.cs" />
-    <Content Include="App_Code\Models\Location.cs" />
-    <Content Include="App_Code\Models\Message.cs" />
-    <Content Include="App_Code\Models\Hostile.cs" />
-    <Content Include="App_Code\Models\NPC.cs" />
-    <Content Include="App_Code\Models\Player.cs" />
-    <Content Include="App_Code\Models\World.cs" />
-    <Content Include="App_Code\Socket_Handler.cs" />
-    <Content Include="App_Code\Utilities.cs" />
-    <Content Include="App_Code\Message_Handlers\Accounts.cs" />
-    <Content Include="App_Code\Message_Handlers\Events.cs" />
-    <Content Include="App_Code\Message_Handlers\Messages.cs" />
-    <Content Include="App_Code\Message_Handlers\Queries.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Models\App\Audio.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Canvas.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Connection.ts" />
-    <TypeScriptCompile Include="Scripts\Controls\Game.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Drawing.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\MainModel.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Me.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Area.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Bases\Selectable.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Particle.ts" />
-    <TypeScriptCompile Include="Scripts\Models\Game\Soul.ts" />
-    <TypeScriptCompile Include="Scripts\Message_Handlers\Queries.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\Models\App\Utilities.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Accounts.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Events.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Messages.ts" />
+    <TypeScriptCompile Include="scripts\Message_Handlers\Queries.ts" />
+    <TypeScriptCompile Include="scripts\App\Audio.ts" />
+    <TypeScriptCompile Include="scripts\App\Canvas.ts" />
+    <TypeScriptCompile Include="scripts\App\Connection.ts" />
+    <TypeScriptCompile Include="scripts\App\Drawing.ts" />
+    <TypeScriptCompile Include="scripts\App\Game.ts" />
+    <TypeScriptCompile Include="scripts\App\Init.ts" />
+    <TypeScriptCompile Include="scripts\App\Me.ts" />
+    <TypeScriptCompile Include="scripts\App\Settings.ts" />
+    <TypeScriptCompile Include="scripts\App\Utilities.ts" />
+    <TypeScriptCompile Include="scripts\Models\Area.ts" />
+    <TypeScriptCompile Include="scripts\Models\Bases\Selectable.ts" />
+    <TypeScriptCompile Include="scripts\Models\FreeParticle.ts" />
+    <TypeScriptCompile Include="scripts\Models\Landmark.ts" />
+    <TypeScriptCompile Include="scripts\Models\Particle.ts" />
+    <TypeScriptCompile Include="scripts\Models\Power.ts" />
+    <TypeScriptCompile Include="scripts\Models\Soul.ts" />
+    <TypeScriptCompile Include="scripts\App\Temp.ts" />
+    <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
@@ -268,13 +372,16 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50224</DevelopmentServerPort>
+          <DevelopmentServerPort>61253</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:50224/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
@@ -290,14 +397,13 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.4\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.4\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-  </Target>
-  -->
+  </Target> -->
 </Project>
