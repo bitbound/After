@@ -42,29 +42,32 @@ var After;
                 };
                 window.onkeypress = function (e) {
                     if ($("#inputChatInput").is(":focus") == false) {
-                        if (e.key == "6" || e.key == "ArrowRight") {
+                        if (e.key == "6" || e.key == "ArrowRight" || e.key == "d") {
                             After.Me.Move("E");
                         }
                         else if (e.key == "3" || e.key == "PageDown") {
                             After.Me.Move("SE");
                         }
-                        else if (e.key == "2" || e.key == "ArrowDown") {
+                        else if (e.key == "2" || e.key == "ArrowDown" || e.key == "s") {
                             After.Me.Move("S");
                         }
                         else if (e.key == "1" || e.key == "End") {
                             After.Me.Move("SW");
                         }
-                        else if (e.key == "4" || e.key == "ArrowLeft") {
+                        else if (e.key == "4" || e.key == "ArrowLeft" || e.key == "a") {
                             After.Me.Move("W");
                         }
                         else if (e.key == "7" || e.key == "Home") {
                             After.Me.Move("NW");
                         }
-                        else if (e.key == "8" || e.key == "ArrowUp") {
+                        else if (e.key == "8" || e.key == "ArrowUp" || e.key == "w") {
                             After.Me.Move("N");
                         }
                         else if (e.key == "9" || e.key == "PageUp") {
                             After.Me.Move("NE");
+                        }
+                        else if (e.key == " ") {
+                            After.Me.ToggleCharging();
                         }
                     }
                 };
@@ -266,7 +269,6 @@ var After;
                     After.Game.SendChat(e);
                 });
                 $("#buttonCharge").click(function (e) {
-                    $("#buttonCharge").attr("disabled", "true");
                     After.Me.ToggleCharging();
                 });
                 $("#divCharge").click(function (e) {

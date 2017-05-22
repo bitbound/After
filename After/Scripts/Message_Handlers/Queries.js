@@ -91,6 +91,7 @@ var After;
                 window.requestAnimationFrame(After.Drawing.DrawCanvas);
                 After.Drawing.AnimateParticles();
                 After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
+                After.Canvas.UpdateMap(true);
             }
             Queries.HandleFirstLoad = HandleFirstLoad;
             function HandleMapUpdate(JsonMessage) {

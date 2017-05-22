@@ -2,9 +2,9 @@
 After.Temp.Login = After.Temp.Login || {};
 After.Temp.Login.Create = function () {
     var strUsername = $("#inputNewUsername").val();
-    var strPassword = $("#inputNewPassword").val();
+    var strPassword = $("#inputCreateNewPassword").val();
     var strEmail = $("#inputEmail").val();
-    var strConfirmPassword = $("#inputConfirmPassword").val();
+    var strConfirmPassword = $("#inputCreateConfirmPassword").val();
     var regex = new RegExp("[^a-z,A-Z,0-9,_,-]").test(strUsername);
     var regex2 = new RegExp("--").test(strUsername);
     var regex3 = new RegExp("__").test(strUsername);

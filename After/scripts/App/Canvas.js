@@ -27,7 +27,7 @@ var After;
             ;
             set OffsetX(Value) {
                 this._offsetX = Value;
-                After.Canvas.UpdateMap();
+                After.Canvas.UpdateMap(false);
             }
             get OffsetY() {
                 return this._offsetY;
@@ -35,7 +35,7 @@ var After;
             ;
             set OffsetY(Value) {
                 this._offsetY = Value;
-                After.Canvas.UpdateMap();
+                After.Canvas.UpdateMap(false);
             }
             ;
             get CenterCoordinate() {
@@ -163,8 +163,8 @@ var After;
                     }
                 }, 20);
             }
-            UpdateMap() {
-                if (After.Temp.MapUpdatePending) {
+            UpdateMap(Force) {
+                if (After.Temp.MapUpdatePending && !Force) {
                     return;
                 }
                 var centerCoord = After.Canvas.CenterCoordinate;

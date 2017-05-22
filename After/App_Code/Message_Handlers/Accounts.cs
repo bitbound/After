@@ -131,6 +131,7 @@ namespace After.Message_Handlers
                 };
                 for (int i = existing.Count - 1; i >= 0; i--)
                 {
+                    Socket_Handler.SocketCollection.Remove(existing[i]);
                     existing[i].Send(Json.Encode(message));
                     existing[i].Close();
                     JsonMessage.Note = "LoginElsewhere";

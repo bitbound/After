@@ -27,7 +27,7 @@
         };
         set OffsetX(Value: number) {
             this._offsetX = Value;
-            After.Canvas.UpdateMap();
+            After.Canvas.UpdateMap(false);
         }
 
         private _offsetY: number;
@@ -36,7 +36,7 @@
         };
         set OffsetY(Value: number) {
             this._offsetY = Value;
-            After.Canvas.UpdateMap();
+            After.Canvas.UpdateMap(false);
         };
         get CenterCoordinate():string {
             var xTotal = After.Canvas.Element.clientWidth / 2 / After.Canvas.ZoomScale - After.Canvas.OffsetX;
@@ -178,8 +178,8 @@
                 }
             }, 20);
         }
-        UpdateMap() {
-            if (After.Temp.MapUpdatePending) {
+        UpdateMap(Force:boolean) {
+            if (After.Temp.MapUpdatePending && !Force) {
                 return;
             }
             var centerCoord = After.Canvas.CenterCoordinate;
