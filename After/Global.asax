@@ -40,9 +40,9 @@
     }
     void Application_BeginRequest(object sender, EventArgs e)
     {
-        if (!Request.IsLocal && !Request.IsSecureConnection)
+        if (Request.Url.Host != "after-game.azurewebsites.net")
         {
-            Response.RedirectPermanent(Request.Url.AbsoluteUri.ToLower().Replace("http://", "https://"), true);
+            Response.RedirectPermanent("https://after-game.azurewebsites.net", true);
             return;
         }
     }
