@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Helpers;
 
@@ -187,11 +188,16 @@ namespace After.Message_Handlers
                 account.TemporaryPassword = Path.GetRandomFileName().Replace(".", "");
                 JsonMessage.Result = "ok";
                 JsonMessage.TemporaryPassword = account.TemporaryPassword;
-                WebMail.SmtpServer = "mail.after-game.net";
-                WebMail.UserName = "support@after-game.net";
-                WebMail.Password = "92ebf4a2-e694-4e7f-bad1-520b60615d1e";
-                WebMail.From = "support@after-game.net";
-                WebMail.Send(account.Email, "Password Reset for After", File.ReadAllText(HttpContext.Current.Server.MapPath("~/Docs/PasswordResetTemplate.html")).Replace("#password#", account.TemporaryPassword));
+                var request = new
+                {
+                    Email = account.Email,
+                    Subject = "Password Reset for After",
+                    Message = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Docs/PasswordResetTemplate.html")).Replace("#password#", account.TemporaryPassword)
+                };
+                var wr = WebRequest.CreateHttp("https://translucency.azurewebsites.net/Services/SendEmail");
+                wr.Method = "POST";
+                new StreamWriter(wr.GetRequestStream()).Write(Json.Encode(request));
+                wr.GetResponse();
                 SH.Send(Json.Encode(JsonMessage));
             }
             catch (Exception ex)
