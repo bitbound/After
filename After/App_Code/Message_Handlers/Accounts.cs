@@ -196,7 +196,13 @@ namespace After.Message_Handlers
                 };
                 var wr = WebRequest.CreateHttp("https://translucency.azurewebsites.net/Services/SendEmail");
                 wr.Method = "POST";
-                new StreamWriter(wr.GetRequestStream()).Write(Json.Encode(request));
+                using (var rs = wr.GetRequestStream())
+                {
+                    using (var sw = new StreamWriter(rs))
+                    {
+                        sw.Write(Json.Encode(request));
+                    }
+                }
                 wr.GetResponse();
                 SH.Send(Json.Encode(JsonMessage));
             }
