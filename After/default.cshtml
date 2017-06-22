@@ -1,8 +1,4 @@
 ﻿@{
-    if (!Request.IsSecureConnection && !Request.IsLocal)
-    {
-        Response.RedirectPermanent("https://after-game.net", true);
-    }
     if (Context.IsWebSocketRequest)
     {
         Microsoft.Web.WebSockets.WebSocketExtensions.AcceptWebSocketRequest(Context, new After.Socket_Handler());

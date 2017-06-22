@@ -40,7 +40,7 @@
     }
     void Application_BeginRequest(object sender, EventArgs e)
     {
-        if (Request.Url.Host != "after-game.azurewebsites.net")
+        if (Request.Url.Host != "after-game.azurewebsites.net" && !Request.IsLocal)
         {
             Response.RedirectPermanent("https://after-game.azurewebsites.net", true);
             return;
