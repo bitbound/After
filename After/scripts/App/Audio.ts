@@ -4,43 +4,17 @@
             this.Context = new AudioContext();
         }
         Context: AudioContext;
-        PlaySource: AudioBufferSourceNode;
-        LoopSource: AudioBufferSourceNode;
+        PlaySource: HTMLAudioElement;
+        LoopSource: HTMLAudioElement;
 
         PlaySound(SourceFile: string, ShowLoading: boolean, Callback: () => void): void {
             if (ShowLoading) {
                 After.Utilities.ShowLoading();
             }
             After.Audio.Context = After.Audio.Context || new AudioContext();
-            var audioCtx = After.Audio.Context;
-            After.Audio.PlaySource = audioCtx.createBufferSource();
-            var source = After.Audio.PlaySource;
-            source.loop = false;
-            var request = new XMLHttpRequest();
-            request.responseType = "arraybuffer";
-            request.open("GET", SourceFile, true);
-            request.onload = function () {
-                audioCtx.decodeAudioData(request.response, function (buffer) {
-                    source.buffer = buffer;
-                    source.connect(audioCtx.destination);
-                    source.start(0);
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                }, function () {
-                    // Error callback.
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                })
-            }
-            request.onerror = function () {
+            After.Audio.PlaySource = document.createElement("audio");
+            After.Audio.PlaySource.src = SourceFile;
+            After.Audio.PlaySource.onerror = function () {
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -48,7 +22,10 @@
                     Callback();
                 }
             }
-            request.ontimeout = function () {
+            After.Audio.PlaySource.oncanplay = function () {
+                var source = After.Audio.Context.createMediaElementSource(After.Audio.PlaySource);
+                source.connect(After.Audio.Context.destination);
+                After.Audio.PlaySource.play();
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -56,41 +33,16 @@
                     Callback();
                 }
             }
-            request.send();
+            After.Audio.PlaySource.load();
         };
         LoadSound(SourceFile: string, ShowLoading: boolean, Callback: () => void) {
             if (ShowLoading) {
                 After.Utilities.ShowLoading();
             }
             After.Audio.Context = After.Audio.Context || new AudioContext();
-            var audioCtx = After.Audio.Context;
-            After.Audio.PlaySource = audioCtx.createBufferSource();
-            var source = After.Audio.PlaySource;
-            source.loop = false;
-            var request = new XMLHttpRequest();
-            request.responseType = "arraybuffer";
-            request.open("GET", SourceFile, true);
-            request.onload = function () {
-                audioCtx.decodeAudioData(request.response, function (buffer) {
-                    source.buffer = buffer;
-                    source.connect(audioCtx.destination);
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                }, function () {
-                    // Error callback.
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                })
-            }
-            request.onerror = function () {
+            After.Audio.PlaySource = document.createElement("audio");
+            After.Audio.PlaySource.src = SourceFile;
+            After.Audio.PlaySource.onerror = function () {
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -98,7 +50,9 @@
                     Callback();
                 }
             }
-            request.ontimeout = function () {
+            After.Audio.PlaySource.oncanplay = function () {
+                var source = After.Audio.Context.createMediaElementSource(After.Audio.PlaySource);
+                source.connect(After.Audio.Context.destination);
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -106,48 +60,22 @@
                     Callback();
                 }
             }
-            request.send();
+            After.Audio.PlaySource.load();
         };
         StopSound(): void {
-            if (After.Audio.PlaySource.buffer != null) {
-                After.Audio.PlaySource.stop();
-                After.Audio.PlaySource.disconnect();
+            if (After.Audio.PlaySource != null) {
+                After.Audio.PlaySource.pause();
             }
         }
-        LoopSound(SourceFile: string, ShowLoading: boolean, Callback: () => void): void {
+        PlayLoop(SourceFile: string, ShowLoading: boolean, Callback: () => void): void {
             if (ShowLoading) {
                 After.Utilities.ShowLoading();
             }
             After.Audio.Context = After.Audio.Context || new AudioContext();
-            var audioCtx = After.Audio.Context;
-            After.Audio.LoopSource = audioCtx.createBufferSource();
-            var source = After.Audio.LoopSource;
-            source.loop = true;
-            var request = new XMLHttpRequest();
-            request.responseType = "arraybuffer";
-            request.open("GET", SourceFile, true);
-            request.onload = function () {
-                audioCtx.decodeAudioData(request.response, function (buffer) {
-                    source.buffer = buffer;
-                    source.connect(audioCtx.destination);
-                    source.start(0);
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                }, function () {
-                    // Error callback.
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                })
-            }
-            request.onerror = function () {
+            After.Audio.LoopSource = document.createElement("audio");
+            After.Audio.LoopSource.loop = true;
+            After.Audio.LoopSource.src = SourceFile;
+            After.Audio.LoopSource.onerror = function () {
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -155,7 +83,10 @@
                     Callback();
                 }
             }
-            request.ontimeout = function () {
+            After.Audio.LoopSource.oncanplay = function () {
+                var source = After.Audio.Context.createMediaElementSource(After.Audio.LoopSource);
+                source.connect(After.Audio.Context.destination);
+                After.Audio.LoopSource.play();
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -163,41 +94,17 @@
                     Callback();
                 }
             }
-            request.send();
+            After.Audio.LoopSource.load();
         };
         LoadLoop(SourceFile: string, ShowLoading: boolean, Callback: () => void) {
             if (ShowLoading) {
                 After.Utilities.ShowLoading();
             }
             After.Audio.Context = After.Audio.Context || new AudioContext();
-            var audioCtx = After.Audio.Context;
-            After.Audio.LoopSource = audioCtx.createBufferSource();
-            var source = After.Audio.LoopSource;
-            source.loop = false;
-            var request = new XMLHttpRequest();
-            request.responseType = "arraybuffer";
-            request.open("GET", SourceFile, true);
-            request.onload = function () {
-                audioCtx.decodeAudioData(request.response, function (buffer) {
-                    source.buffer = buffer;
-                    source.connect(audioCtx.destination);
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                }, function () {
-                    // Error callback.
-                    if (ShowLoading) {
-                        After.Utilities.RemoveLoading();
-                    }
-                    if (Callback) {
-                        Callback();
-                    }
-                })
-            }
-            request.onerror = function () {
+            After.Audio.LoopSource = document.createElement("audio");
+            After.Audio.LoopSource.loop = true;
+            After.Audio.LoopSource.src = SourceFile;
+            After.Audio.LoopSource.onerror = function () {
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -205,7 +112,9 @@
                     Callback();
                 }
             }
-            request.ontimeout = function () {
+            After.Audio.LoopSource.oncanplay = function () {
+                var source = After.Audio.Context.createMediaElementSource(After.Audio.LoopSource);
+                source.connect(After.Audio.Context.destination);
                 if (ShowLoading) {
                     After.Utilities.RemoveLoading();
                 }
@@ -213,12 +122,11 @@
                     Callback();
                 }
             }
-            request.send();
+            After.Audio.LoopSource.load();
         };
         StopLoop():void {
-            if (After.Audio.LoopSource.buffer != null) {
-                After.Audio.LoopSource.stop();
-                After.Audio.LoopSource.disconnect();
+            if (After.Audio.LoopSource != null) {
+                After.Audio.LoopSource.pause();
             }
         }
     }

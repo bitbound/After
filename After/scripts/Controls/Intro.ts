@@ -11,14 +11,14 @@ After.Temp.Intro.Start = function () {
                 $("#svgRing2").animate({ opacity: 1 }, 1500, function () {
                     After.Audio.LoadSound("/Assets/Sounds/gameaudio_teleport-space-morph.mp3", false, function () {
                         $("#svgSliver").show();
-                        After.Audio.PlaySource.start();
+                        After.Audio.PlaySource.play();
                         $("#svgSliver").animate({ top: "20%" }, 500, function () {
                             window.setTimeout(function () {
                                 $("#divPresents").animate({ opacity: 1 }, 2000, function () {
                                     window.setTimeout(function () {
                                         $("#divLogo").animate({ opacity: 0 }, 1500, function () {
                                             $("#divLogo").remove();
-                                            After.Audio.LoopSound("/Assets/Sounds/urupin__heartbeat.mp3", false, function () {
+                                            After.Audio.PlayLoop("/Assets/Sounds/urupin__heartbeat.mp3", false, function () {
                                                 window.setTimeout(function () {
                                                     ATI.Narrate();
                                                     $("#buttonSkip").fadeIn();
