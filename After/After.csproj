@@ -371,6 +371,12 @@
     <TypeScriptCompile Include="scripts\Controls\Intro.ts" />
     <TypeScriptCompile Include="scripts\Controls\LoginForm.ts" />
     <TypeScriptCompile Include="scripts\Controls\Splash.ts" />
+    <Content Include="scripts\Controls\CreateAccount.js" />
+    <Content Include="scripts\Controls\CreateCharacter.js" />
+    <Content Include="scripts\Controls\Game.js" />
+    <Content Include="scripts\Controls\Intro.js" />
+    <Content Include="scripts\Controls\LoginForm.js" />
+    <Content Include="scripts\Controls\Splash.js" />
     <Content Include="scripts\jQuery\jquery-3.1.0.js" />
     <Content Include="scripts\jQuery\jquery-3.1.0.min.js" />
     <Content Include="App_Data\Game_Data\Base\Locations.json" />
@@ -393,7 +399,17 @@
     <Content Include="scripts\jQuery\jquery-3.1.1.min.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.js" />
     <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.js" />
+    <Content Include="scripts\Message_Handlers\Accounts.js" />
+    <Content Include="scripts\Message_Handlers\Events.js" />
+    <Content Include="scripts\Message_Handlers\Messages.js" />
+    <Content Include="scripts\Message_Handlers\Queries.js" />
+    <Content Include="scripts\Models\Area.js" />
     <Content Include="scripts\Models\Bases\Selectable.js" />
+    <Content Include="scripts\Models\FreeParticle.js" />
+    <Content Include="scripts\Models\Landmark.js" />
+    <Content Include="scripts\Models\Particle.js" />
+    <Content Include="scripts\Models\Power.js" />
+    <Content Include="scripts\Models\Soul.js" />
     <Content Include="Styles.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -401,8 +417,6 @@
     <Content Include="default.cshtml" />
     <Content Include="manifest.json" />
     <None Include="Properties\PublishProfiles\Localhost.pubxml" />
-    <Content Include="scripts\jQuery\jquery-3.1.1.min.map" />
-    <Content Include="scripts\jQuery\jquery-3.1.1.slim.min.map" />
     <Content Include="Services\ErrorReporting.cshtml" />
     <Content Include="tsconfig.json" />
     <None Include="Web.Debug.config">
