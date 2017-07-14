@@ -11,7 +11,7 @@ After.Temp.Intro.Start = function () {
                 $("#svgRing2").animate({ opacity: 1 }, 1500, function () {
                     After.Audio.LoadSound("/Assets/Sounds/gameaudio_teleport-space-morph.mp3", false, function () {
                         $("#svgSliver").show();
-                        After.Audio.PlaySource.play();
+                        After.Audio.PlaySource.start();
                         $("#svgSliver").animate({ top: "20%" }, 500, function () {
                             window.setTimeout(function () {
                                 $("#divPresents").animate({ opacity: 1 }, 2000, function () {
