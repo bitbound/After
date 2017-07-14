@@ -371,6 +371,16 @@
     <TypeScriptCompile Include="scripts\Controls\Intro.ts" />
     <TypeScriptCompile Include="scripts\Controls\LoginForm.ts" />
     <TypeScriptCompile Include="scripts\Controls\Splash.ts" />
+    <Content Include="scripts\App\Audio.js" />
+    <Content Include="scripts\App\Canvas.js" />
+    <Content Include="scripts\App\Connection.js" />
+    <Content Include="scripts\App\Drawing.js" />
+    <Content Include="scripts\App\Game.js" />
+    <Content Include="scripts\App\Init.js" />
+    <Content Include="scripts\App\Me.js" />
+    <Content Include="scripts\App\Settings.js" />
+    <Content Include="scripts\App\Temp.js" />
+    <Content Include="scripts\App\Utilities.js" />
     <Content Include="scripts\Controls\CreateAccount.js" />
     <Content Include="scripts\Controls\CreateCharacter.js" />
     <Content Include="scripts\Controls\Game.js" />
