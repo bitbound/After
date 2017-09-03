@@ -34,13 +34,13 @@ namespace After.Message_Handlers
                     CurrentXYZ = "0,0,0",
                     MovementState = Character.MovementStates.Ready
                 };
-                player.AuthenticationTokens.Add(new AuthenticationToken() { Token = Guid.NewGuid().ToString(), LastUsed = DateTime.Now });
+                player.AuthenticationTokens.Add(Guid.NewGuid().ToString());
                 Socket_Handler.SocketCollection.Add(SH);
                 World.Current.Players.Add(player);
                 SH.Name = username;
                 JsonMessage.Result = "ok";
                 JsonMessage.Password = null;
-                JsonMessage.AuthenticationToken = SH.Player.AuthenticationTokens;
+                JsonMessage.AuthenticationToken = SH.Player.AuthenticationTokens.Last();
                 SH.Send(Json.Encode(JsonMessage));
                 Socket_Handler.SocketCollection.Broadcast(Json.Encode(new
                 {
@@ -94,7 +94,7 @@ namespace After.Message_Handlers
                 }
                 else
                 {
-                    var authToken = new AuthenticationToken() { Token = Guid.NewGuid().ToString().Replace("-", ""), LastUsed = DateTime.Now };
+                    var authToken = Guid.NewGuid().ToString();
                     SH.Player.AuthenticationTokens.Add(authToken);
                     SH.Player.TemporaryPassword = "";
                     SH.Player.Password = Crypto.HashPassword(JsonMessage.ConfirmNewPassword);
@@ -103,7 +103,7 @@ namespace After.Message_Handlers
             }
             else if (SH.Player.AuthenticationTokens.Count > 0 && JsonMessage.AuthenticationToken != null)
             {
-                if (!SH.Player.AuthenticationTokens.Exists(at=>at.Token == JsonMessage.AuthenticationToken))
+                if (!SH.Player.AuthenticationTokens.Contains(JsonMessage.AuthenticationToken))
                 {
                     JsonMessage.Result = "expired";
                     SH.Send(Json.Encode(JsonMessage));
@@ -111,7 +111,7 @@ namespace After.Message_Handlers
                 }
                 else
                 {
-                    SH.Player.AuthenticationTokens.RemoveAll(at => at.Token == JsonMessage.AuthenicationToken);
+                    SH.Player.AuthenticationTokens.Remove(JsonMessage.AuthenicationToken);
                 }
             }
             else if (!Crypto.VerifyHashedPassword(SH.Player.Password, JsonMessage.Password))
@@ -145,9 +145,9 @@ namespace After.Message_Handlers
             SH.Player.MovementState = Character.MovementStates.Ready;
             Socket_Handler.SocketCollection.Add(SH);
             JsonMessage.Result = "ok";
-            var newToken = new AuthenticationToken() { Token = Guid.NewGuid().ToString(), LastUsed = DateTime.Now };
+            var newToken = Guid.NewGuid().ToString();
             SH.Player.AuthenticationTokens.Add(newToken);
-            JsonMessage.AuthenticationToken = newToken.Token;
+            JsonMessage.AuthenticationToken = newToken;
             SH.Send(Json.Encode(JsonMessage));
             Socket_Handler.SocketCollection.Broadcast(Json.Encode(new
             {
@@ -194,7 +194,7 @@ namespace After.Message_Handlers
                     Subject = "Password Reset for After",
                     Message = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Docs/PasswordResetTemplate.html")).Replace("#password#", account.TemporaryPassword)
                 };
-                var wr = WebRequest.CreateHttp("https://translucency.azurewebsites.net/Services/SendEmail");
+                var wr = WebRequest.CreateHttp("https://invis.me/Services/SendEmail");
                 wr.Method = "POST";
                 using (var rs = wr.GetRequestStream())
                 {

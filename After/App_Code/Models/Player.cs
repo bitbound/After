@@ -14,7 +14,7 @@ namespace After.Models
         public string Password { get; set; }
         public string TemporaryPassword { get; set; }
         public string Email { get; set; }
-        public List<AuthenticationToken> AuthenticationTokens { get; set; } = new List<AuthenticationToken>();
+        public List<string> AuthenticationTokens { get; set; } = new List<string>();
         public Settings Settings { get; set; } = new Settings();
 
         public bool AdminFlagged { get; set; }

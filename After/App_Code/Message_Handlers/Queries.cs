@@ -160,7 +160,7 @@ namespace After.Message_Handlers
                 {
                     actionList.Add("Change Area");
                 }
-                actionList.Add("Uncreate");
+                actionList.Add("Destroy");
             }
             foreach (var power in SH.Player.Powers.FindAll(p=> p.TargetList.Contains(Power.Targets.Location) && distance >= p.MinRange && distance <= p.MaxRange))
             {

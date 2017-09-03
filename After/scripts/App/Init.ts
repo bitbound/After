@@ -1,5 +1,6 @@
 ﻿namespace After {
     export var Debug = false;
+    export var TouchScreen = false;
     export const Audio = new After.App.Audio();
     export const Canvas = new After.App.Canvas();
     export const Connection = new After.App.Connection();
@@ -45,17 +46,7 @@ $(document).ready(function () {
     };
 
     window.ontouchstart = function(event) {
-        if (event.touches.length > 2) {
-            if (document.documentElement.webkitRequestFullscreen) {
-                document.documentElement.webkitRequestFullscreen();
-            }
-            else if (document.documentElement.webkitRequestFullScreen) {
-                document.documentElement.webkitRequestFullScreen();
-            }
-            else if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            };
-        };
+        After.TouchScreen = true;
     };
     After.Connection.SetHandlers();
     After.Temp.Splash.Init();
