@@ -126,5 +126,19 @@ namespace After.Models
                 };
             }
         }
+
+        // *** Static Methods ***//
+        public static Location CreateTempLocation(string[] XYZ)
+        {
+            var location = new Location();
+            location.XCoord = double.Parse(XYZ[0]);
+            location.YCoord = double.Parse(XYZ[1]);
+            location.ZCoord = XYZ[2];
+            location.Color = "black";
+            location.Description = "A completely empty area.";
+            location.Title = "Empty Area";
+            Storage.Current.Locations.Add(location);
+            return location;
+        }
     }
 }

@@ -16,24 +16,24 @@ var After;
             Queries.HandlePlayerUpdate = HandlePlayerUpdate;
             function HandleRefreshView(JsonMessage) {
                 JsonMessage.Souls.forEach(function (value) {
-                    var index = After.World_Data.Souls.findIndex((soul) => { return soul.Name == value.Name; });
+                    var index = After.Storage.Souls.findIndex((soul) => { return soul.Name == value.Name; });
                     if (index == -1) {
-                        After.World_Data.Souls.push(value);
+                        After.Storage.Souls.push(value);
                     }
                     else {
-                        After.World_Data.Souls[index] = value;
+                        After.Storage.Souls[index] = value;
                     }
                 });
-                for (var i = After.World_Data.Areas.length - 1; i >= 0; i--) {
-                    var value = After.World_Data.Areas[i];
+                for (var i = After.Storage.Areas.length - 1; i >= 0; i--) {
+                    var value = After.Storage.Areas[i];
                     if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {
-                        After.World_Data.Areas.splice(i, 1);
+                        After.Storage.Areas.splice(i, 1);
                     }
                 }
                 JsonMessage.Areas.forEach(function (value) {
-                    After.World_Data.Areas.push(value);
+                    After.Storage.Areas.push(value);
                 });
-                After.World_Data.Areas.forEach(function (value) {
+                After.Storage.Areas.forEach(function (value) {
                     if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {
                         value.IsVisible = true;
                     }
@@ -61,11 +61,6 @@ var After;
                 // Account settings.
                 for (var setting in JsonMessage.Settings) {
                     After.Settings[setting] = JsonMessage.Settings[setting];
-                }
-                for (var setting in After.Settings) {
-                    if (typeof After.Settings[setting] == 'boolean') {
-                        $('#divSideTabs div[prop="' + setting + '"]').attr("on", After.Settings[setting]);
-                    }
                 }
                 // Player update.
                 for (var stat in JsonMessage.Player) {
@@ -96,20 +91,20 @@ var After;
             Queries.HandleFirstLoad = HandleFirstLoad;
             function HandleMapUpdate(JsonMessage) {
                 if (JsonMessage.Area) {
-                    var index = After.World_Data.Areas.findIndex((value) => {
+                    var index = After.Storage.Areas.findIndex((value) => {
                         return value.StorageID == JsonMessage.Area.StorageID;
                     });
                     if (index == -1) {
                         JsonMessage.Area.IsVisible = false;
-                        After.World_Data.Areas.push(JsonMessage.Area);
+                        After.Storage.Areas.push(JsonMessage.Area);
                     }
                 }
                 if (JsonMessage.Landmark) {
-                    var index = After.World_Data.Landmarks.findIndex((value) => {
+                    var index = After.Storage.Landmarks.findIndex((value) => {
                         return value.StorageID == JsonMessage.Landmark.StorageID;
                     });
                     if (index == -1) {
-                        After.World_Data.Landmarks.push(JsonMessage.Landmark);
+                        After.Storage.Landmarks.push(JsonMessage.Landmark);
                     }
                 }
                 if (JsonMessage.Completed) {

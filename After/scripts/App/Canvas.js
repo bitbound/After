@@ -53,7 +53,7 @@ var After;
                 var yCoord = Math.floor(yTotal / 100);
                 var xRemainder = xTotal - (xCoord * 100);
                 var yRemainder = yTotal - (yCoord * 100);
-                var area = After.World_Data.Areas.find(function (a) {
+                var area = After.Storage.Areas.find(function (a) {
                     return a.XCoord == xCoord && a.YCoord == yCoord;
                 });
                 if (typeof area != "undefined" && After.Utilities.NumberIsBetween(xRemainder, 43, 57, true) && After.Utilities.NumberIsBetween(yRemainder, 54.5, 62.5, true)) {
@@ -174,19 +174,19 @@ var After;
                     var xMax = Math.ceil((After.Canvas.Element.clientWidth / After.Canvas.ZoomScale - After.Canvas.OffsetX) / 100);
                     var yMin = Math.floor(-After.Canvas.OffsetY / 100);
                     var yMax = Math.ceil((After.Canvas.Element.clientHeight / After.Canvas.ZoomScale - After.Canvas.OffsetY) / 100);
-                    for (var i = After.World_Data.Areas.length - 1; i >= 0; i--) {
-                        var area = After.World_Data.Areas[i];
+                    for (var i = After.Storage.Areas.length - 1; i >= 0; i--) {
+                        var area = After.Storage.Areas[i];
                         if (area.IsVisible) {
                             continue;
                         }
                         if (!After.Utilities.NumberIsBetween(area.XCoord, xMin, xMax, true) || !After.Utilities.NumberIsBetween(area.YCoord, yMin, yMax, true)) {
-                            After.World_Data.Areas.splice(i, 1);
+                            After.Storage.Areas.splice(i, 1);
                         }
                     }
-                    for (var i = After.World_Data.Landmarks.length - 1; i >= 0; i--) {
-                        var landmark = After.World_Data.Landmarks[i];
+                    for (var i = After.Storage.Landmarks.length - 1; i >= 0; i--) {
+                        var landmark = After.Storage.Landmarks[i];
                         if (!After.Utilities.NumberIsBetween(landmark.XCoord, xMin, xMax, true) || !After.Utilities.NumberIsBetween(landmark.YCoord, yMin, yMax, true)) {
-                            After.World_Data.Landmarks.splice(i, 1);
+                            After.Storage.Landmarks.splice(i, 1);
                         }
                     }
                     var request = {

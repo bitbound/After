@@ -125,7 +125,7 @@ var After;
                 var source = After.Audio.LoopSource;
                 source.loop = true;
                 var request = new XMLHttpRequest();
-                request.responseType = "arrayBuffer";
+                request.responseType = "arraybuffer";
                 request.open("GET", SourceFile, true);
                 request.onload = function () {
                     audioCtx.decodeAudioData(request.response, function (buffer) {

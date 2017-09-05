@@ -14,7 +14,7 @@ namespace After.Message_Handlers
         public static void HandleAccountCreation(dynamic JsonMessage, Socket_Handler SH)
         {
             string username = JsonMessage.Username.Trim();
-            if (World.Current.Players.Exists(username))
+            if (Storage.Current.Players.Exists(username))
             {
                 JsonMessage.Result = "exists";
                 JsonMessage.Password = null;
@@ -36,7 +36,7 @@ namespace After.Message_Handlers
                 };
                 player.AuthenticationTokens.Add(Guid.NewGuid().ToString());
                 Socket_Handler.SocketCollection.Add(SH);
-                World.Current.Players.Add(player);
+                Storage.Current.Players.Add(player);
                 SH.Name = username;
                 JsonMessage.Result = "ok";
                 JsonMessage.Password = null;
@@ -55,7 +55,7 @@ namespace After.Message_Handlers
         {
             var username = (string)JsonMessage.Username.Trim();
             SH.Name = username;
-            if (!World.Current.Players.Exists(SH.Name))
+            if (!Storage.Current.Players.Exists(SH.Name))
             {
                 JsonMessage.Result = "failed";
                 SH.Send(Json.Encode(JsonMessage));
@@ -172,13 +172,13 @@ namespace After.Message_Handlers
                     SH.Send(Json.Encode(JsonMessage));
                     return;
                 }
-                if (!World.Current.Players.Exists(username))
+                if (!Storage.Current.Players.Exists(username))
                 {
                     JsonMessage.Result = "unknown";
                     SH.Send(Json.Encode(JsonMessage));
                     return;
                 }
-                Player account = World.Current.Players.Find(username);
+                Player account = Storage.Current.Players.Find(username);
                 if (string.IsNullOrWhiteSpace(account.Email))
                 {
                     JsonMessage.Result = "no email";

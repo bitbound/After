@@ -59,7 +59,7 @@
     <Content Include="App_Code\Models\Message.cs" />
     <Content Include="App_Code\Models\NPC.cs" />
     <Content Include="App_Code\Models\Player.cs" />
-    <Content Include="App_Code\World.cs" />
+    <Content Include="App_Code\Storage.cs" />
     <Content Include="App_Code\Socket_Handler.cs" />
     <Content Include="App_Code\Utilities.cs" />
     <Content Include="App_Code\Models\Settings.cs" />
@@ -134,12 +134,10 @@
     <Content Include="Docs\PasswordResetTemplate.html" />
     <Content Include="Global.asax" />
     <Content Include="Properties\PublishProfiles\Localhost.pubxml.user" />
-    <Content Include="Properties\PublishProfiles\Production.pubxml.user" />
     <Content Include="App_Data\Game_Data\Base\Locations.json" />
     <Content Include="App_Data\Game_Data\Base\Powers.json" />
     <Content Include="App_Data\Game_Data\Base\Landmarks.json" />
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\after-game - Web Deploy.pubxml" />
     <Content Include="Scripts\App\Audio.js" />
     <Content Include="Scripts\App\Canvas.js" />
     <Content Include="Scripts\App\Connection.js" />
@@ -274,6 +272,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

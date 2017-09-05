@@ -23,20 +23,20 @@ namespace After
         public static string App_Data { get; set; } = HttpContext.Current.Server.MapPath("~/App_Data/");
         public static void StartUp()
         {
-            if (!World.Current.Locations.Exists("0,0,0"))
+            if (!Storage.Current.Locations.Exists("0,0,0"))
             {
                 var strLocations = File.ReadAllText(Path.Combine(Utilities.App_Data, "Game_Data\\Base\\Locations.json"));
                 foreach (var location in Json.Decode<List<Location>>(strLocations))
                 {
-                    World.Current.Locations.Add(location);
+                    Storage.Current.Locations.Add(location);
                 }
             }
-            if (!World.Current.Landmarks.Exists("0,-2,0"))
+            if (!Storage.Current.Landmarks.Exists("0,-2,0"))
             {
                 var strLandmarks = File.ReadAllText(Path.Combine(Utilities.App_Data, "Game_Data\\Base\\Landmarks.json"));
                 foreach (var landmark in Json.Decode<List<Landmark>>(strLandmarks))
                 {
-                    World.Current.Landmarks.Add(landmark);
+                    Storage.Current.Landmarks.Add(landmark);
                 }
             }
         }

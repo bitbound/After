@@ -11,7 +11,7 @@
     export const Utilities = new After.App.Utilities();
 }
 
-namespace After.World_Data {
+namespace After.Storage {
     export const Areas = new Array<After.Models.Area>();
     export const Souls = new Array<After.Models.Soul>();
     export const FreeParticles = new Array<After.Models.FreeParticle>();
@@ -26,6 +26,7 @@ $(document).ready(function () {
         var ex = {
             Message: message,
             TimeStamp: new Date().toString(),
+            Source: source,
             Line: lineno,
             Column: colno,
             Error: error

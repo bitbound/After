@@ -66,6 +66,7 @@ After.Temp.Login.Create = function () {
         "Email": strEmail
     };
     After.Me.Name = strUsername;
+    After.Utilities.ShowLoading();
     After.Connection.Socket.send(JSON.stringify(creationRequest));
 };
 After.Temp.Login.ShowEmailHelp = function () {

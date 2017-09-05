@@ -17,8 +17,6 @@ namespace After.Models
         public List<string> AuthenticationTokens { get; set; } = new List<string>();
         public Settings Settings { get; set; } = new Settings();
 
-        public bool AdminFlagged { get; set; }
-
         public bool Kicked { get; set; }
         public bool Banned { get; set; }
         public int BadLoginAttempts { get; set; } = 0;

@@ -24,7 +24,6 @@ After.Temp.CreateCharacter.Init = function () {
     };
     $(window).on("resize", tempResize);
     for (var i = 0; i < 50; i++) {
-        var canPre = document.getElementById("canvasPreview");
         var part = {};
         part.CurrentX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
         part.FromX = part.CurrentX;
@@ -33,6 +32,10 @@ After.Temp.CreateCharacter.Init = function () {
         part.FromY = part.CurrentY;
         part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
         ATI.PreviewParticles.push(part);
+        $(part).animate({
+            "CurrentX": part.ToX,
+            "CurrentY": part.ToY
+        }, Math.abs(part.ToX - part.CurrentX) * 20);
     }
     ;
     ATI.EvaluateColor = function () {
@@ -94,15 +97,22 @@ After.Temp.CreateCharacter.Init = function () {
         if (ATI.ShowFlybys) {
             var roll = After.Utilities.GetRandom(0, 100, true);
             if (roll < 5) {
-                ATI.Flybys.push({ "X": ATI.canvasPreview.canvas.width, "Y": After.Utilities.GetRandom(0, ATI.canvasPreview.canvas.height, true) });
+                var y = After.Utilities.GetRandom(0, ATI.canvasPreview.canvas.height, true);
+                var fb = { "X": ATI.canvasPreview.canvas.width, "Y": y };
+                ATI.Flybys.push(fb);
+                $(fb).animate({
+                    "X": -5,
+                    "Y": y - 100
+                }, 5000, "linear");
             }
             for (var i = 0; i < ATI.Flybys.length; i++) {
+                if (typeof ATI.Flybys[i] == "undefined") {
+                    continue;
+                }
                 ATI.canvasPreview.fillStyle = "whitesmoke";
                 ATI.canvasPreview.beginPath();
                 ATI.canvasPreview.arc(ATI.Flybys[i].X, ATI.Flybys[i].Y, 1, 0, Math.PI * 2);
                 ATI.canvasPreview.fill();
-                ATI.Flybys[i].X -= 5;
-                ATI.Flybys[i].Y -= .5;
                 if (ATI.Flybys[i].X < 0 || ATI.Flybys[i].Y < 0) {
                     ATI.Flybys.splice(i, 1);
                 }
@@ -111,57 +121,23 @@ After.Temp.CreateCharacter.Init = function () {
         }
         for (var i = 0; i < ATI.PreviewParticles.length; i++) {
             var part = ATI.PreviewParticles[i];
-            if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
-                part.FromX = part.ToX;
-                do {
-                    part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
-                } while (part.FromX == part.ToX);
+            if (Math.abs(part.ToX - part.CurrentX) <= 1) {
+                part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
+                $(part).animate({
+                    "CurrentX": part.ToX
+                }, {
+                    "duration": Math.abs(part.ToX - part.CurrentX) * 20,
+                    "queue": false
+                });
             }
-            else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
-                part.FromX = part.ToX;
-                do {
-                    part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
-                } while (part.FromX == part.ToX);
-            }
-            if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
-                part.FromY = part.ToY;
-                do {
-                    part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
-                } while (part.FromY == part.ToY);
-            }
-            else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
-                part.FromY = part.ToY;
-                do {
-                    part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
-                } while (part.FromY == part.ToY);
-            }
-            var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
-            var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
-            var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
-            var changeX = .25 + (distanceFromEndX / halfwayX * 2);
-            if (part.ToX > part.CurrentX) {
-                part.CurrentX += changeX;
-            }
-            else if (part.ToX < part.CurrentX) {
-                part.CurrentX -= changeX;
-            }
-            ;
-            if (isFinite(part.CurrentX) == false) {
-                part.CurrentX = part.ToX;
-            }
-            var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
-            var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
-            var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
-            var changeY = .25 + (distanceFromEndY / halfwayY * 2);
-            if (part.ToY > part.CurrentY) {
-                part.CurrentY += changeY;
-            }
-            else if (part.ToY < part.CurrentY) {
-                part.CurrentY -= changeY;
-            }
-            ;
-            if (isFinite(part.CurrentY) == false) {
-                part.CurrentY = part.ToY;
+            if (Math.abs(part.ToY - part.CurrentY) <= 1) {
+                part.ToY = part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
+                $(part).animate({
+                    "CurrentY": part.ToY
+                }, {
+                    "duration": Math.abs(part.ToY - part.CurrentY) * 20,
+                    "queue": false
+                });
             }
             canvasPreview.fillStyle = ATI.SoulColor;
             canvasPreview.beginPath();

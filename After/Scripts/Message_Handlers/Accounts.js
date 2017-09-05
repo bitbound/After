@@ -5,6 +5,7 @@ var After;
         var Accounts;
         (function (Accounts) {
             function HandleAccountCreation(JsonMessage) {
+                After.Utilities.RemoveLoading();
                 if (JsonMessage.Result == "ok") {
                     if (localStorage["RememberMe"] == "true") {
                         localStorage["AuthenticationToken"] = JsonMessage.AuthenticationToken;
@@ -24,6 +25,7 @@ var After;
             Accounts.HandleAccountCreation = HandleAccountCreation;
             ;
             function HandleLogon(JsonMessage) {
+                After.Utilities.RemoveLoading();
                 if (JsonMessage.Result == "new required") {
                     $("#divNewPassword").slideDown();
                     $("#divLoginStatus").hide();
@@ -88,6 +90,7 @@ var After;
             }
             Accounts.HandleLoginElsewhere = HandleLoginElsewhere;
             function HandleForgotPassword(JsonMessage) {
+                After.Utilities.RemoveLoading();
                 var result = JsonMessage.Result;
                 if (result == "empty") {
                     After.Utilities.ShowDialog("You must enter a username first.", "black", "OK", null);

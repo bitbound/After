@@ -50,11 +50,11 @@
             After.Connection.Socket.send(JSON.stringify(query));
         }
         else {
-            After.World_Data.Souls.push(JsonMessage.Soul);
-            var index = After.World_Data.Areas.findIndex((value, index) => {
+            After.Storage.Souls.push(JsonMessage.Soul);
+            var index = After.Storage.Areas.findIndex((value, index) => {
                 return value.StorageID == JsonMessage.Soul.CurrentXYZ;
             });
-            After.World_Data.Areas[index].Occupants.push(JsonMessage.Soul.Name);
+            After.Storage.Areas[index].Occupants.push(JsonMessage.Soul.Name);
             if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
                 After.Game.AddChatMessage(JsonMessage.Soul.Name + " has arrived.", "whitesmoke");
             }
@@ -63,19 +63,19 @@
     export function HandleCharacterLeaves(JsonMessage) {
         if (JsonMessage.Soul.Name != After.Me.Name) 
         {
-            var soulIndex = After.World_Data.Souls.findIndex((value, index) => {
+            var soulIndex = After.Storage.Souls.findIndex((value, index) => {
                 return value.Name == JsonMessage.Soul.Name;
             });
 
-            var areaIndex = After.World_Data.Areas.findIndex((value, index) => {
+            var areaIndex = After.Storage.Areas.findIndex((value, index) => {
                 return value.StorageID == JsonMessage.Soul.CurrentXYZ;
             });
-            var occupantIndex = After.World_Data.Areas[areaIndex].Occupants.findIndex((value) => {
+            var occupantIndex = After.Storage.Areas[areaIndex].Occupants.findIndex((value) => {
                 return value == JsonMessage.Soul.Name;
             });
-            After.World_Data.Areas[areaIndex].Occupants.splice(occupantIndex, 1);
+            After.Storage.Areas[areaIndex].Occupants.splice(occupantIndex, 1);
             
-            After.World_Data.Souls.splice(soulIndex, 1);
+            After.Storage.Souls.splice(soulIndex, 1);
             if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
                 After.Game.AddChatMessage(JsonMessage.Soul.Name + " has left.", "whitesmoke");
             }
@@ -121,24 +121,24 @@
                 part.XCoord = Utilities.GetRandom(Number(from[0]) + .25, Number(from[0]) + .75, false);
                 part.YCoord = Utilities.GetRandom(Number(from[1]) + .25, Number(from[1]) + .50, false);
                 part.ZCoord = from[3];
-                After.World_Data.FreeParticles.push(part);
+                After.Storage.FreeParticles.push(part);
                 $(part).animate({
                     "XCoord": Number(dest[0]) + .5,
                     "YCoord": Number(dest[1]) + .5
                 }, Number(JsonMessage.TravelTime), function () {
-                    var index = After.World_Data.FreeParticles.findIndex((value) => value == part);
-                    After.World_Data.FreeParticles.splice(index, 1);
+                    var index = After.Storage.FreeParticles.findIndex((value) => value == part);
+                    After.Storage.FreeParticles.splice(index, 1);
                 });
             }
         }
     }
     export function HandleAreaCreated(JsonMessage) {
-        After.World_Data.Areas.push(JsonMessage.Area);
+        After.Storage.Areas.push(JsonMessage.Area);
     }
     export function HandleAreaRemoved(JsonMessage) {
-        var index = After.World_Data.Areas.findIndex(area => area.StorageID == JsonMessage.Area.LocationID);
+        var index = After.Storage.Areas.findIndex(area => area.StorageID == JsonMessage.Area.LocationID);
         if (index > -1) {
-            After.World_Data.Areas.splice(index, 1);
+            After.Storage.Areas.splice(index, 1);
         }
     }
     export function HandleCharacterCharging(JsonMessage) {
@@ -148,13 +148,13 @@
         fp.XCoord = Number(location[0]) + After.Utilities.GetRandom(0, .99, false);
         fp.YCoord = Number(location[1]) + After.Utilities.GetRandom(0, .99, false);
         fp.ZCoord = location[2];
-        After.World_Data.FreeParticles.push(fp);
+        After.Storage.FreeParticles.push(fp);
         $(fp).animate({
             XCoord: Number(location[0]) + .5,
             YCoord: Number(location[1]) + .5
         }, 750, function () {
-            var index = After.World_Data.FreeParticles.findIndex(part => part == fp);
-            After.World_Data.FreeParticles.splice(index, 1);
+            var index = After.Storage.FreeParticles.findIndex(part => part == fp);
+            After.Storage.FreeParticles.splice(index, 1);
         });
     }
 }

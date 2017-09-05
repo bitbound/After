@@ -50,6 +50,7 @@ After.Temp.Login.Init = function () {
             localStorage.removeItem("Username");
             localStorage.removeItem("AuthenticationToken");
         }
+        After.Utilities.ShowLoading();
         After.Connection.Socket.send(JSON.stringify(logonRequest));
     };
     After.Temp.Login.StartIntro = function () {
@@ -72,6 +73,7 @@ After.Temp.Login.Init = function () {
             "Type": "ForgotPassword",
             "Username": username
         };
+        After.Utilities.ShowLoading();
         After.Connection.Socket.send(JSON.stringify(request));
     }
 };

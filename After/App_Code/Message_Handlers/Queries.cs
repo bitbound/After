@@ -39,15 +39,15 @@ namespace After.Message_Handlers
                     {
                         player.Send(Json.Encode(request));
                     }
-                    World.Current.Locations.Remove(area.StorageID);
+                    Storage.Current.Locations.Remove(area.StorageID);
                     continue;
                 }
                 foreach (var occupant in area.Occupants)
                 {
-                    Character character = World.Current.NPCs.Find(occupant);
+                    Character character = Storage.Current.NPCs.Find(occupant);
                     if (character == null)
                     {
-                        character = World.Current.Players.Find(occupant);
+                        character = Storage.Current.Players.Find(occupant);
                         if (character == null)
                         {
                             continue;
@@ -84,7 +84,7 @@ namespace After.Message_Handlers
                     SH.Player.CurrentXYZ = SH.Player.PreviousXYZ;
                 }
             }
-            if (!World.Current.Locations.Exists(SH.Player.CurrentXYZ))
+            if (!Storage.Current.Locations.Exists(SH.Player.CurrentXYZ))
             {
                 SH.Player.CurrentXYZ = "0,0,0";
             }
@@ -104,8 +104,8 @@ namespace After.Message_Handlers
                 {
                     for (var y = JsonMessage.YMin; y <= JsonMessage.YMax; y++)
                     {
-                        var location = World.Current.Locations.Find($"{x},{y},{SH.Player.ZCoord}");
-                        var landmark = World.Current.Landmarks.Find($"{x},{y},{SH.Player.ZCoord}");
+                        var location = Storage.Current.Locations.Find($"{x},{y},{SH.Player.ZCoord}");
+                        var landmark = Storage.Current.Landmarks.Find($"{x},{y},{SH.Player.ZCoord}");
                         if (location != null)
                         {
                             if (!visibleLocations.Contains(location))
@@ -143,8 +143,8 @@ namespace After.Message_Handlers
         public static void HandleGetAreaActions(dynamic JsonMessage, Socket_Handler SH)
         {
             var actionList = new List<string>();
-            Location target = World.Current.Locations.Find(JsonMessage.TargetXYZ);
-            var distance = target.GetDistanceFrom(World.Current.Locations.Find(SH.Player.CurrentXYZ));
+            Location target = Storage.Current.Locations.Find(JsonMessage.TargetXYZ);
+            var distance = target.GetDistanceFrom(Storage.Current.Locations.Find(SH.Player.CurrentXYZ));
             if (distance == 0)
             {
                 actionList.Add("Explore Here");

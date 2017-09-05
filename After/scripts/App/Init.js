@@ -12,13 +12,13 @@ var After;
     After.Utilities = new After.App.Utilities();
 })(After || (After = {}));
 (function (After) {
-    var World_Data;
-    (function (World_Data) {
-        World_Data.Areas = new Array();
-        World_Data.Souls = new Array();
-        World_Data.FreeParticles = new Array();
-        World_Data.Landmarks = new Array();
-    })(World_Data = After.World_Data || (After.World_Data = {}));
+    var Storage;
+    (function (Storage) {
+        Storage.Areas = new Array();
+        Storage.Souls = new Array();
+        Storage.FreeParticles = new Array();
+        Storage.Landmarks = new Array();
+    })(Storage = After.Storage || (After.Storage = {}));
 })(After || (After = {}));
 $(document).ready(function () {
     if (window.location.href.search("localhost") > -1) {
@@ -29,6 +29,7 @@ $(document).ready(function () {
         var ex = {
             Message: message,
             TimeStamp: new Date().toString(),
+            Source: source,
             Line: lineno,
             Column: colno,
             Error: error

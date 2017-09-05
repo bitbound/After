@@ -16,7 +16,7 @@ namespace After.Message_Handlers
                 return;
             }
             jsonMessage.Username = SH.Player.Name;
-            World.Current.Messages.Add(new Message()
+            Storage.Current.Messages.Add(new Message()
             {
                 StorageID = $"{SH.Player.Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
                 LastAccessed = DateTime.Now,
@@ -50,6 +50,7 @@ namespace After.Message_Handlers
                         var reply = new StringBuilder();
                         reply.AppendLine("");
                         reply.AppendLine("Command List:");
+                        reply.AppendLine("/debug - Toggle debug mode.");
                         reply.AppendLine("/who - Display a list of online players.");
                         var request = new
                         {

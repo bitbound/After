@@ -1,5 +1,6 @@
 ﻿namespace After.Message_Handlers.Accounts {
     export function HandleAccountCreation(JsonMessage) {
+        After.Utilities.RemoveLoading();
         if (JsonMessage.Result == "ok") {
             if (localStorage["RememberMe"] == "true") {
                 localStorage["AuthenticationToken"] = JsonMessage.AuthenticationToken;
@@ -16,6 +17,7 @@
         };
     };
     export function HandleLogon(JsonMessage) {
+        After.Utilities.RemoveLoading();
         if (JsonMessage.Result == "new required") {
             $("#divNewPassword").slideDown();
             $("#divLoginStatus").hide();
@@ -75,6 +77,7 @@
         After.Utilities.ShowDialog("Your were disconnected because your account was logged in from another location.<br/><br/>If this wasn't you, you should change your password immediately.", "black", "OK", null);
     }
     export function HandleForgotPassword(JsonMessage) {
+        After.Utilities.RemoveLoading();
         var result = JsonMessage.Result;
         if (result == "empty") {
             After.Utilities.ShowDialog("You must enter a username first.", "black", "OK", null);

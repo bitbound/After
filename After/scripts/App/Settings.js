@@ -3,18 +3,21 @@ var After;
     var App;
     (function (App) {
         class Settings {
-            constructor() {
-                this.FollowPlayer = true;
+            get FollowPlayer() {
+                return ($('#divSettingsFrame .switch-outer[prop="FollowPlayer"]').attr("on") == "true");
+            }
+            set FollowPlayer(value) {
+                $('#divSettingsFrame .switch-outer[prop="FollowPlayer"]').attr("on", String(value));
             }
             get DPad() {
-                return Boolean($('#divSideTabs div[prop="DPad"]').attr("on"));
+                return ($('#divSettingsFrame .switch-outer[prop="DPad"]').attr("on") == "true");
             }
             set DPad(value) {
-                $('#divSideTabs div[prop="DPad"]').attr("on", String(value));
+                $('#divSettingsFrame .switch-outer[prop="DPad"]').attr("on", String(value));
                 if (value) {
                     $("#divDPad").show();
                     this.Joystick = false;
-                    $('#divSideTabs div[prop="Joystick"]').attr("on", "false");
+                    $('#divSettingsFrame .switch-outer[prop="Joystick"]').attr("on", "false");
                     var request = {
                         "Category": "Accounts",
                         "Type": "ChangeSetting",
@@ -28,14 +31,14 @@ var After;
                 }
             }
             get Joystick() {
-                return Boolean($('#divSideTabs div[prop="Joystick"]').attr("on"));
+                return ($('#divSettingsFrame .switch-outer[prop="Joystick"]').attr("on") == "true");
             }
             set Joystick(value) {
-                $('#divSideTabs div[prop="Joystick"]').attr("on", String(value));
+                $('#divSettingsFrame .switch-outer[prop="Joystick"]').attr("on", String(value));
                 if (value) {
                     $("#divJoystick").show();
                     this.DPad = false;
-                    $('#divSideTabs div[prop="DPad"]').attr("on", "false");
+                    $('#divSettingsFrame .switch-outer[prop="DPad"]').attr("on", "false");
                     var request = {
                         "Category": "Accounts",
                         "Type": "ChangeSetting",
@@ -47,6 +50,12 @@ var After;
                 else {
                     $("#divJoystick").hide();
                 }
+            }
+            get LockTabs() {
+                return ($('#divSettingsFrame .switch-outer[prop="LockTabs"]').attr("on") == "true");
+            }
+            set LockTabs(value) {
+                $('#divSettingsFrame .switch-outer[prop="LockTabs"]').attr("on", String(value));
             }
         }
         App.Settings = Settings;

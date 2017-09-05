@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Helpers;
-using System.Web.Script.Serialization;
 
 namespace After.Models
 {
@@ -148,15 +147,17 @@ namespace After.Models
         public List<string> Flags { get; set; }
         public Dictionary<string, System.Timers.Timer> Timers { get; set; } = new Dictionary<string, System.Timers.Timer>();
         public DateTime LastAccessed { get; set; }
+
+        //*** Utility Methods ***//
         public Location GetCurrentLocation()
         {
             if (CurrentXYZ == null)
             {
                 return null;
             }
-            return World.Current.Locations.Find(CurrentXYZ);
+            return Storage.Current.Locations.Find(CurrentXYZ);
         }
-        public Location GetPreviousLocation(World Context)
+        public Location GetPreviousLocation(Storage Context)
         {
             return Context.Locations.Find(PreviousXYZ);
         }
@@ -167,7 +168,7 @@ namespace After.Models
             {
                 return visibleList;
             }
-            var location = World.Current.Locations.Find(CurrentXYZ);
+            var location = Storage.Current.Locations.Find(CurrentXYZ);
             for (var x = location.XCoord - ViewDistance; x <= location.XCoord + ViewDistance; x++)
             {
                 for (var y = location.YCoord - ViewDistance; y <= location.YCoord + ViewDistance; y++)
@@ -178,8 +179,8 @@ namespace After.Models
                     ) <= ViewDistance)
                     {
                         var storageID = $"{x.ToString()},{y.ToString()},{location.ZCoord}";
-                        if (World.Current.Locations.Exists(storageID))
-                            visibleList.Add(World.Current.Locations.Find(storageID));
+                        if (Storage.Current.Locations.Exists(storageID))
+                            visibleList.Add(Storage.Current.Locations.Find(storageID));
                     }
                 }
             }
@@ -192,10 +193,10 @@ namespace After.Models
                 StopCharging();
             }
             dynamic request;
-            var toLocation = World.Current.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
+            var toLocation = Storage.Current.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
             if (toLocation == null)
             {
-                toLocation = World.Current.CreateTempLocation(ToXYZ);
+                toLocation = Location.CreateTempLocation(ToXYZ);
                 var area = toLocation.ConvertToArea(true);
                 request = new
                 {
@@ -302,7 +303,7 @@ namespace After.Models
                     };
                     handler.Send(Json.Encode(update));
                 }
-                foreach (var player in World.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p.Name != Name))
+                foreach (var player in Storage.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p.Name != Name))
                 {
                     dynamic request = new
                     {

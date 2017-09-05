@@ -127,7 +127,7 @@ var After;
             }
             //*** Utility Functions ***//
             GetCurrentLocation() {
-                return After.World_Data.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
+                return After.Storage.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
             }
             BlowUp(Force) {
                 for (var i = 0; i < After.Me.Particles.length - 1; i++) {

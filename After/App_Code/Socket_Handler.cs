@@ -28,7 +28,7 @@ namespace After
                 {
                     return null;
                 }
-                return World.Current.Players.Find(Name);
+                return Storage.Current.Players.Find(Name);
             }
         }
         public Socket_Handler()
@@ -87,7 +87,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            World.Current.Players.Store(Player.StorageID);
+            Storage.Current.Players.Store(Player.StorageID);
             Player.GetCurrentLocation()?.CharacterLeaves(Player);
             foreach (var timer in Player.Timers)
             {
@@ -112,7 +112,7 @@ namespace After
                 Username = Player.Name,
             };
             SocketCollection.Broadcast(Json.Encode(message));
-            World.Current.Players.Store(Player.StorageID);
+            Storage.Current.Players.Store(Player.StorageID);
             Player.GetCurrentLocation()?.CharacterLeaves(Player);
             foreach (var timer in Player.Timers)
             {
