@@ -289,70 +289,38 @@
                         var part = new After.Models.Particle();
                         part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
                         part.FromX = part.CurrentX;
-                        part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);;
+                        part.ToX = part.CurrentX;
                         part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
                         part.FromY = part.CurrentY;
-                        part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);;
+                        part.ToY = part.CurrentY;
                         soul.Particles.push(part);
                     };
                 }
 
                 // Apply movement to individual particles.
-                //for (var i = 0; i < soul.Particles.length; i++) {
-                //    var part = soul.Particles[i];
+                for (var i = 0; i < soul.Particles.length; i++) {
+                    var part = soul.Particles[i];
+                    
+                    if (Math.abs(part.ToX - part.CurrentX) <= 1) {
+                        part.ToX = After.Utilities.GetRandom(pb.left, pb.right, true);
+                        $(part).animate({
+                            "CurrentX": part.ToX
+                        }, {
+                                "duration": Math.abs(part.ToX - part.CurrentX) * 125,
+                                "queue": false
+                            });
+                    }
 
-                //    // Get new destination if ToX/Y is reached.
-                //    if (part.ToX >= part.FromX && part.CurrentX >= part.ToX) {
-                //        part.FromX = part.ToX;
-                //        do {
-                //            part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                //        } while (part.FromX == part.ToX);
-                //    } else if (part.ToX <= part.FromX && part.CurrentX <= part.ToX) {
-                //        part.FromX = part.ToX;
-                //        do {
-                //            part.ToX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                //        } while (part.FromX == part.ToX);
-                //    }
-                //    if (part.ToY >= part.FromY && part.CurrentY >= part.ToY) {
-                //        part.FromY = part.ToY;
-                //        do {
-                //            part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                //        } while (part.FromY == part.ToY);
-                //    } else if (part.ToY <= part.FromY && part.CurrentY <= part.ToY) {
-                //        part.FromY = part.ToY;
-                //        do {
-                //            part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                //        } while (part.FromY == part.ToY);
-                //    }
-
-                //    // Change x value with ease-in-out motion.
-                //    var halfwayX = (Math.max(part.FromX, part.ToX) - Math.min(part.FromX, part.ToX)) / 2;
-                //    var travelledX = Math.max(part.FromX, part.CurrentX) - Math.min(part.FromX, part.CurrentX);
-                //    var distanceFromEndX = halfwayX - Math.abs(halfwayX - travelledX);
-                //    var changeX = Math.max(.3 * (distanceFromEndX / halfwayX), .1);
-                //    if (part.ToX > part.CurrentX) {
-                //        part.CurrentX += changeX * moveAdjust;
-                //    } else if (part.ToX < part.CurrentX) {
-                //        part.CurrentX -= changeX * moveAdjust;
-                //    };
-                //    if (isFinite(part.CurrentX) == false) {
-                //        part.CurrentX = part.ToX;
-                //    }
-
-                //    // Change y value with ease-in-out motion.
-                //    var halfwayY = (Math.max(part.FromY, part.ToY) - Math.min(part.FromY, part.ToY)) / 2;
-                //    var travelledY = Math.max(part.FromY, part.CurrentY) - Math.min(part.FromY, part.CurrentY);
-                //    var distanceFromEndY = halfwayY - Math.abs(halfwayY - travelledY);
-                //    var changeY = Math.max(.3 * (distanceFromEndY / halfwayY), .1);
-                //    if (part.ToY > part.CurrentY) {
-                //        part.CurrentY += changeY * moveAdjust;
-                //    } else if (part.ToY < part.CurrentY) {
-                //        part.CurrentY -= changeY * moveAdjust;
-                //    };
-                //    if (isFinite(part.CurrentY) == false) {
-                //        part.CurrentY = part.ToY;
-                //    }
-                //}
+                    if (Math.abs(part.ToY - part.CurrentY) <= 1) {
+                        part.ToY = part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, true);
+                        $(part).animate({
+                            "CurrentY": part.ToY
+                        }, {
+                                "duration": Math.abs(part.ToY - part.CurrentY) * 125,
+                                "queue": false
+                            });
+                    }
+                }
             }, 20)
         }
     }

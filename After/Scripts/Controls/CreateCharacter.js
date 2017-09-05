@@ -35,7 +35,7 @@ After.Temp.CreateCharacter.Init = function () {
         $(part).animate({
             "CurrentX": part.ToX,
             "CurrentY": part.ToY
-        }, Math.abs(part.ToX - part.CurrentX) * 20);
+        }, Math.abs(part.ToX - part.CurrentX) * 35);
     }
     ;
     ATI.EvaluateColor = function () {
@@ -126,7 +126,7 @@ After.Temp.CreateCharacter.Init = function () {
                 $(part).animate({
                     "CurrentX": part.ToX
                 }, {
-                    "duration": Math.abs(part.ToX - part.CurrentX) * 20,
+                    "duration": Math.abs(part.ToX - part.CurrentX) * 35,
                     "queue": false
                 });
             }
@@ -135,7 +135,7 @@ After.Temp.CreateCharacter.Init = function () {
                 $(part).animate({
                     "CurrentY": part.ToY
                 }, {
-                    "duration": Math.abs(part.ToY - part.CurrentY) * 20,
+                    "duration": Math.abs(part.ToY - part.CurrentY) * 35,
                     "queue": false
                 });
             }
