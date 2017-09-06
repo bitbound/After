@@ -298,10 +298,9 @@
                 }
 
                 // Apply movement to individual particles.
-                for (var i = 0; i < soul.Particles.length; i++) {
+                for (var i = 0; i < soul.Particles.length; i++) {    
                     var part = soul.Particles[i];
-                    
-                    if (Math.abs(part.ToX - part.CurrentX) <= 1) {
+                    if (part.ToX == part.CurrentX) {
                         part.ToX = After.Utilities.GetRandom(pb.left, pb.right, true);
                         $(part).animate({
                             "CurrentX": part.ToX
@@ -311,7 +310,7 @@
                             });
                     }
 
-                    if (Math.abs(part.ToY - part.CurrentY) <= 1) {
+                    if (part.ToY == part.CurrentY) {
                         part.ToY = part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, true);
                         $(part).animate({
                             "CurrentY": part.ToY

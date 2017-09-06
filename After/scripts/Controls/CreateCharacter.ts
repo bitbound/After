@@ -121,7 +121,7 @@ After.Temp.CreateCharacter.Init = function () {
         for (var i = 0; i < ATI.PreviewParticles.length; i++) {
             var part = ATI.PreviewParticles[i];
 
-            if (Math.abs(part.ToX - part.CurrentX) <= 1) {
+            if (part.ToX == part.CurrentX) {
                 part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
                 $(part).animate({
                     "CurrentX": part.ToX
@@ -131,7 +131,7 @@ After.Temp.CreateCharacter.Init = function () {
                 });
             }
 
-            if (Math.abs(part.ToY - part.CurrentY) <= 1) {
+            if (part.ToY == part.CurrentY) {
                 part.ToY = part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
                 $(part).animate({
                     "CurrentY": part.ToY

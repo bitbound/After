@@ -65,6 +65,9 @@
                     else if (e.key == "9" || e.key == "PageUp") {
                         After.Me.Move("NE");
                     }
+                    else if (e.key == "5") {
+                        After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, true);
+                    }
                     else if (e.key == " ") {
                         After.Me.ToggleCharging();
                     }
@@ -853,7 +856,7 @@
             if (strMessage == "") {
                 return;
             }
-            if (strMessage.trim() == "/debug") {
+            if (strMessage.trim() == "/debug" || ($("#selectChatChannel").val() == "Command" && strMessage.trim() == "debug")) {
                 After.Debug = !After.Debug;
                 if (After.Debug) {
                     $("#divDebug").show();

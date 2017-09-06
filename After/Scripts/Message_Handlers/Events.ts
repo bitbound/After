@@ -89,23 +89,16 @@
             $(After.Me).animate({
                 "XCoord": Number(dest[0]),
                 "YCoord": Number(dest[1])
-            }, Number(JsonMessage.TravelTime));
-            for (var i = 0; i < After.Me.Particles.length; i++) {
-                var x = After.Utilities.GetRandom(-5, 5, true);
-                var y = After.Utilities.GetRandom(-5, 5, true);
-                After.Me.Particles[i].FromX = x;
-                After.Me.Particles[i].ToX = x;
-                After.Me.Particles[i].FromY = y;
-                After.Me.Particles[i].ToY = y;
-                $(After.Me.Particles[i]).animate({
-                    "CurrentX": x,
-                    "CurrentY": y
-                }, Number(JsonMessage.TravelTime), function () {
+            },
+            {
+                "duration": Number(JsonMessage.TravelTime),
+                "queue": false,
+                "always": function () {
                     After.Me.IsMoving = false;
-                })
-            }
+                }
+            });
             if (After.Settings.FollowPlayer) {
-                for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 20) {
+                for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 10) {
                     window.setTimeout(function () {
                         After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, false);
                     }, i)
