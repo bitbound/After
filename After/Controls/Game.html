@@ -10,7 +10,7 @@
         </div>
         <div id="divChatInnerFrame" class="tab-outerframe" >
             <div id="divChatMessageWindow" class="tab-innerframe"></div>
-            <div id="divChatInput">
+            <div id="divChatBottomBar">
                 <select id="selectChatChannel">
                     <option>Global</option>
                     <option>Command</option>
@@ -30,7 +30,13 @@
             <span>Admin</span>
         </div>
         <div class="tab-outerframe">
-            <div class="tab-innerframe"></div>
+            <div id="divAdminMessageWindow" class="tab-innerframe"></div>
+            <div id="divAdminBottomBar">
+                <div id="divAdminInputWrapper">
+                    <input type="text" id="inputAdminInput" />
+                </div>
+                <button id="buttonAdminSubmit" type="button">Submit</button>
+            </div>
         </div>
     </div>
 
@@ -253,6 +259,7 @@
             </div>
         </div>
     </div>
+
     <style>
         /*** Page ***/
         #divGame {
@@ -536,11 +543,11 @@
             margin-top: 5px;
         }
 
-        #divChatMessageWindow {
+        #divChatMessageWindow, #divAdminMessageWindow {
             bottom: 27px;
         }
         
-        #divChatInput {
+        #divChatBottomBar, #divAdminBottomBar {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -555,17 +562,23 @@
             height: 25px;
         }
 
-        #divChatInputWrapper {
+        #divChatInputWrapper{
             position: absolute;
             left: 87px;
             right: 80px;
         }
 
-        #inputChatInput {
+        #divAdminInputWrapper {
+            position: absolute;
+            left: 0;
+            right: 80px;
+        }
+        
+        #inputChatInput, #inputAdminInput {
             width: 100%;
         }
 
-        #buttonChatSubmit {
+        #buttonChatSubmit, #buttonAdminSubmit {
             position: absolute;
             right: 0;
             width: 60px;

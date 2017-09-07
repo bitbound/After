@@ -266,12 +266,12 @@ var After;
                 After.Canvas.Element.oncontextmenu = function (e) {
                     return false;
                 };
-                $("#divChatInput").keypress(function (e) {
+                $("#divChatBottomBar").keypress(function (e) {
                     if (e.keyCode == 13) {
                         After.Game.SendChat(e);
                     }
                     else if (e.keyCode == 27) {
-                        $("#divChatInput").blur();
+                        $("#divChatBottomBar").blur();
                     }
                     ;
                 });
@@ -804,15 +804,10 @@ var After;
                         }, 500);
                     };
                 });
-                $(".dpad-direction").on("touchmove", function (e) {
-                    e.preventDefault();
-                    $(e.currentTarget).removeProp("click");
-                });
                 $(".dpad-direction").on("click", function (e) {
-                    $(e.currentTarget).addClass("hover");
                     After.Me.Move($(e.currentTarget).attr("move-direction"));
                     window.setTimeout(function (e) {
-                        $(e.currentTarget).removeClass("hover");
+                        $(e.currentTarget).blur();
                     }, 200, e);
                 });
                 $("#circleDPadMiddle").on("click", function (e) {
