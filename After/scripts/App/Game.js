@@ -278,6 +278,18 @@ var After;
                 $("#buttonChatSubmit").click(function (e) {
                     After.Game.SendChat(e);
                 });
+                $("#divAdminBottomBar").keypress(function (e) {
+                    if (e.keyCode == 13) {
+                        After.Game.SendAdmin(e);
+                    }
+                    else if (e.keyCode == 27) {
+                        $("#divAdminBottomBar").blur();
+                    }
+                    ;
+                });
+                $("#buttonAdminSubmit").click(function (e) {
+                    After.Game.SendAdmin(e);
+                });
                 $("#buttonCharge").click(function (e) {
                     After.Me.ToggleCharging();
                 });
@@ -850,7 +862,7 @@ var After;
                 if (strMessage == "") {
                     return;
                 }
-                if (strMessage.trim() == "/debug" || ($("#selectChatChannel").val() == "Command" && strMessage.trim() == "debug")) {
+                if (strMessage.trim().toLowerCase() == "/debug" || ($("#selectChatChannel").val() == "Command" && strMessage.trim().toLowerCase() == "debug")) {
                     After.Debug = !After.Debug;
                     if (After.Debug) {
                         $("#divDebug").show();
@@ -868,7 +880,29 @@ var After;
                 };
                 After.Connection.Socket.send(JSON.stringify(jsonMessage));
             }
-            ;
+            SendAdmin(e) {
+                var strMessage = $("#inputAdminInput").val();
+                $("#inputAdminInput").val("");
+                if (strMessage == "") {
+                    return;
+                }
+                if (strMessage.trim().toLowerCase() == "debug") {
+                    After.Debug = !After.Debug;
+                    if (After.Debug) {
+                        $("#divDebug").show();
+                    }
+                    else {
+                        $("#divDebug").hide();
+                    }
+                    return;
+                }
+                var jsonMessage = {
+                    "Category": "Messages",
+                    "Type": "Admin",
+                    "Message": strMessage
+                };
+                After.Connection.Socket.send(JSON.stringify(jsonMessage));
+            }
             AddPower(e) {
                 if ($("#divPowersFrame .tab-innerframe #divPowersCategory-" + e.Category).length == 0) {
                     var header = document.createElement("div");
