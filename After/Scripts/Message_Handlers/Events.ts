@@ -81,22 +81,24 @@
             }
         }
     };
-    export async function HandlePlayerMove(JsonMessage) {
+    export function HandlePlayerMove(JsonMessage) {
         if (JsonMessage.Soul.Name == After.Me.Name) {
             After.Me.IsMoving = true;
             var dest = JsonMessage.To.split(",");
             var from = JsonMessage.From.split(",");
-            $(After.Me).animate({
-                "XCoord": Number(dest[0]),
-                "YCoord": Number(dest[1])
-            },
-            {
-                "duration": Number(JsonMessage.TravelTime),
-                "queue": false,
-                "always": function () {
-                    After.Me.IsMoving = false;
+            $(After.Me).animate(
+                {
+                    "XCoord": Number(dest[0]),
+                    "YCoord": Number(dest[1])
+                },
+                {
+                    "duration": Number(JsonMessage.TravelTime),
+                    "queue": false,
+                    "always": function () {
+                        After.Me.IsMoving = false;
+                    }
                 }
-            });
+            );
             if (After.Settings.FollowPlayer) {
                 for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 10) {
                     window.setTimeout(function () {

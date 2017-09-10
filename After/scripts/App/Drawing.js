@@ -220,84 +220,43 @@ var After;
             }
             ;
             AnimateParticles() {
-                After.Temp.LastIntervalTime = Date.now() - 20;
-                this.ParticleInterval = window.setInterval(function () {
-                    var moveAdjust = Math.min((Date.now() - After.Temp.LastIntervalTime) / 20, 20);
-                    After.Temp.LastIntervalTime = Date.now();
-                    if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
-                        return;
-                    }
-                    var soul = After.Me;
-                    // Set bounds within which particles will move.
-                    if (typeof soul.ParticleBounds == "undefined") {
-                        var top = After.Utilities.GetRandom(-25, 25, true);
-                        var left = After.Utilities.GetRandom(-25, 15, true);
-                        soul.ParticleBounds = {
-                            left: left,
-                            top: top,
-                            right: left + 20,
-                            bottom: top + 20
-                        };
-                        soul.ParticleWanderTo = {
-                            x: After.Utilities.GetRandom(-25, 15, true),
-                            y: After.Utilities.GetRandom(-30, -5, true)
-                        };
-                    }
-                    // Make particles wander in the area.
-                    if (Math.round(soul.ParticleBounds.left) != Math.round(soul.ParticleWanderTo.x)) {
-                        var change = (soul.ParticleWanderTo.x - soul.ParticleBounds.left) / Math.abs((soul.ParticleWanderTo.x - soul.ParticleBounds.left));
-                        soul.ParticleBounds.left += .1 * change;
-                    }
-                    else {
-                        soul.ParticleWanderTo.x = After.Utilities.GetRandom(-25, 15, true);
-                    }
-                    if (Math.round(soul.ParticleBounds.top) != Math.round(soul.ParticleWanderTo.y)) {
-                        var change = (soul.ParticleWanderTo.y - soul.ParticleBounds.top) / Math.abs((soul.ParticleWanderTo.y - soul.ParticleBounds.top));
-                        soul.ParticleBounds.top += .1 * change;
-                    }
-                    else {
-                        soul.ParticleWanderTo.y = After.Utilities.GetRandom(-30, -5, true);
-                    }
-                    soul.ParticleBounds.right = soul.ParticleBounds.left + 20;
-                    soul.ParticleBounds.bottom = soul.ParticleBounds.top + 20;
-                    var pb = soul.ParticleBounds;
-                    // Populate missing particles.
-                    if (soul.Particles.length < 50) {
-                        for (var i = soul.Particles.length; i < 50; i++) {
-                            var part = new After.Models.Particle();
-                            part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
-                            part.FromX = part.CurrentX;
-                            part.ToX = part.CurrentX;
-                            part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
-                            part.FromY = part.CurrentY;
-                            part.ToY = part.CurrentY;
-                            soul.Particles.push(part);
-                        }
-                        ;
-                    }
-                    // Apply movement to individual particles.
-                    for (var i = 0; i < soul.Particles.length; i++) {
-                        var part = soul.Particles[i];
-                        if (part.ToX == part.CurrentX) {
-                            part.ToX = After.Utilities.GetRandom(pb.left, pb.right, true);
-                            $(part).animate({
-                                "CurrentX": part.ToX
-                            }, {
-                                "duration": Math.abs(part.ToX - part.CurrentX) * 125,
-                                "queue": false
-                            });
-                        }
-                        if (part.ToY == part.CurrentY) {
-                            part.ToY = part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, true);
-                            $(part).animate({
-                                "CurrentY": part.ToY
-                            }, {
-                                "duration": Math.abs(part.ToY - part.CurrentY) * 125,
-                                "queue": false
-                            });
-                        }
-                    }
-                }, 20);
+                //After.Temp.LastIntervalTime = Date.now() - 20;
+                //var moveAdjust = Math.min((Date.now() - After.Temp.LastIntervalTime) / 20, 20);
+                //After.Temp.LastIntervalTime = Date.now();
+                //if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
+                //    return;
+                //}
+                var soul = After.Me;
+                // Set bounds within which particles will move.
+                var top = After.Utilities.GetRandom(-25, 25, true);
+                var left = After.Utilities.GetRandom(-25, 15, true);
+                soul.ParticleBounds = {
+                    left: -10,
+                    top: -20,
+                    right: 10,
+                    bottom: 0
+                };
+                // Make particles wander in the area.
+                soul.ParticleWanderTo["x"] = After.Utilities.GetRandom(-25, 15, true);
+                soul.ParticleWanderTo["y"] = After.Utilities.GetRandom(-30, -5, true);
+                After.Me.WanderParticlesX();
+                After.Me.WanderParticlesY();
+                var pb = soul.ParticleBounds;
+                // Populate particles.
+                for (var i = soul.Particles.length; i < 50; i++) {
+                    var part = new After.Models.Particle();
+                    part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                    part.ToX = part.CurrentX;
+                    part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
+                    part.ToY = part.CurrentY;
+                    soul.Particles.push(part);
+                }
+                ;
+                // Apply movement to individual particles.
+                for (var i = 0; i < soul.Particles.length; i++) {
+                    After.Me.MoveParticleX(soul.Particles[i]);
+                    After.Me.MoveParticleY(soul.Particles[i]);
+                }
             }
         }
         App.Drawing = Drawing;

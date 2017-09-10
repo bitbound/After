@@ -135,6 +135,80 @@ var After;
                     After.Me.Particles[i].CurrentY = After.Utilities.GetRandom(-Force, Force, true);
                 }
             }
+            WanderParticlesX() {
+                var soul = After.Me;
+                soul.ParticleWanderTo["x"] = After.Utilities.GetRandom(-25, 15, true);
+                var duration = Math.abs(soul.ParticleBounds.left - soul.ParticleWanderTo.x) * 500;
+                $(soul.ParticleBounds).animate({
+                    "left": soul.ParticleWanderTo.x
+                }, {
+                    "duration": duration,
+                    "queue": false,
+                    "easing": "linear"
+                });
+                $(soul.ParticleBounds).animate({
+                    "right": soul.ParticleWanderTo.x + 20
+                }, {
+                    "duration": duration,
+                    "queue": false,
+                    "easing": "linear"
+                });
+                window.setTimeout(function () {
+                    After.Me.WanderParticlesX();
+                }, duration);
+            }
+            WanderParticlesY() {
+                var soul = After.Me;
+                soul.ParticleWanderTo["y"] = After.Utilities.GetRandom(-30, -5, true);
+                var duration = Math.abs(soul.ParticleBounds.top - soul.ParticleWanderTo.y) * 500;
+                $(soul.ParticleBounds).animate({
+                    "top": soul.ParticleWanderTo.y
+                }, {
+                    "duration": duration,
+                    "queue": false,
+                    "easing": "linear"
+                });
+                $(soul.ParticleBounds).animate({
+                    "bottom": soul.ParticleWanderTo.y + 20
+                }, {
+                    "duration": duration,
+                    "queue": false,
+                    "easing": "linear"
+                });
+                window.setTimeout(function () {
+                    After.Me.WanderParticlesY();
+                }, duration);
+            }
+            MoveParticleX(Part) {
+                var soul = After.Me;
+                var pb = After.Me.ParticleBounds;
+                Part.ToX = After.Utilities.GetRandom(pb.left, pb.right, true);
+                var duration = Math.abs(Part.ToX - Part.CurrentX) * 125;
+                $(Part).animate({
+                    "CurrentX": Part.ToX
+                }, {
+                    "duration": duration,
+                    "queue": false
+                });
+                window.setTimeout(function (Part) {
+                    After.Me.MoveParticleX(Part);
+                }, duration, Part);
+            }
+            MoveParticleY(Part) {
+                var soul = After.Me;
+                var pb = After.Me.ParticleBounds;
+                Part.ToY = After.Utilities.GetRandom(pb.top, pb.bottom, true);
+                var duration = Math.abs(Part.ToY - Part.CurrentY) * 125;
+                $(Part).animate({
+                    "CurrentY": Part.ToY
+                }, {
+                    "duration": duration,
+                    "queue": false
+                });
+                window.setTimeout(function (Part) {
+                    After.Me.MoveParticleY(Part);
+                }, duration, Part);
+            }
         }
         App.Me = Me;
     })(App = After.App || (After.App = {}));
