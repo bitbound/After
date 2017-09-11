@@ -1,0 +1,27 @@
+﻿<div id="divCreateCharacter" style="position:absolute; top:0; right:0; bottom:0; left:0; opacity:0; z-index: 2; overflow: auto; color:white; text-align:center">
+
+    <canvas id="canvasPreview" style="position:absolute; left:0; top: 0; width:100%; height:45% ">
+    </canvas>
+    <div style="position:absolute; left:0; right:0; top: 120px; bottom: 0;">
+        <div id="divTopBorder" style="margin: auto; height:3px; width:200px; background-color:white; border-radius:100%"></div>
+        <div id="divTitle" style="font-size:large; font-weight:900; margin-top: 10px; margin-bottom: 10px;">What color is your soul?</div>
+        <div id="divBottomBorder" style="margin:auto; height:3px; width:200px; background-color:white; border-radius:100%"></div>
+
+        <div id="divCharacterForm" style="display:inline-block; margin-top:25px; text-align:left">
+            <span style="margin-left:-50px">Method 1:</span><br />
+            <label style="color:red">Red:</label><br />
+            <input id="inputRed" type="range" min="0" max="255" value="125" style="width:100%; margin: 0" onchange="After.Temp.Intro.EvaluateColor()" /><br />
+            <label style="color:green">Green:</label><br />
+            <input id="inputGreen" type="range" min="0" max="255" value="125" style="width:100%; margin: 0" onchange="After.Temp.Intro.EvaluateColor()" /><br />
+            <label style="color:blue">Blue:</label><br />
+            <input id="inputBlue" type="range" min="0" max="255" value="125" style="width:100%; margin: 0" onchange="After.Temp.Intro.EvaluateColor()" /><br />
+            <br />
+            <span style="margin-left:-50px">Method 2:</span><br />
+            <label>Pick a Color Name:</label><br />
+            <select id="selectColor" onchange="After.Temp.Intro.ColorSelected()" style="width:100%"></select><br /><br />
+            <div style="text-align:right">
+                <button id="buttonSubmit" onclick="After.Temp.Intro.SubmitColor()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

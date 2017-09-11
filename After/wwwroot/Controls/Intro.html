@@ -1,0 +1,71 @@
+﻿<div id="divIntro" style="background-color:black; position:absolute; top:0; right:0; bottom:0; left:0; opacity:0; z-index: 2;">
+    <div id="divLogo" style="position:absolute; top:15%; width:100%; text-align:center">
+        <img src="/Assets/Images/TranslucencyLogoInverse.png" style="width:80%" />
+        <svg id="svgSliver" height="50%" width="5%" style="position:absolute; left:17.25%; top:-100%; display:none">
+            <ellipse rx="2.5%" ry="50%" cx="2.5%" cy="50%" fill="white"></ellipse>
+        </svg>
+        <svg id="svgRing1" height="12%" width="12%" style="position:absolute; left:16.7%; top:24%; opacity:0">
+            <ellipse rx="6%" ry="6%" cx="6%" cy="6%" stroke="white" fill="transparent"></ellipse>
+        </svg>
+        <svg id="svgRing2" height="12%" width="12%" style="position:absolute; left:16.7%; top:61%; opacity:0">
+            <ellipse rx="6%" ry="6%" cx="6%" cy="6%" stroke="white" fill="transparent"></ellipse>
+            
+        </svg>
+        <div id="divPresents" class="font-serif" style="position:absolute; bottom:-10%; width:100%; text-align:center; color: white; font-size:3vw; opacity:0;">
+            Proudly presents...
+        </div>
+    </div>
+    <div style="position:absolute; top:25%; width:100%; color:white;text-align:center;">
+        <div id="divNarration" class="font-serif" style="display:inline-block; max-width:600px">
+
+        </div>
+    </div>
+    
+    <div id="divContinue" class="font-sansserif" style="position:absolute; bottom: 10%; color:white; width:100%; text-align:center; font-size:10px; opacity:0">
+        Tap to continue.
+    </div>
+    <button id="buttonSkip" style="position:fixed; right:25px; bottom:25px; font-size:10px; color:gray" hidden onclick="After.Temp.Intro.Skip()">Skip</button>
+    <style>
+        .animate-narration {
+            animation-name: animate-narration;
+            animation-duration: 500ms;
+            animation-fill-mode: forwards;
+        }
+        @keyframes animate-narration {
+            from {
+                left: 25px;
+                opacity: 0;
+            }
+
+            to {
+                left: 0;
+                opacity: 1;
+            }
+        }
+
+        @-moz-keyframes animate-narration {
+            from {
+                left: 25px;
+                opacity: 0;
+            }
+
+            to {
+                left: 0;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes animate-narration {
+            from {
+                left: 25px;
+                opacity: 0;
+            }
+
+            to {
+                left: 0;
+                opacity: 1;
+            }
+        }
+    </style>
+</div>
+
