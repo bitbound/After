@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
-
-namespace Dynamic_JSON
+// License: Apache v2.
+namespace Really_Dynamic
 {
     public class Dynamic : DynamicObject
     {
