@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
-// License: Apache v2.
+
 namespace Really_Dynamic
 {
     public class Dynamic : DynamicObject
     {
-        Dictionary<string, object> properties = new Dictionary<string, object>();
+        Dictionary<string, dynamic> properties = new Dictionary<string, dynamic>();
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        public override bool TryGetMember(GetMemberBinder binder, out dynamic result)
         {
             if (properties.ContainsKey(binder.Name))
             {
@@ -20,11 +20,37 @@ namespace Really_Dynamic
             return true;
         }
 
-        public override bool TrySetMember(SetMemberBinder binder, object value)
+        public override bool TrySetMember(SetMemberBinder binder, dynamic value)
         {
             properties[binder.Name] = value;
-            base.TrySetMember(binder, value);
+            base.TrySetMember(binder, value as object);
             return true;
+        }
+        public Dictionary<string, dynamic> ToDictionary()
+        {
+            return properties;
+        }
+        public override IEnumerable<string> GetDynamicMemberNames()
+        {
+            return properties.Keys;
+        }
+        public dynamic this[string key]
+        {
+            get
+            {
+                if (properties.ContainsKey(key))
+                {
+                    return properties[key];
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                properties[key] = value;
+            }
         }
     }
 }

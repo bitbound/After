@@ -35,10 +35,6 @@ namespace Translucency.WebSockets
         {
             foreach (var client in ClientList)
             {
-                if (client == Sender)
-                {
-                    continue;
-                }
                 client.SendString(Message);
             }
         }

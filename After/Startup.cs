@@ -58,7 +58,7 @@ namespace After
                             throw new Exception("Category or Type is null within Socket_Handler.OnMessage.");
                         }
 
-                        if (wsClient.Tags.ContainsKey("Authenticated"))
+                        if (wsClient.Tags.Authenticated != true)
                         {
                             if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
                             {

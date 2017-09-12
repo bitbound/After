@@ -1,5 +1,6 @@
 ﻿using Dynamic_JSON;
 using Newtonsoft.Json.Linq;
+using Really_Dynamic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Translucency.WebSockets
         /// <summary>
         /// A dictionary of arbitrary data to store on the socket.
         /// </summary>
-        public Dictionary<string, dynamic> Tags { get; set; } = new Dictionary<string, dynamic>();
+        public dynamic Tags { get; set; } = new Dynamic();
 
         /// <summary>
         /// The action to perform when a string message is read.  This is performed every time, before the received string is evaluated.
@@ -73,7 +74,7 @@ namespace Translucency.WebSockets
         /// Send a byte array message to the client.
         /// </summary>
         /// <param name="ByteArray">The message to send to the client.</param>
-        public void SendBytes(byte[] ByteArray)
+        public async Task SendBytes(byte[] ByteArray)
         {
             var outBuffer = new ArraySegment<byte>(ByteArray);
             SendBuffer.Add(outBuffer);
@@ -83,8 +84,7 @@ namespace Translucency.WebSockets
             }
             while (SendBuffer.Count > 0)
             {
-                var send = ClientSocket.SendAsync(SendBuffer[0], WebSocketMessageType.Text, true, CancellationToken.None);
-                send.Wait();
+                await ClientSocket.SendAsync(SendBuffer[0], WebSocketMessageType.Text, true, CancellationToken.None);
                 SendBuffer.RemoveAt(0);
             }
         }
@@ -92,10 +92,10 @@ namespace Translucency.WebSockets
         /// Send a string message to the client.
         /// </summary>
         /// <param name="MessageString">The message to send to the client.</param>
-        public void SendString(string MessageString)
+        public async Task SendString(string MessageString)
         {
             var outBuffer = Encoding.UTF8.GetBytes(MessageString);
-            SendBytes(outBuffer);
+            await SendBytes(outBuffer);
         }
         /// <summary>
         /// Continuously reads data from the websocket.
@@ -148,7 +148,7 @@ namespace Translucency.WebSockets
                 {
                     OnMessageStringPreAction.Invoke(this, jsonMessage);
                 }
-                if (OnMessageStringActions.ContainsKey(jsonMessage?.First?.First?.ToString()))
+                if ((jsonMessage as Dynamic)["Command"] != null && OnMessageStringActions.ContainsKey(jsonMessage["Command"]))
                 {
                     OnMessageStringActions[jsonMessage.First.First.ToString()].Invoke(this, jsonMessage);
                 }
