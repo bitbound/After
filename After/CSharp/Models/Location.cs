@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +64,7 @@ namespace After.Models
             LastVisitedBy = CharacterObject.Name;
             var soul = CharacterObject.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers();
-            var request = JsonConvert.SerializeObject(new
+            var request = JSON.Encode(new
             {
                 Category = "Events",
                 Type = "CharacterArrives",
@@ -82,7 +82,7 @@ namespace After.Models
             CharacterObject.CurrentXYZ = null;
             CharacterObject.PreviousXYZ = this.StorageID;
             Occupants.RemoveAll(name=>name == CharacterObject.Name);
-            var request = JsonConvert.SerializeObject(new
+            var request = JSON.Encode(new
             {
                 Category = "Events",
                 Type = "CharacterLeaves",

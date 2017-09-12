@@ -1,5 +1,5 @@
 ﻿using After.Models;
-using Newtonsoft.Json;
+using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ namespace After.Message_Handlers
         public static void HandlePlayerUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {
             JsonMessage.Player = (WSC.Tags["Player"] as Player).ConvertToMe();
-            WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+            WSC.SendString(JSON.Encode(JsonMessage));
         }
         public static void HandleRefreshView(dynamic JsonMessage, WebSocketClient WSC)
         {
@@ -35,7 +35,7 @@ namespace After.Message_Handlers
                     };
                     foreach (var player in area.GetNearbyPlayers())
                     {
-                        player.SendString(JsonConvert.SerializeObject(request));
+                        player.SendString(JSON.Encode(request));
                     }
                     Storage.Current.Locations.Remove(area.StorageID);
                     continue;
@@ -61,13 +61,13 @@ namespace After.Message_Handlers
             }
             JsonMessage.Souls = souls;
             JsonMessage.Areas = areas;
-            WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+            WSC.SendString(JSON.Encode(JsonMessage));
         }
 
         public static void HandleGetPowers(dynamic JsonMessage, WebSocketClient WSC)
         {
             JsonMessage.Powers = (WSC.Tags["Player"] as Player).Powers;
-            WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+            WSC.SendString(JSON.Encode(JsonMessage));
         }
         public static void HandleFirstLoad(dynamic JsonMessage, WebSocketClient WSC)
         {
@@ -90,7 +90,7 @@ namespace After.Message_Handlers
             JsonMessage.Player = (WSC.Tags["Player"] as Player).ConvertToMe();
             JsonMessage.Powers = (WSC.Tags["Player"] as Player).Powers;
             JsonMessage.AccountType = (WSC.Tags["Player"] as Player).AccountType;
-            WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+            WSC.SendString(JSON.Encode(JsonMessage));
 
             (WSC.Tags["Player"] as Player).GetCurrentLocation().CharacterArrives((WSC.Tags["Player"] as Player));
         }
@@ -114,7 +114,7 @@ namespace After.Message_Handlers
                                     Type = "MapUpdate",
                                     Area = location.ConvertToArea(false)
                                 };
-                                WSC.SendString(JsonConvert.SerializeObject(request));
+                                WSC.SendString(JSON.Encode(request));
                             }
                         }
                         if (landmark != null)
@@ -125,7 +125,7 @@ namespace After.Message_Handlers
                                 Type = "MapUpdate",
                                 Landmark = landmark.ConvertToDynamic()
                             };
-                            WSC.SendString(JsonConvert.SerializeObject(request));
+                            WSC.SendString(JSON.Encode(request));
                         }
                     }
                 }
@@ -135,7 +135,7 @@ namespace After.Message_Handlers
                     Type = "MapUpdate",
                     Completed = true
                 };
-                WSC.SendString(JsonConvert.SerializeObject(done));
+                WSC.SendString(JSON.Encode(done));
             });
         }
         public static void HandleGetAreaActions(dynamic JsonMessage, WebSocketClient WSC)
@@ -167,7 +167,7 @@ namespace After.Message_Handlers
             if (actionList.Count > 0)
             {
                 JsonMessage.Actions = actionList;
-                WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
     }

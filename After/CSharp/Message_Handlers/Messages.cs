@@ -1,11 +1,9 @@
 ﻿using After.Models;
-using Newtonsoft.Json;
 using System;
-using System.Net.WebSockets;
 using System.Text;
 using Translucency.WebSockets;
 using System.Linq;
-
+using Dynamic_JSON;
 
 namespace After.Message_Handlers
 {
@@ -33,7 +31,7 @@ namespace After.Message_Handlers
             switch ((string)JsonMessage.Channel)
             {
                 case "Global":
-                    Utilities.Server.Broadcast(JsonConvert.SerializeObject(JsonMessage), WSC);
+                    Utilities.Server.Broadcast(JSON.Encode(JsonMessage), WSC);
                     break;
                 case "Command":
                     ParseCommand(JsonMessage, WSC);
@@ -58,7 +56,7 @@ namespace After.Message_Handlers
             //{
             //    JsonData.Message = "Error: " + ex.Message;
             //}
-            //WSC.SendString(JsonConvert.SerializeObject(JsonData));
+            //WSC.SendString(JSON.Encode(JsonData));
         }
         public static void ParseCommand(dynamic JsonMessage, WebSocketClient WSC)
         {
@@ -81,7 +79,7 @@ namespace After.Message_Handlers
                             Channel = "System",
                             Message = reply.ToString()
                         };
-                        WSC.SendString(JsonConvert.SerializeObject(request));
+                        WSC.SendString(JSON.Encode(request));
                         break;
                     }
                 case "who":
@@ -100,7 +98,7 @@ namespace After.Message_Handlers
                             Channel = "System",
                             Message = reply.ToString()
                         };
-                        WSC.SendString(JsonConvert.SerializeObject(request));
+                        WSC.SendString(JSON.Encode(request));
                         break;
                     }
                 default:
@@ -112,7 +110,7 @@ namespace After.Message_Handlers
                             Channel = "System",
                             Message = "Unknown command.  Type /? for a list of commands."
                         };
-                        WSC.SendString(JsonConvert.SerializeObject(request));
+                        WSC.SendString(JSON.Encode(request));
                         break;
                     }
             }

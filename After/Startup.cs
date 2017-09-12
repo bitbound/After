@@ -1,17 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Net.WebSockets;
 using System.Threading;
 using Translucency.WebSockets;
 using System.Linq;
 using After.Models;
-using Microsoft.AspNetCore.Razor;
-using System.IO;
+using System.Collections.Generic;
+using Dynamic_JSON;
 
 namespace After
 {
@@ -51,17 +49,16 @@ namespace After
                 {
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                     var client = new WebSocketClient(WebSocketServer.ServerList["After"], webSocket);
-                    // TODO: Never reaches here.
                     client.OnMessageStringPreAction = (wsClient, jsonMessage) =>
                     {
-                        if (jsonMessage == null || String.IsNullOrEmpty(jsonMessage["Category"].ToString()) || String.IsNullOrEmpty(jsonMessage["Type"].ToString()))
+                        string category = jsonMessage.Category;
+                        string type = jsonMessage.Type;
+                        if (jsonMessage == null || String.IsNullOrEmpty(category) || String.IsNullOrEmpty(type))
                         {
                             throw new Exception("Category or Type is null within Socket_Handler.OnMessage.");
                         }
-                        string category = jsonMessage["Category"].ToString();
-                        string type = jsonMessage["Type"].ToString();
 
-                        if (wsClient.Tags?["Authenticated"] != true)
+                        if (wsClient.Tags.ContainsKey("Authenticated"))
                         {
                             if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
                             {
@@ -106,7 +103,7 @@ namespace After
                             Type = "Disconnected",
                             Username = wsClient.Tags["Player"].Name
                         };
-                        WebSocketServer.ServerList["After"].Broadcast(JsonConvert.SerializeObject(message), wsClient);
+                        WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message), wsClient);
                         var player = wsClient.Tags["Player"] as Player;
                         Storage.Current.Players.Store(player.StorageID);
                         player.GetCurrentLocation()?.CharacterLeaves(player);
@@ -116,6 +113,8 @@ namespace After
                             timer.Value.Dispose();
                         }
                     };
+                    Utilities.Server.ClientList.Add(client);
+                    await client.HandleSocket();
                 }
                 else
                 {

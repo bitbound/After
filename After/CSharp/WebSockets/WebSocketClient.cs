@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Dynamic_JSON;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,8 +16,6 @@ namespace Translucency.WebSockets
         {
             WSServer = Server;
             ClientSocket = Socket;
-            WSServer.ClientList.Add(this);
-            HandleSocket();
         }
 
         /// <summary>
@@ -38,14 +36,14 @@ namespace Translucency.WebSockets
         /// <summary>
         /// The action to perform when a string message is read.  This is performed every time, before the received string is evaluated.
         /// </summary>
-        public Action<WebSocketClient, JObject> OnMessageStringPreAction { get; set; }
+        public Action<WebSocketClient, dynamic> OnMessageStringPreAction { get; set; }
 
         /// <summary>
         /// A dictionary of actions to be performed as a result of the string message read from the websocket.  The first property's first value of every message
-        /// is used as the key for determining which action to perform.  The WebSocketClient and JObject can be used within the Action.  The JObject is the message
-        /// received and parsed with JsonConvert.
+        /// is used as the key for determining which action to perform.  The WebSocketClient and dynamic can be used within the Action.  The dynamic is the message
+        /// received and parsed with JSON.
         /// </summary>
-        public Dictionary<string, Action<WebSocketClient, JObject>> OnMessageStringActions { get; set; } = new Dictionary<string, Action<WebSocketClient, JObject>>();
+        public Dictionary<string, Action<WebSocketClient, dynamic>> OnMessageStringActions { get; set; } = new Dictionary<string, Action<WebSocketClient, dynamic>>();
 
         /// <summary>
         /// The action to perform when a string message is read.  This is performed every time, after the received string is evaluated.
@@ -65,9 +63,9 @@ namespace Translucency.WebSockets
         /// Send a JSON message to the client.
         /// </summary>
         /// <param name="JsonRequest">The message to send to the client.</param>
-        public void SendJSON(JObject JsonRequest)
+        public void SendJSON(dynamic JsonRequest)
         {
-            var jsonRequest = JsonConvert.SerializeObject(JsonRequest);
+            var jsonRequest = JSON.Encode(JsonRequest);
             SendString(jsonRequest);
         }
 
@@ -102,26 +100,24 @@ namespace Translucency.WebSockets
         /// <summary>
         /// Continuously reads data from the websocket.
         /// </summary>
-        private Task HandleSocket()
+        public async Task HandleSocket()
         {
             try
             {
                 var buffer = new byte[WSServer.ReceiveBufferSize];
-                Task<WebSocketReceiveResult> receive = ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                receive.Wait();
-                ParseMessage(receive.Result, buffer);
+                WebSocketReceiveResult result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                ParseMessage(result, buffer);
                 while (!ClientSocket.CloseStatus.HasValue)
                 {
                     buffer = new byte[WSServer.ReceiveBufferSize];
-                    receive = ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    receive.Wait();
-                    ParseMessage(receive.Result, buffer);
+                    result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    ParseMessage(result, buffer);
                 }
                 if (WSServer.ClientList.Contains(this))
                 {
                     WSServer.ClientList.Remove(this);
                 }
-                return ClientSocket.CloseAsync(receive.Result.CloseStatus.Value, receive.Result.CloseStatusDescription, CancellationToken.None);
+                await ClientSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
             catch
             {
@@ -129,7 +125,7 @@ namespace Translucency.WebSockets
                 {
                     WSServer.ClientList.Remove(this);
                 }
-                return ClientSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
+                await ClientSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
             }
         }
 
@@ -147,7 +143,7 @@ namespace Translucency.WebSockets
             if (Result.MessageType == WebSocketMessageType.Text)
             {
                 var trimmedString = Encoding.UTF8.GetString(TrimBytes(ReadBuffer));
-                var jsonMessage = JsonConvert.DeserializeObject<JObject>(trimmedString);
+                var jsonMessage = JSON.Decode(trimmedString);
                 if (OnMessageStringPreAction != null)
                 {
                     OnMessageStringPreAction.Invoke(this, jsonMessage);

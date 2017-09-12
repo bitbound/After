@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -205,7 +205,7 @@ namespace After.Models
                 };
                 foreach (var player in toLocation.GetNearbyPlayers())
                 {
-                    player.SendString(JsonConvert.SerializeObject(request));
+                    player.SendString(JSON.Encode(request));
                 }
             }
             
@@ -229,7 +229,7 @@ namespace After.Models
             }
             currentLocation.CharacterLeaves(this);
             FutureXYZ = toLocation.StorageID;
-            request = JsonConvert.SerializeObject(new
+            request = JSON.Encode(new
             {
                 Category = "Events",
                 Type = "PlayerMove",
@@ -261,7 +261,7 @@ namespace After.Models
                     Result = "ok"
 
                 };
-                (this as Player).GetSocketHandler().SendString(JsonConvert.SerializeObject(request));
+                (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
             }
             IsCharging = true;
             if (Timers.ContainsKey("ChargeTimer"))
@@ -300,7 +300,7 @@ namespace After.Models
                         Stat = "CurrentCharge",
                         Amount = CurrentCharge
                     };
-                    handler.SendString(JsonConvert.SerializeObject(update));
+                    handler.SendString(JSON.Encode(update));
                 }
                 foreach (var player in Storage.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p.Tags["Player"]?.Name != Name))
                 {
@@ -310,7 +310,7 @@ namespace After.Models
                         Type = "CharacterCharging",
                         Location = CurrentXYZ
                     };
-                    player.SendString(JsonConvert.SerializeObject(request));
+                    player.SendString(JSON.Encode(request));
                 }
             };
             Timers.Add("ChargeTimer", timer);
@@ -327,7 +327,7 @@ namespace After.Models
                     Result = "ok"
 
                 };
-                (this as Player).GetSocketHandler().SendString(JsonConvert.SerializeObject(request));
+                (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
             }
             if (Timers.ContainsKey("ChargeTimer"))
             {
@@ -365,7 +365,7 @@ namespace After.Models
                         Stat = "CurrentCharge",
                         Amount = CurrentCharge
                     };
-                    (this as Player).GetSocketHandler().SendString(JsonConvert.SerializeObject(update));
+                    (this as Player).GetSocketHandler().SendString(JSON.Encode(update));
                 }
             };
             Timers.Add("ChargeTimer", timer);

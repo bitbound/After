@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,7 +55,7 @@ namespace StorageLists
                             {
                                 try
                                 {
-                                    File.WriteAllText(Path.Combine(di.FullName, $"{item.StorageID}.json"), JsonConvert.SerializeObject(item));
+                                    File.WriteAllText(Path.Combine(di.FullName, $"{item.StorageID}.json"), JSON.Encode(item));
                                     success = true;
                                 }
                                 catch
@@ -166,7 +166,7 @@ namespace StorageLists
                 Storage.Add(NewItem.StorageID, NewItem);
                 if (PersistenceFilter.Invoke(NewItem))
                 {
-                    File.WriteAllText(Path.Combine(di.FullName, $"{NewItem.StorageID}.json"), JsonConvert.SerializeObject(NewItem));
+                    File.WriteAllText(Path.Combine(di.FullName, $"{NewItem.StorageID}.json"), JSON.Encode(NewItem));
                 }
             }
         }
@@ -212,7 +212,7 @@ namespace StorageLists
                     {
                         try
                         {
-                            File.WriteAllText(Path.Combine(di.FullName, $"{Storage[StorageID].StorageID}.json"), JsonConvert.SerializeObject(Storage[StorageID]));
+                            File.WriteAllText(Path.Combine(di.FullName, $"{Storage[StorageID].StorageID}.json"), JSON.Encode(Storage[StorageID]));
                             success = true;
                         }
                         catch
@@ -305,7 +305,7 @@ namespace StorageLists
                         {
                             try
                             {
-                                Storage.Add(StorageID, JsonConvert.DeserializeObject<T>(File.ReadAllText(Path.Combine(di.FullName, $"{StorageID}.json"))));
+                                Storage.Add(StorageID, JSON.Decode<T>(File.ReadAllText(Path.Combine(di.FullName, $"{StorageID}.json"))));
                                 Storage[StorageID].LastAccessed = DateTime.Now;
                                 success = true;
                             }
@@ -342,7 +342,7 @@ namespace StorageLists
                 {
                     try
                     {
-                        result.Add(JsonConvert.DeserializeObject<T>(File.ReadAllText(file.FullName)));
+                        result.Add(JSON.Decode<T>(File.ReadAllText(file.FullName)));
                         success = true;
                     }
                     catch

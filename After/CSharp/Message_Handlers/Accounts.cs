@@ -1,14 +1,12 @@
 ﻿using After.Models;
 using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using Translucency.WebSockets;
-using System.Linq;
 using System.Threading;
+using Dynamic_JSON;
 
 namespace After.Message_Handlers
 {
@@ -16,7 +14,7 @@ namespace After.Message_Handlers
     {
         public static void HandleAccountCreation(dynamic JsonMessage, WebSocketClient WSC)
         {
-            string username = JsonMessage.Username.Trim();
+            string username = JsonMessage.Username.ToString().Trim();
             if (Storage.Current.Players.Exists(username))
             {
                 JsonMessage.Result = "exists";
@@ -48,7 +46,7 @@ namespace After.Message_Handlers
                 JsonMessage.Password = null;
                 JsonMessage.AuthenticationToken = player.AuthenticationTokens.Last();
                 WSC.SendJSON(JsonMessage);
-                Utilities.Server.Broadcast(JsonConvert.SerializeObject(new
+                Utilities.Server.Broadcast(JSON.Encode(new
                 {
                     Category = "Accounts",
                     Type = "Connected",
@@ -59,14 +57,14 @@ namespace After.Message_Handlers
         }
         public static void HandleLogon(dynamic JsonMessage, WebSocketClient WSC)
         {
-            var username = (string)JsonMessage.Username.Trim();
+            var username = (string)JsonMessage.Username.ToString().Trim();
             if (!Storage.Current.Players.Exists(username))
             {
                 JsonMessage.Result = "failed";
-                WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                WSC.SendString(JSON.Encode(JsonMessage));
                 return;
             }
-            var player = Storage.Current.Players.Find("username");
+            var player = Storage.Current.Players.Find(username);
             var hasher = new PasswordHasher<Player>();
             var clientList = WebSocketServer.ServerList["After"].ClientList;
             while (player.AuthenticationTokens.Count > 10)
@@ -82,7 +80,7 @@ namespace After.Message_Handlers
                 else
                 {
                     JsonMessage.Result = "locked";
-                    WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                    WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
             }
@@ -91,13 +89,13 @@ namespace After.Message_Handlers
                 if (String.IsNullOrEmpty(JsonMessage.NewPassword))
                 {
                     JsonMessage.Result = "new required";
-                    WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                    WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 else if (JsonMessage.NewPassword != JsonMessage.ConfirmNewPassword)
                 {
                     JsonMessage.Result = "password mismatch";
-                    WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                    WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 else
@@ -106,7 +104,7 @@ namespace After.Message_Handlers
                     player.AuthenticationTokens.Add(authToken);
                     player.TemporaryPassword = "";
                     player.BadLoginAttempts = 0;
-                    player.Password = hasher.HashPassword(WSC.Tags["Player"] as Player, JsonMessage["ConfirmNewPassword"].ToString());
+                    player.Password = hasher.HashPassword(WSC.Tags["Player"] as Player, JsonMessage.ConfirmNewPassword);
                 }
             }
             else if (player.AuthenticationTokens.Count > 0 && JsonMessage.AuthenticationToken != null)
@@ -114,7 +112,7 @@ namespace After.Message_Handlers
                 if (!player.AuthenticationTokens.Contains(JsonMessage.AuthenticationToken))
                 {
                     JsonMessage.Result = "expired";
-                    WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                    WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 else
@@ -122,13 +120,17 @@ namespace After.Message_Handlers
                     player.AuthenticationTokens.Remove(JsonMessage.AuthenicationToken);
                 }
             }
-            else if (!hasher.VerifyHashedPassword(player, player.Password, JsonMessage.Password))
+            else if (hasher.VerifyHashedPassword(player, player.Password, JsonMessage.Password) == PasswordVerificationResult.Failed)
             {
                 player.BadLoginAttempts++;
                 player.LastBadLogin = DateTime.Now;
                 JsonMessage.Result = "failed";
-                WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                WSC.SendString(JSON.Encode(JsonMessage));
                 return;
+            }
+            else if (hasher.VerifyHashedPassword(player, player.Password, JsonMessage.Password) == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                player.Password = hasher.HashPassword(player, JsonMessage.Password);
             }
             if (clientList.Exists(s=>(s as WebSocketClient).Tags?["Player"]?.Name.ToLower() == username.ToLower()))
             {
@@ -141,7 +143,7 @@ namespace After.Message_Handlers
                 for (int i = existing.Count - 1; i >= 0; i--)
                 {
                     clientList.Remove(existing[i]);
-                    existing[i].SendString(JsonConvert.SerializeObject(message));
+                    existing[i].SendString(JSON.Encode(message));
                     existing[i].ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Login elsewhere.", CancellationToken.None);
                 }
             }
@@ -155,8 +157,8 @@ namespace After.Message_Handlers
             var newToken = Guid.NewGuid().ToString();
             player.AuthenticationTokens.Add(newToken);
             JsonMessage.AuthenticationToken = newToken;
-            WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
-            Utilities.Server.Broadcast(JsonConvert.SerializeObject(new
+            WSC.SendString(JSON.Encode(JsonMessage));
+            Utilities.Server.Broadcast(JSON.Encode(new
             {
                 Category = "Accounts",
                 Type = "Connected",
@@ -176,20 +178,20 @@ namespace After.Message_Handlers
                 if (string.IsNullOrWhiteSpace(username))
                 {
                     JsonMessage.Result = "empty";
-                    WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                    WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 if (!Storage.Current.Players.Exists(username))
                 {
                     JsonMessage.Result = "unknown";
-                    WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                    WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 Player account = Storage.Current.Players.Find(username);
                 if (string.IsNullOrWhiteSpace(account.Email))
                 {
                     JsonMessage.Result = "no email";
-                    WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                    WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 account.TemporaryPassword = Path.GetRandomFileName().Replace(".", "");
@@ -207,17 +209,17 @@ namespace After.Message_Handlers
                 {
                     using (var sw = new StreamWriter(rs))
                     {
-                        sw.Write(JsonConvert.SerializeObject(request));
+                        sw.Write(JSON.Encode(request));
                     }
                 }
                 wr.GetResponse();
-                WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                WSC.SendString(JSON.Encode(JsonMessage));
             }
             catch (Exception ex)
             {
                 After.Utilities.WriteError(ex);
                 JsonMessage.Result = "failed";
-                WSC.SendString(JsonConvert.SerializeObject(JsonMessage));
+                WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
     }

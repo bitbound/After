@@ -1,5 +1,5 @@
 ﻿using After.Models;
-using Newtonsoft.Json;
+using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +18,7 @@ namespace After
         {
             get
             {
-                return RootPath + "/Data/";
+                return Path.Combine(RootPath, "Data");
             }
         }
         public static WebSocketServer Server
@@ -33,7 +33,7 @@ namespace After
             if (!Storage.Current.Locations.Exists("0,0,0"))
             {
                 var strLocations = File.ReadAllText(Path.Combine(Utilities.DataPath, "Game_Data\\Base\\Locations.json"));
-                foreach (var location in JsonConvert.DeserializeObject<List<Location>>(strLocations))
+                foreach (var location in JSON.Decode<List<Location>>(strLocations))
                 {
                     Storage.Current.Locations.Add(location);
                 }
@@ -41,7 +41,7 @@ namespace After
             if (!Storage.Current.Landmarks.Exists("0,-2,0"))
             {
                 var strLandmarks = File.ReadAllText(Path.Combine(Utilities.DataPath, "Game_Data\\Base\\Landmarks.json"));
-                foreach (var landmark in JsonConvert.DeserializeObject<List<Landmark>>(strLandmarks))
+                foreach (var landmark in JSON.Decode<List<Landmark>>(strLandmarks))
                 {
                     Storage.Current.Landmarks.Add(landmark);
                 }
@@ -65,7 +65,7 @@ namespace After
                     Source = exError?.Source,
                     StackTrace = exError?.StackTrace,
                 };
-                var error = JsonConvert.SerializeObject(jsonError) + Environment.NewLine;
+                var error = JSON.Encode(jsonError) + Environment.NewLine;
                 File.AppendAllText(filePath, error);
                 exError = exError.InnerException;
             }
