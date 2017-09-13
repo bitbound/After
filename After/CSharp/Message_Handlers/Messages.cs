@@ -4,6 +4,8 @@ using System.Text;
 using Translucency.WebSockets;
 using System.Linq;
 using Dynamic_JSON;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace After.Message_Handlers
 {
@@ -40,23 +42,23 @@ namespace After.Message_Handlers
                     break;
             }
         }
-        public static void HandleAdmin(dynamic JsonMessage, WebSocketClient WSC)
+        public static async void HandleAdmin(dynamic JsonMessage, WebSocketClient WSC)
         {
-            //if (SH?.Player?.AccountType != Player.AccountTypes.Admin)
-            //{
-            //    return;
-            //}
-            //try
-            //{
-            //    var result = CSharpScript.EvaluateAsync(JsonData.Message.ToString());
-            //    result.Wait();
-            //    JsonData.Message = result.Result;
-            //}
-            //catch (Exception ex)
-            //{
-            //    JsonData.Message = "Error: " + ex.Message;
-            //}
-            //WSC.SendString(JSON.Encode(JsonData));
+            if (WSC.Tags?.Player?.AccountType != Player.AccountTypes.Admin)
+            {
+                return;
+            }
+            try
+            {
+                var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"), Storage.Current);
+                JsonMessage.Message = JSON.Encode(result);
+                await WSC.SendString(JSON.Encode(JsonMessage));
+            }
+            catch (Exception ex)
+            {
+                JsonMessage.Message = "Error: " + ex.Message;
+                await WSC.SendString(JSON.Encode(JsonMessage));
+            }
         }
         public static void ParseCommand(dynamic JsonMessage, WebSocketClient WSC)
         {

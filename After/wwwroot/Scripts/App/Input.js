@@ -4,6 +4,10 @@ var After;
     (function (App) {
         class Input {
             constructor() {
+                this.AdminInputHistory = new Array();
+                this.AdminHistoryPosition = -1;
+                this.ChatInputHistory = new Array();
+                this.ChatHistoryPosition = -1;
             }
             SendChat(e) {
                 var strMessage = $("#inputChatInput").val();
@@ -11,6 +15,11 @@ var After;
                 if (strMessage == "") {
                     return;
                 }
+                this.ChatInputHistory.unshift(strMessage);
+                while (this.ChatInputHistory.length > 50) {
+                    this.ChatInputHistory.pop();
+                }
+                this.ChatHistoryPosition = -1;
                 if (strMessage.trim().toLowerCase() == "/debug" || ($("#selectChatChannel").val() == "Command" && strMessage.trim().toLowerCase() == "debug")) {
                     After.Debug = !After.Debug;
                     if (After.Debug) {
@@ -35,6 +44,11 @@ var After;
                 if (strMessage == "") {
                     return;
                 }
+                this.AdminInputHistory.unshift(strMessage);
+                while (this.AdminInputHistory.length > 50) {
+                    this.AdminInputHistory.pop();
+                }
+                this.AdminHistoryPosition = -1;
                 if (strMessage.trim().toLowerCase() == "debug") {
                     After.Debug = !After.Debug;
                     if (After.Debug) {
@@ -143,7 +157,7 @@ var After;
                     }
                 };
                 After.Canvas.Element.onmousedown = function (e) {
-                    $("#inputChatInput").blur();
+                    $("input:focus").blur();
                     After.Canvas.StartDragX = e.clientX;
                     After.Canvas.StartDragY = e.clientY;
                     After.Canvas.StartOffsetX = After.Canvas.OffsetX;
@@ -182,7 +196,7 @@ var After;
                     After.Canvas.IsZooming = false;
                 };
                 After.Canvas.Element.ontouchstart = function (e) {
-                    $("#inputChatInput").blur();
+                    $("input:focus").blur();
                     After.Canvas.IsZooming = false;
                     After.Canvas.InertiaX = 0;
                     After.Canvas.InertiaY = 0;
@@ -308,9 +322,26 @@ var After;
                         After.Input.SendChat(e);
                     }
                     else if (e.keyCode == 27) {
-                        $("#divChatBottomBar").blur();
+                        $("input:focus").blur();
                     }
-                    ;
+                    else if (e.keyCode == 38) {
+                        if (After.Input.ChatHistoryPosition + 1 < After.Input.ChatInputHistory.length) {
+                            After.Input.ChatHistoryPosition++;
+                            $("#inputChatInput").val(After.Input.ChatInputHistory[After.Input.ChatHistoryPosition]);
+                        }
+                        else if (After.Input.ChatInputHistory.length == 1) {
+                            $("#inputChatInput").val(After.Input.ChatInputHistory[0]);
+                        }
+                    }
+                    else if (e.keyCode == 40) {
+                        if (After.Input.ChatHistoryPosition > 0) {
+                            After.Input.ChatHistoryPosition--;
+                            $("#inputChatInput").val(After.Input.ChatInputHistory[After.Input.ChatHistoryPosition]);
+                        }
+                        else if (After.Input.ChatInputHistory.length == 1) {
+                            $("#inputChatInput").val(After.Input.ChatInputHistory[0]);
+                        }
+                    }
                 });
                 $("#buttonChatSubmit").click(function (e) {
                     After.Input.SendChat(e);
@@ -320,9 +351,26 @@ var After;
                         After.Input.SendAdmin(e);
                     }
                     else if (e.keyCode == 27) {
-                        $("#divAdminBottomBar").blur();
+                        $("input:focus").blur();
                     }
-                    ;
+                    else if (e.keyCode == 38) {
+                        if (After.Input.AdminHistoryPosition + 1 < After.Input.AdminInputHistory.length) {
+                            After.Input.AdminHistoryPosition++;
+                            $("#inputAdminInput").val(After.Input.AdminInputHistory[After.Input.AdminHistoryPosition]);
+                        }
+                        else if (After.Input.AdminInputHistory.length == 1) {
+                            $("#inputAdminInput").val(After.Input.AdminInputHistory[0]);
+                        }
+                    }
+                    else if (e.keyCode == 40) {
+                        if (After.Input.AdminHistoryPosition > 0) {
+                            After.Input.AdminHistoryPosition--;
+                            $("#inputAdminInput").val(After.Input.AdminInputHistory[After.Input.AdminHistoryPosition]);
+                        }
+                        else if (After.Input.AdminInputHistory.length == 1) {
+                            $("#inputAdminInput").val(After.Input.AdminInputHistory[0]);
+                        }
+                    }
                 });
                 $("#buttonAdminSubmit").click(function (e) {
                     After.Input.SendAdmin(e);
@@ -344,7 +392,7 @@ var After;
                     After.Temp.ActiveFrame = $(e.currentTarget).parent();
                     After.Temp.StartHeight = After.Temp.ActiveFrame.height();
                     After.Temp.StartLeft = Number(After.Temp.ActiveFrame.css("left").replace("px", ""));
-                    $("#inputChatInput").blur();
+                    $("input:focus").blur();
                     window.onmousemove = function (e) {
                         e.preventDefault();
                         if (After.Temp.Dragging) {
@@ -390,7 +438,7 @@ var After;
                             else {
                                 After.Temp.ActiveFrame.css("z-index", 2);
                                 After.Temp.ActiveFrame.animate({ "height": "155" }, 750);
-                                $("#inputChatInput").blur();
+                                $("input:focus").blur();
                             }
                         }
                         After.Temp.Dragging = false;
@@ -421,11 +469,11 @@ var After;
                                 var newHeight = After.Temp.StartHeight - (e.touches[0].clientY - After.Temp.StartPoint.clientY);
                                 if (newHeight > document.body.clientHeight * .6) {
                                     After.Temp.ActiveFrame.height(document.body.clientHeight * .6);
-                                    $("#inputChatInput").blur();
+                                    $("input:focus").blur();
                                 }
                                 else if (newHeight > 0) {
                                     After.Temp.ActiveFrame.height(newHeight);
-                                    $("#inputChatInput").blur();
+                                    $("input:focus").blur();
                                 }
                                 else if (newHeight <= 0) {
                                     After.Temp.ActiveFrame.css("z-index", 0);
