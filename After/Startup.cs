@@ -106,7 +106,7 @@ namespace After
                         WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message), wsClient);
                         var player = wsClient.Tags["Player"] as Player;
                         Storage.Current.Players.Store(player.StorageID);
-                        player.GetCurrentLocation()?.CharacterLeaves(player);
+                        player.GetCurrentLocation()?.CharacterLeavesAsync(player);
                         foreach (var timer in player.Timers)
                         {
                             timer.Value.Stop();

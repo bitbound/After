@@ -185,11 +185,11 @@ namespace After.Models
             }
             return visibleList;
         }
-        public void Move(string[] ToXYZ)
+        public async Task MoveAsync(string[] ToXYZ)
         {
             if (IsCharging)
             {
-                StopCharging();
+                await StopCharging();
             }
             dynamic request;
             var toLocation = Storage.Current.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
@@ -227,7 +227,7 @@ namespace After.Models
                     nearbyPlayers.Add(player);
                 }
             }
-            currentLocation.CharacterLeaves(this);
+            await currentLocation.CharacterLeavesAsync(this);
             FutureXYZ = toLocation.StorageID;
             request = JSON.Encode(new
             {
@@ -242,15 +242,15 @@ namespace After.Models
             {
                 player.SendString(request);
             }
-            Task.Run(() => {
+            await Task.Run(async () => {
                 Thread.Sleep((int)(Math.Round(travelTime)));
                 CurrentXYZ = toLocation.StorageID;
                 FutureXYZ = null;
-                toLocation.CharacterArrives(this);
+                await toLocation.CharacterArrivesAsync(this);
                 MovementState = MovementStates.Ready;
             });
         }
-        public void StartCharging()
+        public async Task StartCharging()
         {
             if (this is Player)
             {
@@ -261,7 +261,7 @@ namespace After.Models
                     Result = "ok"
 
                 };
-                (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
+                await (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
             }
             IsCharging = true;
             if (Timers.ContainsKey("ChargeTimer"))
@@ -316,7 +316,7 @@ namespace After.Models
             Timers.Add("ChargeTimer", timer);
             timer.Start();
         }
-        public void StopCharging()
+        public async Task StopCharging()
         {
             if (this is Player)
             {
@@ -327,7 +327,7 @@ namespace After.Models
                     Result = "ok"
 
                 };
-                (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
+                await (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
             }
             if (Timers.ContainsKey("ChargeTimer"))
             {

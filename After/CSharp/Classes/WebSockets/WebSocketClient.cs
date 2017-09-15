@@ -40,9 +40,9 @@ namespace Translucency.WebSockets
         public Action<WebSocketClient, dynamic> OnMessageStringPreAction { get; set; }
 
         /// <summary>
-        /// A dictionary of actions to be performed as a result of the string message read from the websocket.  The first property's first value of every message
-        /// is used as the key for determining which action to perform.  The WebSocketClient and dynamic can be used within the Action.  The dynamic is the message
-        /// received and parsed with JSON.
+        /// A dictionary of actions to be performed as a result of the string message read from the websocket.  The message received must be of type Dynamic,
+        /// and the property "Command" must contain a string value that identifies the key to look up for the desired action.  The WebSocketClient and dynamic
+        /// can be used within the Action.  The dynamic is the full received message.
         /// </summary>
         public Dictionary<string, Action<WebSocketClient, dynamic>> OnMessageStringActions { get; set; } = new Dictionary<string, Action<WebSocketClient, dynamic>>();
 
@@ -64,10 +64,10 @@ namespace Translucency.WebSockets
         /// Send a JSON message to the client.
         /// </summary>
         /// <param name="JsonRequest">The message to send to the client.</param>
-        public void SendJSON(dynamic JsonRequest)
+        public async Task SendJSON(dynamic JsonRequest)
         {
             var jsonRequest = JSON.Encode(JsonRequest);
-            SendString(jsonRequest);
+            await SendString(jsonRequest);
         }
 
         /// <summary>
@@ -144,26 +144,27 @@ namespace Translucency.WebSockets
             {
                 var trimmedString = Encoding.UTF8.GetString(TrimBytes(ReadBuffer));
                 var jsonMessage = JSON.Decode(trimmedString);
-                if (OnMessageStringPreAction != null)
+
+                OnMessageStringPreAction?.Invoke(this, jsonMessage);
+
+                if (jsonMessage is Dynamic)
                 {
-                    OnMessageStringPreAction.Invoke(this, jsonMessage);
+                    if ((jsonMessage as Dynamic)["Command"] != null && OnMessageStringActions.ContainsKey(jsonMessage["Command"]))
+                    {
+                        OnMessageStringActions[jsonMessage.First.First.ToString()].Invoke(this, jsonMessage);
+                    }
+
                 }
-                if ((jsonMessage as Dynamic)["Command"] != null && OnMessageStringActions.ContainsKey(jsonMessage["Command"]))
-                {
-                    OnMessageStringActions[jsonMessage.First.First.ToString()].Invoke(this, jsonMessage);
-                }
-                if (OnMessageStringPostAction != null)
-                {
-                    OnMessageStringPostAction.Invoke(this);
-                }
+
+                OnMessageStringPostAction?.Invoke(this);
             }
             else if (Result.MessageType == WebSocketMessageType.Binary)
             {
-                OnMessageByteAction(this, ReadBuffer);
+                OnMessageByteAction?.Invoke(this, ReadBuffer);
             }
             else if (Result.MessageType == WebSocketMessageType.Close)
             {
-                OnCloseAction(this);
+                OnCloseAction?.Invoke(this);
             }
         }
 

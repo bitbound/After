@@ -9,12 +9,12 @@ namespace After.Message_Handlers
 {
     public static class Queries
     {
-        public static void HandlePlayerUpdate(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandlePlayerUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {
             JsonMessage.Player = (WSC.Tags["Player"] as Player).ConvertToMe();
-            WSC.SendString(JSON.Encode(JsonMessage));
+            await WSC.SendString(JSON.Encode(JsonMessage));
         }
-        public static void HandleRefreshView(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleRefreshView(dynamic JsonMessage, WebSocketClient WSC)
         {
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
@@ -35,7 +35,7 @@ namespace After.Message_Handlers
                     };
                     foreach (var player in area.GetNearbyPlayers())
                     {
-                        player.SendString(JSON.Encode(request));
+                        await player.SendString(JSON.Encode(request));
                     }
                     Storage.Current.Locations.Remove(area.StorageID);
                     continue;
@@ -64,12 +64,12 @@ namespace After.Message_Handlers
             WSC.SendString(JSON.Encode(JsonMessage));
         }
 
-        public static void HandleGetPowers(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleGetPowers(dynamic JsonMessage, WebSocketClient WSC)
         {
             JsonMessage.Powers = (WSC.Tags["Player"] as Player).Powers;
-            WSC.SendString(JSON.Encode(JsonMessage));
+            await WSC.SendString(JSON.Encode(JsonMessage));
         }
-        public static void HandleFirstLoad(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleFirstLoad(dynamic JsonMessage, WebSocketClient WSC)
         {
             if (String.IsNullOrWhiteSpace((WSC.Tags["Player"] as Player).CurrentXYZ))
             {
@@ -92,11 +92,11 @@ namespace After.Message_Handlers
             JsonMessage.AccountType = (WSC.Tags["Player"] as Player).AccountType;
             WSC.SendString(JSON.Encode(JsonMessage));
 
-            (WSC.Tags["Player"] as Player).GetCurrentLocation().CharacterArrives((WSC.Tags["Player"] as Player));
+            await (WSC.Tags["Player"] as Player).GetCurrentLocation().CharacterArrivesAsync((WSC.Tags["Player"] as Player));
         }
         public static async Task HandleMapUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {
-            await Task.Run(()=>{
+            await Task.Run(async ()=>{
                 var visibleLocations = (WSC.Tags["Player"] as Player).GetVisibleLocations();
                 for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)
                 {
@@ -114,7 +114,7 @@ namespace After.Message_Handlers
                                     Type = "MapUpdate",
                                     Area = location.ConvertToArea(false)
                                 };
-                                WSC.SendString(JSON.Encode(request));
+                                await WSC.SendString(JSON.Encode(request));
                             }
                         }
                         if (landmark != null)
@@ -125,7 +125,7 @@ namespace After.Message_Handlers
                                 Type = "MapUpdate",
                                 Landmark = landmark.ConvertToDynamic()
                             };
-                            WSC.SendString(JSON.Encode(request));
+                            await WSC.SendString(JSON.Encode(request));
                         }
                     }
                 }
@@ -135,10 +135,10 @@ namespace After.Message_Handlers
                     Type = "MapUpdate",
                     Completed = true
                 };
-                WSC.SendString(JSON.Encode(done));
+                await WSC.SendString(JSON.Encode(done));
             });
         }
-        public static void HandleGetAreaActions(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleGetAreaActions(dynamic JsonMessage, WebSocketClient WSC)
         {
             var actionList = new List<string>();
             Location target = Storage.Current.Locations.Find(JsonMessage.TargetXYZ);
@@ -167,7 +167,7 @@ namespace After.Message_Handlers
             if (actionList.Count > 0)
             {
                 JsonMessage.Actions = actionList;
-                WSC.SendString(JSON.Encode(JsonMessage));
+                await WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
     }

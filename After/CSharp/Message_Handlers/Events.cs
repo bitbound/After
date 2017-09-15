@@ -1,27 +1,28 @@
 ﻿using After.Models;
+using System.Threading.Tasks;
 using Translucency.WebSockets;
 
 namespace After.Message_Handlers
 {
     public static class Events
     {
-        public static void HandleStartCharging(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleStartCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
             if ((WSC.Tags["Player"] as Player).MovementState != Models.Character.MovementStates.Ready)
             {
                 return;
             }
-            (WSC.Tags["Player"] as Player).StartCharging();
+            await (WSC.Tags["Player"] as Player).StartCharging();
         }
-        public static void HandleStopCharging(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleStopCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
             if ((WSC.Tags["Player"] as Player).MovementState != Models.Character.MovementStates.Ready)
             {
                 return;
             }
-            (WSC.Tags["Player"] as Player).StopCharging();
+            await (WSC.Tags["Player"] as Player).StopCharging();
         }
-        public static void HandlePlayerMove(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandlePlayerMove(dynamic JsonMessage, WebSocketClient WSC)
         {
             if ((WSC.Tags["Player"] as Player).MovementState != Models.Character.MovementStates.Ready)
             {
@@ -52,7 +53,7 @@ namespace After.Message_Handlers
             destXYZ[0] = (double.Parse(currentXYZ[0]) + xChange).ToString();
             destXYZ[1] = (double.Parse(currentXYZ[1]) + yChange).ToString();
             destXYZ[2] = currentXYZ[2];
-            (WSC.Tags["Player"] as Player).Move(destXYZ);
+            await (WSC.Tags["Player"] as Player).MoveAsync(destXYZ);
         }
     }
 }

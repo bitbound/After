@@ -6,17 +6,18 @@ using System.Linq;
 using Dynamic_JSON;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using System.Threading.Tasks;
 
 namespace After.Message_Handlers
 {
     public static class Messages
     {
-        public static void HandleChat(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleChat(dynamic JsonMessage, WebSocketClient WSC)
         {
             string message = JsonMessage.Message;
             if (message.StartsWith("/"))
             {
-                ParseCommand(JsonMessage, WSC);
+                await ParseCommand(JsonMessage, WSC);
                 return;
             }
             JsonMessage.Username = (WSC.Tags["Player"] as Player).Name;
@@ -36,13 +37,13 @@ namespace After.Message_Handlers
                     Utilities.Server.Broadcast(JSON.Encode(JsonMessage), WSC);
                     break;
                 case "Command":
-                    ParseCommand(JsonMessage, WSC);
+                    await ParseCommand(JsonMessage, WSC);
                     break;
                 default:
                     break;
             }
         }
-        public static async void HandleAdmin(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleAdmin(dynamic JsonMessage, WebSocketClient WSC)
         {
             if (WSC.Tags?.Player?.AccountType != Player.AccountTypes.Admin)
             {
@@ -52,15 +53,15 @@ namespace After.Message_Handlers
             {
                 var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"), Storage.Current);
                 JsonMessage.Message = JSON.Encode(result);
-                await WSC.SendString(JSON.Encode(JsonMessage));
+                WSC.SendString(JSON.Encode(JsonMessage));
             }
             catch (Exception ex)
             {
                 JsonMessage.Message = "Error: " + ex.Message;
-                await WSC.SendString(JSON.Encode(JsonMessage));
+                WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
-        public static void ParseCommand(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task ParseCommand(dynamic JsonMessage, WebSocketClient WSC)
         {
             string message = JsonMessage.Message.ToLower();
             var commandArray = message.Split(' ');
@@ -81,7 +82,7 @@ namespace After.Message_Handlers
                             Channel = "System",
                             Message = reply.ToString()
                         };
-                        WSC.SendString(JSON.Encode(request));
+                        await WSC.SendString(JSON.Encode(request));
                         break;
                     }
                 case "who":
@@ -91,7 +92,7 @@ namespace After.Message_Handlers
                         reply.AppendLine("Online Players:");
                         foreach (WebSocketClient wsc in Utilities.Server.ClientList.Where(cl=>!String.IsNullOrWhiteSpace(cl.Tags?["Player"]?.Name)))
                         {
-                            reply.AppendLine((WSC.Tags["Player"] as Player).Name);
+                            reply.AppendLine((wsc.Tags["Player"] as Player).Name);
                         }
                         var request = new
                         {
@@ -100,7 +101,7 @@ namespace After.Message_Handlers
                             Channel = "System",
                             Message = reply.ToString()
                         };
-                        WSC.SendString(JSON.Encode(request));
+                        await WSC.SendString(JSON.Encode(request));
                         break;
                     }
                 default:
@@ -112,7 +113,7 @@ namespace After.Message_Handlers
                             Channel = "System",
                             Message = "Unknown command.  Type /? for a list of commands."
                         };
-                        WSC.SendString(JSON.Encode(request));
+                        await WSC.SendString(JSON.Encode(request));
                         break;
                     }
             }

@@ -2,6 +2,7 @@ using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Translucency.WebSockets;
 
 namespace After.Models
@@ -56,7 +57,7 @@ namespace After.Models
         {
             return Utilities.Server.ClientList.Where(client => (client.Tags?["Player"] as Player)?.GetCurrentLocation()?.GetDistanceFrom(this) <= client.Tags?["Player"]?.ViewDistance).ToList();
         }
-        public void CharacterArrives(Character CharacterObject)
+        public async Task CharacterArrivesAsync(Character CharacterObject)
         {
             CharacterObject.CurrentXYZ = StorageID;
             Occupants.Add(CharacterObject.Name);
@@ -72,10 +73,10 @@ namespace After.Models
             });
             foreach (var player in nearbyPlayers)
             {
-                player.SendString(request);
+                await player.SendString(request);
             }
         }
-        public void CharacterLeaves(Character CharacterObject)
+        public async Task CharacterLeavesAsync(Character CharacterObject)
         {
             var soul = CharacterObject.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers();
@@ -90,7 +91,7 @@ namespace After.Models
             });
             foreach (var player in nearbyPlayers)
             {
-                player.SendString(request);
+                await player.SendString(request);
             }
         }
         public dynamic ConvertToArea(bool IsVisible)

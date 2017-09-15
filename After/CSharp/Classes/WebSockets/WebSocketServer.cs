@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Translucency.WebSockets
 {
@@ -31,11 +32,11 @@ namespace Translucency.WebSockets
             return server;
         }
 
-        public void Broadcast(string Message, WebSocketClient Sender)
+        public async Task Broadcast(string Message, WebSocketClient Sender)
         {
             foreach (var client in ClientList)
             {
-                client.SendString(Message);
+                await client.SendString(Message);
             }
         }
         private WebSocketServer()

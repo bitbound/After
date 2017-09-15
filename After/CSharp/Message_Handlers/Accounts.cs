@@ -7,12 +7,13 @@ using System.Net;
 using Translucency.WebSockets;
 using System.Threading;
 using Dynamic_JSON;
+using System.Threading.Tasks;
 
 namespace After.Message_Handlers
 {
     public static class Accounts
     {
-        public static void HandleAccountCreation(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleAccountCreation(dynamic JsonMessage, WebSocketClient WSC)
         {
             string username = JsonMessage.Username.ToString().Trim();
             if (Storage.Current.Players.Exists(username))
@@ -46,16 +47,16 @@ namespace After.Message_Handlers
                 JsonMessage.Password = null;
                 JsonMessage.AuthenticationToken = player.AuthenticationTokens.Last();
                 WSC.SendJSON(JsonMessage);
-                Utilities.Server.Broadcast(JSON.Encode(new
+                await Utilities.Server.Broadcast(JSON.Encode(new
                 {
                     Category = "Accounts",
                     Type = "Connected",
                     Username = player.Name
                 }), WSC);
-                player.GetCurrentLocation().CharacterArrives(player);
+                await player.GetCurrentLocation().CharacterArrivesAsync(player);
             }
         }
-        public static void HandleLogon(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleLogon(dynamic JsonMessage, WebSocketClient WSC)
         {
             var username = (string)JsonMessage.Username.ToString().Trim();
             if (!Storage.Current.Players.Exists(username))
@@ -143,8 +144,8 @@ namespace After.Message_Handlers
                 for (int i = existing.Count - 1; i >= 0; i--)
                 {
                     clientList.Remove(existing[i]);
-                    existing[i].SendString(JSON.Encode(message));
-                    existing[i].ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Login elsewhere.", CancellationToken.None);
+                    await existing[i].SendString(JSON.Encode(message));
+                    await existing[i].ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Login elsewhere.", CancellationToken.None);
                 }
             }
             player.BadLoginAttempts = 0;
@@ -158,7 +159,7 @@ namespace After.Message_Handlers
             player.AuthenticationTokens.Add(newToken);
             JsonMessage.AuthenticationToken = newToken;
             WSC.SendString(JSON.Encode(JsonMessage));
-            Utilities.Server.Broadcast(JSON.Encode(new
+            await Utilities.Server.Broadcast(JSON.Encode(new
             {
                 Category = "Accounts",
                 Type = "Connected",
@@ -170,7 +171,7 @@ namespace After.Message_Handlers
             string prop = JsonMessage.Property;
             (WSC.Tags["Player"] as Player).Settings.GetType().GetProperty(prop).SetValue((WSC.Tags["Player"] as Player).Settings, JsonMessage.Value);
         }
-        public static void HandleForgotPassword(dynamic JsonMessage, WebSocketClient WSC)
+        public static async Task HandleForgotPassword(dynamic JsonMessage, WebSocketClient WSC)
         {
             try
             {
@@ -178,20 +179,20 @@ namespace After.Message_Handlers
                 if (string.IsNullOrWhiteSpace(username))
                 {
                     JsonMessage.Result = "empty";
-                    WSC.SendString(JSON.Encode(JsonMessage));
+                    await WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 if (!Storage.Current.Players.Exists(username))
                 {
                     JsonMessage.Result = "unknown";
-                    WSC.SendString(JSON.Encode(JsonMessage));
+                    await WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 Player account = Storage.Current.Players.Find(username);
                 if (string.IsNullOrWhiteSpace(account.Email))
                 {
                     JsonMessage.Result = "no email";
-                    WSC.SendString(JSON.Encode(JsonMessage));
+                    await WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
                 account.TemporaryPassword = Path.GetRandomFileName().Replace(".", "");
@@ -213,13 +214,13 @@ namespace After.Message_Handlers
                     }
                 }
                 wr.GetResponse();
-                WSC.SendString(JSON.Encode(JsonMessage));
+                await WSC.SendString(JSON.Encode(JsonMessage));
             }
             catch (Exception ex)
             {
                 After.Utilities.WriteError(ex);
                 JsonMessage.Result = "failed";
-                WSC.SendString(JSON.Encode(JsonMessage));
+                await WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
     }
