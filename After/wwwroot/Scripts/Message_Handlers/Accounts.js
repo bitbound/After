@@ -102,7 +102,7 @@ var After;
                     After.Utilities.ShowDialog("A recovery email hasn't been set up for that account.", "black", "OK", null);
                 }
                 else if (result == "failed") {
-                    After.Utilities.ShowDialog("An error has occurred.  Try reloading After.  If the issue persists, please contact support@after-game.net.", "darkred", "OK", null);
+                    After.Utilities.ShowDialog("An error has occurred.  Try reloading After.  If the issue persists, please contact translucency_software@outlook.com.", "darkred", "OK", null);
                 }
                 else if (result == "ok") {
                     After.Utilities.ShowDialog("Password reset successful!<br/><br/>A temporary password has been sent to your email (remember to check in junk/spam).", "black", "OK", null);

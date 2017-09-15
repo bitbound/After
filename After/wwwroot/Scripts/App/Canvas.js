@@ -70,6 +70,16 @@ var After;
                     After.Temp.ButtonPoint = e;
                     return;
                 }
+                if (typeof area != "undefined" && After.Utilities.NumberIsBetween(xRemainder, 37.5, 46, true) && After.Utilities.NumberIsBetween(yRemainder, 85, 93, true)) {
+                    var request = {
+                        "Category": "Queries",
+                        "Type": "GetAreaOccupants",
+                        "TargetXYZ": area.StorageID
+                    };
+                    After.Connection.Socket.send(JSON.stringify(request));
+                    After.Temp.ButtonPoint = e;
+                    return;
+                }
                 if (After.Canvas.SelectedObject != undefined && After.Canvas.SelectedObject == area) {
                     After.Canvas.SelectedObject.IsSelected = !After.Canvas.SelectedObject.IsSelected;
                 }

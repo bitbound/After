@@ -49,8 +49,9 @@ namespace After
                 {
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                     var client = new WebSocketClient(WebSocketServer.ServerList["After"], webSocket);
-                    client.OnMessageStringPreAction = (wsClient, jsonMessage) =>
+                    client.StringMessageReceived += (sender, jsonMessage) =>
                     {
+                        var wsClient = sender as WebSocketClient;
                         string category = jsonMessage.Category;
                         string type = jsonMessage.Type;
                         if (jsonMessage == null || String.IsNullOrEmpty(category) || String.IsNullOrEmpty(type))
@@ -86,8 +87,9 @@ namespace After
                             }
                         }
                     };
-                    client.OnCloseAction = (wsClient) =>
+                    client.SocketClosed += (sender, args) =>
                     {
+                        var wsClient = sender as WebSocketClient;
                         var clientList = WebSocketServer.ServerList["After"].ClientList;
                         if (clientList.Contains(wsClient))
                         {

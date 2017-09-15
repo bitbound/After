@@ -185,6 +185,79 @@ var After;
                 $(divActionList).fadeIn();
             }
             Queries.HandleGetAreaActions = HandleGetAreaActions;
+            function HandleGetAreaOccupants(JsonMessage) {
+                var point = After.Temp.ButtonPoint;
+                var divOccupantList = document.createElement("div");
+                $(divOccupantList).css({
+                    "position": "fixed",
+                    "display": "none",
+                    "border": "1px solid lightgray"
+                });
+                if (point.clientX <= document.documentElement.clientWidth / 2) {
+                    divOccupantList.style.left = point.clientX + "px";
+                }
+                else {
+                    divOccupantList.style.right = (document.documentElement.clientWidth - point.clientX) + "px";
+                }
+                if (point.clientY <= document.documentElement.clientHeight / 2) {
+                    divOccupantList.style.top = point.clientY + "px";
+                }
+                else {
+                    divOccupantList.style.bottom = (document.documentElement.clientHeight - point.clientY) + "px";
+                }
+                for (var i = 0; i < JsonMessage.Occupants.length; i++) {
+                    var occupant = document.createElement("div");
+                    $(occupant).css({
+                        "padding": "10px",
+                        "background-color": "rgba(255,255,255, .75)",
+                        "text-align": "center",
+                        "cursor": "pointer",
+                        "font-weight": "bold",
+                        "user-select": "none"
+                    });
+                    occupant.classList.add("font-sansserif");
+                    occupant.setAttribute("targetxyz", JsonMessage.TargetXYZ);
+                    $(occupant).hover(function (e) {
+                        $(e.currentTarget).css("background-color", "white");
+                    }, function (e) {
+                        $(e.currentTarget).css("background-color", "rgba(255,255,255, .75)");
+                    });
+                    occupant.innerHTML = JsonMessage.Occupants[i];
+                    occupant.onclick = function (e) {
+                        var xyz = e.currentTarget.getAttribute("targetxyz");
+                        var occupantName = e.currentTarget.innerHTML;
+                        var request = {
+                            "Category": "Events",
+                            "Type": "AreaOccupantClicked",
+                            "TargetXYZ": xyz,
+                            "Occupant": occupantName
+                        };
+                        After.Connection.Socket.send(JSON.stringify(request));
+                        // TODO: Handle this on other end.
+                    };
+                    divOccupantList.appendChild(occupant);
+                }
+                document.body.appendChild(divOccupantList);
+                $(window).one("click", function () {
+                    window.setTimeout(function () {
+                        $(divOccupantList).remove();
+                    }, 250);
+                });
+                $(window).one("touchstart", function () {
+                    window.setTimeout(function () {
+                        $(divOccupantList).remove();
+                    }, 250);
+                });
+                $(divOccupantList).mouseout(function () {
+                    window.setTimeout(function () {
+                        if ($(divOccupantList).is(":hover") == false) {
+                            $(divOccupantList).remove();
+                        }
+                    }, 1000);
+                });
+                $(divOccupantList).fadeIn();
+            }
+            Queries.HandleGetAreaOccupants = HandleGetAreaOccupants;
         })(Queries = Message_Handlers.Queries || (Message_Handlers.Queries = {}));
     })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));

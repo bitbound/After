@@ -55,5 +55,13 @@ namespace After.Message_Handlers
             destXYZ[2] = currentXYZ[2];
             await (WSC.Tags["Player"] as Player).MoveAsync(destXYZ);
         }
+        public static async Task HandleDoAreaAction(dynamic JsonMessage, WebSocketClient WSC)
+        {
+            // TODO.
+        }
+        public static async Task HandleAreaOccupantClicked(dynamic JsonMessage, WebSocketClient WSC)
+        {
+            // TODO.
+        }
     }
 }

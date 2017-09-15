@@ -170,5 +170,11 @@ namespace After.Message_Handlers
                 await WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
+        public static async Task HandleGetAreaOccupants(dynamic JsonMessage, WebSocketClient WSC)
+        {
+            Location target = Storage.Current.Locations.Find(JsonMessage.TargetXYZ);
+            JsonMessage.Occupants = target.Occupants;
+            await WSC.SendString(JSON.Encode(JsonMessage));
+        }
     }
 }

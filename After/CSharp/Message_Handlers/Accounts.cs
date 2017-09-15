@@ -202,7 +202,7 @@ namespace After.Message_Handlers
                 {
                     Email = account.Email,
                     Subject = "Password Reset for After",
-                    Message = File.ReadAllText(Path.Combine(Utilities.RootPath, "/Docs/PasswordResetTemplate.html")).Replace("#password#", account.TemporaryPassword)
+                    Message = File.ReadAllText(Path.Combine(Utilities.RootPath, "Docs\\PasswordResetTemplate.html")).Replace("#password#", account.TemporaryPassword)
                 };
                 var wr = WebRequest.CreateHttp("https://invis.me/Services/SendEmail");
                 wr.Method = "POST";

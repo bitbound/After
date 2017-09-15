@@ -35,30 +35,24 @@ namespace Translucency.WebSockets
         public dynamic Tags { get; set; } = new Dynamic();
 
         /// <summary>
-        /// The action to perform when a string message is read.  This is performed every time, before the received string is evaluated.
+        /// An event that's fired whenever a string message is received.
         /// </summary>
-        public Action<WebSocketClient, dynamic> OnMessageStringPreAction { get; set; }
+        public event EventHandler<dynamic> StringMessageReceived;
 
         /// <summary>
-        /// A dictionary of actions to be performed as a result of the string message read from the websocket.  The message received must be of type Dynamic,
-        /// and the property "Command" must contain a string value that identifies the key to look up for the desired action.  The WebSocketClient and dynamic
-        /// can be used within the Action.  The dynamic is the full received message.
+        /// An event that's fired whenever a binary message is received.
         /// </summary>
-        public Dictionary<string, Action<WebSocketClient, dynamic>> OnMessageStringActions { get; set; } = new Dictionary<string, Action<WebSocketClient, dynamic>>();
+        public event EventHandler<byte[]> BinaryMessageReceived;
 
         /// <summary>
-        /// The action to perform when a string message is read.  This is performed every time, after the received string is evaluated.
+        /// An event that's fired when the socket closes.
         /// </summary>
-        public Action<WebSocketClient> OnMessageStringPostAction { get; set; }
+        public event EventHandler SocketClosed;
 
         /// <summary>
-        /// Similar to OnMessageStringActions, only this is one action performed when a byte array message is received.
+        /// An event that fires when an error occurs while reading from the websocket.
         /// </summary>
-        public Action<WebSocketClient, byte[]> OnMessageByteAction { get; set; }
-        /// <summary>
-        /// The action to perform when the socket connecton is closed.
-        /// </summary>
-        public Action<WebSocketClient> OnCloseAction { get; set; }
+        public event EventHandler<Exception> SocketError;
 
         /// <summary>
         /// Send a JSON message to the client.
@@ -84,8 +78,9 @@ namespace Translucency.WebSockets
             }
             while (SendBuffer.Count > 0)
             {
-                await ClientSocket.SendAsync(SendBuffer[0], WebSocketMessageType.Text, true, CancellationToken.None);
-                SendBuffer.RemoveAt(0);
+                var segment = SendBuffer[0];
+                await ClientSocket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+                SendBuffer.Remove(segment);
             }
         }
         /// <summary>
@@ -119,13 +114,15 @@ namespace Translucency.WebSockets
                 }
                 await ClientSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
-            catch
+            catch (Exception ex)
             {
                 if (WSServer.ClientList.Contains(this))
                 {
                     WSServer.ClientList.Remove(this);
                 }
                 await ClientSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
+                SocketError?.Invoke(this, ex);
+                SocketClosed?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -145,26 +142,15 @@ namespace Translucency.WebSockets
                 var trimmedString = Encoding.UTF8.GetString(TrimBytes(ReadBuffer));
                 var jsonMessage = JSON.Decode(trimmedString);
 
-                OnMessageStringPreAction?.Invoke(this, jsonMessage);
-
-                if (jsonMessage is Dynamic)
-                {
-                    if ((jsonMessage as Dynamic)["Command"] != null && OnMessageStringActions.ContainsKey(jsonMessage["Command"]))
-                    {
-                        OnMessageStringActions[jsonMessage.First.First.ToString()].Invoke(this, jsonMessage);
-                    }
-
-                }
-
-                OnMessageStringPostAction?.Invoke(this);
+                StringMessageReceived?.Invoke(this, jsonMessage);
             }
             else if (Result.MessageType == WebSocketMessageType.Binary)
             {
-                OnMessageByteAction?.Invoke(this, ReadBuffer);
+                BinaryMessageReceived?.Invoke(this, TrimBytes(ReadBuffer));
             }
             else if (Result.MessageType == WebSocketMessageType.Close)
             {
-                OnCloseAction?.Invoke(this);
+                SocketClosed?.Invoke(this, EventArgs.Empty);
             }
         }
 
