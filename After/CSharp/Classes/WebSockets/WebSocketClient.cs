@@ -1,4 +1,5 @@
 ﻿using After;
+using After.Models;
 using Dynamic_JSON;
 using Newtonsoft.Json.Linq;
 using Really_Dynamic;
@@ -16,7 +17,6 @@ namespace Translucency.WebSockets
     {
         public WebSocketClient(WebSocket Socket)
         {
-            WSServer = Utilities.Server;
             ClientSocket = Socket;
         }
 
@@ -26,14 +26,14 @@ namespace Translucency.WebSockets
         public WebSocket ClientSocket { get; set; }
 
         /// <summary>
-        /// The WebSocketServer to which this client is connected.
+        /// The Player associated with this connection.
         /// </summary>
-        public WebSocketServer WSServer { get; set; }
+        public Player Player { get; set; }
 
         /// <summary>
-        /// A dictionary of arbitrary data to store on the socket.
+        /// Indicates if the user has authenticated yet.
         /// </summary>
-        public dynamic Tags { get; set; } = new Dynamic();
+        public bool Authenticated { get; set; }
 
         /// <summary>
         /// An event that's fired whenever a string message is received.
@@ -100,26 +100,26 @@ namespace Translucency.WebSockets
         {
             try
             {
-                var buffer = new byte[WSServer.ReceiveBufferSize];
+                var buffer = new byte[Utilities.Server.ReceiveBufferSize];
                 WebSocketReceiveResult result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 ParseMessage(result, buffer);
                 while (!ClientSocket.CloseStatus.HasValue)
                 {
-                    buffer = new byte[WSServer.ReceiveBufferSize];
+                    buffer = new byte[Utilities.Server.ReceiveBufferSize];
                     result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     ParseMessage(result, buffer);
                 }
-                if (WSServer.ClientList.Contains(this))
+                if (Utilities.Server.ClientList.Contains(this))
                 {
-                    WSServer.ClientList.Remove(this);
+                    Utilities.Server.ClientList.Remove(this);
                 }
                 await ClientSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
             catch (Exception ex)
             {
-                if (WSServer.ClientList.Contains(this))
+                if (Utilities.Server.ClientList.Contains(this))
                 {
-                    WSServer.ClientList.Remove(this);
+                    Utilities.Server.ClientList.Remove(this);
                 }
                 await ClientSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
                 SocketError?.Invoke(this, ex);

@@ -11,21 +11,21 @@ namespace After.Message_Handlers
     {
         public static async Task HandlePlayerUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {
-            JsonMessage.Player = (WSC.Tags["Player"] as Player).ConvertToMe();
+            JsonMessage.Player = (WSC.Player as Player).ConvertToMe();
             await WSC.SendString(JSON.Encode(JsonMessage));
         }
         public static async Task HandleRefreshView(dynamic JsonMessage, WebSocketClient WSC)
         {
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
-            var location = (WSC.Tags["Player"] as Player).GetCurrentLocation();
+            var location = (WSC.Player as Player).GetCurrentLocation();
             if (location == null)
             {
                 return;
             }
-            foreach (var area in (WSC.Tags["Player"] as Player).GetVisibleLocations())
+            foreach (var area in (WSC.Player as Player).GetVisibleLocations())
             {
-                if (area.IsStatic == false && DateTime.Now - area.LastVisited > TimeSpan.FromMinutes(1))
+                if (area.IsStatic == false && DateTime.Now - area.LastVisited > TimeSpan.FromMinutes(1) && area.Occupants.Count == 0)
                 {
                     var request = new
                     {
@@ -66,47 +66,71 @@ namespace After.Message_Handlers
 
         public static async Task HandleGetPowers(dynamic JsonMessage, WebSocketClient WSC)
         {
-            JsonMessage.Powers = (WSC.Tags["Player"] as Player).Powers;
+            JsonMessage.Powers = (WSC.Player as Player).Powers;
             await WSC.SendString(JSON.Encode(JsonMessage));
         }
         public static async Task HandleFirstLoad(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if (String.IsNullOrWhiteSpace((WSC.Tags["Player"] as Player).CurrentXYZ))
+            if (String.IsNullOrWhiteSpace((WSC.Player as Player).CurrentXYZ))
             {
-                if (String.IsNullOrWhiteSpace((WSC.Tags["Player"] as Player).PreviousXYZ))
+                if (String.IsNullOrWhiteSpace((WSC.Player as Player).PreviousXYZ))
                 {
-                    (WSC.Tags["Player"] as Player).CurrentXYZ = "0,0,0";
+                    (WSC.Player as Player).CurrentXYZ = "0,0,0";
                 }
                 else
                 {
-                    (WSC.Tags["Player"] as Player).CurrentXYZ = (WSC.Tags["Player"] as Player).PreviousXYZ;
+                    (WSC.Player as Player).CurrentXYZ = (WSC.Player as Player).PreviousXYZ;
                 }
             }
-            if (!Storage.Current.Locations.Exists((WSC.Tags["Player"] as Player).CurrentXYZ))
+            if (!Storage.Current.Locations.Exists((WSC.Player as Player).CurrentXYZ))
             {
-                (WSC.Tags["Player"] as Player).CurrentXYZ = "0,0,0";
+                (WSC.Player as Player).CurrentXYZ = "0,0,0";
             }
-            JsonMessage.Settings = (WSC.Tags["Player"] as Player).Settings;
-            JsonMessage.Player = (WSC.Tags["Player"] as Player).ConvertToMe();
-            JsonMessage.Powers = (WSC.Tags["Player"] as Player).Powers;
-            JsonMessage.AccountType = (WSC.Tags["Player"] as Player).AccountType;
+            JsonMessage.Settings = (WSC.Player as Player).Settings;
+            JsonMessage.Player = (WSC.Player as Player).ConvertToMe();
+            JsonMessage.Powers = (WSC.Player as Player).Powers;
+            JsonMessage.AccountType = (WSC.Player as Player).AccountType;
             WSC.SendString(JSON.Encode(JsonMessage));
 
-            await (WSC.Tags["Player"] as Player).GetCurrentLocation().CharacterArrives((WSC.Tags["Player"] as Player));
+            await (WSC.Player as Player).GetCurrentLocation().CharacterArrives((WSC.Player as Player));
         }
         public static async Task HandleMapUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {
             await Task.Run(async ()=>{
-                var visibleLocations = (WSC.Tags["Player"] as Player).GetVisibleLocations();
+                var visibleLocations = (WSC.Player as Player).GetVisibleLocations();
                 for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)
                 {
                     for (var y = JsonMessage.YMin; y <= JsonMessage.YMax; y++)
                     {
-                        var location = Storage.Current.Locations.Find($"{x},{y},{(WSC.Tags["Player"] as Player).ZCoord}");
-                        var landmark = Storage.Current.Landmarks.Find($"{x},{y},{(WSC.Tags["Player"] as Player).ZCoord}");
+                        var location = Storage.Current.Locations.Find($"{x},{y},{(WSC.Player as Player).ZCoord}");
+                        var landmark = Storage.Current.Landmarks.Find($"{x},{y},{(WSC.Player as Player).ZCoord}");
                         if (location != null)
                         {
-                            if (!visibleLocations.Contains(location))
+                            if (location.IsStatic == false && DateTime.Now - location.LastVisited > TimeSpan.FromMinutes(1))
+                            {
+                                var request = new
+                                {
+                                    Category = "Events",
+                                    Type = "AreaRemoved",
+                                    Area = location.ConvertToArea(true)
+                                };
+                                foreach (var player in location.GetNearbyPlayers())
+                                {
+                                    await player.SendString(JSON.Encode(request));
+                                }
+                                Storage.Current.Locations.Remove(location.StorageID);
+                            }
+                            else if (visibleLocations.Contains(location))
+                            {
+                                var request = new
+                                {
+                                    Category = "Queries",
+                                    Type = "MapUpdate",
+                                    Area = location.ConvertToArea(true)
+                                };
+                                await WSC.SendString(JSON.Encode(request));
+                            }
+                            else
                             {
                                 var request = new
                                 {
@@ -142,11 +166,11 @@ namespace After.Message_Handlers
         {
             var actionList = new List<string>();
             Location target = Storage.Current.Locations.Find(JsonMessage.TargetXYZ);
-            var distance = target.GetDistanceFrom(Storage.Current.Locations.Find((WSC.Tags["Player"] as Player).CurrentXYZ));
+            var distance = target.GetDistanceFrom(Storage.Current.Locations.Find((WSC.Player as Player).CurrentXYZ));
             if (distance == 0)
             {
                 actionList.Add("Explore Here");
-                if (!target.IsStatic || target.OwnerID != (WSC.Tags["Player"] as Player).StorageID)
+                if (!target.IsStatic || target.OwnerID != (WSC.Player as Player).StorageID)
                 {
                     actionList.Add("Take Control");
                 }
@@ -154,13 +178,13 @@ namespace After.Message_Handlers
             else if (distance < 2)
             {
                 actionList.Add("Move Here");
-                if (target.OwnerID == (WSC.Tags["Player"] as Player).StorageID)
+                if (target.OwnerID == (WSC.Player as Player).StorageID)
                 {
                     actionList.Add("Change Area");
                 }
                 actionList.Add("Destroy");
             }
-            foreach (var power in (WSC.Tags["Player"] as Player).Powers.FindAll(p=> p.TargetList.Contains(Power.Targets.Location) && distance >= p.MinRange && distance <= p.MaxRange))
+            foreach (var power in (WSC.Player as Player).Powers.FindAll(p=> p.TargetList.Contains(Power.Targets.Location) && distance >= p.MinRange && distance <= p.MaxRange))
             {
                 actionList.Add(power.Name);
             }

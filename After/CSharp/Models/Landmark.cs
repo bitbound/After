@@ -23,8 +23,8 @@ namespace After.Models
             }
         }
         public string Text { get; set; }
-        public int FontSize { get; set; }
-        public string FontStyle { get; set; }
+        public int FontSize { get; set; } = 150;
+        public string FontStyle { get; set; } = "serif";
         public string Color { get; set; } = "white";
         public DateTime LastAccessed { get; set; }
         public dynamic ConvertToDynamic()

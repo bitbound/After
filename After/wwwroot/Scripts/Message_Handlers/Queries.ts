@@ -21,7 +21,10 @@
         })
         for (var i = After.Storage.Areas.length - 1; i >= 0; i--) {
             var value = After.Storage.Areas[i];
-            if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {
+            if (value.ZCoord != After.Me.ZCoord) {
+                After.Storage.Areas.splice(i, 1);
+            }
+            else if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {
                 After.Storage.Areas.splice(i, 1);
             }
         }
@@ -90,18 +93,19 @@
             var index = After.Storage.Areas.findIndex((value) => {
                 return value.StorageID == JsonMessage.Area.StorageID;
             });
-            if (index == -1) {
-                JsonMessage.Area.IsVisible = false;
-                After.Storage.Areas.push(JsonMessage.Area);
+            if (index > -1) {
+                After.Storage.Areas.splice(index, 1);
             }
+            After.Storage.Areas.push(JsonMessage.Area);
         }
         if (JsonMessage.Landmark) {
             var index = After.Storage.Landmarks.findIndex((value) => {
                 return value.StorageID == JsonMessage.Landmark.StorageID;
             });
-            if (index == -1) {
-                After.Storage.Landmarks.push(JsonMessage.Landmark);
+            if (index > -1) {
+                After.Storage.Landmarks.splice(index, 1);
             }
+            After.Storage.Landmarks.push(JsonMessage.Landmark);
         }
         if (JsonMessage.Completed) {
             After.Temp.MapUpdatePending = false;

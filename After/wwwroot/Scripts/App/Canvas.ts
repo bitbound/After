@@ -202,6 +202,10 @@
 
                 for (var i = After.Storage.Areas.length - 1; i >= 0; i--) {
                     var area = After.Storage.Areas[i];
+                    if (area.IsStatic == false && (Date.now() - Date.parse(area.LastVisited.toString()) > 60000)) {
+                        After.Storage.Areas.splice(i, 1);
+                        continue;
+                    }
                     if (area.IsVisible) {
                         continue;
                     }

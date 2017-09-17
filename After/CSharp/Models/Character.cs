@@ -168,6 +168,10 @@ namespace After.Models
                 return visibleList;
             }
             var location = Storage.Current.Locations.Find(CurrentXYZ);
+            if (location == null)
+            {
+                return visibleList;
+            }
             for (var x = location.XCoord - ViewDistance; x <= location.XCoord + ViewDistance; x++)
             {
                 for (var y = location.YCoord - ViewDistance; y <= location.YCoord + ViewDistance; y++)
@@ -187,10 +191,6 @@ namespace After.Models
         }
         public async Task Move(string[] ToXYZ)
         {
-            if (IsCharging)
-            {
-                await StopCharging();
-            }
             dynamic request;
             var toLocation = Storage.Current.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
             if (toLocation == null)
@@ -214,7 +214,18 @@ namespace After.Models
             var currentLocation = GetCurrentLocation();
             if (currentLocation == null)
             {
-                return;
+                currentLocation = Location.CreateTempLocation(new string[] { XCoord.ToString(), YCoord.ToString(), ZCoord });
+                var area = currentLocation.ConvertToArea(true);
+                request = new
+                {
+                    Category = "Events",
+                    Type = "AreaCreated",
+                    Area = area
+                };
+                foreach (var player in currentLocation.GetNearbyPlayers())
+                {
+                    await player.SendString(JSON.Encode(request));
+                }
             }
             MovementState = MovementStates.Moving;
             var distance = currentLocation.GetDistanceFrom(toLocation);
@@ -240,7 +251,7 @@ namespace After.Models
             });
             foreach (var player in nearbyPlayers)
             {
-                player.SendString(request);
+                await player.SendString(request);
             }
             await Task.Run(async () => {
                 Thread.Sleep((int)(Math.Round(travelTime)));
@@ -302,7 +313,7 @@ namespace After.Models
                     };
                     handler.SendString(JSON.Encode(update));
                 }
-                foreach (var player in Storage.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p.Tags["Player"]?.Name != Name))
+                foreach (var player in Storage.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p?.Player?.Name != Name))
                 {
                     dynamic request = new
                     {

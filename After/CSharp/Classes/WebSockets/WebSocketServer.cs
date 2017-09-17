@@ -32,7 +32,7 @@ namespace Translucency.WebSockets
             return server;
         }
 
-        public async Task Broadcast(string Message, WebSocketClient Sender)
+        public async Task Broadcast(string Message)
         {
             foreach (var client in ClientList)
             {

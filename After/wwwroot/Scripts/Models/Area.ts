@@ -18,6 +18,8 @@
         Title: string;
         Description: string;
         InvestedWillpower: number;
+        LastVisited: Date;
+        IsStatic: boolean;
         Occupants: Array<string>;
 
         //*** Visual Only Properties ***//

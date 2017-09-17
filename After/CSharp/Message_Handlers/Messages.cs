@@ -20,12 +20,12 @@ namespace After.Message_Handlers
                 await ParseCommand(JsonMessage, WSC);
                 return;
             }
-            JsonMessage.Username = (WSC.Tags["Player"] as Player).Name;
+            JsonMessage.Username = (WSC.Player as Player).Name;
             Storage.Current.Messages.Add(new Message()
             {
-                StorageID = $"{(WSC.Tags["Player"] as Player).Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
+                StorageID = $"{(WSC.Player as Player).Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
                 LastAccessed = DateTime.Now,
-                Sender = (WSC.Tags["Player"] as Player).Name,
+                Sender = (WSC.Player as Player).Name,
                 Content = JsonMessage.Message,
                 Recipient = JsonMessage?.Recipent,
                 Channel = JsonMessage.Channel,
@@ -34,7 +34,7 @@ namespace After.Message_Handlers
             switch ((string)JsonMessage.Channel)
             {
                 case "Global":
-                    Utilities.Server.Broadcast(JSON.Encode(JsonMessage), WSC);
+                    Utilities.Server.Broadcast(JSON.Encode(JsonMessage));
                     break;
                 case "Command":
                     await ParseCommand(JsonMessage, WSC);
@@ -45,7 +45,7 @@ namespace After.Message_Handlers
         }
         public static async Task HandleAdmin(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if (WSC.Tags?.Player?.AccountType != Player.AccountTypes.Admin)
+            if (WSC?.Player?.AccountType != Player.AccountTypes.Admin)
             {
                 return;
             }
@@ -90,9 +90,9 @@ namespace After.Message_Handlers
                         var reply = new StringBuilder();
                         reply.AppendLine("");
                         reply.AppendLine("Online Players:");
-                        foreach (WebSocketClient wsc in Utilities.Server.ClientList.Where(cl=>!String.IsNullOrWhiteSpace(cl.Tags?["Player"]?.Name)))
+                        foreach (WebSocketClient wsc in Utilities.Server.ClientList.Where(cl=>!String.IsNullOrWhiteSpace(cl?.Player?.Name)))
                         {
-                            reply.AppendLine((wsc.Tags["Player"] as Player).Name);
+                            reply.AppendLine((WSC.Player as Player).Name);
                         }
                         var request = new
                         {

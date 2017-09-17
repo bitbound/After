@@ -35,7 +35,7 @@ namespace After
                 app.UseDeveloperExceptionPage();
             }
             Utilities.RootPath = System.IO.Path.Combine(env.ContentRootPath, "wwwroot");
-            After.Utilities.StartUp();
+            Utilities.StartUp();
             WebSocketServer.Create("After");
             app.UseStaticFiles();
             var webSocketOptions = new WebSocketOptions()
@@ -59,7 +59,7 @@ namespace After
                             throw new Exception("Category or Type is null within Socket_Handler.OnMessage.");
                         }
 
-                        if (wsClient.Tags.Authenticated != true)
+                        if (wsClient.Authenticated != true)
                         {
                             if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
                             {
@@ -95,7 +95,7 @@ namespace After
                         {
                             clientList.Remove(wsClient);
                         }
-                        if (wsClient.Tags["Player"]?.Name == null)
+                        if (wsClient?.Player?.Name == null)
                         {
                             return;
                         }
@@ -103,10 +103,10 @@ namespace After
                         {
                             Category = "Accounts",
                             Type = "Disconnected",
-                            Username = wsClient.Tags["Player"].Name
+                            Username = wsClient?.Player.Name
                         };
-                        WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message), wsClient);
-                        var player = wsClient.Tags["Player"] as Player;
+                        WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message));
+                        var player = wsClient?.Player as Player;
                         Storage.Current.Players.Store(player.StorageID);
                         player.GetCurrentLocation()?.CharacterLeaves(player);
                         foreach (var timer in player.Timers)
@@ -115,7 +115,7 @@ namespace After
                             timer.Value.Dispose();
                         }
                     };
-                    Utilities.Server.ClientList.Add(client);
+                    //Utilities.Server.ClientList.Add(client);
                     await client.HandleSocket();
                 }
                 else

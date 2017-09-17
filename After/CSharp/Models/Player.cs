@@ -40,11 +40,11 @@ namespace After.Models
 
         public bool IsLoggedIn()
         {
-            return Utilities.Server.ClientList.Exists(client => client.Tags?["Player"]?.Name == Name);
+            return Utilities.Server.ClientList.Exists(client => client?.Player?.Name == Name);
         }
         public WebSocketClient GetSocketHandler()
         {
-            return Utilities.Server.ClientList.Find(client => client.Tags?["Player"]?.Name == Name);
+            return Utilities.Server.ClientList.Find(client => client?.Player?.Name == Name);
         }
         public dynamic ConvertToMe()
         {

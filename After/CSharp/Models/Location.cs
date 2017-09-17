@@ -55,7 +55,7 @@ namespace After.Models
         }
         public List<WebSocketClient> GetNearbyPlayers()
         {
-            return Utilities.Server.ClientList.Where(client => (client.Tags?["Player"] as Player)?.GetCurrentLocation()?.GetDistanceFrom(this) <= client.Tags?["Player"]?.ViewDistance).ToList();
+            return Utilities.Server.ClientList.Where(client => (client?.Player as Player)?.GetCurrentLocation()?.GetDistanceFrom(this) <= client?.Player?.ViewDistance).ToList();
         }
         public async Task CharacterArrives(Character CharacterObject)
         {
@@ -108,7 +108,10 @@ namespace After.Models
                     Title = this.Title,
                     Occupants = this.Occupants,
                     Description = this.Description,
-                    InvestedWillpower = this.InvestedWillpower
+                    InvestedWillpower = this.InvestedWillpower,
+                    LastVisited = this.LastVisited,
+                    IsStatic = this.IsStatic,
+                    IsVisible = true
                 };
             }
             else
@@ -120,7 +123,10 @@ namespace After.Models
                     ZCoord = this.ZCoord,
                     StorageID = this.StorageID,
                     Color = this.Color,
-                    Title = this.Title
+                    Title = this.Title,
+                    IsStatic = this.IsStatic,
+                    LastVisited = this.LastVisited,
+                    IsVisible = false
                 };
             }
         }
@@ -135,6 +141,8 @@ namespace After.Models
             location.Color = "black";
             location.Description = "A completely empty area.";
             location.Title = "Empty Area";
+            location.LastAccessed = DateTime.Now;
+            location.LastVisited = DateTime.Now;
             Storage.Current.Locations.Add(location);
             return location;
         }

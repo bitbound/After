@@ -8,23 +8,23 @@ namespace After.Message_Handlers
     {
         public static async Task HandleStartCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if ((WSC.Tags["Player"] as Player).MovementState != Models.Character.MovementStates.Ready)
+            if ((WSC.Player as Player).MovementState != Models.Character.MovementStates.Ready)
             {
                 return;
             }
-            await (WSC.Tags["Player"] as Player).StartCharging();
+            await (WSC.Player as Player).StartCharging();
         }
         public static async Task HandleStopCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if ((WSC.Tags["Player"] as Player).MovementState != Models.Character.MovementStates.Ready)
+            if ((WSC.Player as Player).MovementState != Models.Character.MovementStates.Ready)
             {
                 return;
             }
-            await (WSC.Tags["Player"] as Player).StopCharging();
+            await (WSC.Player as Player).StopCharging();
         }
         public static async Task HandlePlayerMove(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if ((WSC.Tags["Player"] as Player).MovementState != Models.Character.MovementStates.Ready)
+            if ((WSC.Player as Player).MovementState != Character.MovementStates.Ready)
             {
                 return;
             }
@@ -48,12 +48,12 @@ namespace After.Message_Handlers
             {
                 xChange--;
             }
-            var currentXYZ = (WSC.Tags["Player"] as Player).CurrentXYZ.Split(',');
+            var currentXYZ = (WSC.Player as Player).CurrentXYZ.Split(',');
             var destXYZ = new string[3];
             destXYZ[0] = (double.Parse(currentXYZ[0]) + xChange).ToString();
             destXYZ[1] = (double.Parse(currentXYZ[1]) + yChange).ToString();
             destXYZ[2] = currentXYZ[2];
-            await (WSC.Tags["Player"] as Player).Move(destXYZ);
+            await (WSC.Player as Player).Move(destXYZ);
         }
         public static async Task HandleDoAreaAction(dynamic JsonMessage, WebSocketClient WSC)
         {
