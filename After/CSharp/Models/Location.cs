@@ -57,7 +57,7 @@ namespace After.Models
         {
             return Utilities.Server.ClientList.Where(client => (client.Tags?["Player"] as Player)?.GetCurrentLocation()?.GetDistanceFrom(this) <= client.Tags?["Player"]?.ViewDistance).ToList();
         }
-        public async Task CharacterArrivesAsync(Character CharacterObject)
+        public async Task CharacterArrives(Character CharacterObject)
         {
             CharacterObject.CurrentXYZ = StorageID;
             Occupants.Add(CharacterObject.Name);
@@ -76,7 +76,7 @@ namespace After.Models
                 await player.SendString(request);
             }
         }
-        public async Task CharacterLeavesAsync(Character CharacterObject)
+        public async Task CharacterLeaves(Character CharacterObject)
         {
             var soul = CharacterObject.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers();

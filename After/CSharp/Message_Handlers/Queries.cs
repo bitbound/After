@@ -92,7 +92,7 @@ namespace After.Message_Handlers
             JsonMessage.AccountType = (WSC.Tags["Player"] as Player).AccountType;
             WSC.SendString(JSON.Encode(JsonMessage));
 
-            await (WSC.Tags["Player"] as Player).GetCurrentLocation().CharacterArrivesAsync((WSC.Tags["Player"] as Player));
+            await (WSC.Tags["Player"] as Player).GetCurrentLocation().CharacterArrives((WSC.Tags["Player"] as Player));
         }
         public static async Task HandleMapUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {

@@ -53,7 +53,7 @@ namespace After.Message_Handlers
             destXYZ[0] = (double.Parse(currentXYZ[0]) + xChange).ToString();
             destXYZ[1] = (double.Parse(currentXYZ[1]) + yChange).ToString();
             destXYZ[2] = currentXYZ[2];
-            await (WSC.Tags["Player"] as Player).MoveAsync(destXYZ);
+            await (WSC.Tags["Player"] as Player).Move(destXYZ);
         }
         public static async Task HandleDoAreaAction(dynamic JsonMessage, WebSocketClient WSC)
         {

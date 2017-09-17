@@ -53,7 +53,8 @@ namespace After.Message_Handlers
                     Type = "Connected",
                     Username = player.Name
                 }), WSC);
-                await player.GetCurrentLocation().CharacterArrivesAsync(player);
+                WSC.WSServer.ClientList.Add(WSC);
+                //await player.GetCurrentLocation().CharacterArrives(player);
             }
         }
         public static async Task HandleLogon(dynamic JsonMessage, WebSocketClient WSC)
@@ -165,6 +166,7 @@ namespace After.Message_Handlers
                 Type = "Connected",
                 Username = (WSC.Tags["Player"] as Player).Name
             }), WSC);
+            WSC.WSServer.ClientList.Add(WSC);
         }
         public static void HandleChangeSetting(dynamic JsonMessage, WebSocketClient WSC)
         {

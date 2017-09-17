@@ -185,7 +185,7 @@ namespace After.Models
             }
             return visibleList;
         }
-        public async Task MoveAsync(string[] ToXYZ)
+        public async Task Move(string[] ToXYZ)
         {
             if (IsCharging)
             {
@@ -227,7 +227,7 @@ namespace After.Models
                     nearbyPlayers.Add(player);
                 }
             }
-            await currentLocation.CharacterLeavesAsync(this);
+            await currentLocation.CharacterLeaves(this);
             FutureXYZ = toLocation.StorageID;
             request = JSON.Encode(new
             {
@@ -246,7 +246,7 @@ namespace After.Models
                 Thread.Sleep((int)(Math.Round(travelTime)));
                 CurrentXYZ = toLocation.StorageID;
                 FutureXYZ = null;
-                await toLocation.CharacterArrivesAsync(this);
+                await toLocation.CharacterArrives(this);
                 MovementState = MovementStates.Ready;
             });
         }

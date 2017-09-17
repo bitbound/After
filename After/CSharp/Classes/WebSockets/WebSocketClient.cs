@@ -1,4 +1,5 @@
-﻿using Dynamic_JSON;
+﻿using After;
+using Dynamic_JSON;
 using Newtonsoft.Json.Linq;
 using Really_Dynamic;
 using System;
@@ -13,9 +14,9 @@ namespace Translucency.WebSockets
 {
     public class WebSocketClient
     {
-        public WebSocketClient(WebSocketServer Server, WebSocket Socket)
+        public WebSocketClient(WebSocket Socket)
         {
-            WSServer = Server;
+            WSServer = Utilities.Server;
             ClientSocket = Socket;
         }
 

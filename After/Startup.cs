@@ -48,7 +48,7 @@ namespace After
                 if (context.WebSockets.IsWebSocketRequest)
                 {
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                    var client = new WebSocketClient(WebSocketServer.ServerList["After"], webSocket);
+                    var client = new WebSocketClient(webSocket);
                     client.StringMessageReceived += (sender, jsonMessage) =>
                     {
                         var wsClient = sender as WebSocketClient;
@@ -108,7 +108,7 @@ namespace After
                         WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message), wsClient);
                         var player = wsClient.Tags["Player"] as Player;
                         Storage.Current.Players.Store(player.StorageID);
-                        player.GetCurrentLocation()?.CharacterLeavesAsync(player);
+                        player.GetCurrentLocation()?.CharacterLeaves(player);
                         foreach (var timer in player.Timers)
                         {
                             timer.Value.Stop();
