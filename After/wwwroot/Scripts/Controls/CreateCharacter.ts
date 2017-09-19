@@ -23,20 +23,51 @@ After.Temp.CreateCharacter.Init = function () {
         }
     }
     $(window).on("resize", tempResize);
+
+    ATI.AnimateParticleX = function (Particle: any) {
+        var part = Particle;
+        part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
+        var duration = Math.abs(part.ToX - part.CurrentX) * 35;
+        $(part).animate({
+            "CurrentX": part.ToX
+        }, {
+                "duration": Math.abs(part.ToX - part.CurrentX) * 35,
+                "queue": false
+            });
+        window.setTimeout(function (part) {
+            if (After.Temp.Intro) {
+                After.Temp.Intro.AnimateParticleX(part);
+            }
+        }, duration, part)
+    }
+    ATI.AnimateParticleY = function (Particle: any) {
+        var part = Particle;
+        part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
+        var duration = Math.abs(part.ToY - part.CurrentY) * 35;
+        $(part).animate({
+            "CurrentY": part.ToY
+        }, {
+                "duration": Math.abs(part.ToY - part.CurrentY) * 35,
+                "queue": false
+            });
+        window.setTimeout(function (part) {
+            if (After.Temp.Intro) {
+                After.Temp.Intro.AnimateParticleY(part);
+            }
+        }, duration, part)
+    }
+
     for (var i = 0; i < 50; i++) {
         var part = <any>{};
         part.CurrentX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
         part.FromX = part.CurrentX;
-        part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
         part.CurrentY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
         part.FromY = part.CurrentY;
-        part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
         ATI.PreviewParticles.push(part);
-        $(part).animate({
-            "CurrentX": part.ToX,
-            "CurrentY": part.ToY
-        }, Math.abs(part.ToX - part.CurrentX) * 35);
+        ATI.AnimateParticleX(part);
+        ATI.AnimateParticleY(part);
     };
+
     ATI.EvaluateColor = function () {
         ($("#selectColor")[0] as HTMLSelectElement).selectedIndex = 0;
         while (Number($("#inputRed").val()) + Number($("#inputGreen").val()) + Number($("#inputBlue").val()) < 125) {
@@ -65,7 +96,7 @@ After.Temp.CreateCharacter.Init = function () {
                     $(document.body).append(data);
                 });
             };
-            After.Audio.LoopSource.start();
+            After.Audio.StreamLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3");
             ATI.CurrentPosition = 6;
             ATI.IsPaused = false;
             $("#divNarration").html("");

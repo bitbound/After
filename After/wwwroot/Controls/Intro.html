@@ -27,45 +27,13 @@
     <button id="buttonSkip" style="position:fixed; right:25px; bottom:25px; font-size:10px; color:gray" hidden onclick="After.Temp.Intro.Skip()">Skip</button>
     <style>
         .animate-narration {
-            animation-name: animate-narration;
-            animation-duration: 500ms;
-            animation-fill-mode: forwards;
-        }
-        @keyframes animate-narration {
-            from {
-                left: 25px;
-                opacity: 0;
-            }
-
-            to {
-                left: 0;
-                opacity: 1;
-            }
+            transition-duration: 500ms;
+            transition-timing-function: linear;
+            transition-property: all;
+            left: 0 !important;
+            opacity: 1 !important;
         }
 
-        @-moz-keyframes animate-narration {
-            from {
-                left: 25px;
-                opacity: 0;
-            }
-
-            to {
-                left: 0;
-                opacity: 1;
-            }
-        }
-
-        @-webkit-keyframes animate-narration {
-            from {
-                left: 25px;
-                opacity: 0;
-            }
-
-            to {
-                left: 0;
-                opacity: 1;
-            }
-        }
     </style>
 </div>
 

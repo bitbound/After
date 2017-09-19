@@ -47,26 +47,25 @@ After.Temp.Splash = {
             $('#imgPlay').click(function () {
                 $("#divSplash").fadeOut('slow',function () {
                     $("#divSplash").remove();
-                    After.Audio.StopLoop();
+                    After.Audio.StopStreamLoop();
                     After.Temp.Login.Init();
                 });
             });
-            After.Audio.PlayLoop("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3", true, function () {
-                if ($("#divSplash").length == 0) {
-                    After.Audio.StopLoop();
+            After.Audio.StreamLoop("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
+            if ($("#divSplash").length == 0) {
+                After.Audio.StopStreamLoop();
+            }
+            $('#imgTitle').animate({ opacity: "1" }, 2000, function () {
+                if (!After.Temp.Splash.Skipped) {
+                    After.Temp.Splash.RaiseParticle();
                 }
-                $('#imgTitle').animate({ opacity: "1" }, 2000, function () {
-                    if (!After.Temp.Splash.Skipped) {
-                        After.Temp.Splash.RaiseParticle();
-                    }
-                    $('#imgTunnel').animate({ opacity: "1" }, 2000, function () {
-                        $('#imgTunnel').addClass("glowing");
-                        $('#imgPlay').animate({ opacity: "1" }, 2000);
-                        $('#imgBlog').animate({ opacity: "1" }, 2000, function () {
-                        });
+                $('#imgTunnel').animate({ opacity: "1" }, 2000, function () {
+                    $('#imgTunnel').addClass("glowing");
+                    $('#imgPlay').animate({ opacity: "1" }, 2000);
+                    $('#imgBlog').animate({ opacity: "1" }, 2000, function () {
                     });
                 });
-            })
+            });
         });
     }
 }

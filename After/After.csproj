@@ -63,7 +63,6 @@
     <None Include="wwwroot\Scripts\Models\Particle.js" />
     <None Include="wwwroot\Scripts\Models\Power.js" />
     <None Include="wwwroot\Scripts\Models\Soul.js" />
-    <None Include="Pages\Services\ErrorReporting.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

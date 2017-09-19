@@ -32,7 +32,7 @@ $(document).ready(function () {
             Column: colno,
             Error: error
         }
-        $.post(window.location.origin + "/Services/ErrorReporting.cshtml", JSON.stringify(ex));
+        $.post(window.location.origin + "/Services/ErrorReporting", JSON.stringify(ex));
         if (After.Debug) {
             console.log("Unhandled Error: " + JSON.stringify(ex));
             alert("Unhandled Error: " + JSON.stringify(ex));

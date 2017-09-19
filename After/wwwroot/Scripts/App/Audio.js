@@ -224,6 +224,38 @@ var After;
                     After.Audio.LoopSource.disconnect();
                 }
             }
+            StreamSound(SourceFile) {
+                var audio = document.createElement("audio");
+                audio.classList.add("audio-stream");
+                audio.src = SourceFile;
+                audio.onended = function (ev) {
+                    document.body.removeChild(this);
+                };
+                audio.play();
+            }
+            StreamLoop(SourceFile) {
+                var audio = document.createElement("audio");
+                audio.classList.add("audio-stream-loop");
+                audio.src = SourceFile;
+                audio.loop = true;
+                audio.onended = function (ev) {
+                    document.body.removeChild(this);
+                };
+                document.body.appendChild(audio);
+                audio.play();
+            }
+            StopStream() {
+                $("audio.audio-stream").each(function (index, elem) {
+                    elem.pause();
+                    $(elem).remove();
+                });
+            }
+            StopStreamLoop() {
+                $("audio.audio-stream-loop").each(function (index, elem) {
+                    elem.pause();
+                    $(elem).remove();
+                });
+            }
         }
         App.Audio = Audio;
     })(App = After.App || (After.App = {}));
