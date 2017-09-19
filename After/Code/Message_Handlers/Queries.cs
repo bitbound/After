@@ -42,10 +42,10 @@ namespace After.Message_Handlers
                 }
                 foreach (var occupant in area.Occupants)
                 {
-                    Character character = Storage.Current.NPCs.Find(occupant);
+                    Character character = Storage.Current.NPCs.Find(occupant.StorageID);
                     if (character == null)
                     {
-                        character = Storage.Current.Players.Find(occupant);
+                        character = Storage.Current.Players.Find(occupant.StorageID);
                         if (character == null)
                         {
                             continue;

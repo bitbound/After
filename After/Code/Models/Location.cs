@@ -1,3 +1,4 @@
+using After.Code.Models;
 using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace After.Models
         public DateTime LastVisited { get; set; }
         public string LastVisitedBy { get; set; }
         public long InvestedWillpower { get; set; }
-        public List<string> Occupants { get; set; } = new List<string>();
+        public List<Occupant> Occupants { get; set; } = new List<Occupant>();
         public string OwnerID { get; set; }
         public List<Script> Scripts { get; set; }
         public DateTime LastAccessed { get; set; }
@@ -60,7 +61,7 @@ namespace After.Models
         public async Task CharacterArrives(Character CharacterObject)
         {
             CharacterObject.CurrentXYZ = StorageID;
-            Occupants.Add(CharacterObject.Name);
+            Occupants.Add(new Occupant(CharacterObject));
             LastVisited = DateTime.Now;
             LastVisitedBy = CharacterObject.Name;
             var soul = CharacterObject.ConvertToSoul();
@@ -82,7 +83,7 @@ namespace After.Models
             var nearbyPlayers = GetNearbyPlayers();
             CharacterObject.CurrentXYZ = null;
             CharacterObject.PreviousXYZ = this.StorageID;
-            Occupants.RemoveAll(name=>name == CharacterObject.Name);
+            Occupants.RemoveAll(occ=>occ.StorageID == CharacterObject.StorageID);
             var request = JSON.Encode(new
             {
                 Category = "Events",

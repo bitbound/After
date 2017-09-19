@@ -19,17 +19,7 @@ namespace After.Models
         }
         public string Type { get; set; }
         public string StorageID { get; set; }
-        public string Name
-        {
-            get
-            {
-                return StorageID;
-            }
-            set
-            {
-                StorageID = value;
-            }
-        }
+        public string Name { get; set; }
         public string Color { get; set; } = "gray";
         public string PortraitUri { get; set; }
         public double CoreEnergyPeak { get; set; }

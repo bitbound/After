@@ -49,7 +49,7 @@ namespace After
             var locations = Storage.Current.Locations.GetAll();
             Storage.Current.Locations.GetAll().ForEach(loc => {
                 foreach (var occupant in loc.Occupants) { 
-                    if (Storage.Current.NPCs.Find(occupant) == null)
+                    if (Storage.Current.NPCs.Find(occupant.StorageID) == null)
                     {
                         Storage.Current.Locations.Find(loc.StorageID).Occupants.Remove(occupant);
                     }

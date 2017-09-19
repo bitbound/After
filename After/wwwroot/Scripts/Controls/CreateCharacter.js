@@ -88,7 +88,7 @@ After.Temp.CreateCharacter.Init = function () {
             ATI.PreviewLeft = Math.round((ATI.canvasPreview.canvas.width / 2) - 50);
             document.getElementById("buttonSkip").onclick = function () {
                 $("#divIntro").hide();
-                After.Audio.LoopSource.stop();
+                After.Audio.StopStreamLoop();
                 ATI.ShowFlybys = false;
                 $.get("/Controls/CreateAccount.html", function (data) {
                     $(document.body).append(data);

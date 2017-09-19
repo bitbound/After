@@ -68,40 +68,43 @@ After.Temp.Intro.Start = function () {
                     $("#divNarration").append(outerSpan);
                 };
 
-                var animateText = function (outerSpan) {
-                    if ($("#divIntro").is(":hidden")) {
-                        return;
-                    }
-                    if (outerSpan.length == 0) {
-                        ATI.IsPaused = true;
-                        if ($("#divNarration").text().search("you realize that you've stopped moving") > -1) {
-                            ATI.ShowFlybys = false;
-                        };
-                        $("#divIntro").click(function () {
-                            ATI.IsPaused = false;
-                            if ($("#divNarration").text().search("Your passing was") > -1) {
-                                After.Audio.StopStreamLoop();
-                                $("#divNarration").html("");
-                                $("#divIntro").hide();
-                                $.get("/Controls/CreateCharacter.html", function (data) {
-                                    $(document.body).append(data);
-                                    After.Temp.CreateCharacter.Init();
-                                });
-                            }
-                            else {
-                                ATI.Narrate();
-                            }
-                            $("#divIntro").off("click");
-                        });
-                        ATI.FlashContinue();
-                        return;
-                    }
-                    $(outerSpan).children().first().addClass("animate-narration");
-                    window.setTimeout(function () {
-                        animateText($(outerSpan.next()));
-                    }, 25);
-                };
-                animateText($("#divNarration").children().first());
+                if ($("#divIntro").is(":hidden")) {
+                    return;
+                }
+
+                $("#divNarration").children().each((index, elem) => {
+                    window.setTimeout(function (elem) {
+                        $(elem.firstChild).animate({
+                            "left": 0,
+                            "opacity": 1
+                        }, {
+                                "duration": "500",
+                                "queue": false,
+                            });
+                    }, index * 25, elem)
+                })
+                window.setTimeout(function () {
+                    ATI.IsPaused = true;
+                    if ($("#divNarration").text().search("you realize that you've stopped moving") > -1) {
+                        ATI.ShowFlybys = false;
+                    };
+                    $("#divIntro").one("click", function () {
+                        ATI.IsPaused = false;
+                        if ($("#divNarration").text().search("Your passing was") > -1) {
+                            After.Audio.StopStreamLoop();
+                            $("#divNarration").html("");
+                            $("#divIntro").hide();
+                            $.get("/Controls/CreateCharacter.html", function (data) {
+                                $(document.body).append(data);
+                                After.Temp.CreateCharacter.Init();
+                            });
+                        }
+                        else {
+                            ATI.Narrate();
+                        }
+                    });
+                    ATI.FlashContinue();
+                }, ($("#divNarration").children().length - 1) * 25);
                 ATI.CurrentPosition++;
             }, 750);
         };

@@ -7,7 +7,7 @@
             this.Color = "gray";
             this.IsSelected = false;
             this.IsVisible = false;
-            this.Occupants = new Array<string>();
+            this.Occupants = new Array<Occupant>();
             this.IsInteractButtonDepressed = false;
         }
         XCoord: number;
@@ -20,7 +20,7 @@
         InvestedWillpower: number;
         LastVisited: Date;
         IsStatic: boolean;
-        Occupants: Array<string>;
+        Occupants: Array<Occupant>;
 
         //*** Visual Only Properties ***//
         IsSelected: boolean;

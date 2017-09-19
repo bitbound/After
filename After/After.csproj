@@ -60,6 +60,7 @@
     <None Include="wwwroot\Scripts\Models\Bases\Selectable.js" />
     <None Include="wwwroot\Scripts\Models\FreeParticle.js" />
     <None Include="wwwroot\Scripts\Models\Landmark.js" />
+    <None Include="wwwroot\Scripts\Models\Occupant.js" />
     <None Include="wwwroot\Scripts\Models\Particle.js" />
     <None Include="wwwroot\Scripts\Models\Power.js" />
     <None Include="wwwroot\Scripts\Models\Soul.js" />
@@ -91,6 +92,7 @@
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Bases\Selectable.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\FreeParticle.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Landmark.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Occupant.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Particle.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Power.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Soul.ts" />

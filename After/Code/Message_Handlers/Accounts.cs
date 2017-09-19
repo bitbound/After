@@ -41,6 +41,7 @@ namespace After.Message_Handlers
                     OwnerID = username,
                     IsStatic = true,
                     StorageID = player.CurrentXYZ,
+                    LastVisited = DateTime.Now,
                     Color = player.Color
                 };
                 Storage.Current.Locations.Add(innerVoid);
@@ -48,10 +49,19 @@ namespace After.Message_Handlers
                 {
                     Color = player.Color,
                     StorageID = player.CurrentXYZ,
-                    FontSize = 150,
+                    FontSize = 100,
                     Text = $"{username}'s Inner Void"
                 };
                 Storage.Current.Landmarks.Add(landMark);
+                var norahc = new NPC()
+                {
+                    Name = "Norahc",
+                    StorageID = Guid.NewGuid().ToString(),
+                    CurrentXYZ = player.CurrentXYZ,
+                    Color = "lightsteelblue",
+                    CoreEnergy = 50000,
+                    ViewDistance = 5
+                };
 
 
                 var hasher = new PasswordHasher<Player>();
