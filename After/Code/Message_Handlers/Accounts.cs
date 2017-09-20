@@ -57,13 +57,22 @@ namespace After.Message_Handlers
                 var norahc = new NPC()
                 {
                     Name = "Norahc",
+                    DisplayName = "Norahc",
                     StorageID = Guid.NewGuid().ToString(),
                     CurrentXYZ = player.CurrentXYZ,
                     Color = "lightsteelblue",
                     CoreEnergy = 50000,
-                    ViewDistance = 5
+                    ViewDistance = 5,
+                    MovementState = Character.MovementStates.Ready,
+                    PortraitUri = "/Assets/Images/Portraits/Norahc.png"
                 };
-
+                norahc.Scripts.Add(new Script()
+                {
+                    Trigger = Script.Triggers.OnEnter,
+                    ScriptText = ""
+                });
+                Storage.Current.NPCs.Add(norahc);
+                innerVoid.Occupants.Add(new Code.Models.Occupant() { DisplayName = norahc.DisplayName, StorageID = norahc.StorageID });
 
                 var hasher = new PasswordHasher<Player>();
                 player.Password = hasher.HashPassword(player, JsonMessage.Password.ToString());

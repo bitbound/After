@@ -129,10 +129,16 @@ var After;
             GetCurrentLocation() {
                 return After.Storage.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
             }
+            SyncParticleCoords() {
+                After.Me.Particles.forEach(function (value, index) {
+                    value.XCoord = After.Me.XCoord;
+                    value.YCoord = After.Me.YCoord;
+                });
+            }
             BlowUp(Force) {
                 for (var i = 0; i < After.Me.Particles.length - 1; i++) {
-                    After.Me.Particles[i].CurrentX = After.Utilities.GetRandom(-Force, Force, true);
-                    After.Me.Particles[i].CurrentY = After.Utilities.GetRandom(-Force, Force, true);
+                    After.Me.Particles[i].XCoord = After.Utilities.GetRandom(-Force, Force, true);
+                    After.Me.Particles[i].YCoord = After.Utilities.GetRandom(-Force, Force, true);
                 }
             }
             WanderParticlesX() {

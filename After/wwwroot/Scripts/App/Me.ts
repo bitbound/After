@@ -101,12 +101,6 @@
 
         // *** Visual Properties Only ***//
         Height: number;
-        ParentBounds: {
-            top: number,
-            right: number,
-            bottom: number,
-            left: number
-        };
         Particles: Array<After.Models.Particle>;
         ParticleInterval: number;
         ParticleBounds: {
@@ -155,10 +149,16 @@
         GetCurrentLocation() :After.Models.Area {
             return After.Storage.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
         }
+        SyncParticleCoords(): void {
+            After.Me.Particles.forEach(function(value, index) {
+                value.XCoord = After.Me.XCoord;
+                value.YCoord = After.Me.YCoord;
+            });
+        }
         BlowUp(Force: number) {
             for (var i = 0; i < After.Me.Particles.length - 1; i++) {
-                After.Me.Particles[i].CurrentX = After.Utilities.GetRandom(-Force, Force, true);
-                After.Me.Particles[i].CurrentY = After.Utilities.GetRandom(-Force, Force, true);
+                After.Me.Particles[i].XCoord = After.Utilities.GetRandom(-Force, Force, true);
+                After.Me.Particles[i].YCoord = After.Utilities.GetRandom(-Force, Force, true);
             }
         }
         WanderParticlesX() {

@@ -29,6 +29,7 @@ namespace After
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            var startTime = DateTime.Now;
             loggerFactory.AddConsole();
             if (env.IsDevelopment())
             {
@@ -124,6 +125,8 @@ namespace After
                 }
             });
             app.UseMvc();
+            var bootTime = DateTime.Now - startTime;
+            Utilities.WriteLog("DIAGNOSTICS", $"Boot time took {bootTime.TotalSeconds} seconds.{Environment.NewLine}");
             //app.Run(async (context) =>
             //{
             //    await context.Response.WriteAsync("Hello World!");

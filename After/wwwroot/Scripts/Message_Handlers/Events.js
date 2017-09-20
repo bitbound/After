@@ -96,6 +96,17 @@ var After;
                     After.Me.IsMoving = true;
                     var dest = JsonMessage.To.split(",");
                     var from = JsonMessage.From.split(",");
+                    After.Me.Particles.forEach(function (value, index) {
+                        window.setTimeout(function (value) {
+                            $(value).animate({
+                                "XCoord": Number(dest[0]),
+                                "YCoord": Number(dest[1])
+                            }, {
+                                "duration": Number(JsonMessage.TravelTime),
+                                "queue": false,
+                            });
+                        }, index * 20, value);
+                    });
                     $(After.Me).animate({
                         "XCoord": Number(dest[0]),
                         "YCoord": Number(dest[1])

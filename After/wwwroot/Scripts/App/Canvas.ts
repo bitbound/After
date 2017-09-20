@@ -85,7 +85,7 @@
                 After.Temp.ButtonPoint = e;
                 return;
             }
-            if (typeof area != "undefined" && After.Utilities.NumberIsBetween(xRemainder, 37.5, 46, true) && After.Utilities.NumberIsBetween(yRemainder, 85, 93, true)) {
+            if (typeof area != "undefined" && After.Utilities.NumberIsBetween(xRemainder, 37.5, 46.5, true) && After.Utilities.NumberIsBetween(yRemainder, 84.5, 93, true)) {
                 var request = {
                     "Category": "Queries",
                     "Type": "GetAreaOccupants",

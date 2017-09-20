@@ -186,19 +186,13 @@ var After;
                 for (var i = 0; i < After.Me.Particles.length; i++) {
                     var part = After.Me.Particles[i];
                     // Get the xy coordinate of area's top-left corner.
-                    var parentX = ((After.Me.XCoord * 100) + After.Canvas.OffsetX) * After.Canvas.ZoomScale;
-                    var parentY = ((After.Me.YCoord * 100) + After.Canvas.OffsetY) * After.Canvas.ZoomScale;
-                    After.Me.ParentBounds = {
-                        left: parentX,
-                        top: parentY,
-                        right: parentX + (100 * After.Canvas.ZoomScale),
-                        bottom: parentY + (100 * After.Canvas.ZoomScale),
-                    };
+                    var baseX = ((part.XCoord * 100) + After.Canvas.OffsetX) * After.Canvas.ZoomScale;
+                    var baseY = ((part.YCoord * 100) + After.Canvas.OffsetY) * After.Canvas.ZoomScale;
                     // Draw particle.
                     c2d.fillStyle = After.Me.Color;
                     c2d.beginPath();
-                    var partX = After.Me.ParentBounds.left + (part.CurrentX * zs) + (50 * zs) - ((After.Me.Height - 1) * 2);
-                    var partY = After.Me.ParentBounds.top + (part.CurrentY * zs) + (30 * zs) - ((After.Me.Height - 1) * 20);
+                    var partX = baseX + (part.CurrentX * zs) + (50 * zs) - ((After.Me.Height - 1) * 2);
+                    var partY = baseY + (part.CurrentY * zs) + (30 * zs) - ((After.Me.Height - 1) * 20);
                     c2d.arc(partX, partY, .5 * zs * After.Me.Height, 0, Math.PI * 2);
                     c2d.strokeStyle = "dimgray";
                     c2d.lineWidth = .25 * zs * After.Me.Height;
@@ -220,12 +214,6 @@ var After;
             }
             ;
             AnimateParticles() {
-                //After.Temp.LastIntervalTime = Date.now() - 20;
-                //var moveAdjust = Math.min((Date.now() - After.Temp.LastIntervalTime) / 20, 20);
-                //After.Temp.LastIntervalTime = Date.now();
-                //if (After.Me.IsMoving == true || After.Me.CurrentXYZ == null) {
-                //    return;
-                //}
                 var soul = After.Me;
                 // Set bounds within which particles will move.
                 var top = After.Utilities.GetRandom(-25, 25, true);
@@ -246,9 +234,11 @@ var After;
                 for (var i = soul.Particles.length; i < 50; i++) {
                     var part = new After.Models.Particle();
                     part.CurrentX = After.Utilities.GetRandom(pb.left, pb.right, false);
+                    part.XCoord = After.Me.XCoord;
                     part.ToX = part.CurrentX;
                     part.CurrentY = After.Utilities.GetRandom(pb.top, pb.bottom, false);
                     part.ToY = part.CurrentY;
+                    part.YCoord = After.Me.YCoord;
                     soul.Particles.push(part);
                 }
                 ;

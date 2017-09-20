@@ -106,7 +106,7 @@ namespace After.Message_Handlers
                         var landmark = Storage.Current.Landmarks.Find($"{x},{y},{(WSC.Player as Player).ZCoord}");
                         if (location != null)
                         {
-                            if (location.IsStatic == false && DateTime.Now - location.LastVisited > TimeSpan.FromMinutes(1))
+                            if (location.IsStatic == false && DateTime.Now - location.LastVisited > TimeSpan.FromMinutes(1) && location.Occupants.Count == 0)
                             {
                                 var request = new
                                 {

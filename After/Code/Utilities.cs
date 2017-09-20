@@ -46,13 +46,20 @@ namespace After
                     Storage.Current.Landmarks.Add(landmark);
                 }
             }
-            var locations = Storage.Current.Locations.GetAll();
             Storage.Current.Locations.GetAll().ForEach(loc => {
                 foreach (var occupant in loc.Occupants) { 
                     if (Storage.Current.NPCs.Find(occupant.StorageID) == null)
                     {
                         Storage.Current.Locations.Find(loc.StorageID).Occupants.Remove(occupant);
                     }
+                }
+            });
+            Storage.Current.NPCs.GetAll().ForEach(npc =>
+            {
+                var loc = Storage.Current.Locations.Find(npc.CurrentXYZ);
+                if (!loc.Occupants.Exists(oc=>oc.StorageID == npc.StorageID))
+                {
+                    loc.Occupants.Add(new Code.Models.Occupant() { DisplayName = npc.DisplayName, StorageID = npc.StorageID });
                 }
             });
         }
@@ -78,6 +85,15 @@ namespace After
                 File.AppendAllText(filePath, error);
                 exError = exError.InnerException;
             }
+        }
+        public static void WriteLog(string Category, string Message)
+        {
+            var filePath = Path.Combine(DataPath, "Log", DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString().PadLeft(2, '0'), DateTime.Now.Day.ToString().PadLeft(2, '0') + ".txt");
+            if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            }
+            File.AppendAllText(filePath, $"{Category.ToUpper()} - {DateTime.Now.ToString()} - {Message}");
         }
     }
 }

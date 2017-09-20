@@ -158,7 +158,7 @@ namespace After.Models
             Combat,
             Dialog
         }
-        public List<string> Flags { get; set; }
+        public Dictionary<string, string> Flags { get; set; }
         public Dictionary<string, System.Timers.Timer> Timers { get; set; } = new Dictionary<string, System.Timers.Timer>();
         public DateTime LastAccessed { get; set; }
 
