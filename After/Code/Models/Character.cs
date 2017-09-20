@@ -19,7 +19,32 @@ namespace After.Models
         }
         public string Type { get; set; }
         public string StorageID { get; set; }
-        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public string Name
+        {
+            get
+            {
+                if (this is Player)
+                {
+                    return StorageID;
+                }
+                else
+                {
+                    return DisplayName;
+                }
+            }
+            set
+            {
+                if (this is Player)
+                {
+                    StorageID = value;
+                }
+                else
+                {
+                    DisplayName = value;
+                }
+            }
+        }
         public string Color { get; set; } = "gray";
         public string PortraitUri { get; set; }
         public double CoreEnergyPeak { get; set; }

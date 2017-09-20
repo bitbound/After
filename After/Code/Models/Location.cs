@@ -61,7 +61,7 @@ namespace After.Models
         public async Task CharacterArrives(Character CharacterObject)
         {
             CharacterObject.CurrentXYZ = StorageID;
-            Occupants.Add(new Occupant(CharacterObject));
+            Occupants.Add(new Occupant() { DisplayName = CharacterObject.DisplayName, StorageID = CharacterObject.StorageID });
             LastVisited = DateTime.Now;
             LastVisitedBy = CharacterObject.Name;
             var soul = CharacterObject.ConvertToSoul();

@@ -10,17 +10,6 @@ namespace After.Models
         {
            
         }
-        public new string Name
-        {
-            get
-            {
-                return StorageID;
-            }
-            set
-            {
-                StorageID = value;
-            }
-        }
         public string Password { get; set; }
         public string TemporaryPassword { get; set; }
         public string Email { get; set; }

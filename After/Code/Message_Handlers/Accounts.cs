@@ -28,6 +28,7 @@ namespace After.Message_Handlers
                 var player = new Player()
                 {
                     Name = username,
+                    DisplayName = username,
                     Email = JsonMessage.Email,
                     Color = JsonMessage.Color,
                     CurrentXYZ = $"0,0,{username}-0",

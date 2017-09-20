@@ -37,8 +37,7 @@ $(document).ready(function () {
         };
         $.post(window.location.origin + "/Services/ErrorReporting", JSON.stringify(ex));
         if (After.Debug) {
-            console.log("Unhandled Error: " + JSON.stringify(ex));
-            alert("Unhandled Error: " + JSON.stringify(ex));
+            throw error;
         }
         else {
             console.log("Unhandled Error: " + JSON.stringify(ex));

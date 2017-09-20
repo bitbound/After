@@ -221,15 +221,16 @@
             }, function (e) {
                 $(e.currentTarget).css("background-color", "rgba(255,255,255, .75)");
             })
-            occupant.innerHTML = JsonMessage.Occupants[i];
+            occupant.innerHTML = JsonMessage.Occupants[i].DisplayName;
+            occupant.id = JsonMessage.Occupants[i].StorageID;
             occupant.onclick = function (e) {
                 var xyz = (e.currentTarget as HTMLDivElement).getAttribute("targetxyz");
-                var occupantName = (e.currentTarget as HTMLDivElement).innerHTML;
+                var occupantID = (e.currentTarget as HTMLDivElement).id;
                 var request = {
                     "Category": "Events",
                     "Type": "AreaOccupantClicked",
                     "TargetXYZ": xyz,
-                    "Occupant": occupantName
+                    "Occupant": occupantID
                 }
                 After.Connection.Socket.send(JSON.stringify(request));
                 // TODO: Handle this on other end.
