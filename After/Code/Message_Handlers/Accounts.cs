@@ -173,11 +173,11 @@ namespace After.Message_Handlers
                 {
                     clientList.Remove(existing[i]);
                     await existing[i].SendString(JSON.Encode(message));
-                    await existing[i].ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Login elsewhere.", CancellationToken.None);
+                    await existing[i].ClientSocket.CloseOutputAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
                 }
             }
             player.BadLoginAttempts = 0;
-           WSC.Player= player;
+            WSC.Player= player;
             WSC.Authenticated = true;
             player.IsCharging = false;
             player.CurrentCharge = 0;

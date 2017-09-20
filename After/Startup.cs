@@ -49,7 +49,7 @@ namespace After
                 {
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                     var client = new WebSocketClient(webSocket);
-                    client.StringMessageReceived += (sender, jsonMessage) =>
+                    client.StringMessageReceived += async (sender, jsonMessage) =>
                     {
                         var wsClient = sender as WebSocketClient;
                         string category = jsonMessage.Category;
@@ -63,7 +63,7 @@ namespace After
                         {
                             if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
                             {
-                                webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Unauthorized.", CancellationToken.None);
+                                await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
                                 return;
                             }
                         }
@@ -87,7 +87,7 @@ namespace After
                             }
                         }
                     };
-                    client.SocketClosed += (sender, args) =>
+                    client.SocketClosed += async (sender, args) =>
                     {
                         var wsClient = sender as WebSocketClient;
                         var clientList = WebSocketServer.ServerList["After"].ClientList;
@@ -105,7 +105,7 @@ namespace After
                             Type = "Disconnected",
                             Username = wsClient?.Player.Name
                         };
-                        WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message));
+                        await WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message));
                         var player = wsClient?.Player as Player;
                         Storage.Current.Players.Store(player.StorageID);
                         player.GetCurrentLocation()?.CharacterLeaves(player);

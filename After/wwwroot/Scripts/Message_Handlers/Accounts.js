@@ -86,7 +86,7 @@ var After;
             }
             Accounts.HandleDisconnected = HandleDisconnected;
             function HandleLoginElsewhere(JsonMessage) {
-                After.Utilities.ShowDialog("Your were disconnected because your account was logged in from another location.<br/><br/>If this wasn't you, you should change your password immediately.", "black", "OK", null);
+                After.Utilities.ShowDialog("Your were disconnected because your account was logged in from another location.", "black", "OK", null);
             }
             Accounts.HandleLoginElsewhere = HandleLoginElsewhere;
             function HandleForgotPassword(JsonMessage) {

@@ -113,7 +113,7 @@ namespace Translucency.WebSockets
                 {
                     Utilities.Server.ClientList.Remove(this);
                 }
-                await ClientSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                await ClientSocket.CloseOutputAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace Translucency.WebSockets
                 {
                     Utilities.Server.ClientList.Remove(this);
                 }
-                await ClientSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
+                await ClientSocket.CloseOutputAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
                 SocketError?.Invoke(this, ex);
                 SocketClosed?.Invoke(this, EventArgs.Empty);
             }
