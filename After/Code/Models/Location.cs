@@ -1,4 +1,5 @@
 using After.Code.Models;
+using After.Code.Scripting;
 using Dynamic_JSON;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace After.Models
         public long InvestedWillpower { get; set; }
         public List<Occupant> Occupants { get; set; } = new List<Occupant>();
         public string OwnerID { get; set; }
-        public List<Script> Scripts { get; set; }
+        public List<IScript> Scripts { get; set; }
         public DateTime LastAccessed { get; set; }
 
 

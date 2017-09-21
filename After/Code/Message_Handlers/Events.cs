@@ -57,10 +57,12 @@ namespace After.Message_Handlers
         }
         public static async Task HandleDoAreaAction(dynamic JsonMessage, WebSocketClient WSC)
         {
+            await Task.Delay(1);
             // TODO.
         }
         public static async Task HandleAreaOccupantClicked(dynamic JsonMessage, WebSocketClient WSC)
         {
+            await Task.Delay(1);
             // TODO.
         }
     }
