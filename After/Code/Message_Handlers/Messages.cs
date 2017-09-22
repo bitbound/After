@@ -51,12 +51,7 @@ namespace After.Message_Handlers
             }
             try
             {
-                var global = new
-                {
-                    Storage = Storage.Current,
-                    Me = WSC.Player
-                };
-                var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"), global);
+                var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"), Storage.Current);
                 JsonMessage.Message = JSON.Encode(result);
                 await WSC.SendString(JSON.Encode(JsonMessage));
             }

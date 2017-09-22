@@ -28,18 +28,7 @@ namespace After
                 return WebSocketServer.ServerList["After"];
             }
         }
-        public static async void BroadcastMessage(string Message, string From, string Channel)
-        {
-            var jsonMessage = new
-            {
-                Category = "Messages",
-                Type = "Chat",
-                Username = From,
-                Channel = Channel,
-                Message = Message
-            };
-            await Server.Broadcast(JSON.Encode(jsonMessage));
-        }
+       
         public static void StartUp()
         {
             if (!Storage.Current.Locations.Exists("0,0,0"))
@@ -71,7 +60,7 @@ namespace After
                 var loc = Storage.Current.Locations.Find(npc.CurrentXYZ);
                 if (!loc.Occupants.Exists(oc=>oc.StorageID == npc.StorageID))
                 {
-                    loc.Occupants.Add(new Code.Models.Occupant() { DisplayName = npc.DisplayName, StorageID = npc.StorageID });
+                    loc.Occupants.Add(new Models.Occupant() { DisplayName = npc.DisplayName, StorageID = npc.StorageID });
                 }
             });
         }

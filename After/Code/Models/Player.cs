@@ -6,10 +6,6 @@ namespace After.Models
 {
     public class Player: Character
     {
-        public Player()
-        {
-           
-        }
         public string Password { get; set; }
         public string TemporaryPassword { get; set; }
         public string Email { get; set; }

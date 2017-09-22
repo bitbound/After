@@ -36,6 +36,11 @@ namespace Translucency.WebSockets
         public bool Authenticated { get; set; }
 
         /// <summary>
+        /// A list of timestamps for the last 20 requests.  Used for DoS/brute force protection.
+        /// </summary>
+        public List<DateTime> RequestHistory { get; set; } = new List<DateTime>();
+
+        /// <summary>
         /// An event that's fired whenever a string message is received.
         /// </summary>
         public event EventHandler<dynamic> StringMessageReceived;
@@ -93,6 +98,7 @@ namespace Translucency.WebSockets
             var outBuffer = Encoding.UTF8.GetBytes(MessageString);
             await SendBytes(outBuffer);
         }
+        
         /// <summary>
         /// Continuously reads data from the websocket.
         /// </summary>
@@ -107,6 +113,7 @@ namespace Translucency.WebSockets
                 {
                     buffer = new byte[Utilities.Server.ReceiveBufferSize];
                     result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    // TODO: RequestHistory.
                     ParseMessage(result, buffer);
                 }
                 if (Utilities.Server.ClientList.Contains(this))

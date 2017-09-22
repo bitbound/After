@@ -1,5 +1,5 @@
-using After.Code.Models;
-using After.Code.Scripting;
+using After.Models;
+using After.Scripting;
 using Really_Dynamic;
 using System;
 using System.Collections.Generic;
@@ -39,7 +39,7 @@ namespace After.Models
         public long InvestedWillpower { get; set; }
         public List<Occupant> Occupants { get; set; } = new List<Occupant>();
         public string OwnerID { get; set; }
-        public List<Script> Scripts { get; set; }
+        public List<IScript> Scripts { get; set; }
         public DateTime LastAccessed { get; set; }
 
 
@@ -79,11 +79,7 @@ namespace After.Models
             }
             foreach (var occupant in Occupants)
             {
-                NPCScript script = Storage.Current.NPCs.Find(occupant.StorageID)?.Scripts?.Find(scr => scr.Trigger == Triggers.OnBecomeAwarePlayer) as NPCScript;
-                if (script != null)
-                {
-                    await script.FireScript(Storage.Current.NPCs.Find(occupant.StorageID), CharacterObject.StorageID);
-                }
+                Storage.Current.NPCs.Find(occupant.StorageID)?.CheckAwareness(CharacterObject);
             }
         }
         public async Task CharacterLeaves(Character CharacterObject)

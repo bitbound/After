@@ -7,8 +7,9 @@ using System.Net;
 using Translucency.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using After.Code.Scripting;
+using After.Scripting;
 using Really_Dynamic;
+using System.Collections.Generic;
 
 namespace After.Message_Handlers
 {
@@ -69,12 +70,12 @@ namespace After.Message_Handlers
                 };
                 norahc.Scripts.Add(new NPCScript()
                 {
-                    Trigger = Triggers.OnBecomeAwarePlayer,
-                    // TODO: Temp.
-                    ScriptText = "InitiateDialog($\"I'm firing this script because I saw {Initiator} enter.\");"
+                    Trigger = Triggers.OnBecomeAware,
+                    TriggerSources = new List<Type>() { typeof(Player) }
+                    
                 });
                 Storage.Current.NPCs.Add(norahc);
-                innerVoid.Occupants.Add(new Code.Models.Occupant() { DisplayName = norahc.DisplayName, StorageID = norahc.StorageID });
+                innerVoid.Occupants.Add(new Models.Occupant() { DisplayName = norahc.DisplayName, StorageID = norahc.StorageID });
 
                 var hasher = new PasswordHasher<Player>();
                 player.Password = hasher.HashPassword(player, JsonMessage.Password.ToString());

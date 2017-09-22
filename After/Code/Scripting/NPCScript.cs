@@ -6,29 +6,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace After.Code.Scripting
+namespace After.Scripting
 {
-    public class NPCScript
+    public class NPCScript : IScript
     {
-        public virtual string ScriptText { get; set; }
-        public virtual Triggers Trigger { get; set; }
+        public string ScriptText { get; set; }
+        public Triggers Trigger { get; set; }
         public NPC Executor { get; set; }
-        public string Initiator { get; set; }
+        public string InitiatorID { get; set; }
+        public string InitiatorName { get; set; }
+        public List<Type> TriggerSources { get; set; }
 
         public void InitiateDialog(string DialogID)
         {
-            // TODO: Temp.
-            Utilities.BroadcastMessage(DialogID, "Norahc", "Global");
+            
         }
 
         // TODO: Attack, run, do stuff, etc.
 
-        public async Task FireScript(NPC Executor, string Initiator)
+        public async Task FireScript<T>(T Executor, string InitiatorID, string InitiatorName)
         {
             this.Executor = Executor as NPC;
-            this.Initiator = Initiator;
+            this.InitiatorID = InitiatorID;
+            this.InitiatorName = InitiatorName;
             await CSharpScript.EvaluateAsync(ScriptText, ScriptOptions.Default, this, typeof(NPCScript));
         }
-        
     }
 }
