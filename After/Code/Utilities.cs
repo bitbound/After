@@ -1,5 +1,5 @@
 ﻿using After.Models;
-using Dynamic_JSON;
+using Really_Dynamic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +27,18 @@ namespace After
             {
                 return WebSocketServer.ServerList["After"];
             }
+        }
+        public static async void BroadcastMessage(string Message, string From, string Channel)
+        {
+            var jsonMessage = new
+            {
+                Category = "Messages",
+                Type = "Chat",
+                Username = From,
+                Channel = Channel,
+                Message = Message
+            };
+            await Server.Broadcast(JSON.Encode(jsonMessage));
         }
         public static void StartUp()
         {

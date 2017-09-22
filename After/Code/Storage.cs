@@ -16,7 +16,6 @@ namespace After
             Messages.FolderPath = Path.Combine(Utilities.DataPath, "Storage\\Messages");
             Landmarks.FolderPath = Path.Combine(Utilities.DataPath, "Storage\\Landmarks");
             Locations.PersistenceFilter = new Predicate<Location>(loc => loc.IsStatic == true);
-            Messages.PersistenceFilter = new Predicate<Message>(mes => Messages.Storage.IndexOfValue(mes) > 50);
         }
         public StorageList<Player> Players { get; set; } = new StorageList<Player>();
         public StorageList<Location> Locations { get; set; } = new StorageList<Location>();

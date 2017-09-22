@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Really_Dynamic;
 using System.Collections.Generic;
-// LICENSE: Apache v2.
-namespace Dynamic_JSON
+namespace Really_Dynamic
 {
     public class JSON
     {

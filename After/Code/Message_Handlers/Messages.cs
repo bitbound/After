@@ -3,10 +3,10 @@ using System;
 using System.Text;
 using Translucency.WebSockets;
 using System.Linq;
-using Dynamic_JSON;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using System.Threading.Tasks;
+using Really_Dynamic;
 
 namespace After.Message_Handlers
 {
@@ -20,21 +20,21 @@ namespace After.Message_Handlers
                 await ParseCommand(JsonMessage, WSC);
                 return;
             }
-            JsonMessage.Username = (WSC.Player as Player).Name;
+            JsonMessage.Username = WSC?.Player;
             Storage.Current.Messages.Add(new Message()
             {
-                StorageID = $"{(WSC.Player as Player).Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
+                StorageID = $"{WSC?.Player?.Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
                 LastAccessed = DateTime.Now,
-                Sender = (WSC.Player as Player).Name,
-                Content = JsonMessage.Message,
+                Sender = WSC?.Player?.Name,
+                Content = JsonMessage?.Message,
                 Recipient = JsonMessage?.Recipent,
-                Channel = JsonMessage.Channel,
+                Channel = JsonMessage?.Channel,
                 Timestamp = DateTime.Now
             });
             switch ((string)JsonMessage.Channel)
             {
                 case "Global":
-                    Utilities.Server.Broadcast(JSON.Encode(JsonMessage));
+                    await Utilities.Server.Broadcast(JSON.Encode(JsonMessage));
                     break;
                 case "Command":
                     await ParseCommand(JsonMessage, WSC);
@@ -51,14 +51,19 @@ namespace After.Message_Handlers
             }
             try
             {
-                var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"), Storage.Current);
+                var global = new
+                {
+                    Storage = Storage.Current,
+                    Me = WSC.Player
+                };
+                var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"), global);
                 JsonMessage.Message = JSON.Encode(result);
-                WSC.SendString(JSON.Encode(JsonMessage));
+                await WSC.SendString(JSON.Encode(JsonMessage));
             }
             catch (Exception ex)
             {
                 JsonMessage.Message = "Error: " + ex.Message;
-                WSC.SendString(JSON.Encode(JsonMessage));
+                await WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
         public static async Task ParseCommand(dynamic JsonMessage, WebSocketClient WSC)

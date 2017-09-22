@@ -8,34 +8,27 @@ using System.Threading.Tasks;
 
 namespace After.Code.Scripting
 {
-    public class NPCScript : IScript
+    public class NPCScript
     {
-        public Triggers Trigger { get; set; }
-        public string ScriptText { get; set; }
-        public dynamic Executor { get; set; }
-        public dynamic Initiator { get; set; }
+        public virtual string ScriptText { get; set; }
+        public virtual Triggers Trigger { get; set; }
+        public NPC Executor { get; set; }
+        public string Initiator { get; set; }
 
         public void InitiateDialog(string DialogID)
         {
-
+            // TODO: Temp.
+            Utilities.BroadcastMessage(DialogID, "Norahc", "Global");
         }
 
-        public void Attack()
+        // TODO: Attack, run, do stuff, etc.
+
+        public async Task FireScript(NPC Executor, string Initiator)
         {
-
-        }
-
-        public void Run()
-        {
-
-        }
-
-
-        public async Task FireScript(dynamic Executor, dynamic Initiator, Triggers Trigger)
-        {
-            this.Executor = Storage.Current.NPCs.Find(Executor);
+            this.Executor = Executor as NPC;
             this.Initiator = Initiator;
             await CSharpScript.EvaluateAsync(ScriptText, ScriptOptions.Default, this, typeof(NPCScript));
         }
+        
     }
 }

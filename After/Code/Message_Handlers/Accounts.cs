@@ -6,8 +6,9 @@ using System.Linq;
 using System.Net;
 using Translucency.WebSockets;
 using System.Threading;
-using Dynamic_JSON;
 using System.Threading.Tasks;
+using After.Code.Scripting;
+using Really_Dynamic;
 
 namespace After.Message_Handlers
 {
@@ -66,10 +67,11 @@ namespace After.Message_Handlers
                     MovementState = Character.MovementStates.Ready,
                     PortraitUri = "/Assets/Images/Portraits/Norahc.png"
                 };
-                norahc.Scripts.Add(new Script()
+                norahc.Scripts.Add(new NPCScript()
                 {
-                    Trigger = Script.Triggers.OnEnter,
-                    ScriptText = ""
+                    Trigger = Triggers.OnBecomeAwarePlayer,
+                    // TODO: Temp.
+                    ScriptText = "InitiateDialog($\"I'm firing this script because I saw {Initiator} enter.\");"
                 });
                 Storage.Current.NPCs.Add(norahc);
                 innerVoid.Occupants.Add(new Code.Models.Occupant() { DisplayName = norahc.DisplayName, StorageID = norahc.StorageID });
