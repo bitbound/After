@@ -13,7 +13,8 @@ namespace After.Models
         public Settings Settings { get; set; } = new Settings();
 
         public bool Kicked { get; set; }
-        public bool Banned { get; set; }
+        public bool IsBanned { get; set; }
+        public bool IsWarned { get; set; }
         public int BadLoginAttempts { get; set; } = 0;
         public DateTime LastBadLogin { get; set; }
         

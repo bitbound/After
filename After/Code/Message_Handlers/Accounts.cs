@@ -108,6 +108,13 @@ namespace After.Message_Handlers
             var player = Storage.Current.Players.Find(username);
             var hasher = new PasswordHasher<Player>();
             var clientList = WebSocketServer.ServerList["After"].ClientList;
+            if (player.IsBanned)
+            {
+                JsonMessage.Result = "banned";
+                await WSC.SendJSON(JsonMessage);
+                await WSC.ClientSocket.CloseOutputAsync(System.Net.WebSockets.WebSocketCloseStatus.Empty, "Account banned.", CancellationToken.None);
+                return;
+            }
             while (player.AuthenticationTokens.Count > 10)
             {
                 player.AuthenticationTokens.RemoveAt(0);

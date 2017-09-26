@@ -95,4 +95,5 @@
             After.Utilities.ShowDialog("Password reset successful!<br/><br/>A temporary password has been sent to your email (remember to check in junk/spam).", "black", "OK", null);
         }
     }
+    // TODO: Handle warned/banned.
 }

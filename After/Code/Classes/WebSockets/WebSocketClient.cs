@@ -108,13 +108,12 @@ namespace Translucency.WebSockets
             {
                 var buffer = new byte[Utilities.Server.ReceiveBufferSize];
                 WebSocketReceiveResult result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                ParseMessage(result, buffer);
+                await ParseMessage(result, buffer);
                 while (!ClientSocket.CloseStatus.HasValue)
                 {
                     buffer = new byte[Utilities.Server.ReceiveBufferSize];
                     result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    // TODO: RequestHistory.
-                    ParseMessage(result, buffer);
+                    await ParseMessage(result, buffer);
                 }
                 if (Utilities.Server.ClientList.Contains(this))
                 {
@@ -139,11 +138,39 @@ namespace Translucency.WebSockets
         /// </summary>
         /// <param name="Result">The WebSocketReceiveResult.</param>
         /// <param name="ReadBuffer">The byte array buffer read from the socket stream.</param>
-        private void ParseMessage(WebSocketReceiveResult Result, byte[] ReadBuffer)
+        private async Task ParseMessage(WebSocketReceiveResult Result, byte[] ReadBuffer)
         {
             if (!Result.EndOfMessage)
             {
                 return;
+            }
+            RequestHistory.Add(DateTime.Now);
+            while (RequestHistory.Count > 20)
+            {
+                RequestHistory.RemoveAt(0);
+            }
+            if (RequestHistory.Count(time=>DateTime.Now.AddSeconds(-10) > time) > 20)
+            {
+                if (Player.IsWarned)
+                {
+                    Player.IsBanned = true;
+                    var request = new
+                    {
+                        Category = "Accounts",
+                        Type = "Banned"
+                    };
+                    await SendJSON(request);
+                }
+                else
+                {
+                    Player.IsWarned = true;
+                    var request = new
+                    {
+                        Category = "Accounts",
+                        Type = "Warned"
+                    };
+                    await SendJSON(request);
+                }
             }
             if (Result.MessageType == WebSocketMessageType.Text)
             {

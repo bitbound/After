@@ -109,6 +109,7 @@ var After;
                 }
             }
             Accounts.HandleForgotPassword = HandleForgotPassword;
+            // TODO: Handle warned/banned.
         })(Accounts = Message_Handlers.Accounts || (Message_Handlers.Accounts = {}));
     })(Message_Handlers = After.Message_Handlers || (After.Message_Handlers = {}));
 })(After || (After = {}));
