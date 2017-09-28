@@ -146,11 +146,11 @@ namespace Translucency.WebSockets
                 return;
             }
             RequestHistory.Add(DateTime.Now);
-            while (RequestHistory.Count > 20)
+            while (RequestHistory.Count > 50)
             {
                 RequestHistory.RemoveAt(0);
             }
-            if (RequestHistory.Where(time=>DateTime.Now - time < TimeSpan.FromSeconds(10)).Count() > 15)
+            if (RequestHistory.Where(time=>DateTime.Now - time < TimeSpan.FromSeconds(1)).Count() > 40)
             {
                 if (Player.IsWarned)
                 {
@@ -161,6 +161,11 @@ namespace Translucency.WebSockets
                         Type = "Banned"
                     };
                     await SendJSON(request);
+                    if (Player.AccountType == Player.AccountTypes.Admin)
+                    {
+                        Player.IsWarned = false;
+                        Player.IsBanned = false;
+                    }
                     await ClientSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Banned.", CancellationToken.None);
                     ClientSocket.Dispose();
                     return;

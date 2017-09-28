@@ -112,7 +112,7 @@ var After;
             }
             Accounts.HandleForgotPassword = HandleForgotPassword;
             function HandleWarned(JsonMessage) {
-                After.Connection.IsDisconnectExpected = true;
+                //After.Connection.IsDisconnectExpected = true;
                 After.Utilities.ShowDialog("You have been disconnected for suspicious activity.  Your account has been flagged, and any future offenses will result in a permanent ban.  If you believe this was in error, please contact support.", "red", "OK", null);
             }
             Accounts.HandleWarned = HandleWarned;

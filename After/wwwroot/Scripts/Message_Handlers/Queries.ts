@@ -76,7 +76,7 @@
             After.Game.AddPower(JsonMessage.Powers[i]);
         }
         if (JsonMessage.AccountType == 3) {
-            $("#divAdminFrame").removeAttr("hidden");
+            $("#divAdminFrame").removeClass("hidden");
         }
         else {
             $("#divAdminFrame").remove();
