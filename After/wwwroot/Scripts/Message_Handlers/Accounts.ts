@@ -36,7 +36,7 @@
         }
         else if (JsonMessage.Result == "ok") {
             if (JsonMessage.Note == "LoginElsewhere") {
-                After.Utilities.ShowDialog("Your account was logged in from another location and was forced off by this login session.<br/><br/>If that wasn't you, you should change your password immediately.", "black", "OK", null);
+                After.Utilities.ShowDialog("Your account was already logged in from another location and was forced off by this login session.", "black", "OK", null);
             }
             if (localStorage["RememberMe"] == "true") {
                 localStorage["AuthenticationToken"] = JsonMessage.AuthenticationToken;
@@ -55,7 +55,10 @@
             $("#inputPassword").val("");
             localStorage.removeItem("Username");
             localStorage.removeItem("AuthenticationToken");
-        };
+        }
+        else if (JsonMessage.Result == "banned") {
+            After.Utilities.ShowDialog("Your account is banned.  If you believe this is a mistake, please contact support.", "red", "OK", null);
+        }
         $("#buttonLogin").removeAttr("disabled");
     };
 
@@ -95,5 +98,12 @@
             After.Utilities.ShowDialog("Password reset successful!<br/><br/>A temporary password has been sent to your email (remember to check in junk/spam).", "black", "OK", null);
         }
     }
-    // TODO: Handle warned/banned.
+    export function HandleWarned(JsonMessage) {
+        After.Connection.IsDisconnectExpected = true;
+        After.Utilities.ShowDialog("You have been disconnected for suspicious activity.  Your account has been flagged, and any future offenses will result in a permanent ban.  If you believe this was in error, please contact support.", "red", "OK", null);
+    }
+    export function HandleBanned(JsonMessage) {
+        After.Connection.IsDisconnectExpected = true;
+        After.Utilities.ShowDialog("You have been permanently banned for repeated suspicious activity.  If you believe this was in error, please contact support.", "red", "OK", null);
+    }
 }

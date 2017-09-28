@@ -5,13 +5,18 @@ var After;
         class Connection {
             constructor() {
                 this.Socket = new WebSocket(location.origin.replace("http", "ws"));
+                this.IsDisconnectExpected = false;
             }
             SetHandlers() {
                 After.Connection.Socket.onopen = function () {
+                    After.Connection.IsDisconnectExpected = false;
                     console.log("Connected.");
                 };
                 After.Connection.Socket.onerror = function (e) {
                     console.log("Error.");
+                    if (After.Connection.IsDisconnectExpected) {
+                        return;
+                    }
                     var divError = document.createElement("div");
                     var divMessage = document.createElement("div");
                     var buttonRefresh = document.createElement("button");
@@ -41,6 +46,9 @@ var After;
                 };
                 After.Connection.Socket.onclose = function () {
                     console.log("Closed.");
+                    if (After.Connection.IsDisconnectExpected) {
+                        return;
+                    }
                     var divError = document.createElement("div");
                     var divMessage = document.createElement("div");
                     var buttonRefresh = document.createElement("button");

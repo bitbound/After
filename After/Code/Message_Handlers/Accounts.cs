@@ -112,7 +112,8 @@ namespace After.Message_Handlers
             {
                 JsonMessage.Result = "banned";
                 await WSC.SendJSON(JsonMessage);
-                await WSC.ClientSocket.CloseOutputAsync(System.Net.WebSockets.WebSocketCloseStatus.Empty, "Account banned.", CancellationToken.None);
+                await WSC.ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Account banned.", CancellationToken.None);
+                WSC.ClientSocket.Dispose();
                 return;
             }
             while (player.AuthenticationTokens.Count > 10)
@@ -192,7 +193,8 @@ namespace After.Message_Handlers
                 {
                     clientList.Remove(existing[i]);
                     await existing[i].SendString(JSON.Encode(message));
-                    await existing[i].ClientSocket.CloseOutputAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
+                    await existing[i].ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
+                    existing[i].ClientSocket.Dispose();
                 }
             }
             player.BadLoginAttempts = 0;

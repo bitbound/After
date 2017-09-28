@@ -58,7 +58,7 @@ namespace After
             Storage.Current.NPCs.GetAll().ForEach(npc =>
             {
                 var loc = Storage.Current.Locations.Find(npc.CurrentXYZ);
-                if (!loc.Occupants.Exists(oc=>oc.StorageID == npc.StorageID))
+                if (!loc?.Occupants.Exists(oc=>oc.StorageID == npc.StorageID) == true)
                 {
                     loc.Occupants.Add(new Models.Occupant() { DisplayName = npc.DisplayName, StorageID = npc.StorageID });
                 }

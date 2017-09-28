@@ -34,6 +34,10 @@ button:active {
     background-color: gray;
 }
 
+.hidden {
+    display: none;
+}
+
 .font-serif {
     font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
 }

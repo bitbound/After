@@ -111,6 +111,10 @@ After.Temp.Intro.Start = function () {
         ATI.FlashContinue = function () {
             ATI.Interval = window.setInterval(function () {
                 var divC = document.getElementById("divContinue");
+                if (divC == null) {
+                    window.clearInterval(ATI.Interval);
+                    return;
+                }
                 if (ATI.IsPaused == false) {
                     $("#divContinue").css("opacity", "0");
                     window.clearInterval(ATI.Interval);

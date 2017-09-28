@@ -64,7 +64,8 @@ namespace After
                         {
                             if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
                             {
-                                await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
+                                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
+                                webSocket.Dispose();
                                 return;
                             }
                         }
@@ -116,7 +117,6 @@ namespace After
                             timer.Value.Dispose();
                         }
                     };
-                    //Utilities.Server.ClientList.Add(client);
                     await client.HandleSocket();
                 }
                 else

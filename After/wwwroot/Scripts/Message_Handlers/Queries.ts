@@ -48,7 +48,7 @@
             After.Game.AddPower(JsonMessage.Powers[i]);
         }
         if (JsonMessage.IsAdmin) {
-            $("#divAdminFrame").removeAttr("hidden");
+            $("#divAdminFrame").removeClass("hidden");
         }
         else {
             $("#divAdminFrame").remove();

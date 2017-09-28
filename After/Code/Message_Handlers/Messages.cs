@@ -20,7 +20,7 @@ namespace After.Message_Handlers
                 await ParseCommand(JsonMessage, WSC);
                 return;
             }
-            JsonMessage.Username = WSC?.Player;
+            JsonMessage.Username = WSC?.Player?.Name;
             Storage.Current.Messages.Add(new Message()
             {
                 StorageID = $"{WSC?.Player?.Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",

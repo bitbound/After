@@ -119,7 +119,7 @@ namespace Translucency.WebSockets
                 {
                     Utilities.Server.ClientList.Remove(this);
                 }
-                await ClientSocket.CloseOutputAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                await ClientSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
             catch (Exception ex)
             {
@@ -130,6 +130,7 @@ namespace Translucency.WebSockets
                 await ClientSocket.CloseOutputAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
                 SocketError?.Invoke(this, ex);
                 SocketClosed?.Invoke(this, EventArgs.Empty);
+                ClientSocket.Dispose();
             }
         }
 
@@ -149,7 +150,7 @@ namespace Translucency.WebSockets
             {
                 RequestHistory.RemoveAt(0);
             }
-            if (RequestHistory.Count(time=>DateTime.Now.AddSeconds(-10) > time) > 20)
+            if (RequestHistory.Where(time=>DateTime.Now - time < TimeSpan.FromSeconds(10)).Count() > 15)
             {
                 if (Player.IsWarned)
                 {
@@ -160,6 +161,9 @@ namespace Translucency.WebSockets
                         Type = "Banned"
                     };
                     await SendJSON(request);
+                    await ClientSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Banned.", CancellationToken.None);
+                    ClientSocket.Dispose();
+                    return;
                 }
                 else
                 {
@@ -170,6 +174,9 @@ namespace Translucency.WebSockets
                         Type = "Warned"
                     };
                     await SendJSON(request);
+                    await ClientSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Warned.", CancellationToken.None);
+                    ClientSocket.Dispose();
+                    return;
                 }
             }
             if (Result.MessageType == WebSocketMessageType.Text)
