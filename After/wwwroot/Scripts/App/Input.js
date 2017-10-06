@@ -225,7 +225,6 @@ var After;
                         After.Canvas.LastTouchPoint1 = e.touches[0];
                         After.Canvas.LastTouchPoint2 = e.touches[1];
                     }
-                    e.preventDefault();
                 };
                 After.Canvas.Element.ontouchmove = function (e) {
                     e.preventDefault();
@@ -286,10 +285,6 @@ var After;
                             After.Canvas.IsZooming = false;
                             return;
                         }
-                        if (After.Utilities.NumberIsBetween(Math.abs(After.Canvas.StartDragX - e.changedTouches[0].clientX), 0, 5, true) && After.Utilities.NumberIsBetween(Math.abs(After.Canvas.StartDragY - e.changedTouches[0].clientY), 0, 5, true)) {
-                            After.Canvas.SelectPoint(e.changedTouches[0]);
-                            return;
-                        }
                         After.Canvas.ApplyInertia();
                     }
                     else if (e.touches.length == 1) {
@@ -312,7 +307,6 @@ var After;
                         After.Canvas.LastTouchPoint1 = e.touches[0];
                         After.Canvas.LastTouchPoint2 = e.touches[1];
                     }
-                    e.preventDefault();
                 };
                 After.Canvas.Element.oncontextmenu = function (e) {
                     return false;
@@ -757,7 +751,6 @@ var After;
                     }
                 });
                 $("#svgJoystick").on("touchstart", function (e) {
-                    e.preventDefault();
                     if (e.touches.length == 1) {
                         After.Temp.JoystickManipulation = true;
                         window.ontouchmove = function (e) {
@@ -880,15 +873,10 @@ var After;
                         window.onmousemove = null;
                         window.onmouseup = null;
                         window.onmouseleave = null;
-                        if ($("#svgJoystick").css("margin-left") == "0px" && $("#svgJoystick").css("margin-top") == "0px") {
-                            After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, true);
-                        }
-                        else {
-                            $("#svgJoystick").animate({
-                                "margin-left": "0",
-                                "margin-top": "0",
-                            }, 500);
-                        }
+                        $("#svgJoystick").animate({
+                            "margin-left": "0",
+                            "margin-top": "0",
+                        }, 250);
                     };
                     window.onmouseleave = function (e) {
                         After.Temp.JoystickManipulation = false;
@@ -900,6 +888,9 @@ var After;
                             "margin-top": 0,
                         }, 500);
                     };
+                });
+                $("#svgJoystick").on("click", function (e) {
+                    After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, true);
                 });
                 $(".dpad-direction").on("click", function (e) {
                     After.Me.Move($(e.currentTarget).attr("move-direction"));

@@ -33,7 +33,8 @@ namespace After.Message_Handlers
                     DisplayName = username,
                     Email = JsonMessage.Email,
                     Color = JsonMessage.Color,
-                    CurrentXYZ = $"0,0,{username}-0",
+                    // TODO: Start in void.
+                    CurrentXYZ = $"0,0,0",
                     MovementState = Character.MovementStates.Ready
                 };
 
@@ -71,11 +72,12 @@ namespace After.Message_Handlers
                 norahc.Scripts.Add(new NPCScript()
                 {
                     Trigger = Triggers.OnBecomeAware,
-                    TriggerSources = new List<Type>() { typeof(Player) }
+                    TriggerSources = new List<Type>() { typeof(Player) },
+                    ScriptText = @""
                     
                 });
                 Storage.Current.NPCs.Add(norahc);
-                innerVoid.Occupants.Add(new Models.Occupant() { DisplayName = norahc.DisplayName, StorageID = norahc.StorageID });
+                innerVoid.Occupants.Add(new Occupant() { DisplayName = norahc.DisplayName, StorageID = norahc.StorageID });
 
                 var hasher = new PasswordHasher<Player>();
                 player.Password = hasher.HashPassword(player, JsonMessage.Password.ToString());

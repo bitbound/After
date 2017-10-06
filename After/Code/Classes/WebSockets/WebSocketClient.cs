@@ -152,37 +152,7 @@ namespace Translucency.WebSockets
             }
             if (RequestHistory.Where(time=>DateTime.Now - time < TimeSpan.FromSeconds(1)).Count() > 40)
             {
-                if (Player.IsWarned)
-                {
-                    Player.IsBanned = true;
-                    var request = new
-                    {
-                        Category = "Accounts",
-                        Type = "Banned"
-                    };
-                    await SendJSON(request);
-                    if (Player.AccountType == Player.AccountTypes.Admin)
-                    {
-                        Player.IsWarned = false;
-                        Player.IsBanned = false;
-                    }
-                    await ClientSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Banned.", CancellationToken.None);
-                    ClientSocket.Dispose();
-                    return;
-                }
-                else
-                {
-                    Player.IsWarned = true;
-                    var request = new
-                    {
-                        Category = "Accounts",
-                        Type = "Warned"
-                    };
-                    await SendJSON(request);
-                    await ClientSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Warned.", CancellationToken.None);
-                    ClientSocket.Dispose();
-                    return;
-                }
+                await Player.WarnOrBan(this);
             }
             if (Result.MessageType == WebSocketMessageType.Text)
             {

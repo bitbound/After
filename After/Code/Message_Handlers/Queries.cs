@@ -96,6 +96,10 @@ namespace After.Message_Handlers
         }
         public static async Task HandleMapUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {
+            if (JsonMessage.XMax - JsonMessage.XMin > 500)
+            {
+                await WSC.Player.WarnOrBan(WSC);
+            }
             await Task.Run(async ()=>{
                 var visibleLocations = (WSC.Player as Player).GetVisibleLocations();
                 for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)

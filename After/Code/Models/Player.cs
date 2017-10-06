@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
+using System.Threading;
+using System.Threading.Tasks;
 using Translucency.WebSockets;
 
 namespace After.Models
@@ -42,6 +45,40 @@ namespace After.Models
         public WebSocketClient GetSocketHandler()
         {
             return Utilities.Server.ClientList.Find(client => client?.Player?.Name == Name);
+        }
+        public async Task WarnOrBan(WebSocketClient WSC)
+        {
+            if (IsWarned)
+            {
+                IsBanned = true;
+                var request = new
+                {
+                    Category = "Accounts",
+                    Type = "Banned"
+                };
+                await WSC.SendJSON(request);
+                if (AccountType == AccountTypes.Admin)
+                {
+                    IsWarned = false;
+                    IsBanned = false;
+                }
+                await WSC.ClientSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Banned.", CancellationToken.None);
+                WSC.ClientSocket.Dispose();
+                return;
+            }
+            else
+            {
+                IsWarned = true;
+                var request = new
+                {
+                    Category = "Accounts",
+                    Type = "Warned"
+                };
+                await WSC.SendJSON(request);
+                await WSC.ClientSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Warned.", CancellationToken.None);
+                WSC.ClientSocket.Dispose();
+                return;
+            }
         }
         public dynamic ConvertToMe()
         {
