@@ -17,7 +17,7 @@ namespace After.Storage {
     export const Souls = new Array<After.Models.Soul>();
     export const FreeParticles = new Array<After.Models.FreeParticle>();
     export const Landmarks = new Array<After.Models.Landmark>();
-}
+};
 
 $(document).ready(function () {
     if (window.location.href.search("localhost") > -1) {
@@ -51,6 +51,4 @@ $(document).ready(function () {
         After.TouchScreen = true;
     };
     After.Connection.SetHandlers();
-    After.Temp.Splash.Init();
-
 })

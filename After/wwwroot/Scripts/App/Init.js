@@ -21,6 +21,7 @@ var After;
         Storage.Landmarks = new Array();
     })(Storage = After.Storage || (After.Storage = {}));
 })(After || (After = {}));
+;
 $(document).ready(function () {
     if (window.location.href.search("localhost") > -1) {
         After.Debug = true;
@@ -53,5 +54,4 @@ $(document).ready(function () {
         After.TouchScreen = true;
     };
     After.Connection.SetHandlers();
-    After.Temp.Splash.Init();
 });

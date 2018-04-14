@@ -57,6 +57,19 @@ button:active {
     background-color: rgba(0, 0, 0, 0.75)
 }
 
+.link-button {
+    padding: 1em 1.5em;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+    border: 2px solid gray;
+    font-family: monospace;
+}
+
+.link-button:hover {
+    border: 2px solid white;
+}
+
 /*** Loading Frame ***/
 .loading-frame {
     position: fixed;

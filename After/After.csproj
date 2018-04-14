@@ -2,8 +2,41 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Scripts\App\Audio.ts" />
+    <Content Remove="wwwroot\Scripts\App\Canvas.ts" />
+    <Content Remove="wwwroot\Scripts\App\Connection.ts" />
+    <Content Remove="wwwroot\Scripts\App\Drawing.ts" />
+    <Content Remove="wwwroot\Scripts\App\Game.ts" />
+    <Content Remove="wwwroot\Scripts\App\Init.ts" />
+    <Content Remove="wwwroot\Scripts\App\Input.ts" />
+    <Content Remove="wwwroot\Scripts\App\Me.ts" />
+    <Content Remove="wwwroot\Scripts\App\Settings.ts" />
+    <Content Remove="wwwroot\Scripts\App\Temp.ts" />
+    <Content Remove="wwwroot\Scripts\App\Utilities.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\CreateAccount.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\CreateCharacter.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\Game.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\Intro.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\LoginForm.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\Splash.ts" />
+    <Content Remove="wwwroot\Scripts\Message_Handlers\Accounts.ts" />
+    <Content Remove="wwwroot\Scripts\Message_Handlers\Events.ts" />
+    <Content Remove="wwwroot\Scripts\Message_Handlers\Messages.ts" />
+    <Content Remove="wwwroot\Scripts\Message_Handlers\Queries.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Area.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Bases\Selectable.ts" />
+    <Content Remove="wwwroot\Scripts\Models\FreeParticle.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Landmark.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Occupant.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Particle.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Power.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Soul.ts" />
+    <Content Remove="wwwroot\Scripts\typings\jquery\jquery.d.ts" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\Default Settings.pubxml" />
@@ -42,7 +75,6 @@
     <None Include="wwwroot\Scripts\Controls\Game.js" />
     <None Include="wwwroot\Scripts\Controls\Intro.js" />
     <None Include="wwwroot\Scripts\Controls\LoginForm.js" />
-    <None Include="wwwroot\Scripts\Controls\Splash.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.min.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
@@ -83,7 +115,7 @@
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Game.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Intro.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\LoginForm.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\Splash.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Index.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Accounts.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Events.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Messages.ts" />

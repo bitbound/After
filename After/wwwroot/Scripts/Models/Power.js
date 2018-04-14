@@ -8,7 +8,7 @@ var After;
             }
         }
         Models.Power = Power;
-        var Targets;
+        let Targets;
         (function (Targets) {
             Targets[Targets["Self"] = 0] = "Self";
             Targets[Targets["Character"] = 1] = "Character";
