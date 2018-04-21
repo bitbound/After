@@ -1,35 +1,15 @@
 function raiseParticle() {
     try {
-        var rectList = document.getElementById("imgTunnel").getBoundingClientRect();
-        var riseHeight = $("#imgTunnel").height() * .8;
-        var randomLeft = Math.random() * ($("#imgTunnel").width() * .20) + ($("#imgTunnel").width() * .25);
-        var startLeft = Math.round(randomLeft + rectList.left);
-        var startTop = Math.round(rectList.top + $("#imgTunnel").height() * .45);
-        var part = document.createElement("div");
-        $(part).css({
-            height: "1px",
-            width: "1px",
-            left: startLeft,
-            top: startTop,
-            "border-radius": "100%",
-            position: "absolute",
-            "background-color": "black"
-        });
-        document.getElementById("divEffects").appendChild(part);
-        $(part).animate({
-            height: "6px",
-            width: "6px",
-            "top": "-=" + riseHeight,
-            "opacity": "0",
-            "background-color": "gray"
-        }, 3000, function () {
-            $(part).remove();
-        });
-        window.setTimeout(function () {
-            if ($("#divSplash").length > 0) {
-                raiseParticle();
-            }
-        }, 100);
+        var imageWidth = document.getElementById("imgTunnel").clientWidth;
+        for (var i = 0; i < 60; i++) {
+            window.setTimeout(function () {
+                var startLeft = Math.random() * -(imageWidth * .25);
+                var part = document.createElement("div");
+                part.classList.add("particle");
+                part.style.transform = "translate(" + startLeft + "px, -125px)";
+                document.getElementById("divParticles").appendChild(part);
+            }, 100 * i);
+        }
     }
     catch (ex) { }
 }

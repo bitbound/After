@@ -221,7 +221,8 @@
                 "left": "50%",
                 "transform": "translate(-50%, -50%)",
                 "z-index": "4",
-                "box-shadow": "10px 10px 5px rgba(255,255,255,.15)"
+                "box-shadow": "10px 10px 5px rgba(255,255,255,.15)",
+                "min-width": "300px"
             });
             divOuter.appendChild(divMessage);
             divOuter.appendChild(buttonAction);

@@ -2,70 +2,7 @@ After.Temp = After.Temp || {};
 After.Temp.CreateCharacter = After.Temp.CreateCharacter || {};
 After.Temp.CreateCharacter.Init = function () {
     var ATI = After.Temp.Intro || {};
-    ATI.PreviewParticles = [];
-    ATI.Flybys = [];
-    ATI.canvasPreview = document.getElementById("canvasPreview").getContext("2d");
     ATI.SoulColor = "gray";
-    After.Temp.Intro.canvasPreview.canvas.width = $("#canvasPreview").width();
-    After.Temp.Intro.canvasPreview.canvas.height = $("#canvasPreview").height();
-    ATI.PreviewLeft = Math.round((ATI.canvasPreview.canvas.width / 2) - 50);
-    ATI.PreviewTop = 0;
-    var tempResize = function (e) {
-        if ($("#divGame").is(":visible")) {
-            $(window).off("resize", tempResize);
-            return;
-        }
-        ATI.canvasPreview.canvas.width = $("#canvasPreview").width();
-        ATI.PreviewLeft = Math.round((ATI.canvasPreview.canvas.width / 2) - 50);
-        ATI.canvasPreview.canvas.height = $("#canvasPreview").height();
-        if ($("#divCreateCharacter").is(":visible") == false) {
-            ATI.PreviewTop = Math.round(ATI.canvasPreview.canvas.height * .25);
-        }
-    };
-    $(window).on("resize", tempResize);
-    ATI.AnimateParticleX = function (Particle) {
-        var part = Particle;
-        part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
-        var duration = Math.abs(part.ToX - part.CurrentX) * 35;
-        $(part).animate({
-            "CurrentX": part.ToX
-        }, {
-            "duration": Math.abs(part.ToX - part.CurrentX) * 35,
-            "queue": false
-        });
-        window.setTimeout(function (part) {
-            if (After.Temp.Intro) {
-                After.Temp.Intro.AnimateParticleX(part);
-            }
-        }, duration, part);
-    };
-    ATI.AnimateParticleY = function (Particle) {
-        var part = Particle;
-        part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
-        var duration = Math.abs(part.ToY - part.CurrentY) * 35;
-        $(part).animate({
-            "CurrentY": part.ToY
-        }, {
-            "duration": Math.abs(part.ToY - part.CurrentY) * 35,
-            "queue": false
-        });
-        window.setTimeout(function (part) {
-            if (After.Temp.Intro) {
-                After.Temp.Intro.AnimateParticleY(part);
-            }
-        }, duration, part);
-    };
-    for (var i = 0; i < 50; i++) {
-        var part = {};
-        part.CurrentX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
-        part.FromX = part.CurrentX;
-        part.CurrentY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
-        part.FromY = part.CurrentY;
-        ATI.PreviewParticles.push(part);
-        ATI.AnimateParticleX(part);
-        ATI.AnimateParticleY(part);
-    }
-    ;
     ATI.EvaluateColor = function () {
         $("#selectColor")[0].selectedIndex = 0;
         while (Number($("#inputRed").val()) + Number($("#inputGreen").val()) + Number($("#inputBlue").val()) < 125) {
@@ -74,6 +11,7 @@ After.Temp.CreateCharacter.Init = function () {
             $("#inputBlue")[0].value = String(Number($("#inputBlue")[0].value) + 1);
         }
         ATI.SoulColor = "rgb(" + $("#inputRed").val() + ", " + $("#inputGreen").val() + ", " + $("#inputBlue").val() + ")";
+        // TODO: Change eye color.
     };
     ATI.SubmitColor = function () {
         After.Me.Color = ATI.SoulColor;
@@ -117,62 +55,6 @@ After.Temp.CreateCharacter.Init = function () {
         $("#inputGreen").val(rgbColor.split(",")[1]);
         $("#inputBlue").val(rgbColor.replace(")", "").split(",")[2]);
     };
-    ATI.PreviewInterval = window.setInterval(function () {
-        var canvasPreview = ATI.canvasPreview;
-        canvasPreview.save();
-        canvasPreview.fillStyle = 'rgba(0,0,0, 0.2)';
-        canvasPreview.fillRect(0, 0, canvasPreview.canvas.width, canvasPreview.canvas.height);
-        if (ATI.ShowFlybys) {
-            var roll = After.Utilities.GetRandom(0, 100, true);
-            if (roll < 5) {
-                var y = After.Utilities.GetRandom(0, ATI.canvasPreview.canvas.height, true);
-                var fb = { "X": ATI.canvasPreview.canvas.width, "Y": y };
-                ATI.Flybys.push(fb);
-                $(fb).animate({
-                    "X": -5,
-                    "Y": y - 100
-                }, 5000, "linear");
-            }
-            for (var i = 0; i < ATI.Flybys.length; i++) {
-                if (typeof ATI.Flybys[i] == "undefined") {
-                    continue;
-                }
-                ATI.canvasPreview.fillStyle = "whitesmoke";
-                ATI.canvasPreview.beginPath();
-                ATI.canvasPreview.arc(ATI.Flybys[i].X, ATI.Flybys[i].Y, 1, 0, Math.PI * 2);
-                ATI.canvasPreview.fill();
-                if (ATI.Flybys[i].X < 0 || ATI.Flybys[i].Y < 0) {
-                    ATI.Flybys.splice(i, 1);
-                }
-            }
-            ;
-        }
-        for (var i = 0; i < ATI.PreviewParticles.length; i++) {
-            var part = ATI.PreviewParticles[i];
-            if (part.ToX == part.CurrentX) {
-                part.ToX = After.Utilities.GetRandom(ATI.PreviewLeft, ATI.PreviewLeft + 100, true);
-                $(part).animate({
-                    "CurrentX": part.ToX
-                }, {
-                    "duration": Math.abs(part.ToX - part.CurrentX) * 35,
-                    "queue": false
-                });
-            }
-            if (part.ToY == part.CurrentY) {
-                part.ToY = part.ToY = After.Utilities.GetRandom(ATI.PreviewTop, ATI.PreviewTop + 100, true);
-                $(part).animate({
-                    "CurrentY": part.ToY
-                }, {
-                    "duration": Math.abs(part.ToY - part.CurrentY) * 35,
-                    "queue": false
-                });
-            }
-            canvasPreview.fillStyle = ATI.SoulColor;
-            canvasPreview.beginPath();
-            canvasPreview.arc(part.CurrentX, part.CurrentY, 2, 0, Math.PI * 2);
-            canvasPreview.fill();
-        }
-    }, 25);
     document.getElementById("selectColor").appendChild(document.createElement("option"));
     After.Utilities.ColorNames.forEach(function (value, index) {
         var option = document.createElement("option");

@@ -6,25 +6,21 @@ After.Temp.Intro.Start = function () {
         var ATI = After.Temp.Intro;
         $("#divLogin").animate({ opacity: 0 }, 1000, function () {
             $("#divLogin").hide();
-            $("#divIntro").animate({ opacity: 1 }, 2000, function () {
-                $("#svgRing1").animate({ opacity: 1 }, 1500);
-                $("#svgRing2").animate({ opacity: 1 }, 1500, function () {
+            $("#divIntro").animate({ opacity: 1 }, 1500, function () {
+                $("#svgRing1").animate({ opacity: 1 }, 1000);
+                $("#svgRing2").animate({ opacity: 1 }, 1000, function () {
                     After.Audio.LoadSound("/Assets/Sounds/gameaudio_teleport-space-morph.mp3", false, function () {
                         $("#svgSliver").show();
                         After.Audio.PlaySource.start();
                         $("#svgSliver").animate({ top: "20%" }, 500, function () {
                             window.setTimeout(function () {
-                                $("#divPresents").animate({ opacity: 1 }, 2000, function () {
+                                $("#divLogo").animate({ opacity: 0 }, 1500, function () {
+                                    $("#divLogo").remove();
+                                    After.Audio.StreamLoop("/Assets/Sounds/urupin__heartbeat.mp3");
                                     window.setTimeout(function () {
-                                        $("#divLogo").animate({ opacity: 0 }, 1500, function () {
-                                            $("#divLogo").remove();
-                                            After.Audio.StreamLoop("/Assets/Sounds/urupin__heartbeat.mp3");
-                                            window.setTimeout(function () {
-                                                ATI.Narrate();
-                                                $("#buttonSkip").fadeIn();
-                                            }, 1000);
-                                        });
-                                    }, 2000);
+                                        ATI.Narrate();
+                                        $("#buttonSkip").fadeIn();
+                                    }, 1000);
                                 });
                             }, 1000);
                         });

@@ -11,7 +11,6 @@
     <Content Remove="wwwroot\Scripts\App\Connection.ts" />
     <Content Remove="wwwroot\Scripts\App\Drawing.ts" />
     <Content Remove="wwwroot\Scripts\App\Game.ts" />
-    <Content Remove="wwwroot\Scripts\App\Init.ts" />
     <Content Remove="wwwroot\Scripts\App\Input.ts" />
     <Content Remove="wwwroot\Scripts\App\Me.ts" />
     <Content Remove="wwwroot\Scripts\App\Settings.ts" />
@@ -21,7 +20,6 @@
     <Content Remove="wwwroot\Scripts\Controls\CreateCharacter.ts" />
     <Content Remove="wwwroot\Scripts\Controls\Game.ts" />
     <Content Remove="wwwroot\Scripts\Controls\Intro.ts" />
-    <Content Remove="wwwroot\Scripts\Controls\LoginForm.ts" />
     <Content Remove="wwwroot\Scripts\Controls\Splash.ts" />
     <Content Remove="wwwroot\Scripts\Message_Handlers\Accounts.ts" />
     <Content Remove="wwwroot\Scripts\Message_Handlers\Events.ts" />
@@ -35,6 +33,7 @@
     <Content Remove="wwwroot\Scripts\Models\Particle.ts" />
     <Content Remove="wwwroot\Scripts\Models\Power.ts" />
     <Content Remove="wwwroot\Scripts\Models\Soul.ts" />
+    <Content Remove="wwwroot\Scripts\Play.ts" />
     <Content Remove="wwwroot\Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
 
@@ -54,8 +53,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Data\ClientErrors\" />
+    <Folder Include="wwwroot\Data\Errors\" />
+    <Folder Include="wwwroot\Data\Logs\" />
+    <Folder Include="wwwroot\Data\Storage\Landmarks\" />
+    <Folder Include="wwwroot\Data\Storage\Locations\" />
     <Folder Include="wwwroot\Data\Storage\Messages\" />
     <Folder Include="wwwroot\Data\Storage\NPCs\" />
+    <Folder Include="wwwroot\Data\Storage\Players\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,7 +69,6 @@
     <None Include="wwwroot\Scripts\App\Connection.js" />
     <None Include="wwwroot\Scripts\App\Drawing.js" />
     <None Include="wwwroot\Scripts\App\Game.js" />
-    <None Include="wwwroot\Scripts\App\Init.js" />
     <None Include="wwwroot\Scripts\App\Input.js" />
     <None Include="wwwroot\Scripts\App\Me.js" />
     <None Include="wwwroot\Scripts\App\Settings.js" />
@@ -74,7 +78,6 @@
     <None Include="wwwroot\Scripts\Controls\CreateCharacter.js" />
     <None Include="wwwroot\Scripts\Controls\Game.js" />
     <None Include="wwwroot\Scripts\Controls\Intro.js" />
-    <None Include="wwwroot\Scripts\Controls\LoginForm.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.min.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
@@ -104,7 +107,6 @@
     <TypeScriptCompile Include="wwwroot\Scripts\App\Connection.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Drawing.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Game.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Init.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Input.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Me.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Settings.ts" />
@@ -114,7 +116,6 @@
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\CreateCharacter.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Game.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Intro.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\LoginForm.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Index.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Accounts.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Events.ts" />
@@ -128,6 +129,7 @@
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Particle.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Power.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Soul.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Play.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
 

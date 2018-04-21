@@ -14,7 +14,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <link href="~/site.css" rel="stylesheet" />
     <script src="~/scripts/jQuery/jquery-3.1.1.min.js"></script>
-    <script src="~/scripts/Index.js"></script>
+    <script defer src="~/scripts/Index.js"></script>
 </head>
 <body>
     <div id="divSplash">
@@ -23,6 +23,7 @@
         </div>
         <div id="divTunnel" style="text-align:center">
             <img id="imgTunnel" src="/Assets/Images/Tunnel and Shadow.png" style="height:250px; width:auto" />
+            <div id="divParticles" style="overflow:visible;"></div>
         </div>
         <div style="text-align:center; margin-top:20px;">
             <a href="/play" class="link-button">Play</a>
@@ -30,8 +31,6 @@
         <div style="margin-top:50px;text-align: right; color:white; font-size:50%">
             Sound by <a href="http://www.freesound.org/people/ceich93/">Operation Contrast</a> at FreeSound.org.
         </div>
-
-        <div id="divEffects" style="position:fixed; left:0; top:0; width:100%; height:100%; pointer-events: none;"></div>
         <style>
             body {
                 background-color: black;
@@ -54,6 +53,34 @@
                 color: white;
                 font-size: 50%;
                 z-index: -1
+            }
+            .particle {
+                height: 1px;
+                width: 1px;
+                opacity: 1;
+                background-color: black;
+                border-radius: 100%;
+                position: absolute;
+                display: inline-block;
+                animation-name: particle-rise;
+                animation-iteration-count: infinite;
+                animation-duration: 6s;
+                animation-fill-mode: backwards;
+            }
+            @@keyframes particle-rise {
+                from {
+                    height: 1px;
+                    width: 1px;
+                    opacity: 1;
+                    background-color: black;
+                }
+                to {
+                    height: 6px;
+                    width: 6px;
+                    margin-top: -300px;
+                    opacity: 0;
+                    background-color: gray;
+                }
             }
             .glowing {
                 animation-name: glowing;

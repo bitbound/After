@@ -38,10 +38,89 @@
     <script src="~/scripts/Controls/CreateAccount.js"></script>
     <script src="~/scripts/Controls/CreateCharacter.js"></script>
     <script src="~/scripts/Controls/Intro.js"></script>
-    <script src="~/scripts/Controls/LoginForm.js"></script>
     <script src="~/scripts/Controls/Game.js"></script>
+    <script defer src="~/Scripts/Play.js"></script>
 </head>
 <body>
+    <div id="divLogin" onkeypress='if (event.keyCode == 13) { After.Temp.Login.TryLogin(); }'>
+        <div id="divLoginImage">
+            <img src="/Assets/Images/AfterTitle.png" alt="After" />
+        </div>
 
+        <br />
+        <div id="divLoginForm">
+            <label class="font-sansserif" for="inputUsername">Username:</label><br />
+            <input id="inputUsername" type="text" />
+            <br />
+            <label class="font-sansserif" for="inputPassword">Password:</label><br />
+            <input id="inputPassword" type="password" />
+            <div id="divNewPassword" hidden>
+                <label class="font-sansserif" for="inputPassword">New Password:</label><br />
+                <input id="inputNewPassword" type="password" />
+                <br />
+                <label class="font-sansserif" for="inputPassword">Confirm New Password:</label><br />
+                <input id="inputConfirmNewPassword" type="password" />
+            </div>
+            <br />
+            <div id="divRemember" class="font-sansserif">
+                <label>Remember Me</label>
+                <input id="checkRememberMe" type="checkbox" onchange="After.Temp.Login.RememberMeChanged(event)" />
+            </div>
+            <div style="text-align:right; margin-top: 10px">
+                <button id="buttonLogin" type="button" onclick="After.Temp.Login.TryLogin()">Log In</button>
+                <br />
+                <a href="#" onclick='After.Temp.Login.StartIntro()' style="margin-top:10px">New player?  Click here!</a>
+                <br />
+                <a href="#" onclick='After.Temp.Login.ForgotPasswordClicked()'>Forgot password?</a>
+            </div>
+        </div>
+        <div id="divLoginStatus" style="color: red; font-size: small; margin-top: 20px;"></div>
+        <style>
+            #divLogin {
+                height: 100%;
+                width: 100%;
+                text-align: center;
+            }
+
+            #divLoginImage {
+                height: 200px;
+                background-image: url('/Assets/Images/Tunnel.png');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+            }
+
+            #divLoginImage img {
+                position: relative;
+                top: 20%;
+            }
+
+            #divLoginForm {
+                text-align: left;
+                display: inline-block;
+            }
+
+            #divLoginForm label {
+                color: white;
+            }
+
+            #divLoginForm a {
+                font-size: smaller;
+                text-decoration: none;
+                color: Highlight;
+                cursor: pointer;
+                display: inline-block;
+            }
+
+            #divLoginForm a:hover {
+                color: white;
+            }
+
+            #divRemember {
+                font-size: .8em;
+                margin-top: 5px;
+            }
+        </style>
+    </div>
 </body>
 </html>
