@@ -34,7 +34,7 @@ namespace After.Message_Handlers
                     Email = JsonMessage.Email,
                     Color = JsonMessage.Color,
                     // TODO: Start in void.
-                    CurrentXYZ = $"0,0,0",
+                    CurrentXYZ = $"0,0,{username}-0",
                     MovementState = Character.MovementStates.Ready
                 };
 

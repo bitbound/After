@@ -258,6 +258,7 @@ namespace StorageLists
             }
             lock (LockObject)
             {
+                var di = Directory.CreateDirectory(FolderPath);
                 if (Storage.ContainsKey(StorageID))
                 {
                     Storage[StorageID].LastAccessed = DateTime.Now;
@@ -265,7 +266,6 @@ namespace StorageLists
                 }
                 else
                 {
-                    var di = Directory.CreateDirectory(FolderPath);
                     if (File.Exists(Path.Combine(di.FullName, $"{StorageID}.json")))
                     {
                         return true;

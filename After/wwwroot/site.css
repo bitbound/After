@@ -63,11 +63,20 @@ button:active {
     color: white;
     text-decoration: none;
     border: 2px solid gray;
-    font-family: monospace;
+    font-family: sans-serif;
 }
 
 .link-button:hover {
     border: 2px solid white;
+}
+
+.dialog-letter {
+    opacity : 0;
+}
+
+.dialog-letter-appear {
+    transition: all linear 500ms;
+    opacity: 1;
 }
 
 /*** Loading Frame ***/

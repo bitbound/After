@@ -13,23 +13,15 @@ After.Temp.CreateCharacter.Init = function () {
             ($("#inputBlue")[0] as HTMLInputElement).value = String(Number(($("#inputBlue")[0] as HTMLInputElement).value) + 1);
         }
         ATI.SoulColor = "rgb(" + $("#inputRed").val() + ", " + $("#inputGreen").val() + ", " + $("#inputBlue").val() + ")";
-        // TODO: Change eye color.
+        $(".iris-color").css("stop-color", ATI.SoulColor);
     };
     ATI.SubmitColor = function () {
         After.Me.Color = ATI.SoulColor;
         $.when($("#divCreateCharacter").children("div").animate({ opacity: 0 }, 1000)).then(function () {
-            $("#divNarration").parent().css("top", "50%");
-            $("#canvasPreview").css("margin", "0");
-            $("#divIntro").prepend($("#canvasPreview"));
             $("#divCreateCharacter").remove();
-            ATI.canvasPreview.canvas.width = $("#divLogin").innerWidth();
-            ATI.canvasPreview.canvas.height = $("#divLogin").innerHeight() * .45;
-            ATI.PreviewTop = Math.round(ATI.canvasPreview.canvas.height * .25);
-            ATI.PreviewLeft = Math.round((ATI.canvasPreview.canvas.width / 2) - 50);
             document.getElementById("buttonSkip").onclick = function () {
                 $("#divIntro").hide();
                 After.Audio.StopStreamLoop();
-                ATI.ShowFlybys = false;
                 $.get("/Controls/CreateAccount.html", function (data) {
                     $(document.body).append(data);
                 });
@@ -39,7 +31,6 @@ After.Temp.CreateCharacter.Init = function () {
             ATI.IsPaused = false;
             $("#divNarration").html("");
             $("#divIntro").show();
-            ATI.ShowFlybys = true;
             ATI.Narrate();
         });
     }
@@ -56,7 +47,25 @@ After.Temp.CreateCharacter.Init = function () {
         $("#inputRed").val(rgbColor.replace("rgb(", "").split(",")[0]);
         $("#inputGreen").val(rgbColor.split(",")[1]);
         $("#inputBlue").val(rgbColor.replace(")", "").split(",")[2]);
+        $(".iris-color").css("stop-color", ATI.SoulColor);
     };
+    ATI.Blink = function () {
+        $(".eye-lid").animate({
+            "height": "30px"
+        }, 500, function () {
+            $(".eye-lid").animate({
+                "height": "0"
+            }, 500);
+        });
+       
+        var waitTime = Math.random() * 3000 + 1500;
+        window.setTimeout(function () {
+            if ($(".eye-lid").length > 0) {
+                ATI.Blink();
+            }
+        }, waitTime)
+        
+    }
 
     document.getElementById("selectColor").appendChild(document.createElement("option"));
     After.Utilities.ColorNames.forEach(function (value, index) {
@@ -68,4 +77,5 @@ After.Temp.CreateCharacter.Init = function () {
         document.getElementById("selectColor").appendChild(option);
     });
     $("#divCreateCharacter").animate({ "opacity": "1" }, 1000);
+    ATI.Blink();
 }

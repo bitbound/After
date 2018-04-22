@@ -57,10 +57,8 @@ After.Temp.Intro.Start = function () {
                     var outerSpan = document.createElement("span");
                     var innerSpan = document.createElement("span");
                     outerSpan.appendChild(innerSpan);
-                    innerSpan.style.opacity = "0";
                     innerSpan.innerText = narrateText.slice(i, i + 1);
-                    innerSpan.style.position = "relative";
-                    innerSpan.style.left = "25px";
+                    innerSpan.classList.add("dialog-letter");
                     $("#divNarration").append(outerSpan);
                 };
 
@@ -70,20 +68,11 @@ After.Temp.Intro.Start = function () {
 
                 $("#divNarration").children().each((index, elem) => {
                     window.setTimeout(function (elem) {
-                        $(elem.firstChild).animate({
-                            "left": 0,
-                            "opacity": 1
-                        }, {
-                                "duration": "500",
-                                "queue": false,
-                            });
+                        $(elem.firstChild).addClass("dialog-letter-appear");
                     }, index * 25, elem)
                 })
                 window.setTimeout(function () {
                     ATI.IsPaused = true;
-                    if ($("#divNarration").text().search("you realize that you've stopped moving") > -1) {
-                        ATI.ShowFlybys = false;
-                    };
                     $("#divIntro").one("click", function () {
                         ATI.IsPaused = false;
                         if ($("#divNarration").text().search("Your passing was") > -1) {
@@ -102,7 +91,7 @@ After.Temp.Intro.Start = function () {
                     ATI.FlashContinue();
                 }, ($("#divNarration").children().length - 1) * 25);
                 ATI.CurrentPosition++;
-            }, 750);
+            }, 500);
         };
         ATI.FlashContinue = function () {
             ATI.Interval = window.setInterval(function () {
