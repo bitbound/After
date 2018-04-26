@@ -62,20 +62,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Scripts\App\Audio.js" />
-    <None Include="wwwroot\Scripts\App\Canvas.js" />
-    <None Include="wwwroot\Scripts\App\Connection.js" />
-    <None Include="wwwroot\Scripts\App\Drawing.js" />
-    <None Include="wwwroot\Scripts\App\Game.js" />
-    <None Include="wwwroot\Scripts\App\Input.js" />
-    <None Include="wwwroot\Scripts\App\Me.js" />
-    <None Include="wwwroot\Scripts\App\Settings.js" />
-    <None Include="wwwroot\Scripts\App\Temp.js" />
-    <None Include="wwwroot\Scripts\App\Utilities.js" />
-    <None Include="wwwroot\Scripts\Controls\CreateAccount.js" />
-    <None Include="wwwroot\Scripts\Controls\CreateCharacter.js" />
-    <None Include="wwwroot\Scripts\Controls\Game.js" />
-    <None Include="wwwroot\Scripts\Controls\Intro.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.min.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
@@ -85,14 +71,6 @@
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.map" />
-    <None Include="wwwroot\Scripts\Models\Area.js" />
-    <None Include="wwwroot\Scripts\Models\Bases\Selectable.js" />
-    <None Include="wwwroot\Scripts\Models\FreeParticle.js" />
-    <None Include="wwwroot\Scripts\Models\Landmark.js" />
-    <None Include="wwwroot\Scripts\Models\Occupant.js" />
-    <None Include="wwwroot\Scripts\Models\Particle.js" />
-    <None Include="wwwroot\Scripts\Models\Power.js" />
-    <None Include="wwwroot\Scripts\Models\Soul.js" />
   </ItemGroup>
 
   <ItemGroup>
