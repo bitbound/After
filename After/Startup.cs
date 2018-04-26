@@ -35,8 +35,8 @@ namespace After
             {
                 app.UseDeveloperExceptionPage();
             }
-            Utilities.RootPath = System.IO.Path.Combine(env.ContentRootPath, "wwwroot");
-            Utilities.StartUp();
+            App.RootPath = System.IO.Path.Combine(env.ContentRootPath, "wwwroot");
+            App.StartUp();
             WebSocketServer.Create("After");
             app.UseStaticFiles();
             var webSocketOptions = new WebSocketOptions()
@@ -53,39 +53,31 @@ namespace After
                     client.StringMessageReceived += async (sender, jsonMessage) =>
                     {
                         var wsClient = sender as WebSocketClient;
-                        string category = jsonMessage.Category;
                         string type = jsonMessage.Type;
-                        if (jsonMessage == null || String.IsNullOrEmpty(category) || String.IsNullOrEmpty(type))
+                        if (jsonMessage == null || String.IsNullOrEmpty(type))
                         {
-                            throw new Exception("Category or Type is null within Socket_Handler.OnMessage.");
+                            throw new Exception("Type is null in socket message.");
                         }
 
-                        if (wsClient.Authenticated != true)
+                        if (wsClient.IsAuthenticated != true)
                         {
-                            if (category != "Accounts" || (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword"))
+                            if (type != "Logon" && type != "AccountCreation" && type != "ForgotPassword")
                             {
                                 await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
                                 webSocket.Dispose();
                                 return;
                             }
                         }
-                        var methodHandler = Type.GetType("After.Message_Handlers." + category).GetMethods().FirstOrDefault(mi => mi.Name == "Handle" + type);
+                        var methodHandler = Type.GetType("After.Code.Classes.WebSockets.MessageHandlers").GetMethods().FirstOrDefault(mi => mi.Name == "Receive" + type);
                         if (methodHandler != null)
                         {
                             try
                             {
-                                if (category == "Messages" && type == "Admin")
-                                {
-                                    After.Message_Handlers.Messages.HandleAdmin(jsonMessage, client);
-                                }
-                                else
-                                {
-                                    methodHandler.Invoke(null, new object[] { jsonMessage, client });
-                                }
+                                methodHandler.Invoke(null, new object[] { jsonMessage, client });
                             }
                             catch (Exception ex)
                             {
-                                After.Utilities.WriteError(ex);
+                                Utilities.WriteError(ex);
                             }
                         }
                     };
@@ -103,7 +95,6 @@ namespace After
                         }
                         dynamic message = new
                         {
-                            Category = "Accounts",
                             Type = "Disconnected",
                             Username = wsClient?.Player.Name
                         };

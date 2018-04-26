@@ -21,10 +21,7 @@
     <Content Remove="wwwroot\Scripts\Controls\Game.ts" />
     <Content Remove="wwwroot\Scripts\Controls\Intro.ts" />
     <Content Remove="wwwroot\Scripts\Controls\Splash.ts" />
-    <Content Remove="wwwroot\Scripts\Message_Handlers\Accounts.ts" />
-    <Content Remove="wwwroot\Scripts\Message_Handlers\Events.ts" />
-    <Content Remove="wwwroot\Scripts\Message_Handlers\Messages.ts" />
-    <Content Remove="wwwroot\Scripts\Message_Handlers\Queries.ts" />
+    <Content Remove="wwwroot\Scripts\MessageHandlers\Receive.ts" />
     <Content Remove="wwwroot\Scripts\Models\Area.ts" />
     <Content Remove="wwwroot\Scripts\Models\Bases\Selectable.ts" />
     <Content Remove="wwwroot\Scripts\Models\FreeParticle.ts" />
@@ -88,10 +85,6 @@
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.js" />
     <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.map" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Accounts.js" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Events.js" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Messages.js" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Queries.js" />
     <None Include="wwwroot\Scripts\Models\Area.js" />
     <None Include="wwwroot\Scripts\Models\Bases\Selectable.js" />
     <None Include="wwwroot\Scripts\Models\FreeParticle.js" />
@@ -118,10 +111,7 @@
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Game.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Intro.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Index.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Accounts.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Events.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Messages.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Queries.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\MessageHandlers\Receive.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Area.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Bases\Selectable.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\FreeParticle.ts" />

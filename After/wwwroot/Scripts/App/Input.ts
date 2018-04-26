@@ -61,8 +61,7 @@
                 return;
             }
             var jsonMessage = {
-                "Category": "Messages",
-                "Type": "Admin",
+                "Type": "AdminScript",
                 "Message": strMessage
             };
             After.Connection.Socket.send(JSON.stringify(jsonMessage));
@@ -312,7 +311,7 @@
             }
 
 
-            $("#divChatBottomBar").keypress(function(e) {
+            $("#divChatBottomBar").keydown(function(e) {
                 if (e.keyCode == 13) {
                     After.Input.SendChat(e);
                 } else if (e.keyCode == 27) {
@@ -341,7 +340,7 @@
                 After.Input.SendChat(e);
             });
 
-            $("#divAdminBottomBar").keypress(function(e) {
+            $("#divAdminBottomBar").keydown(function(e) {
                 if (e.keyCode == 13) {
                     After.Input.SendAdmin(e);
                 } else if (e.keyCode == 27) {

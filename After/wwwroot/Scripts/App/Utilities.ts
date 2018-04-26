@@ -1,5 +1,9 @@
 ﻿namespace After.App {
     export class Utilities {
+        IsJSONString(messageString: string): boolean {
+            return (messageString.startsWith("{") && messageString.endsWith("}") ||
+                messageString.startsWith("[") && messageString.endsWith("]"));
+        }
         NumberIsBetween(NumberAnalyzed: number, Min: number, Max: number, IncludeMinMax: boolean): boolean {
             if (IncludeMinMax) {
                 if (NumberAnalyzed == Min || NumberAnalyzed == Max) {
@@ -280,6 +284,24 @@
                 Math.pow(Number(xyz1Arr[0]) - Number(xyz2Arr[0]), 2) +
                 Math.pow(Number(xyz1Arr[1]) - Number(xyz2Arr[1]), 2)
             );
+        }
+        FormatObjectForHTML(serializableObject: string): string {
+            var tempArray = new Array<any>();
+            var jsonString = JSON.stringify(serializableObject, function (key, value) {
+                if (typeof value == "object" && value != null) {
+                    if (tempArray.findIndex(x => x == value) > -1) {
+                        return "[Possible circular reference.]"
+                    }
+                    else {
+                        tempArray.push(value);
+                    }
+                }
+                return value;
+            }, "&emsp;").split("\n").join("<br/>").split(" ").join("&nbsp;");
+            return jsonString;
+        }
+        EncodeForHTML(input: string) {
+            return $("<div>").text(input).html();
         }
     }
 }

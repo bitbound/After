@@ -19,7 +19,7 @@ namespace After.Pages.Services
         public void OnPost()
         {
             var strError = new System.IO.StreamReader(Request.Body).ReadToEnd();
-            var di = System.IO.Directory.CreateDirectory(System.IO.Path.Combine(After.Utilities.DataPath, "ClientErrors"));
+            var di = System.IO.Directory.CreateDirectory(System.IO.Path.Combine(After.App.DataPath, "ClientErrors"));
             System.IO.File.AppendAllText(di.FullName + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt", strError + Environment.NewLine + Environment.NewLine);
             Response.StatusCode = 200;
             using (var sw = new System.IO.StreamWriter(Response.Body))

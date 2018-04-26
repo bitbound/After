@@ -19,20 +19,20 @@ namespace After
                 Channel = Channel,
                 Message = Message
             };
-            await Utilities.Server.Broadcast(JSON.Encode(jsonMessage));
+            await App.Server.Broadcast(JSON.Encode(jsonMessage));
         }
         public static void DeletePlayer(string Name)
         {
             Storage.Current.Players.Remove(Name);
-            foreach (var file in Directory.GetFiles(Path.Combine(Utilities.DataPath, "Storage\\Landmarks")).Where(file => file.ToLower().Contains(Name.ToLower())))
+            foreach (var file in Directory.GetFiles(Path.Combine(App.DataPath, "Storage\\Landmarks")).Where(file => file.ToLower().Contains(Name.ToLower())))
             {
                 File.Delete(file);
             }
-            foreach (var file in Directory.GetFiles(Path.Combine(Utilities.DataPath, "Storage\\Locations")).Where(file => file.ToLower().Contains(Name.ToLower())))
+            foreach (var file in Directory.GetFiles(Path.Combine(App.DataPath, "Storage\\Locations")).Where(file => file.ToLower().Contains(Name.ToLower())))
             {
                 File.Delete(file);
             }
-            foreach (var file in Directory.GetFiles(Path.Combine(Utilities.DataPath, "Storage\\Players")).Where(file => file.ToLower().Contains(Name.ToLower())))
+            foreach (var file in Directory.GetFiles(Path.Combine(App.DataPath, "Storage\\Players")).Where(file => file.ToLower().Contains(Name.ToLower())))
             {
                 File.Delete(file);
             }

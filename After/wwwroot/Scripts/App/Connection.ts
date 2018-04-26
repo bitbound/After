@@ -77,10 +77,10 @@
             };
             After.Connection.Socket.onmessage = function (e) {
                 var jsonMessage = JSON.parse(e.data);
-                if (typeof jsonMessage.Category == "undefined" || typeof jsonMessage.Type == "undefined") {
+                if (typeof jsonMessage.Type == "undefined") {
                     throw "Error handling message: " + e.data;
                 }
-                eval("After.Message_Handlers." + jsonMessage.Category + "." + "Handle" + jsonMessage.Type + "(jsonMessage);");
+                eval("After.MessageHandlers.Receive" + jsonMessage.Type + "(jsonMessage);");
             };
         }
     }

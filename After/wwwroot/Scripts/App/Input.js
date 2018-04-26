@@ -60,8 +60,7 @@ var After;
                     return;
                 }
                 var jsonMessage = {
-                    "Category": "Messages",
-                    "Type": "Admin",
+                    "Type": "AdminScript",
                     "Message": strMessage
                 };
                 After.Connection.Socket.send(JSON.stringify(jsonMessage));
@@ -311,7 +310,7 @@ var After;
                 After.Canvas.Element.oncontextmenu = function (e) {
                     return false;
                 };
-                $("#divChatBottomBar").keypress(function (e) {
+                $("#divChatBottomBar").keydown(function (e) {
                     if (e.keyCode == 13) {
                         After.Input.SendChat(e);
                     }
@@ -340,7 +339,7 @@ var After;
                 $("#buttonChatSubmit").click(function (e) {
                     After.Input.SendChat(e);
                 });
-                $("#divAdminBottomBar").keypress(function (e) {
+                $("#divAdminBottomBar").keydown(function (e) {
                     if (e.keyCode == 13) {
                         After.Input.SendAdmin(e);
                     }

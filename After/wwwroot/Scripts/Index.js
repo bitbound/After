@@ -1,12 +1,11 @@
 function raiseParticle() {
     try {
-        var imageWidth = document.getElementById("imgTunnel").clientWidth;
         for (var i = 0; i < 60; i++) {
             window.setTimeout(function () {
-                var startLeft = Math.random() * -(imageWidth * .25);
+                var startLeft = Math.random() * -45;
                 var part = document.createElement("div");
                 part.classList.add("particle");
-                part.style.transform = "translate(" + startLeft + "px, -125px)";
+                part.style.transform = "translate(" + startLeft + "px, -130px)";
                 document.getElementById("divParticles").appendChild(part);
             }, 100 * i);
         }

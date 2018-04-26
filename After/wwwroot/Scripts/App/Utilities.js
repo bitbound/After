@@ -3,6 +3,10 @@ var After;
     var App;
     (function (App) {
         class Utilities {
+            IsJSONString(messageString) {
+                return (messageString.startsWith("{") && messageString.endsWith("}") ||
+                    messageString.startsWith("[") && messageString.endsWith("]"));
+            }
             NumberIsBetween(NumberAnalyzed, Min, Max, IncludeMinMax) {
                 if (IncludeMinMax) {
                     if (NumberAnalyzed == Min || NumberAnalyzed == Max) {
@@ -287,6 +291,24 @@ var After;
                 }
                 return Math.sqrt(Math.pow(Number(xyz1Arr[0]) - Number(xyz2Arr[0]), 2) +
                     Math.pow(Number(xyz1Arr[1]) - Number(xyz2Arr[1]), 2));
+            }
+            FormatObjectForHTML(serializableObject) {
+                var tempArray = new Array();
+                var jsonString = JSON.stringify(serializableObject, function (key, value) {
+                    if (typeof value == "object" && value != null) {
+                        if (tempArray.findIndex(x => x == value) > -1) {
+                            return "[Possible circular reference.]";
+                        }
+                        else {
+                            tempArray.push(value);
+                        }
+                    }
+                    return value;
+                }, "&emsp;").split("\n").join("<br/>").split(" ").join("&nbsp;");
+                return jsonString;
+            }
+            EncodeForHTML(input) {
+                return $("<div>").text(input).html();
             }
         }
         App.Utilities = Utilities;

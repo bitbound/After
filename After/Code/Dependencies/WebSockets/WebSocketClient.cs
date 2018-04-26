@@ -32,7 +32,7 @@ namespace Translucency.WebSockets
         /// <summary>
         /// Indicates if the user has authenticated yet.
         /// </summary>
-        public bool Authenticated { get; set; }
+        public bool IsAuthenticated { get; set; }
 
         /// <summary>
         /// A list of timestamps for the last 20 requests.  Used for DoS/brute force protection.
@@ -105,26 +105,26 @@ namespace Translucency.WebSockets
         {
             try
             {
-                var buffer = new byte[Utilities.Server.ReceiveBufferSize];
+                var buffer = new byte[App.Server.ReceiveBufferSize];
                 WebSocketReceiveResult result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 await ParseMessage(result, buffer);
                 while (!ClientSocket.CloseStatus.HasValue)
                 {
-                    buffer = new byte[Utilities.Server.ReceiveBufferSize];
+                    buffer = new byte[App.Server.ReceiveBufferSize];
                     result = await ClientSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     await ParseMessage(result, buffer);
                 }
-                if (Utilities.Server.ClientList.Contains(this))
+                if (App.Server.ClientList.Contains(this))
                 {
-                    Utilities.Server.ClientList.Remove(this);
+                    App.Server.ClientList.Remove(this);
                 }
                 await ClientSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             }
             catch (Exception ex)
             {
-                if (Utilities.Server.ClientList.Contains(this))
+                if (App.Server.ClientList.Contains(this))
                 {
-                    Utilities.Server.ClientList.Remove(this);
+                    App.Server.ClientList.Remove(this);
                 }
                 await ClientSocket.CloseOutputAsync(WebSocketCloseStatus.InternalServerError, "An unhandled exception occurred.", CancellationToken.None);
                 SocketError?.Invoke(this, ex);

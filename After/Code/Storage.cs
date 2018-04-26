@@ -10,11 +10,11 @@ namespace After
         public static Storage Current { get; set; } = new Storage();
         public Storage()
         {
-            Locations.FolderPath = Path.Combine(Utilities.DataPath, "Storage\\Locations");
-            Players.FolderPath = Path.Combine(Utilities.DataPath, "Storage\\Players");
-            NPCs.FolderPath = Path.Combine(Utilities.DataPath, "Storage\\NPCs");
-            Messages.FolderPath = Path.Combine(Utilities.DataPath, "Storage\\Messages");
-            Landmarks.FolderPath = Path.Combine(Utilities.DataPath, "Storage\\Landmarks");
+            Locations.FolderPath = Path.Combine(App.DataPath, "Storage\\Locations");
+            Players.FolderPath = Path.Combine(App.DataPath, "Storage\\Players");
+            NPCs.FolderPath = Path.Combine(App.DataPath, "Storage\\NPCs");
+            Messages.FolderPath = Path.Combine(App.DataPath, "Storage\\Messages");
+            Landmarks.FolderPath = Path.Combine(App.DataPath, "Storage\\Landmarks");
             Locations.PersistenceFilter = new Predicate<Location>(loc => loc.IsStatic == true);
         }
         public StorageList<Player> Players { get; set; } = new StorageList<Player>();

@@ -57,7 +57,7 @@ namespace After.Models
         }
         public List<WebSocketClient> GetNearbyPlayers()
         {
-            return Utilities.Server.ClientList.Where(client => (client?.Player as Player)?.GetCurrentLocation()?.GetDistanceFrom(this) <= client?.Player?.ViewDistance).ToList();
+            return App.Server.ClientList.Where(client => (client?.Player as Player)?.GetCurrentLocation()?.GetDistanceFrom(this) <= client?.Player?.ViewDistance).ToList();
         }
         public async Task CharacterArrives(Character CharacterObject)
         {
