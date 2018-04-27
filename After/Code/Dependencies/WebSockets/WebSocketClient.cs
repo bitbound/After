@@ -1,6 +1,6 @@
 ﻿using After;
 using After.Models;
-using Really_Dynamic;
+using After.Dependencies;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Translucency.WebSockets
+namespace After.Dependencies.WebSockets
 {
     public class WebSocketClient
     {

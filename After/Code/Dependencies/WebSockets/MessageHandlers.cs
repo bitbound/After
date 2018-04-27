@@ -3,7 +3,7 @@ using After.Scripting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using Really_Dynamic;
+using After.Dependencies;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Translucency.WebSockets;
+using After.Dependencies.WebSockets;
 
 namespace After.Code.Classes.WebSockets
 {
@@ -53,14 +53,6 @@ namespace After.Code.Classes.WebSockets
                     Color = player.Color
                 };
                 Storage.Current.Locations.Add(innerVoid);
-                var landMark = new Landmark()
-                {
-                    Color = player.Color,
-                    StorageID = player.CurrentXYZ,
-                    FontSize = 100,
-                    Text = $"{username}'s Inner Void"
-                };
-                Storage.Current.Landmarks.Add(landMark);
                 var norahc = new NPC()
                 {
                     Name = "Norahc",
@@ -552,7 +544,6 @@ namespace After.Code.Classes.WebSockets
                     for (var y = JsonMessage.YMin; y <= JsonMessage.YMax; y++)
                     {
                         var location = Storage.Current.Locations.Find($"{x},{y},{(WSC.Player as Player).ZCoord}");
-                        var landmark = Storage.Current.Landmarks.Find($"{x},{y},{(WSC.Player as Player).ZCoord}");
                         if (location != null)
                         {
                             if (location.IsStatic == false && DateTime.Now - location.LastVisited > TimeSpan.FromMinutes(1) && location.Occupants.Count == 0)
@@ -589,16 +580,6 @@ namespace After.Code.Classes.WebSockets
                                 };
                                 await WSC.SendString(JSON.Encode(request));
                             }
-                        }
-                        if (landmark != null)
-                        {
-                            var request = new
-                            {
-                                Category = "Queries",
-                                Type = "MapUpdate",
-                                Landmark = landmark.ConvertToDynamic()
-                            };
-                            await WSC.SendString(JSON.Encode(request));
                         }
                     }
                 }

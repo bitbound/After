@@ -101,12 +101,14 @@ $(document).ready(function () {
             TimeStamp: new Date().toString(),
             Source: source,
             Line: lineno,
-            Column: colno,
-            Error: error
+            Column: colno
         };
-        $.post(window.location.origin + "/Services/ErrorReporting", JSON.stringify(ex));
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = "text";
+        xhr.open("post", "/Services/ErrorReporting");
+        xhr.send(JSON.stringify(ex));
         if (After.Debug) {
-            throw error;
+            throw message;
         }
         else {
             console.log("Unhandled Error: " + JSON.stringify(ex));

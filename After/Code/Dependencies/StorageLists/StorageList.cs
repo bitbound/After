@@ -1,11 +1,11 @@
-﻿using Really_Dynamic;
+﻿using After.Dependencies;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Timers;
 
-namespace StorageLists
+namespace After.Dependencies.StorageLists
 {
     public class StorageList<T> where T : IStorageItem
     {
@@ -16,63 +16,25 @@ namespace StorageLists
             SaveTimer.Start();
         }
 
-        private object LockObject { get; set; } = new object();
+        /// <summary>
+        /// The folder within which items of type T will be saved.
+        /// </summary>
+        public string FolderPath { get; set; }
 
         /// <summary>
-        /// Items in memory.  This will not return persisted items that haven't been loaded into memory.
+        /// The length of time to hold items in Storage (in memory) before persisting them.
         /// </summary>
-        public SortedList<string, T> Storage { get; set; } = new SortedList<string, T>();
+        public TimeSpan MemCacheTime { get; set; } = TimeSpan.FromMinutes(3);
 
         /// <summary>
-        /// Timer that will persist items in Storage every interval.
+        /// If predicate returns true for item, it will be saved to disk.  Otherwise, it will only be retained in memory.
         /// </summary>
-        private Timer SaveTimer { get; set; }
+        public Predicate<T> PersistenceFilter { get; set; } = new Predicate<T>((temp) => { return true; });
 
         /// <summary>
-        /// Persists items in Storage every interval.
+        /// An action to perform if there's a failure writing to disk.  By default, everything is retained in memory.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SaveTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            lock (LockObject)
-            {
-                for (var i = Storage.Count - 1; i >= 0; i--)
-                {
-                    var item = Storage.Values[i];
-                    if (PersistenceFilter.Invoke(item))
-                    {
-                        if (DateTime.Now - item.LastAccessed >= MemCacheTime)
-                        {
-                            Store(item.StorageID);
-                        }
-                        else
-                        {
-                            var di = Directory.CreateDirectory(FolderPath);
-                            var success = false;
-                            var startTime = DateTime.Now;
-                            while (success == false && DateTime.Now - startTime < TimeSpan.FromSeconds(5))
-                            {
-                                try
-                                {
-                                    File.WriteAllText(Path.Combine(di.FullName, $"{item.StorageID}.json"), JSON.Encode(item));
-                                    success = true;
-                                }
-                                catch
-                                {
-                                    System.Threading.Thread.Sleep(500);
-                                }
-                            }
-                            if (!success)
-                            {
-                                PersistErrorAction.Invoke();
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
+        public Action PersistErrorAction { get; set; } = new Action(() => { });
 
         /// <summary>
         /// How often, in milliseconds, to persist items in Storage.  The default is 5 minutes.
@@ -108,165 +70,86 @@ namespace StorageLists
         }
 
         /// <summary>
-        /// The length of time to hold items in Storage (in memory) before persisting them.
+        /// Items in memory.  This will not return persisted items that haven't been loaded into memory.
         /// </summary>
-        public TimeSpan MemCacheTime { get; set; } = TimeSpan.FromMinutes(3);
+        public SortedList<string, T> Storage { get; set; } = new SortedList<string, T>();
 
+        private object FileSystemLock { get; set; } = new object();
         /// <summary>
-        /// The folder within which items of type T will be saved.
+        /// Timer that will persist items in Storage every interval.
         /// </summary>
-        public string FolderPath { get; set; }
+        private Timer SaveTimer { get; set; }
 
-        /// <summary>
-        /// If predicate returns true for item, it will be saved to disk.  Otherwise, it will only be retained in memory.
-        /// </summary>
-        public Predicate<T> PersistenceFilter { get; set; } = new Predicate<T>((temp) => { return true; });
-
-        /// <summary>
-        /// An action to perform if there's a failure writing to disk.  By default, everything is retained in memory.
-        /// </summary>
-        public Action PersistErrorAction { get; set; } = new Action(() => { });
-
+        private object StorageLock { get; set; } = new object();
         /// <summary>
         /// Add new item to Storage.
         /// </summary>
-        /// <param name="NewItem"></param>
-        public void Add(T NewItem)
+        /// <param name="newItem"></param>
+        public void Add(T newItem)
         {
             if (FolderPath == null)
             {
                 throw new Exception("FolderPath must have a value.");
             }
-            if (!(NewItem is IStorageItem))
+            if (!(newItem is IStorageItem))
             {
                 throw new Exception("Item must implement interface IStorageItem.");
             }
-            if (String.IsNullOrWhiteSpace(NewItem.StorageID))
+            if (String.IsNullOrWhiteSpace(newItem.StorageID))
             {
                 throw new Exception("StorageID cannot be empty.");
             }
             foreach (var character in Path.GetInvalidFileNameChars())
             {
-                if (NewItem.StorageID.Contains(character))
+                if (newItem.StorageID.Contains(character))
                 {
                     throw new Exception("StorageID can only contain characters allowable in file names.");
                 }
             }
-            lock (LockObject)
+            lock (StorageLock)
             {
-                if (Storage.ContainsKey(NewItem.StorageID))
+                if (Storage.ContainsKey(newItem.StorageID))
                 {
                     throw new Exception("Item with same StorageID already exists.");
                 }
                 var di = Directory.CreateDirectory(FolderPath);
-                if (Storage.ContainsKey(NewItem.StorageID) || File.Exists(Path.Combine(di.FullName, $"{NewItem.StorageID}.json")))
+                if (Storage.ContainsKey(newItem.StorageID) || File.Exists(Path.Combine(di.FullName, $"{newItem.StorageID}.json")))
                 {
                     throw new Exception("Item with same StorageID already exists.");
                 }
-                Storage.Add(NewItem.StorageID, NewItem);
-                if (PersistenceFilter.Invoke(NewItem))
+                Storage.Add(newItem.StorageID, newItem);
+                if (PersistenceFilter.Invoke(newItem))
                 {
-                    File.WriteAllText(Path.Combine(di.FullName, $"{NewItem.StorageID}.json"), JSON.Encode(NewItem));
+                    lock (FileSystemLock)
+                    {
+                        File.WriteAllText(Path.Combine(di.FullName, $"{newItem.StorageID}.json"), JSON.Encode(newItem));
+                    }
                 }
             }
         }
-        /// <summary>
-        /// Remove item from Storage and delete it from disk.
-        /// </summary>
-        /// <param name="StorageID"></param>
-        public void Remove(string StorageID)
-        {
-            if (FolderPath == null)
-            {
-                throw new Exception("FolderPath must have a value.");
-            }
-            lock (LockObject)
-            {
-                if (Storage.ContainsKey(StorageID))
-                {
-                    Storage.Remove(StorageID);
-                }
-                var di = Directory.CreateDirectory(FolderPath);
-                if (File.Exists(Path.Combine(di.FullName, $"{StorageID}.json")))
-                {
-                    File.Delete(Path.Combine(di.FullName, $"{StorageID}.json"));
-                }
-            }
 
-        }
-        /// <summary>
-        /// Save item to disk and clear from Storage.
-        /// </summary>
-        /// <param name="StorageID"></param>
-        public void Store(string StorageID)
-        {
-            // Lock is called prior to calling Store.
-            if (Storage.ContainsKey(StorageID))
-            {
-                if (PersistenceFilter.Invoke(Storage[StorageID]))
-                {
-                    var di = Directory.CreateDirectory(FolderPath);
-                    var success = false;
-                    var startTime = DateTime.Now;
-                    while (success == false && DateTime.Now - startTime < TimeSpan.FromSeconds(5))
-                    {
-                        try
-                        {
-                            File.WriteAllText(Path.Combine(di.FullName, $"{Storage[StorageID].StorageID}.json"), JSON.Encode(Storage[StorageID]));
-                            success = true;
-                        }
-                        catch
-                        {
-                            System.Threading.Thread.Sleep(500);
-                        }
-                    }
-                    if (success)
-                    {
-                        Storage.Remove(StorageID);
-                    }
-                    else
-                    {
-                        PersistErrorAction.Invoke();
-                    }
-                }
-            }
-
-        }
-        /// <summary>
-        /// Store all items in Storage, provided they pass the persistence filter.
-        /// </summary>
-        public void StoreAll()
-        {
-            lock (LockObject)
-            {
-                for (var i = Storage.Count - 1; i >= 0; i--)
-                {
-                    Store(Storage.Keys[i]);
-                }
-            }
-        }
         /// <summary>
         /// Check if item exists in either Storage or disk.
         /// </summary>
-        /// <param name="StorageID"></param>
+        /// <param name="storageID"></param>
         /// <returns></returns>
-        public bool Exists(string StorageID)
+        public bool Exists(string storageID)
         {
             if (FolderPath == null)
             {
                 throw new Exception("FolderPath must have a value.");
             }
-            lock (LockObject)
+            lock (StorageLock)
             {
                 var di = Directory.CreateDirectory(FolderPath);
-                if (Storage.ContainsKey(StorageID))
+                if (Storage.ContainsKey(storageID))
                 {
-                    Storage[StorageID].LastAccessed = DateTime.Now;
+                    Storage[storageID].LastAccessed = DateTime.Now;
                     return true;
                 }
                 else
                 {
-                    if (File.Exists(Path.Combine(di.FullName, $"{StorageID}.json")))
+                    if (File.Exists(Path.Combine(di.FullName, $"{storageID}.json")))
                     {
                         return true;
                     }
@@ -277,52 +160,140 @@ namespace StorageLists
                 }
             }
         }
+
         /// <summary>
         /// Find an item from Storage or disk.
         /// </summary>
-        /// <param name="StorageID"></param>
+        /// <param name="storageID"></param>
         /// <returns></returns>
-        public T Find(string StorageID)
+        public T Find(string storageID)
         {
             if (FolderPath == null)
             {
                 throw new Exception("FolderPath must have a value.");
             }
-            lock (LockObject)
+            lock (StorageLock)
             {
-                if (Storage.ContainsKey(StorageID))
+                if (Storage.ContainsKey(storageID))
                 {
-                    Storage[StorageID].LastAccessed = DateTime.Now;
-                    return Storage[StorageID];
-                }
-                else
-                {
-                    var di = Directory.CreateDirectory(FolderPath);
-                    if (File.Exists(Path.Combine(di.FullName, $"{StorageID}.json")))
-                    {
-                        var success = false;
-                        while (success == false)
-                        {
-                            try
-                            {
-                                Storage.Add(StorageID, JSON.Decode<T>(File.ReadAllText(Path.Combine(di.FullName, $"{StorageID}.json"))));
-                                Storage[StorageID].LastAccessed = DateTime.Now;
-                                success = true;
-                            }
-                            catch
-                            {
-                                System.Threading.Thread.Sleep(500);
-                            }
-                        }
-                        return Storage[StorageID];
-                    }
-                    else
-                    {
-                        return default(T);
-                    }
+                    Storage[storageID].LastAccessed = DateTime.Now;
+                    return Storage[storageID];
                 }
             }
+            var di = Directory.CreateDirectory(FolderPath);
+            if (File.Exists(Path.Combine(di.FullName, $"{storageID}.json")))
+            {
+                var success = false;
+                while (success == false)
+                {
+                    try
+                    {
+                        Storage.Add(storageID, JSON.Decode<T>(File.ReadAllText(Path.Combine(di.FullName, $"{storageID}.json"))));
+                        Storage[storageID].LastAccessed = DateTime.Now;
+                        success = true;
+                    }
+                    catch
+                    {
+                        System.Threading.Thread.Sleep(500);
+                    }
+                }
+                return Storage[storageID];
+            }
+            else
+            {
+                return default(T);
+            }
         }
+
+        /// <summary>
+        /// Find an item from Storage or disk.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public T Find(Predicate<T> predicate)
+        {
+            if (FolderPath == null)
+            {
+                throw new Exception("FolderPath must have a value.");
+            }
+            lock (StorageLock)
+            {
+
+                if (Storage.Any(x => predicate.Invoke(x.Value)))
+                {
+                    var match = Storage.FirstOrDefault(x => predicate.Invoke(x.Value));
+                    match.Value.LastAccessed = DateTime.Now;
+                    return match.Value;
+                }
+            }
+            var di = Directory.CreateDirectory(FolderPath);
+            foreach (var file in di.GetFiles())
+            {
+                var item = JSON.Decode<T>(File.ReadAllText(file.FullName));
+                if (predicate.Invoke(item))
+                {
+                    var success = false;
+                    while (success == false)
+                    {
+                        try
+                        {
+                            item.LastAccessed = DateTime.Now;
+                            Storage.Add(item.StorageID, item);
+                            success = true;
+                        }
+                        catch
+                        {
+                            System.Threading.Thread.Sleep(500);
+                        }
+                    }
+                    return item;
+                }
+            }
+            return default(T);
+        }
+
+        /// <summary>
+        /// Find an item from Storage or disk.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public List<T> FindAll(Predicate<T> predicate)
+        {
+            if (FolderPath == null)
+            {
+                throw new Exception("FolderPath must have a value.");
+            }
+            var matchList = new List<T>();
+            lock (StorageLock)
+            {
+                matchList.AddRange(Storage.Where(x => predicate.Invoke(x.Value)).Select(x => x.Value));
+            }
+            var di = Directory.CreateDirectory(FolderPath);
+            foreach (var file in di.GetFiles())
+            {
+                var item = JSON.Decode<T>(File.ReadAllText(file.FullName));
+                if (predicate.Invoke(item))
+                {
+                    var success = false;
+                    while (success == false)
+                    {
+                        try
+                        {
+                            item.LastAccessed = DateTime.Now;
+                            Storage.Add(item.StorageID, item);
+                            success = true;
+                        }
+                        catch
+                        {
+                            System.Threading.Thread.Sleep(500);
+                        }
+                    }
+                    matchList.Add(item);
+                }
+            }
+            return matchList;
+        }
+
         /// <summary>
         /// WARNING: This will read all files on disk within FolderPath.  Returns all items for this StorageList, both in memory and on disk.
         /// </summary>
@@ -351,7 +322,7 @@ namespace StorageLists
                     }
                 }
             }
-            lock (LockObject)
+            lock (StorageLock)
             {
                 foreach (var item in Storage)
                 {
@@ -362,6 +333,136 @@ namespace StorageLists
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Remove item from Storage and delete it from disk.
+        /// </summary>
+        /// <param name="storageID"></param>
+        public void Remove(string storageID)
+        {
+            if (FolderPath == null)
+            {
+                throw new Exception("FolderPath must have a value.");
+            }
+            lock (StorageLock)
+            {
+                if (Storage.ContainsKey(storageID))
+                {
+                    Storage.Remove(storageID);
+                }
+                var di = Directory.CreateDirectory(FolderPath);
+                if (File.Exists(Path.Combine(di.FullName, $"{storageID}.json")))
+                {
+                    File.Delete(Path.Combine(di.FullName, $"{storageID}.json"));
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Save item to disk and clear from Storage.
+        /// </summary>
+        /// <param name="storageID"></param>
+        public void Store(string storageID)
+        {
+            // Lock is called prior to calling Store.
+            if (Storage.ContainsKey(storageID))
+            {
+                if (PersistenceFilter.Invoke(Storage[storageID]))
+                {
+                    var di = Directory.CreateDirectory(FolderPath);
+                    var success = false;
+                    var startTime = DateTime.Now;
+                    while (success == false && DateTime.Now - startTime < TimeSpan.FromSeconds(5))
+                    {
+                        try
+                        {
+                            lock (FileSystemLock)
+                            {
+                                File.WriteAllText(Path.Combine(di.FullName, $"{Storage[storageID].StorageID}.json"), JSON.Encode(Storage[storageID]));
+                            }
+                            success = true;
+                        }
+                        catch
+                        {
+                            System.Threading.Thread.Sleep(500);
+                        }
+                    }
+                    if (success)
+                    {
+                        Storage.Remove(storageID);
+                    }
+                    else
+                    {
+                        PersistErrorAction.Invoke();
+                    }
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Store all items in Storage, provided they pass the persistence filter.
+        /// </summary>
+        public void StoreAll()
+        {
+            lock (StorageLock)
+            {
+                for (var i = Storage.Count - 1; i >= 0; i--)
+                {
+                    Store(Storage.Keys[i]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Persists items in Storage every interval.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            SortedList<string, T> tempList;
+            lock (StorageLock)
+            {
+                tempList = new SortedList<string, T>(Storage);
+            }
+            for (var i = tempList.Count - 1; i >= 0; i--)
+            {
+                var item = tempList.Values[i];
+                if (PersistenceFilter.Invoke(item))
+                {
+                    if (DateTime.Now - item.LastAccessed >= MemCacheTime)
+                    {
+                        Store(item.StorageID);
+                    }
+                    else
+                    {
+                        var di = Directory.CreateDirectory(FolderPath);
+                        var success = false;
+                        var startTime = DateTime.Now;
+                        while (success == false && DateTime.Now - startTime < TimeSpan.FromSeconds(5))
+                        {
+                            try
+                            {
+                                File.WriteAllText(Path.Combine(di.FullName, $"{item.StorageID}.json"), JSON.Encode(item));
+                                success = true;
+                            }
+                            catch
+                            {
+                                System.Threading.Thread.Sleep(500);
+                            }
+                        }
+                        if (!success)
+                        {
+                            PersistErrorAction.Invoke();
+                        }
+                    }
+                }
+            }
+            tempList.Clear();
+
         }
     }
 }

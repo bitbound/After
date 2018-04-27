@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
 
-namespace Really_Dynamic
+namespace After.Dependencies
 {
     public class Dynamic : DynamicObject
     {

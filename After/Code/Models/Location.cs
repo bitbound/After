@@ -1,15 +1,16 @@
 using After.Models;
 using After.Scripting;
-using Really_Dynamic;
+using After.Dependencies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Translucency.WebSockets;
+using After.Dependencies.WebSockets;
+using After.Dependencies.StorageLists;
 
 namespace After.Models
 {
-    public class Location : StorageLists.IStorageItem
+    public class Location : IStorageItem
     {
         public double XCoord { get; set; }
         public double YCoord { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Translucency.WebSockets;
+using After.Dependencies.WebSockets;
 
 namespace After.Models
 {

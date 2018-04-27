@@ -1,8 +1,9 @@
-﻿using System;
+﻿using After.Dependencies.StorageLists;
+using System;
 
 namespace After.Models
 {
-    public class Message : StorageLists.IStorageItem
+    public class Message : IStorageItem
     {
         public string StorageID { get; set; }
         public string Channel { get; set; }

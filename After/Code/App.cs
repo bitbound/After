@@ -1,9 +1,9 @@
 ﻿using After.Models;
-using Really_Dynamic;
+using After.Dependencies;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Translucency.WebSockets;
+using After.Dependencies.WebSockets;
 
 /// <summary>
 /// Summary description for Utilities
@@ -37,14 +37,6 @@ namespace After
                 foreach (var location in JSON.Decode<List<Location>>(strLocations))
                 {
                     Storage.Current.Locations.Add(location);
-                }
-            }
-            if (!Storage.Current.Landmarks.Exists("0,-2,0"))
-            {
-                var strLandmarks = File.ReadAllText(Path.Combine(App.DataPath, "Game_Data\\Base\\Landmarks.json"));
-                foreach (var landmark in JSON.Decode<List<Landmark>>(strLandmarks))
-                {
-                    Storage.Current.Landmarks.Add(landmark);
                 }
             }
             Storage.Current.Locations.GetAll().ForEach(loc => {

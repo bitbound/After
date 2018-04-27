@@ -1,4 +1,5 @@
-using Really_Dynamic;
+using After.Dependencies;
+using After.Dependencies.StorageLists;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace After.Models
 {
-    public class Character : StorageLists.IStorageItem
+    public class Character : IStorageItem
     {
         public Character()
         {

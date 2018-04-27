@@ -5,11 +5,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net.WebSockets;
 using System.Threading;
-using Translucency.WebSockets;
+using After.Dependencies.WebSockets;
 using System.Linq;
 using After.Models;
 using System.Collections.Generic;
-using Really_Dynamic;
+using After.Dependencies;
 
 namespace After
 {

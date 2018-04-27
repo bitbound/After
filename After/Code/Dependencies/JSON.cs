@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Really_Dynamic;
+using After.Dependencies;
 using System.Collections.Generic;
-namespace Really_Dynamic
+namespace After.Dependencies
 {
     public class JSON
     {

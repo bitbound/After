@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StorageLists
+namespace After.Dependencies.StorageLists
 {
     public interface IStorageItem
     {
