@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using After.Dependencies.WebSockets;
+using After.Components;
 
 namespace After.Code.Classes.WebSockets
 {
@@ -22,7 +23,7 @@ namespace After.Code.Classes.WebSockets
         public static async Task ReceiveAccountCreation(dynamic JsonMessage, WebSocketClient WSC)
         {
             string username = JsonMessage.Username.ToString().Trim();
-            if (Storage.Current.Players.Exists(username))
+            if (Storage.Players.Exists(username))
             {
                 JsonMessage.Result = "exists";
                 JsonMessage.Password = null;
@@ -33,12 +34,11 @@ namespace After.Code.Classes.WebSockets
             {
                 var player = new Player()
                 {
-                    Name = username,
+                    StorageID = username,
                     DisplayName = username,
                     Email = JsonMessage.Email,
                     Color = JsonMessage.Color,
-                    // TODO: Start in void.
-                    CurrentXYZ = $"0,0,{username}-0",
+                    CurrentLocation = Guid.NewGuid().ToString(),
                     MovementState = Character.MovementStates.Ready
                 };
 
@@ -48,20 +48,18 @@ namespace After.Code.Classes.WebSockets
                     Description = "This is a plane of existence that lies within your own soul.",
                     OwnerID = username,
                     IsStatic = true,
-                    StorageID = player.CurrentXYZ,
+                    StorageID = player.CurrentLocation,
                     LastVisited = DateTime.Now,
                     Color = player.Color
                 };
-                Storage.Current.Locations.Add(innerVoid);
+                Storage.Locations.Add(innerVoid);
                 var norahc = new NPC()
                 {
-                    Name = "Norahc",
                     DisplayName = "Norahc",
                     StorageID = Guid.NewGuid().ToString(),
-                    CurrentXYZ = player.CurrentXYZ,
+                    CurrentLocation = player.CurrentLocation,
                     Color = "lightsteelblue",
                     CoreEnergy = 50000,
-                    ViewDistance = 5,
                     MovementState = Character.MovementStates.Ready,
                     PortraitUri = "/Assets/Images/Portraits/Norahc.png"
                 };
@@ -72,15 +70,19 @@ namespace After.Code.Classes.WebSockets
                     ScriptText = @""
 
                 });
-                Storage.Current.NPCs.Add(norahc);
-                innerVoid.Occupants.Add(new Occupant() { DisplayName = norahc.DisplayName, StorageID = norahc.StorageID });
+                Storage.NPCs.Add(norahc);
+                innerVoid.Occupants.Add(new Occupant() {
+                    DisplayName = norahc.DisplayName,
+                    StorageID = norahc.StorageID,
+                    OccupantType = OccupantTypes.NPC
+                });
 
                 var hasher = new PasswordHasher<Player>();
                 player.Password = hasher.HashPassword(player, JsonMessage.Password.ToString());
                 WSC.IsAuthenticated = true;
                 WSC.Player = player;
                 player.AuthenticationTokens.Add(Guid.NewGuid().ToString());
-                Storage.Current.Players.Add(player);
+                Storage.Players.Add(player);
                 JsonMessage.Result = "ok";
                 JsonMessage.Password = null;
                 JsonMessage.AuthenticationToken = player.AuthenticationTokens.Last();
@@ -89,7 +91,7 @@ namespace After.Code.Classes.WebSockets
                 {
                     Category = "Accounts",
                     Type = "Connected",
-                    Username = player.Name
+                    Username = player.DisplayName
                 }));
                 App.Server.ClientList.Add(WSC);
             }
@@ -97,13 +99,13 @@ namespace After.Code.Classes.WebSockets
         public static async Task ReceiveLogon(dynamic JsonMessage, WebSocketClient WSC)
         {
             var username = (string)JsonMessage.Username.ToString().Trim();
-            if (!Storage.Current.Players.Exists(username))
+            if (!Storage.Players.Exists(username))
             {
                 JsonMessage.Result = "failed";
                 await WSC.SendString(JSON.Encode(JsonMessage));
                 return;
             }
-            var player = Storage.Current.Players.Find(username);
+            var player = Storage.Players.Find(username);
             var hasher = new PasswordHasher<Player>();
             var clientList = WebSocketServer.ServerList["After"].ClientList;
             if (player.IsBanned)
@@ -151,7 +153,7 @@ namespace After.Code.Classes.WebSockets
                     player.AuthenticationTokens.Add(authToken);
                     player.TemporaryPassword = "";
                     player.BadLoginAttempts = 0;
-                    player.Password = hasher.HashPassword(WSC.Player as Player, JsonMessage.ConfirmNewPassword);
+                    player.Password = hasher.HashPassword(WSC.Player, JsonMessage.ConfirmNewPassword);
                 }
             }
             else if (player.AuthenticationTokens.Count > 0 && JsonMessage.AuthenticationToken != null)
@@ -179,9 +181,9 @@ namespace After.Code.Classes.WebSockets
             {
                 player.Password = hasher.HashPassword(player, JsonMessage.Password);
             }
-            if (clientList.Exists(s => (s as WebSocketClient)?.Player?.Name.ToLower() == username.ToLower()))
+            if (clientList.Exists(s => (s as WebSocketClient)?.Player?.StorageID.ToLower() == username.ToLower()))
             {
-                var existing = clientList.FindAll(s => (s as WebSocketClient)?.Player?.Name.ToLower() == username.ToLower());
+                var existing = clientList.FindAll(s => (s as WebSocketClient)?.Player?.StorageID.ToLower() == username.ToLower());
                 var message = new
                 {
                     Category = "Accounts",
@@ -210,14 +212,14 @@ namespace After.Code.Classes.WebSockets
             {
                 Category = "Accounts",
                 Type = "Connected",
-                Username = (WSC.Player as Player).Name
+                Username = WSC.Player.StorageID
             }));
             App.Server.ClientList.Add(WSC);
         }
         public static void ReceiveChangeSetting(dynamic JsonMessage, WebSocketClient WSC)
         {
             string prop = JsonMessage.Property;
-            (WSC.Player as Player).Settings.GetType().GetProperty(prop).SetValue((WSC.Player as Player).Settings, JsonMessage.Value);
+            WSC.Player.Settings.GetType().GetProperty(prop).SetValue(WSC.Player.Settings, JsonMessage.Value);
         }
         public static async Task ReceiveForgotPassword(dynamic JsonMessage, WebSocketClient WSC)
         {
@@ -230,13 +232,13 @@ namespace After.Code.Classes.WebSockets
                     await WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
-                if (!Storage.Current.Players.Exists(username))
+                if (!Storage.Players.Exists(username))
                 {
                     JsonMessage.Result = "unknown";
                     await WSC.SendString(JSON.Encode(JsonMessage));
                     return;
                 }
-                Player account = Storage.Current.Players.Find(username);
+                Player account = Storage.Players.Find(username);
                 if (string.IsNullOrWhiteSpace(account.Email))
                 {
                     JsonMessage.Result = "no email";
@@ -276,62 +278,19 @@ namespace After.Code.Classes.WebSockets
         #region Events
         public static async Task ReceiveStartCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if ((WSC.Player as Player).MovementState != Models.Character.MovementStates.Ready)
+            if (WSC.Player.MovementState != Models.Character.MovementStates.Ready)
             {
                 return;
             }
-            await (WSC.Player as Player).StartCharging();
+            await WSC.Player.StartCharging();
         }
         public static async Task ReceiveStopCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if ((WSC.Player as Player).MovementState != Models.Character.MovementStates.Ready)
+            if (WSC.Player.MovementState != Models.Character.MovementStates.Ready)
             {
                 return;
             }
-            await (WSC.Player as Player).StopCharging();
-        }
-        public static async Task ReceivePlayerMove(dynamic JsonMessage, WebSocketClient WSC)
-        {
-            if ((WSC.Player as Player).MovementState != Character.MovementStates.Ready)
-            {
-                return;
-            }
-            var xChange = 0;
-            var yChange = 0;
-            var dir = (string)JsonMessage.Direction;
-            dir = dir.ToUpper();
-            if (dir.Contains("N"))
-            {
-                yChange--;
-            }
-            else if (dir.Contains("S"))
-            {
-                yChange++;
-            }
-            if (dir.Contains("E"))
-            {
-                xChange++;
-            }
-            else if (dir.Contains("W"))
-            {
-                xChange--;
-            }
-            var currentXYZ = (WSC.Player as Player).CurrentXYZ.Split(',');
-            var destXYZ = new string[3];
-            destXYZ[0] = (double.Parse(currentXYZ[0]) + xChange).ToString();
-            destXYZ[1] = (double.Parse(currentXYZ[1]) + yChange).ToString();
-            destXYZ[2] = currentXYZ[2];
-            await (WSC.Player as Player).Move(destXYZ);
-        }
-        public static async Task ReceiveDoAreaAction(dynamic JsonMessage, WebSocketClient WSC)
-        {
-            await Task.Delay(1);
-            // TODO.
-        }
-        public static async Task ReceiveAreaOccupantClicked(dynamic JsonMessage, WebSocketClient WSC)
-        {
-            await Task.Delay(1);
-            // TODO.
+            await WSC.Player.StopCharging();
         }
         #endregion Events
 
@@ -341,15 +300,15 @@ namespace After.Code.Classes.WebSockets
             string message = JsonMessage.Message;
             if (message.StartsWith("/"))
             {
-                await ParseCommand(JsonMessage, WSC);
+                await CommandParser.ParseCommand(JsonMessage, WSC);
                 return;
             }
-            JsonMessage.Username = WSC?.Player?.Name;
-            Storage.Current.Messages.Add(new Message()
+            JsonMessage.Username = WSC?.Player?.StorageID;
+            Storage.Messages.Add(new Message()
             {
-                StorageID = $"{WSC?.Player?.Name}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
+                StorageID = $"{WSC?.Player?.StorageID}-${DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss.fff")}",
                 LastAccessed = DateTime.Now,
-                Sender = WSC?.Player?.Name,
+                Sender = WSC?.Player?.StorageID,
                 Content = JsonMessage?.Message,
                 Recipient = JsonMessage?.Recipent,
                 Channel = JsonMessage?.Channel,
@@ -361,7 +320,7 @@ namespace After.Code.Classes.WebSockets
                     await App.Server.Broadcast(JSON.Encode(JsonMessage));
                     break;
                 case "Command":
-                    await ParseCommand(JsonMessage, WSC);
+                    await CommandParser.ParseCommand(JsonMessage, WSC);
                     break;
                 default:
                     break;
@@ -375,7 +334,7 @@ namespace After.Code.Classes.WebSockets
             }
             try
             {
-                var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"), Storage.Current);
+                var result = await CSharpScript.EvaluateAsync(JsonMessage.Message, ScriptOptions.Default.WithReferences("After"));
                 JsonMessage.Message = result;
                 await WSC.SendString(JSON.Encode(JsonMessage));
             }
@@ -385,82 +344,26 @@ namespace After.Code.Classes.WebSockets
                 await WSC.SendString(JSON.Encode(JsonMessage));
             }
         }
-        public static async Task ParseCommand(dynamic JsonMessage, WebSocketClient WSC)
-        {
-            string message = JsonMessage.Message.ToLower();
-            var commandArray = message.Split(' ');
-            var command = commandArray[0].Replace("/", "");
-            switch (command)
-            {
-                case "?":
-                    {
-                        var reply = new StringBuilder();
-                        reply.AppendLine("");
-                        reply.AppendLine("Command List:");
-                        reply.AppendLine("/debug - Toggle debug mode.");
-                        reply.AppendLine("/who - Display a list of online players.");
-                        var request = new
-                        {
-                            Category = "Messages",
-                            Type = "Chat",
-                            Channel = "System",
-                            Message = reply.ToString()
-                        };
-                        await WSC.SendString(JSON.Encode(request));
-                        break;
-                    }
-                case "who":
-                    {
-                        var reply = new StringBuilder();
-                        reply.AppendLine("");
-                        reply.AppendLine("Online Players:");
-                        foreach (WebSocketClient wsc in App.Server.ClientList.Where(cl => !String.IsNullOrWhiteSpace(cl?.Player?.Name)))
-                        {
-                            reply.AppendLine((WSC.Player as Player).Name);
-                        }
-                        var request = new
-                        {
-                            Category = "Messages",
-                            Type = "Chat",
-                            Channel = "System",
-                            Message = reply.ToString()
-                        };
-                        await WSC.SendString(JSON.Encode(request));
-                        break;
-                    }
-                default:
-                    {
-                        var request = new
-                        {
-                            Category = "Messages",
-                            Type = "Chat",
-                            Channel = "System",
-                            Message = "Unknown command.  Type /? for a list of commands."
-                        };
-                        await WSC.SendString(JSON.Encode(request));
-                        break;
-                    }
-            }
-        }
+
         #endregion Messages
 
 
         #region Queries
         public static async Task ReceivePlayerUpdate(dynamic JsonMessage, WebSocketClient WSC)
         {
-            JsonMessage.Player = (WSC.Player as Player).ConvertToMe();
+            JsonMessage.Player = WSC.Player.ConvertToMe();
             await WSC.SendString(JSON.Encode(JsonMessage));
         }
         public static async Task ReceiveRefreshView(dynamic JsonMessage, WebSocketClient WSC)
         {
             var souls = new List<dynamic>();
             var areas = new List<dynamic>();
-            var location = (WSC.Player as Player).GetCurrentLocation();
+            var location = WSC.Player.GetCurrentLocation();
             if (location == null)
             {
                 return;
             }
-            foreach (var area in (WSC.Player as Player).GetVisibleLocations())
+            foreach (var area in WSC.Player.GetVisibleLocations())
             {
                 if (area.IsStatic == false && DateTime.Now - area.LastVisited > TimeSpan.FromMinutes(1) && area.Occupants.Count == 0)
                 {
@@ -474,15 +377,15 @@ namespace After.Code.Classes.WebSockets
                     {
                         await player.SendString(JSON.Encode(request));
                     }
-                    Storage.Current.Locations.Remove(area.StorageID);
+                    Storage.Locations.Remove(area.StorageID);
                     continue;
                 }
                 foreach (var occupant in area.Occupants)
                 {
-                    Character character = Storage.Current.NPCs.Find(occupant.StorageID);
+                    Character character = Storage.NPCs.Find(occupant.StorageID);
                     if (character == null)
                     {
-                        character = Storage.Current.Players.Find(occupant.StorageID);
+                        character = Storage.Players.Find(occupant.StorageID);
                         if (character == null)
                         {
                             continue;
@@ -503,104 +406,33 @@ namespace After.Code.Classes.WebSockets
 
         public static async Task ReceiveGetPowers(dynamic JsonMessage, WebSocketClient WSC)
         {
-            JsonMessage.Powers = (WSC.Player as Player).Powers;
+            JsonMessage.Powers = WSC.Player.Powers;
             await WSC.SendString(JSON.Encode(JsonMessage));
         }
         public static async Task ReceiveFirstLoad(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if (String.IsNullOrWhiteSpace((WSC.Player as Player).CurrentXYZ))
+            if (!Storage.Locations.Exists(WSC.Player.CurrentLocation))
             {
-                if (String.IsNullOrWhiteSpace((WSC.Player as Player).PreviousXYZ))
-                {
-                    (WSC.Player as Player).CurrentXYZ = "0,0,0";
-                }
-                else
-                {
-                    (WSC.Player as Player).CurrentXYZ = (WSC.Player as Player).PreviousXYZ;
-                }
+                WSC.Player.CurrentLocation = WSC.Player.InnerVoidLocation;
             }
-            if (!Storage.Current.Locations.Exists((WSC.Player as Player).CurrentXYZ))
-            {
-                (WSC.Player as Player).CurrentXYZ = "0,0,0";
-            }
-            JsonMessage.Settings = (WSC.Player as Player).Settings;
-            JsonMessage.Player = (WSC.Player as Player).ConvertToMe();
-            JsonMessage.Powers = (WSC.Player as Player).Powers;
-            JsonMessage.AccountType = (WSC.Player as Player).AccountType;
+            JsonMessage.Settings = WSC.Player.Settings;
+            JsonMessage.Player = WSC.Player.ConvertToMe();
+            JsonMessage.Powers = WSC.Player.Powers;
+            JsonMessage.AccountType = WSC.Player.AccountType;
             WSC.SendString(JSON.Encode(JsonMessage));
 
-            await (WSC.Player as Player).GetCurrentLocation().CharacterArrives((WSC.Player as Player));
+            await WSC.Player.GetCurrentLocation().CharacterArrives(WSC.Player);
         }
-        public static async Task ReceiveMapUpdate(dynamic JsonMessage, WebSocketClient WSC)
-        {
-            if (JsonMessage.XMax - JsonMessage.XMin > 500)
-            {
-                await WSC.Player.WarnOrBan(WSC);
-            }
-            await Task.Run(async () => {
-                var visibleLocations = (WSC.Player as Player).GetVisibleLocations();
-                for (var x = JsonMessage.XMin; x <= JsonMessage.XMax; x++)
-                {
-                    for (var y = JsonMessage.YMin; y <= JsonMessage.YMax; y++)
-                    {
-                        var location = Storage.Current.Locations.Find($"{x},{y},{(WSC.Player as Player).ZCoord}");
-                        if (location != null)
-                        {
-                            if (location.IsStatic == false && DateTime.Now - location.LastVisited > TimeSpan.FromMinutes(1) && location.Occupants.Count == 0)
-                            {
-                                var request = new
-                                {
-                                    Category = "Events",
-                                    Type = "AreaRemoved",
-                                    Area = location.ConvertToArea(true)
-                                };
-                                foreach (var player in location.GetNearbyPlayers())
-                                {
-                                    await player.SendString(JSON.Encode(request));
-                                }
-                                Storage.Current.Locations.Remove(location.StorageID);
-                            }
-                            else if (visibleLocations.Contains(location))
-                            {
-                                var request = new
-                                {
-                                    Category = "Queries",
-                                    Type = "MapUpdate",
-                                    Area = location.ConvertToArea(true)
-                                };
-                                await WSC.SendString(JSON.Encode(request));
-                            }
-                            else
-                            {
-                                var request = new
-                                {
-                                    Category = "Queries",
-                                    Type = "MapUpdate",
-                                    Area = location.ConvertToArea(false)
-                                };
-                                await WSC.SendString(JSON.Encode(request));
-                            }
-                        }
-                    }
-                }
-                var done = new
-                {
-                    Category = "Queries",
-                    Type = "MapUpdate",
-                    Completed = true
-                };
-                await WSC.SendString(JSON.Encode(done));
-            });
-        }
+
         public static async Task ReceiveGetAreaActions(dynamic JsonMessage, WebSocketClient WSC)
         {
             var actionList = new List<string>();
-            Location target = Storage.Current.Locations.Find(JsonMessage.TargetXYZ);
-            var distance = target.GetDistanceFrom(Storage.Current.Locations.Find((WSC.Player as Player).CurrentXYZ));
+            Location target = Storage.Locations.Find(JsonMessage.TargetXYZ);
+            var distance = target.GetDistanceFrom(Storage.Locations.Find(WSC.Player.CurrentLocation));
             if (distance == 0)
             {
                 actionList.Add("Explore Here");
-                if (!target.IsStatic || target.OwnerID != (WSC.Player as Player).StorageID)
+                if (!target.IsStatic || target.OwnerID != WSC.Player.StorageID)
                 {
                     actionList.Add("Take Control");
                 }
@@ -608,13 +440,13 @@ namespace After.Code.Classes.WebSockets
             else if (distance < 2)
             {
                 actionList.Add("Move Here");
-                if (target.OwnerID == (WSC.Player as Player).StorageID)
+                if (target.OwnerID == WSC.Player.StorageID)
                 {
                     actionList.Add("Change Area");
                 }
                 actionList.Add("Destroy");
             }
-            foreach (var power in (WSC.Player as Player).Powers.FindAll(p => p.TargetList.Contains(Power.Targets.Location) && distance >= p.MinRange && distance <= p.MaxRange))
+            foreach (var power in WSC.Player.Powers.FindAll(p => p.TargetList.Contains(Power.Targets.Location) && distance >= p.MinRange && distance <= p.MaxRange))
             {
                 actionList.Add(power.Name);
             }
@@ -626,7 +458,7 @@ namespace After.Code.Classes.WebSockets
         }
         public static async Task ReceiveGetAreaOccupants(dynamic JsonMessage, WebSocketClient WSC)
         {
-            Location target = Storage.Current.Locations.Find(JsonMessage.TargetXYZ);
+            Location target = Storage.Locations.Find(JsonMessage.TargetXYZ);
             JsonMessage.Occupants = target.Occupants;
             await WSC.SendString(JSON.Encode(JsonMessage));
         }

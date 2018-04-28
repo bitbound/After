@@ -10,13 +10,13 @@ namespace After.Models
     {
         public List<NPCScript> Scripts { get; set; } = new List<NPCScript>();
         public List<DialogItem> DialogItems { get; set; } = new List<DialogItem>();
-        public async Task CheckAwareness(Character ApproachingCharacter)
+        public async Task CheckAwareness(Character approachingCharacter)
         {
-            var script = Scripts?.Find(scr => scr.Trigger == Triggers.OnBecomeAware && scr.TriggerSources.Contains(ApproachingCharacter.GetType()));
+            var script = Scripts?.Find(scr => scr.Trigger == Triggers.OnBecomeAware && scr.TriggerSources.Contains(approachingCharacter.GetType()));
             if (script != null)
             {
                 // TODO: Check for stealth.
-                await script.FireScript(this, ApproachingCharacter.StorageID, ApproachingCharacter.DisplayName);
+                await script.FireScript(this, approachingCharacter.StorageID, approachingCharacter.DisplayName);
             }
         }
     }

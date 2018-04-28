@@ -10,6 +10,7 @@
     export const Me = new After.App.Me();
     export const Settings = new After.App.Settings();
     export const Utilities = new After.App.Utilities();
+    export const MessageHandlers = new After.App.MessageHandlers();
 }
 
 namespace After.Storage {

@@ -22,14 +22,14 @@ var After;
                     y: 0
                 };
             }
-            get CurrentXYZ() {
+            get CurrentLocation() {
                 if (this.XCoord == null || this.YCoord == null || this.ZCoord == null) {
                     return null;
                 }
                 return this.XCoord.toString() + "," + this.YCoord.toString() + "," + this.ZCoord;
             }
             ;
-            set CurrentXYZ(XYZ) {
+            set CurrentLocation(XYZ) {
                 if (XYZ == null) {
                     this.XCoord = null;
                     this.YCoord = null;
@@ -127,7 +127,7 @@ var After;
             }
             //*** Utility Functions ***//
             GetCurrentLocation() {
-                return After.Storage.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
+                return After.Storage.Areas.find((value) => { return value.StorageID == After.Me.CurrentLocation; });
             }
             SyncParticleCoords() {
                 After.Me.Particles.forEach(function (value, index) {

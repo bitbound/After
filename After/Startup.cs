@@ -89,18 +89,18 @@ namespace After
                         {
                             clientList.Remove(wsClient);
                         }
-                        if (wsClient?.Player?.Name == null)
+                        if (wsClient?.Player?.StorageID == null)
                         {
                             return;
                         }
                         dynamic message = new
                         {
                             Type = "Disconnected",
-                            Username = wsClient?.Player.Name
+                            Username = wsClient?.Player.StorageID
                         };
                         await WebSocketServer.ServerList["After"].Broadcast(JSON.Encode(message));
-                        var player = wsClient?.Player as Player;
-                        Storage.Current.Players.Store(player.StorageID);
+                        var player = wsClient?.Player;
+                        Storage.Players.Store(player.StorageID);
                         player.GetCurrentLocation()?.CharacterLeaves(player);
                         foreach (var timer in player.Timers)
                         {

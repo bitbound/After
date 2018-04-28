@@ -1,8 +1,9 @@
-var After;
-(function (After) {
-    var MessageHandlers;
-    (function (MessageHandlers) {
-        function ReceiveAccountCreation(JsonMessage) {
+﻿namespace After.App {
+    export class MessageHandlers {
+        constructor() {
+
+        }
+        ReceiveAccountCreation(JsonMessage) {
             After.Utilities.RemoveLoading();
             if (JsonMessage.Result == "ok") {
                 if (localStorage["RememberMe"] == "true") {
@@ -17,12 +18,9 @@ var After;
                     $("#divCreateAccountStatus").fadeIn();
                     return;
                 }
-            }
-            ;
-        }
-        MessageHandlers.ReceiveAccountCreation = ReceiveAccountCreation;
-        ;
-        function ReceiveLogon(JsonMessage) {
+            };
+        };
+        ReceiveLogon(JsonMessage) {
             After.Utilities.RemoveLoading();
             if (JsonMessage.Result == "new required") {
                 $("#divNewPassword").slideDown();
@@ -66,30 +64,26 @@ var After;
                 After.Utilities.ShowDialog("Your account is banned.  If you believe this is a mistake, please contact support.", "red", "OK", null);
             }
             $("#buttonLogin").removeAttr("disabled");
-        }
-        MessageHandlers.ReceiveLogon = ReceiveLogon;
-        ;
-        function ReceiveConnected(JsonMessage) {
+        };
+
+        ReceiveConnected(JsonMessage) {
             var spanMessage = document.createElement("span");
             spanMessage.style.color = "whitesmoke";
             spanMessage.innerText = JsonMessage.Username + " has connected.";
             $("#divChatMessageWindow").append(spanMessage);
             $("#divChatMessageWindow").append("<br/>");
         }
-        MessageHandlers.ReceiveConnected = ReceiveConnected;
-        function ReceiveDisconnected(JsonMessage) {
+        ReceiveDisconnected(JsonMessage) {
             var spanMessage = document.createElement("span");
             spanMessage.style.color = "whitesmoke";
             spanMessage.innerText = JsonMessage.Username + " has disconnected.";
             $("#divChatMessageWindow").append(spanMessage);
             $("#divChatMessageWindow").append("<br/>");
         }
-        MessageHandlers.ReceiveDisconnected = ReceiveDisconnected;
-        function ReceiveLoginElsewhere(JsonMessage) {
+        ReceiveLoginElsewhere(JsonMessage) {
             After.Utilities.ShowDialog("Your were disconnected because your account was logged in from another location.", "black", "OK", null);
         }
-        MessageHandlers.ReceiveLoginElsewhere = ReceiveLoginElsewhere;
-        function ReceiveForgotPassword(JsonMessage) {
+        ReceiveForgotPassword(JsonMessage) {
             After.Utilities.RemoveLoading();
             var result = JsonMessage.Result;
             if (result == "empty") {
@@ -108,18 +102,16 @@ var After;
                 After.Utilities.ShowDialog("Password reset successful!<br/><br/>A temporary password has been sent to your email (remember to check in junk/spam).", "black", "OK", null);
             }
         }
-        MessageHandlers.ReceiveForgotPassword = ReceiveForgotPassword;
-        function ReceiveWarned(JsonMessage) {
-            //After.Connection.IsDisconnectExpected = true;
+        ReceiveWarned(JsonMessage) {
+            After.Connection.IsDisconnectExpected = true;
             After.Utilities.ShowDialog("You have been disconnected for suspicious activity.  Your account has been flagged, and any future offenses will result in a permanent ban.  If you believe this was in error, please contact support.", "red", "OK", null);
         }
-        MessageHandlers.ReceiveWarned = ReceiveWarned;
-        function ReceiveBanned(JsonMessage) {
+        ReceiveBanned(JsonMessage) {
             After.Connection.IsDisconnectExpected = true;
             After.Utilities.ShowDialog("You have been permanently banned for repeated suspicious activity.  If you believe this was in error, please contact support.", "red", "OK", null);
         }
-        MessageHandlers.ReceiveBanned = ReceiveBanned;
-        function ReceiveStartCharging(JsonMessage) {
+
+        ReceiveStartCharging(JsonMessage) {
             $("#buttonCharge").removeAttr("disabled");
             if (JsonMessage.Result == "ok") {
                 After.Me.IsCharging = true;
@@ -128,7 +120,7 @@ var After;
                 if (After.Temp.ChargeInterval != undefined) {
                     window.clearInterval(After.Temp.ChargeInterval);
                 }
-                After.Temp.ChargeInterval = window.setInterval(function () {
+                After.Temp.ChargeInterval = window.setInterval(() => {
                     if (After.Me.IsCharging == false) {
                         if (After.Me.CurrentCharge == 0) {
                             $('#divButtonCharge').show();
@@ -150,23 +142,19 @@ var After;
                         top: startTop,
                     });
                     $("#divCharge").append(part);
-                    window.setTimeout(function (thisParticle) {
+                    window.setTimeout((thisParticle) => {
                         $(thisParticle).remove();
                     }, 1000, part);
                 }, 100);
             }
-        }
-        MessageHandlers.ReceiveStartCharging = ReceiveStartCharging;
-        ;
-        function ReceiveStopCharging(JsonMessage) {
+        };
+        ReceiveStopCharging(JsonMessage) {
             $("#buttonCharge").removeAttr("disabled");
             After.Me.IsCharging = false;
-        }
-        MessageHandlers.ReceiveStopCharging = ReceiveStopCharging;
-        ;
-        function ReceiveCharacterArrives(JsonMessage) {
+        };
+        ReceiveCharacterArrives(JsonMessage) {
             if (JsonMessage.Soul.Name == After.Me.Name) {
-                After.Me.CurrentXYZ = JsonMessage.Soul.CurrentXYZ;
+                After.Me.CurrentLocation = JsonMessage.Soul.CurrentLocation;
                 var query = {
                     "Category": "Queries",
                     "Type": "RefreshView"
@@ -176,67 +164,71 @@ var After;
             else {
                 After.Storage.Souls.push(JsonMessage.Soul);
                 var index = After.Storage.Areas.findIndex((value, index) => {
-                    return value.StorageID == JsonMessage.Soul.CurrentXYZ;
+                    return value.StorageID == JsonMessage.Soul.CurrentLocation;
                 });
                 After.Storage.Areas[index].Occupants.push(JsonMessage.Soul.Name);
-                if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
+                if (JsonMessage.Soul.CurrentLocation == After.Me.CurrentLocation) {
                     After.Game.AddChatMessage(JsonMessage.Soul.Name + " has arrived.", "whitesmoke");
                 }
             }
-        }
-        MessageHandlers.ReceiveCharacterArrives = ReceiveCharacterArrives;
-        ;
-        function ReceiveCharacterLeaves(JsonMessage) {
+        };
+        ReceiveCharacterLeaves(JsonMessage) {
             if (JsonMessage.Soul.Name != After.Me.Name) {
                 var soulIndex = After.Storage.Souls.findIndex((value, index) => {
                     return value.Name == JsonMessage.Soul.Name;
                 });
+
                 var areaIndex = After.Storage.Areas.findIndex((value, index) => {
-                    return value.StorageID == JsonMessage.Soul.CurrentXYZ;
+                    return value.StorageID == JsonMessage.Soul.CurrentLocation;
                 });
                 var occupantIndex = After.Storage.Areas[areaIndex].Occupants.findIndex((value) => {
                     return value == JsonMessage.Soul.Name;
                 });
                 After.Storage.Areas[areaIndex].Occupants.splice(occupantIndex, 1);
+
                 After.Storage.Souls.splice(soulIndex, 1);
-                if (JsonMessage.Soul.CurrentXYZ == After.Me.CurrentXYZ) {
+                if (JsonMessage.Soul.CurrentLocation == After.Me.CurrentLocation) {
                     After.Game.AddChatMessage(JsonMessage.Soul.Name + " has left.", "whitesmoke");
                 }
             }
-        }
-        MessageHandlers.ReceiveCharacterLeaves = ReceiveCharacterLeaves;
-        ;
-        function ReceivePlayerMove(JsonMessage) {
+        };
+        ReceivePlayerMove(JsonMessage) {
             if (JsonMessage.Soul.Name == After.Me.Name) {
                 After.Me.IsMoving = true;
                 var dest = JsonMessage.To.split(",");
                 var from = JsonMessage.From.split(",");
-                After.Me.Particles.forEach(function (value, index) {
-                    window.setTimeout(function (value) {
-                        $(value).animate({
-                            "XCoord": Number(dest[0]),
-                            "YCoord": Number(dest[1])
-                        }, {
-                            "duration": Number(JsonMessage.TravelTime),
-                            "queue": false,
-                        });
+                After.Me.Particles.forEach((value, index) => {
+                    window.setTimeout((value) => {
+                        $(value).animate(
+                            {
+                                "XCoord": Number(dest[0]),
+                                "YCoord": Number(dest[1])
+                            },
+                            {
+                                "duration": Number(JsonMessage.TravelTime),
+                                "queue": false,
+                            }
+                        );
                     }, index * 20, value);
                 });
-                $(After.Me).animate({
-                    "XCoord": Number(dest[0]),
-                    "YCoord": Number(dest[1])
-                }, {
-                    "duration": Number(JsonMessage.TravelTime),
-                    "queue": false,
-                    "always": function () {
-                        After.Me.IsMoving = false;
+                $(After.Me).animate(
+                    {
+                        "XCoord": Number(dest[0]),
+                        "YCoord": Number(dest[1])
+                    },
+                    {
+                        "duration": Number(JsonMessage.TravelTime),
+                        "queue": false,
+                        "always": () => {
+                            After.Me.IsMoving = false;
+                        }
                     }
-                });
+                );
                 if (After.Settings.FollowPlayer) {
                     for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 10) {
-                        window.setTimeout(function () {
+                        window.setTimeout(() => {
                             After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, false);
-                        }, i);
+                        }, i)
                     }
                 }
             }
@@ -253,26 +245,23 @@ var After;
                     $(part).animate({
                         "XCoord": Number(dest[0]) + .5,
                         "YCoord": Number(dest[1]) + .5
-                    }, Number(JsonMessage.TravelTime), function () {
+                    }, Number(JsonMessage.TravelTime), () => {
                         var index = After.Storage.FreeParticles.findIndex((value) => value == part);
                         After.Storage.FreeParticles.splice(index, 1);
                     });
                 }
             }
         }
-        MessageHandlers.ReceivePlayerMove = ReceivePlayerMove;
-        function ReceiveAreaCreated(JsonMessage) {
+        ReceiveAreaCreated(JsonMessage) {
             After.Storage.Areas.push(JsonMessage.Area);
         }
-        MessageHandlers.ReceiveAreaCreated = ReceiveAreaCreated;
-        function ReceiveAreaRemoved(JsonMessage) {
+        ReceiveAreaRemoved(JsonMessage) {
             var index = After.Storage.Areas.findIndex(area => area.StorageID == JsonMessage.Area.LocationID);
             if (index > -1) {
                 After.Storage.Areas.splice(index, 1);
             }
         }
-        MessageHandlers.ReceiveAreaRemoved = ReceiveAreaRemoved;
-        function ReceiveCharacterCharging(JsonMessage) {
+        ReceiveCharacterCharging(JsonMessage) {
             var location = JsonMessage.Location.split(",");
             var fp = new After.Models.FreeParticle();
             fp.Color = "white";
@@ -283,13 +272,13 @@ var After;
             $(fp).animate({
                 XCoord: Number(location[0]) + .5,
                 YCoord: Number(location[1]) + .5
-            }, 750, function () {
+            }, 750, () => {
                 var index = After.Storage.FreeParticles.findIndex(part => part == fp);
                 After.Storage.FreeParticles.splice(index, 1);
             });
         }
-        MessageHandlers.ReceiveCharacterCharging = ReceiveCharacterCharging;
-        function ReceiveChat(JsonData) {
+
+        ReceiveChat(JsonData) {
             switch (JsonData.Channel) {
                 case "Global":
                     var spanMessage = document.createElement("span");
@@ -316,8 +305,7 @@ var After;
                 divChat.scrollTop = divChat.scrollHeight;
             }
         }
-        MessageHandlers.ReceiveChat = ReceiveChat;
-        function ReceiveAdminScript(JsonData) {
+        ReceiveAdminScript(JsonData) {
             var spanMessage = document.createElement("span");
             if (typeof JsonData.Message == "object") {
                 spanMessage.innerHTML = After.Utilities.FormatObjectForHTML(JsonData.Message);
@@ -326,6 +314,7 @@ var After;
                 spanMessage.innerText = After.Utilities.EncodeForHTML(JsonData.Message);
             }
             spanMessage.style.color = "white";
+
             $("#divAdminMessageWindow").append(spanMessage);
             $("#divAdminMessageWindow").append("<br/>");
             var divAdmin = document.getElementById("divAdminMessageWindow");
@@ -336,19 +325,17 @@ var After;
                 divAdmin.scrollTop = divAdmin.scrollHeight;
             }
         }
-        MessageHandlers.ReceiveAdminScript = ReceiveAdminScript;
-        function ReceiveStatUpdate(JsonMessage) {
+
+        ReceiveStatUpdate(JsonMessage) {
             After.Me[JsonMessage.Stat] = JsonMessage.Amount;
         }
-        MessageHandlers.ReceiveStatUpdate = ReceiveStatUpdate;
-        function ReceivePlayerUpdate(JsonMessage) {
+        ReceivePlayerUpdate(JsonMessage) {
             for (var stat in JsonMessage.Player) {
                 After.Me[stat] = JsonMessage.Player[stat];
             }
         }
-        MessageHandlers.ReceivePlayerUpdate = ReceivePlayerUpdate;
-        function ReceiveRefreshView(JsonMessage) {
-            JsonMessage.Souls.forEach(function (value) {
+        ReceiveRefreshView(JsonMessage) {
+            JsonMessage.Souls.forEach((value) => {
                 var index = After.Storage.Souls.findIndex((soul) => { return soul.Name == value.Name; });
                 if (index == -1) {
                     After.Storage.Souls.push(value);
@@ -356,30 +343,29 @@ var After;
                 else {
                     After.Storage.Souls[index] = value;
                 }
-            });
+            })
             for (var i = After.Storage.Areas.length - 1; i >= 0; i--) {
                 var value = After.Storage.Areas[i];
                 if (value.ZCoord != After.Me.ZCoord) {
                     After.Storage.Areas.splice(i, 1);
                 }
-                else if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {
+                else if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentLocation) <= After.Me.ViewDistance) {
                     After.Storage.Areas.splice(i, 1);
                 }
             }
-            JsonMessage.Areas.forEach(function (value) {
+            JsonMessage.Areas.forEach((value) => {
                 After.Storage.Areas.push(value);
-            });
-            After.Storage.Areas.forEach(function (value) {
-                if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentXYZ) <= After.Me.ViewDistance) {
+            })
+            After.Storage.Areas.forEach((value) => {
+                if (After.Utilities.GetDistanceBetween(value.StorageID, After.Me.CurrentLocation) <= After.Me.ViewDistance) {
                     value.IsVisible = true;
                 }
                 else {
                     value.IsVisible = false;
                 }
-            });
+            })
         }
-        MessageHandlers.ReceiveRefreshView = ReceiveRefreshView;
-        function ReceiveGetPowers(JsonMessage) {
+        ReceiveGetPowers(JsonMessage) {
             $("#divPowersFrame .tab-innerframe").html("");
             for (var i = 0; i < JsonMessage.Powers.length; i++) {
                 After.Me.Powers.push(JsonMessage.Powers[i]);
@@ -392,12 +378,12 @@ var After;
                 $("#divAdminFrame").remove();
             }
         }
-        MessageHandlers.ReceiveGetPowers = ReceiveGetPowers;
-        function ReceiveFirstLoad(JsonMessage) {
+        ReceiveFirstLoad(JsonMessage) {
             // Account settings.
             for (var setting in JsonMessage.Settings) {
                 After.Settings[setting] = JsonMessage.Settings[setting];
             }
+
             // Player update.
             for (var stat in JsonMessage.Player) {
                 After.Me[stat] = JsonMessage.Player[stat];
@@ -406,6 +392,7 @@ var After;
             for (var stat in JsonMessage.Player) {
                 After.Me[stat] = JsonMessage.Player[stat];
             }
+
             // Get powers.
             $("#divPowersFrame .tab-innerframe").html("");
             for (var i = 0; i < JsonMessage.Powers.length; i++) {
@@ -418,14 +405,14 @@ var After;
             else {
                 $("#divAdminFrame").remove();
             }
+
             // Start drawing.
             window.requestAnimationFrame(After.Drawing.DrawCanvas);
             After.Drawing.AnimateParticles();
             After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, true, false);
             After.Canvas.UpdateMap(true);
         }
-        MessageHandlers.ReceiveFirstLoad = ReceiveFirstLoad;
-        function ReceiveMapUpdate(JsonMessage) {
+        ReceiveMapUpdate(JsonMessage) {
             if (JsonMessage.Area) {
                 var index = After.Storage.Areas.findIndex((value) => {
                     return value.StorageID == JsonMessage.Area.StorageID;
@@ -448,15 +435,14 @@ var After;
                 After.Temp.MapUpdatePending = false;
             }
         }
-        MessageHandlers.ReceiveMapUpdate = ReceiveMapUpdate;
-        function ReceiveGetAreaActions(JsonMessage) {
-            var point = After.Temp.ButtonPoint;
+        ReceiveGetAreaActions(JsonMessage) {
+            var point = (After.Temp.ButtonPoint as MouseEvent | Touch);
             var divActionList = document.createElement("div");
             $(divActionList).css({
                 "position": "fixed",
                 "display": "none",
                 "border": "1px solid lightgray"
-            });
+            })
             if (point.clientX <= document.documentElement.clientWidth / 2) {
                 divActionList.style.left = point.clientX + "px";
             }
@@ -478,58 +464,57 @@ var After;
                     "cursor": "pointer",
                     "font-weight": "bold",
                     "user-select": "none"
-                });
+                })
                 action.classList.add("font-sansserif");
                 action.setAttribute("targetxyz", JsonMessage.TargetXYZ);
-                $(action).hover(function (e) {
+                $(action).hover((e) => {
                     $(e.currentTarget).css("background-color", "white");
-                }, function (e) {
+                }, (e) => {
                     $(e.currentTarget).css("background-color", "rgba(255,255,255, .75)");
-                });
+                })
                 action.innerHTML = JsonMessage.Actions[i];
-                action.onclick = function (e) {
-                    var xyz = e.currentTarget.getAttribute("targetxyz");
-                    var action = e.currentTarget.innerHTML;
+                action.onclick = (e) => {
+                    var xyz = (e.currentTarget as HTMLDivElement).getAttribute("targetxyz");
+                    var action = (e.currentTarget as HTMLDivElement).innerHTML;
                     var request = {
                         "Category": "Events",
                         "Type": "DoAreaAction",
                         "TargetXYZ": xyz,
                         "Action": action
-                    };
+                    }
                     After.Connection.Socket.send(JSON.stringify(request));
                     // TODO: Handle this on other end.
-                };
+                }
                 divActionList.appendChild(action);
             }
             document.body.appendChild(divActionList);
-            $(window).one("click", function () {
-                window.setTimeout(function () {
+            $(window).one("click", () => {
+                window.setTimeout(() => {
                     $(divActionList).remove();
                 }, 250);
             });
-            $(window).one("touchstart", function () {
-                window.setTimeout(function () {
+            $(window).one("touchstart", () => {
+                window.setTimeout(() => {
                     $(divActionList).remove();
                 }, 250);
             });
-            $(divActionList).mouseout(function () {
-                window.setTimeout(function () {
+            $(divActionList).mouseout(() => {
+                window.setTimeout(() => {
                     if ($(divActionList).is(":hover") == false) {
                         $(divActionList).remove();
                     }
-                }, 1000);
-            });
+                }, 1000)
+            })
             $(divActionList).fadeIn();
         }
-        MessageHandlers.ReceiveGetAreaActions = ReceiveGetAreaActions;
-        function ReceiveGetAreaOccupants(JsonMessage) {
-            var point = After.Temp.ButtonPoint;
+        ReceiveGetAreaOccupants(JsonMessage) {
+            var point = (After.Temp.ButtonPoint as MouseEvent | Touch);
             var divOccupantList = document.createElement("div");
             $(divOccupantList).css({
                 "position": "fixed",
                 "display": "none",
                 "border": "1px solid lightgray"
-            });
+            })
             if (point.clientX <= document.documentElement.clientWidth / 2) {
                 divOccupantList.style.left = point.clientX + "px";
             }
@@ -551,50 +536,49 @@ var After;
                     "cursor": "pointer",
                     "font-weight": "bold",
                     "user-select": "none"
-                });
+                })
                 occupant.classList.add("font-sansserif");
                 occupant.setAttribute("targetxyz", JsonMessage.TargetXYZ);
-                $(occupant).hover(function (e) {
+                $(occupant).hover((e) => {
                     $(e.currentTarget).css("background-color", "white");
-                }, function (e) {
+                }, (e) => {
                     $(e.currentTarget).css("background-color", "rgba(255,255,255, .75)");
-                });
+                })
                 occupant.innerHTML = JsonMessage.Occupants[i].DisplayName;
                 occupant.id = JsonMessage.Occupants[i].StorageID;
-                occupant.onclick = function (e) {
-                    var xyz = e.currentTarget.getAttribute("targetxyz");
-                    var occupantID = e.currentTarget.id;
+                occupant.onclick = (e) => {
+                    var xyz = (e.currentTarget as HTMLDivElement).getAttribute("targetxyz");
+                    var occupantID = (e.currentTarget as HTMLDivElement).id;
                     var request = {
                         "Category": "Events",
                         "Type": "AreaOccupantClicked",
                         "TargetXYZ": xyz,
                         "Occupant": occupantID
-                    };
+                    }
                     After.Connection.Socket.send(JSON.stringify(request));
                     // TODO: Handle this on other end.
-                };
+                }
                 divOccupantList.appendChild(occupant);
             }
             document.body.appendChild(divOccupantList);
-            $(window).one("click", function () {
-                window.setTimeout(function () {
+            $(window).one("click", () => {
+                window.setTimeout(() => {
                     $(divOccupantList).remove();
                 }, 250);
             });
-            $(window).one("touchstart", function () {
-                window.setTimeout(function () {
+            $(window).one("touchstart", () => {
+                window.setTimeout(() => {
                     $(divOccupantList).remove();
                 }, 250);
             });
-            $(divOccupantList).mouseout(function () {
-                window.setTimeout(function () {
+            $(divOccupantList).mouseout(() => {
+                window.setTimeout(() => {
                     if ($(divOccupantList).is(":hover") == false) {
                         $(divOccupantList).remove();
                     }
-                }, 1000);
-            });
+                }, 1000)
+            })
             $(divOccupantList).fadeIn();
         }
-        MessageHandlers.ReceiveGetAreaOccupants = ReceiveGetAreaOccupants;
-    })(MessageHandlers = After.MessageHandlers || (After.MessageHandlers = {}));
-})(After || (After = {}));
+    }
+}

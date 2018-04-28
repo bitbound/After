@@ -19,33 +19,8 @@ namespace After.Models
             CurrentWillpower = 100;
         }
         public string Type { get; set; }
-        public string StorageID { get; set; }
         public string DisplayName { get; set; }
-        public string Name
-        {
-            get
-            {
-                if (this is Player)
-                {
-                    return StorageID;
-                }
-                else
-                {
-                    return DisplayName;
-                }
-            }
-            set
-            {
-                if (this is Player)
-                {
-                    StorageID = value;
-                }
-                else
-                {
-                    DisplayName = value;
-                }
-            }
-        }
+        public string StorageID { get; set; }
         public string Color { get; set; } = "gray";
         public string PortraitUri { get; set; }
         public double CoreEnergyPeak { get; set; }
@@ -113,36 +88,9 @@ namespace After.Models
                 return CurrentWillpower / MaxWillpower;
             }
         }
-        public string PreviousXYZ { get; set; }
-        public string FutureXYZ { get; set; }
-        public double? XCoord { get; set; }
-        public double? YCoord { get; set; }
-        public string ZCoord { get; set; }
-        public string CurrentXYZ
-        {
-            get
-            {
-                if (XCoord == null || YCoord == null || ZCoord == null)
-                {
-                    return null;
-                }
-                return $"{XCoord},{YCoord},{ZCoord}";
-            }
-            set
-            {
-                if (value == null)
-                {
-                    XCoord = null;
-                    YCoord = null;
-                    return;
-                }
-                var locArray = value.Split(',');
-                this.XCoord = double.Parse(locArray[0]);
-                this.YCoord = double.Parse(locArray[1]);
-                this.ZCoord = locArray[2];
-            }
-        }
-        public double ViewDistance { get; set; } = 2;
+        public string CurrentLocation { get; set; }
+        public string PreviousLocation { get; set; }
+        public List<string> RemotelyViewingLocations { get; set; } = new List<string>();
        
         public bool IsCharging { get; set; }
 
@@ -153,9 +101,7 @@ namespace After.Models
         public enum MovementStates
         {
             Ready,
-            Teleporting,
             Moving,
-            Traveling,
             Combat,
             Dialog
         }
@@ -166,116 +112,28 @@ namespace After.Models
         //*** Utility Methods ***//
         public Location GetCurrentLocation()
         {
-            if (CurrentXYZ == null)
-            {
-                return null;
-            }
-            return Storage.Current.Locations.Find(CurrentXYZ);
+            return Storage.Locations.Find(CurrentLocation);
         }
-        public Location GetPreviousLocation(Storage Context)
+        public Location GetPreviousLocation()
         {
-            return Context.Locations.Find(PreviousXYZ);
+            return Storage.Locations.Find(PreviousLocation);
         }
         public List<Location> GetVisibleLocations()
         {
             List<Location> visibleList = new List<Location>();
-            if (CurrentXYZ == null)
+            if (Storage.Locations.Exists(CurrentLocation))
             {
-                return visibleList;
+                visibleList.Add(Storage.Locations.Find(CurrentLocation));
             }
-            var location = Storage.Current.Locations.Find(CurrentXYZ);
-            if (location == null)
+
+            foreach (var remoteLocation in RemotelyViewingLocations)
             {
-                return visibleList;
-            }
-            for (var x = location.XCoord - ViewDistance; x <= location.XCoord + ViewDistance; x++)
-            {
-                for (var y = location.YCoord - ViewDistance; y <= location.YCoord + ViewDistance; y++)
+                if (Storage.Locations.Exists(remoteLocation))
                 {
-                    if (Math.Sqrt(
-                        Math.Pow(x - location.XCoord, 2) +
-                        Math.Pow(y - location.YCoord, 2)
-                    ) <= ViewDistance)
-                    {
-                        var storageID = $"{x.ToString()},{y.ToString()},{location.ZCoord}";
-                        if (Storage.Current.Locations.Exists(storageID))
-                            visibleList.Add(Storage.Current.Locations.Find(storageID));
-                    }
+                    visibleList.Add(Storage.Locations.Find(remoteLocation));
                 }
             }
             return visibleList;
-        }
-        public async Task Move(string[] ToXYZ)
-        {
-            dynamic request;
-            var toLocation = Storage.Current.Locations.Find($"{ToXYZ[0]},{ToXYZ[1]},{ToXYZ[2]}");
-            if (toLocation == null)
-            {
-                toLocation = Location.CreateTempLocation(ToXYZ);
-                var area = toLocation.ConvertToArea(true);
-                request = new
-                {
-                    Category = "Events",
-                    Type = "AreaCreated",
-                    Area = area
-                };
-                foreach (var player in toLocation.GetNearbyPlayers())
-                {
-                    player.SendString(JSON.Encode(request));
-                }
-            }
-            
-            // TODO: Check if blocked.
-            var soul = ConvertToSoul();
-            var currentLocation = GetCurrentLocation();
-            if (currentLocation == null)
-            {
-                currentLocation = Location.CreateTempLocation(new string[] { XCoord.ToString(), YCoord.ToString(), ZCoord });
-                var area = currentLocation.ConvertToArea(true);
-                request = new
-                {
-                    Category = "Events",
-                    Type = "AreaCreated",
-                    Area = area
-                };
-                foreach (var player in currentLocation.GetNearbyPlayers())
-                {
-                    await player.SendString(JSON.Encode(request));
-                }
-            }
-            MovementState = MovementStates.Moving;
-            var distance = currentLocation.GetDistanceFrom(toLocation);
-            var travelTime = distance * 1000;
-            var nearbyPlayers = currentLocation.GetNearbyPlayers();
-            foreach (var player in toLocation.GetNearbyPlayers())
-            {
-                if (!nearbyPlayers.Contains(player))
-                {
-                    nearbyPlayers.Add(player);
-                }
-            }
-            await currentLocation.CharacterLeaves(this);
-            FutureXYZ = toLocation.StorageID;
-            request = JSON.Encode(new
-            {
-                Category = "Events",
-                Type = "PlayerMove",
-                Soul = soul,
-                From = currentLocation.StorageID,
-                To = toLocation.StorageID,
-                TravelTime = travelTime
-            });
-            foreach (var player in nearbyPlayers)
-            {
-                await player.SendString(request);
-            }
-            await Task.Run(async () => {
-                Thread.Sleep((int)(Math.Round(travelTime)));
-                CurrentXYZ = toLocation.StorageID;
-                FutureXYZ = null;
-                await toLocation.CharacterArrives(this);
-                MovementState = MovementStates.Ready;
-            });
         }
         public async Task StartCharging()
         {
@@ -288,7 +146,7 @@ namespace After.Models
                     Result = "ok"
 
                 };
-                await (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
+                await (this as Player).GetSocketClient().SendString(JSON.Encode(request));
             }
             IsCharging = true;
             if (Timers.ContainsKey("ChargeTimer"))
@@ -311,8 +169,8 @@ namespace After.Models
                 
                 if (this is Player)
                 {
-                    var handler = (this as Player).GetSocketHandler();
-                    if (handler == null)
+                    var socket = (this as Player).GetSocketClient();
+                    if (socket == null)
                     {
                         (sen as System.Timers.Timer).Stop();
                         (sen as System.Timers.Timer).Dispose();
@@ -327,17 +185,17 @@ namespace After.Models
                         Stat = "CurrentCharge",
                         Amount = CurrentCharge
                     };
-                    handler.SendString(JSON.Encode(update));
+                    socket.SendString(JSON.Encode(update));
                 }
-                foreach (var player in Storage.Current.Locations.Find(CurrentXYZ).GetNearbyPlayers().Where(p=>p?.Player?.Name != Name))
+                foreach (var occupant in Storage.Locations.Find(CurrentLocation).Occupants.Where(x=>x.OccupantType == OccupantTypes.Player))
                 {
                     dynamic request = new
                     {
                         Category = "Events",
                         Type = "CharacterCharging",
-                        Location = CurrentXYZ
+                        Location = CurrentLocation
                     };
-                    player.SendString(JSON.Encode(request));
+                    Storage.Players.Find(occupant.StorageID).GetSocketClient().SendString(JSON.Encode(request));
                 }
             };
             Timers.Add("ChargeTimer", timer);
@@ -354,7 +212,7 @@ namespace After.Models
                     Result = "ok"
 
                 };
-                await (this as Player).GetSocketHandler().SendString(JSON.Encode(request));
+                await (this as Player).GetSocketClient().SendString(JSON.Encode(request));
             }
             if (Timers.ContainsKey("ChargeTimer"))
             {
@@ -376,7 +234,7 @@ namespace After.Models
                 }
                 if (this is Player)
                 {
-                    var handler = (this as Player).GetSocketHandler();
+                    var handler = (this as Player).GetSocketClient();
                     if (handler == null)
                     {
                         (sen as System.Timers.Timer).Stop();
@@ -392,7 +250,7 @@ namespace After.Models
                         Stat = "CurrentCharge",
                         Amount = CurrentCharge
                     };
-                    (this as Player).GetSocketHandler().SendString(JSON.Encode(update));
+                    (this as Player).GetSocketClient().SendString(JSON.Encode(update));
                 }
             };
             Timers.Add("ChargeTimer", timer);
@@ -400,15 +258,12 @@ namespace After.Models
         }
         public dynamic ConvertToSoul()
         {
-            var location = CurrentXYZ.Split(',');
             return new
             {
-                Name = this.Name,
+                Name = this.DisplayName,
                 Color = this.Color,
-                XCoord = location[0],
-                YCoord = location[1],
-                ZCoord = location[2],
-                CurrentXYZ = this.CurrentXYZ
+                Location = CurrentLocation,
+                CurrentLocation = this.CurrentLocation
             };
         }
     }

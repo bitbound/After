@@ -22,13 +22,13 @@
         }
         Name: string;
         Color: string;
-        get CurrentXYZ() {
+        get CurrentLocation() {
             if (this.XCoord == null || this.YCoord == null || this.ZCoord == null) {
                 return null;
             }
             return this.XCoord.toString() + "," + this.YCoord.toString() + "," + this.ZCoord;
         };
-        set CurrentXYZ(XYZ: string) {
+        set CurrentLocation(XYZ: string) {
             if (XYZ == null) {
                 this.XCoord = null;
                 this.YCoord = null;
@@ -147,7 +147,7 @@
 
         //*** Utility Functions ***//
         GetCurrentLocation() :After.Models.Area {
-            return After.Storage.Areas.find((value) => { return value.StorageID == After.Me.CurrentXYZ; });
+            return After.Storage.Areas.find((value) => { return value.StorageID == After.Me.CurrentLocation; });
         }
         SyncParticleCoords(): void {
             After.Me.Particles.forEach(function(value, index) {

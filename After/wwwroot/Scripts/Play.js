@@ -11,6 +11,7 @@ var After;
     After.Me = new After.App.Me();
     After.Settings = new After.App.Settings();
     After.Utilities = new After.App.Utilities();
+    After.MessageHandlers = new After.App.MessageHandlers();
 })(After || (After = {}));
 (function (After) {
     var Storage;

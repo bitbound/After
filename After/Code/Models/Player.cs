@@ -14,6 +14,7 @@ namespace After.Models
         public string Email { get; set; }
         public List<string> AuthenticationTokens { get; set; } = new List<string>();
         public Settings Settings { get; set; } = new Settings();
+        public string InnerVoidLocation { get; set; }
 
         public bool Kicked { get; set; }
         public bool IsBanned { get; set; }
@@ -35,16 +36,16 @@ namespace After.Models
 
         public override string ToString()
         {
-            return Name;
+            return StorageID;
         }
 
         public bool IsLoggedIn()
         {
-            return App.Server.ClientList.Exists(client => client?.Player?.Name == Name);
+            return App.Server.ClientList.Exists(client => client?.Player?.StorageID == StorageID);
         }
-        public WebSocketClient GetSocketHandler()
+        public WebSocketClient GetSocketClient()
         {
-            return App.Server.ClientList.Find(client => client?.Player?.Name == Name);
+            return App.Server.ClientList.Find(client => client?.Player?.StorageID == StorageID);
         }
         public async Task WarnOrBan(WebSocketClient WSC)
         {
@@ -82,15 +83,11 @@ namespace After.Models
         }
         public dynamic ConvertToMe()
         {
-            var location = CurrentXYZ.Split(',');
             return new
             {
-                Name = this.Name,
+                Name = this.DisplayName,
                 Color = this.Color,
-                XCoord = location[0],
-                YCoord = location[1],
-                ZCoord = location[2],
-                CurrentXYZ = this.CurrentXYZ,
+                CurrentLocation = this.CurrentLocation,
                 CoreEnergy = this.CoreEnergy,
                 CoreEnergyPeak = this.CoreEnergyPeak,
                 CurrentEnergy = this.CurrentEnergy,
@@ -101,8 +98,7 @@ namespace After.Models
                 MaxChargeModifier = this.MaxChargeModifier,
                 CurrentWillpower = this.CurrentWillpower,
                 MaxWillpower = this.MaxWillpower,
-                MaxWillpowerModifier = this.MaxWillpowerModifier,
-                ViewDistance = this.ViewDistance
+                MaxWillpowerModifier = this.MaxWillpowerModifier
             };
         }
     }

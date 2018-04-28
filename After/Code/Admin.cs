@@ -23,7 +23,7 @@ namespace After
         }
         public static void DeletePlayer(string Name)
         {
-            Storage.Current.Players.Remove(Name);
+            Storage.Players.Remove(Name);
             foreach (var file in Directory.GetFiles(Path.Combine(App.DataPath, "Storage\\Landmarks")).Where(file => file.ToLower().Contains(Name.ToLower())))
             {
                 File.Delete(file);

@@ -10,5 +10,7 @@ namespace After.Models
     {
         public string DisplayName { get; set; }
         public string StorageID { get; set; }
+
+        public OccupantTypes OccupantType { get; set; }
     }
 }

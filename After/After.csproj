@@ -21,7 +21,6 @@
     <Content Remove="wwwroot\Scripts\Controls\Game.ts" />
     <Content Remove="wwwroot\Scripts\Controls\Intro.ts" />
     <Content Remove="wwwroot\Scripts\Controls\Splash.ts" />
-    <Content Remove="wwwroot\Scripts\MessageHandlers\Receive.ts" />
     <Content Remove="wwwroot\Scripts\Models\Area.ts" />
     <Content Remove="wwwroot\Scripts\Models\Bases\Selectable.ts" />
     <Content Remove="wwwroot\Scripts\Models\FreeParticle.ts" />
@@ -54,7 +53,6 @@
     <Folder Include="wwwroot\Data\ClientErrors\" />
     <Folder Include="wwwroot\Data\Errors\" />
     <Folder Include="wwwroot\Data\Logs\" />
-    <Folder Include="wwwroot\Data\Storage\Landmarks\" />
     <Folder Include="wwwroot\Data\Storage\Locations\" />
     <Folder Include="wwwroot\Data\Storage\Messages\" />
     <Folder Include="wwwroot\Data\Storage\NPCs\" />
@@ -89,7 +87,7 @@
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Game.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\Intro.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Index.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\MessageHandlers\Receive.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\MessageHandlers.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Area.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\Bases\Selectable.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Models\FreeParticle.ts" />

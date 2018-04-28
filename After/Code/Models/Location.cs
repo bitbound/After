@@ -15,20 +15,8 @@ namespace After.Models
         public double XCoord { get; set; }
         public double YCoord { get; set; }
         public string ZCoord { get; set; }
-        public string StorageID
-        {
-            get
-            {
-                return XCoord.ToString() + "," + YCoord.ToString() + "," + ZCoord.ToString();
-            }
-            set
-            {
-                var split = value.Split(',');
-                XCoord = double.Parse(split[0]);
-                YCoord = double.Parse(split[1]);
-                ZCoord = split[2];
-            }
-        }
+        public string StorageID { get; set; }
+        
         public string Color { get; set; } = "darkgray";
 
         public string Title { get; set; }
@@ -58,15 +46,22 @@ namespace After.Models
         }
         public List<WebSocketClient> GetNearbyPlayers()
         {
-            return App.Server.ClientList.Where(client => (client?.Player as Player)?.GetCurrentLocation()?.GetDistanceFrom(this) <= client?.Player?.ViewDistance).ToList();
+            var nearbyPlayers = new List<WebSocketClient>();
+            nearbyPlayers.AddRange(App.Server.ClientList.Where(client => client?.Player?.CurrentLocation == StorageID));
+            nearbyPlayers.AddRange(App.Server.ClientList.Where(client => client?.Player?.RemotelyViewingLocations?.Contains(StorageID) ?? false));
+            return nearbyPlayers;
         }
-        public async Task CharacterArrives(Character CharacterObject)
+        public async Task CharacterArrives(Character arrivingCharacter)
         {
-            CharacterObject.CurrentXYZ = StorageID;
-            Occupants.Add(new Occupant() { DisplayName = CharacterObject.DisplayName, StorageID = CharacterObject.StorageID });
+            arrivingCharacter.CurrentLocation = StorageID;
+            Occupants.Add(new Occupant() {
+                DisplayName = arrivingCharacter.DisplayName,
+                StorageID = arrivingCharacter.StorageID,
+                OccupantType = (arrivingCharacter is Player) ? OccupantTypes.Player : OccupantTypes.NPC
+            });
             LastVisited = DateTime.Now;
-            LastVisitedBy = CharacterObject.Name;
-            var soul = CharacterObject.ConvertToSoul();
+            LastVisitedBy = arrivingCharacter.StorageID;
+            var soul = arrivingCharacter.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers();
             var request = JSON.Encode(new
             {
@@ -80,15 +75,15 @@ namespace After.Models
             }
             foreach (var occupant in Occupants)
             {
-                Storage.Current.NPCs.Find(occupant.StorageID)?.CheckAwareness(CharacterObject);
+                Storage.NPCs.Find(occupant.StorageID)?.CheckAwareness(arrivingCharacter);
             }
         }
         public async Task CharacterLeaves(Character CharacterObject)
         {
             var soul = CharacterObject.ConvertToSoul();
             var nearbyPlayers = GetNearbyPlayers();
-            CharacterObject.CurrentXYZ = null;
-            CharacterObject.PreviousXYZ = this.StorageID;
+            CharacterObject.CurrentLocation = null;
+            CharacterObject.PreviousLocation = this.StorageID;
             Occupants.RemoveAll(occ=>occ.StorageID == CharacterObject.StorageID);
             var request = JSON.Encode(new
             {
@@ -150,7 +145,7 @@ namespace After.Models
             location.Title = "Empty Area";
             location.LastAccessed = DateTime.Now;
             location.LastVisited = DateTime.Now;
-            Storage.Current.Locations.Add(location);
+            Storage.Locations.Add(location);
             return location;
         }
     }
