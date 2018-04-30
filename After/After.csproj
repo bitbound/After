@@ -15,6 +15,7 @@
     <Content Remove="wwwroot\Scripts\App\Me.ts" />
     <Content Remove="wwwroot\Scripts\App\Settings.ts" />
     <Content Remove="wwwroot\Scripts\App\Temp.ts" />
+    <Content Remove="wwwroot\Scripts\App\UI.ts" />
     <Content Remove="wwwroot\Scripts\App\Utilities.ts" />
     <Content Remove="wwwroot\Scripts\Controls\CreateAccount.ts" />
     <Content Remove="wwwroot\Scripts\Controls\CreateCharacter.ts" />
@@ -81,6 +82,7 @@
     <TypeScriptCompile Include="wwwroot\Scripts\App\Me.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Settings.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Temp.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\UI.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\App\Utilities.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\CreateAccount.ts" />
     <TypeScriptCompile Include="wwwroot\Scripts\Controls\CreateCharacter.ts" />

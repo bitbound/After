@@ -401,17 +401,17 @@ var After;
                                 After.Temp.ActiveFrame.css("z-index", 0);
                                 After.Temp.ActiveFrame.height(0);
                             }
-                            if (!After.Settings.LockTabs) {
-                                var newLeft = After.Temp.StartLeft + e.clientX - After.Temp.StartPoint.clientX;
-                                if (newLeft > 10) {
-                                    if (newLeft < document.body.clientWidth - 60) {
-                                        After.Temp.ActiveFrame.css("left", newLeft + "px");
-                                    }
-                                }
-                                else {
-                                    After.Temp.ActiveFrame.css("left", "10px");
-                                }
-                            }
+                            //    if (!After.Settings.LockTabs) {
+                            //        var newLeft = After.Temp.StartLeft + e.clientX - After.Temp.StartPoint.clientX;
+                            //        if (newLeft > 10) {
+                            //            if (newLeft < document.body.clientWidth - 60) {
+                            //                After.Temp.ActiveFrame.css("left", newLeft + "px");
+                            //            }
+                            //        }
+                            //        else {
+                            //            After.Temp.ActiveFrame.css("left", "10px");
+                            //        }
+                            //    }
                         }
                     };
                     window.onmouseleave = function (e) {
@@ -472,17 +472,17 @@ var After;
                                     After.Temp.ActiveFrame.css("z-index", 0);
                                     After.Temp.ActiveFrame.height(0);
                                 }
-                                if (!After.Settings.LockTabs) {
-                                    var newLeft = After.Temp.StartLeft + e.touches[0].clientX - After.Temp.StartPoint.clientX;
-                                    if (newLeft > 10) {
-                                        if (newLeft < document.body.clientWidth - 60) {
-                                            After.Temp.ActiveFrame.css("left", newLeft + "px");
-                                        }
-                                    }
-                                    else {
-                                        After.Temp.ActiveFrame.css("left", "10px");
-                                    }
-                                }
+                                //if (!After.Settings.LockTabs) {
+                                //    var newLeft = After.Temp.StartLeft + e.touches[0].clientX - After.Temp.StartPoint.clientX;
+                                //    if (newLeft > 10) {
+                                //        if (newLeft < document.body.clientWidth - 60) {
+                                //            After.Temp.ActiveFrame.css("left", newLeft + "px");
+                                //        }
+                                //    }
+                                //    else {
+                                //        After.Temp.ActiveFrame.css("left", "10px");
+                                //    }
+                                //}
                             }
                         };
                         window.ontouchend = function (e) {
@@ -631,17 +631,17 @@ var After;
                                 After.Temp.ActiveFrame.css("z-index", 0);
                                 After.Temp.ActiveFrame.width(0);
                             }
-                            if (!After.Settings.LockTabs) {
-                                var newBottom = After.Temp.StartBottom + After.Temp.StartPoint.clientY - e.clientY;
-                                if (newBottom > 85) {
-                                    if (newBottom < document.body.clientHeight - 85) {
-                                        After.Temp.ActiveFrame.css("bottom", newBottom + "px");
-                                    }
-                                }
-                                else {
-                                    After.Temp.ActiveFrame.css("bottom", "85px");
-                                }
-                            }
+                            //if (!After.Settings.LockTabs) {
+                            //    var newBottom = After.Temp.StartBottom + After.Temp.StartPoint.clientY - e.clientY;
+                            //    if (newBottom > 85) {
+                            //        if (newBottom < document.body.clientHeight - 85) {
+                            //            After.Temp.ActiveFrame.css("bottom", newBottom + "px");
+                            //        }
+                            //    }
+                            //    else {
+                            //        After.Temp.ActiveFrame.css("bottom", "85px");
+                            //    }
+                            //}
                         }
                     };
                     window.onmouseleave = function (e) {
@@ -706,17 +706,17 @@ var After;
                                     After.Temp.ActiveFrame.css("z-index", 0);
                                     After.Temp.ActiveFrame.width(0);
                                 }
-                                if (!After.Settings.LockTabs) {
-                                    var newBottom = After.Temp.StartBottom + After.Temp.StartPoint.clientY - e.touches[0].clientY;
-                                    if (newBottom > 85) {
-                                        if (newBottom < document.body.clientHeight - 85) {
-                                            After.Temp.ActiveFrame.css("bottom", newBottom + "px");
-                                        }
-                                    }
-                                    else {
-                                        After.Temp.ActiveFrame.css("bottom", "85px");
-                                    }
-                                }
+                                //if (!After.Settings.LockTabs) {
+                                //    var newBottom = After.Temp.StartBottom + After.Temp.StartPoint.clientY - e.touches[0].clientY;
+                                //    if (newBottom > 85) {
+                                //        if (newBottom < document.body.clientHeight - 85) {
+                                //            After.Temp.ActiveFrame.css("bottom", newBottom + "px");
+                                //        }
+                                //    }
+                                //    else {
+                                //        After.Temp.ActiveFrame.css("bottom", "85px");
+                                //    }
+                                //}
                             }
                         };
                         window.ontouchend = function (e) {

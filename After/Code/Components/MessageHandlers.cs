@@ -45,7 +45,10 @@ namespace After.Code.Classes.WebSockets
                 var innerVoid = new Location()
                 {
                     Title = $"{username}'s Inner Void",
-                    Description = "This is a plane of existence that lies within your own soul.",
+                    Description = @"Where are you?  The question lazily formulates in your mind.  Once it solidifies into a true desire to know,
+                                    the space around you suddenly changes.  The change is subtle but definitive, and you
+                                    recognize immediately that your will alone caused it to happen.You are still surrounded by emptiness,
+                                    but you are in a small pocket of existence that you just now forced into being.",
                     OwnerID = username,
                     IsStatic = true,
                     StorageID = player.CurrentLocation,
@@ -193,7 +196,9 @@ namespace After.Code.Classes.WebSockets
                 {
                     clientList.Remove(existing[i]);
                     await existing[i].SendString(JSON.Encode(message));
-                    await existing[i].ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
+                    existing[i].ClientSocket.Abort();
+                    // TODO: Close broken?
+                    //await existing[i].ClientSocket.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Account logged in elsewhere.", CancellationToken.None);
                     existing[i].ClientSocket.Dispose();
                 }
             }

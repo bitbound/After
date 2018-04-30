@@ -9,6 +9,7 @@
     export const Input = new After.App.Input();
     export const Me = new After.App.Me();
     export const Settings = new After.App.Settings();
+    export const UI = new After.App.UI();
     export const Utilities = new After.App.Utilities();
     export const MessageHandlers = new After.App.MessageHandlers();
 }

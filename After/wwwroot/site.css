@@ -28,9 +28,11 @@ select {
 }
 button:hover {
     background-color: dimgray;
+    transition: .2s all;
 }
 button:active {
     background-color: gray;
+    transition: .1s all;
 }
 
 .hidden {

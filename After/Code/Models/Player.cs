@@ -85,20 +85,21 @@ namespace After.Models
         {
             return new
             {
-                Name = this.DisplayName,
-                Color = this.Color,
-                CurrentLocation = this.CurrentLocation,
-                CoreEnergy = this.CoreEnergy,
-                CoreEnergyPeak = this.CoreEnergyPeak,
-                CurrentEnergy = this.CurrentEnergy,
-                MaxEnergy = this.MaxEnergy,
-                MaxEnergyModifier = this.MaxEnergyModifier,
-                CurrentCharge = this.CurrentCharge,
-                MaxCharge = this.MaxCharge,
-                MaxChargeModifier = this.MaxChargeModifier,
-                CurrentWillpower = this.CurrentWillpower,
-                MaxWillpower = this.MaxWillpower,
-                MaxWillpowerModifier = this.MaxWillpowerModifier
+                this.DisplayName,
+                this.Color,
+                this.CurrentLocation,
+                this.CoreEnergy,
+                this.CoreEnergyPeak,
+                this.CurrentEnergy,
+                this.MaxEnergy,
+                this.MaxEnergyModifier,
+                this.CurrentCharge,
+                this.MaxCharge,
+                this.MaxChargeModifier,
+                this.CurrentWillpower,
+                this.MaxWillpower,
+                this.MaxWillpowerModifier,
+                this.Powers
             };
         }
     }

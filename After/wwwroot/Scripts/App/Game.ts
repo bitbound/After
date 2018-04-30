@@ -3,20 +3,6 @@
         constructor() {
             
         }
-        AddChatMessage(Message: string, Color: string) {
-            var spanMessage = document.createElement("span");
-            spanMessage.style.color = Color;
-            spanMessage.innerText = Message;
-            $("#divChatMessageWindow").append(spanMessage);
-            $("#divChatMessageWindow").append("<br/>");
-            var divChat = document.getElementById("divChatMessageWindow");
-            if (divChat != null) {
-                if ($("#divChatMessageWindow").height() == 0) {
-                    $("#divChatIconBorder").addClass("blinking");
-                }
-                divChat.scrollTop = divChat.scrollHeight;
-            }
-        };
         AddPower(e) {
             if ($("#divPowersFrame .tab-innerframe #divPowersCategory-" + e.Category).length == 0) {
                 var header = document.createElement("div");

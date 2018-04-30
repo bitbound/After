@@ -10,6 +10,7 @@ var After;
     After.Input = new After.App.Input();
     After.Me = new After.App.Me();
     After.Settings = new After.App.Settings();
+    After.UI = new After.App.UI();
     After.Utilities = new After.App.Utilities();
     After.MessageHandlers = new After.App.MessageHandlers();
 })(After || (After = {}));

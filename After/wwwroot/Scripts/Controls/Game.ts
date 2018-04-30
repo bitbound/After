@@ -6,11 +6,6 @@ namespace After.Controls {
                 $("#divLogin").hide();
                 $.get("/Controls/Game.html", function (data) {
                     $(document.body).append(data);
-                    var spanMessage = document.createElement("span");
-                    spanMessage.style.color = "whitesmoke";
-                    spanMessage.innerHTML = "Welcome to After!<br/><br/>This game is in the beginning stages of development.  Check out the dev blog for updates!";
-                    $("#divChatMessageWindow").append(spanMessage);
-                    $("#divChatMessageWindow").append("<br/>");
                     After.Controls.Game.Load();
                 });
             });

@@ -173,7 +173,7 @@ var After;
                     });
                     After.Storage.Areas[index].Occupants.push(JsonMessage.Soul.Name);
                     if (JsonMessage.Soul.CurrentLocation == After.Me.CurrentLocation) {
-                        After.Game.AddChatMessage(JsonMessage.Soul.Name + " has arrived.", "whitesmoke");
+                        After.UI.AddMessageNoSender(JsonMessage.Soul.Name + " has arrived.", "whitesmoke");
                     }
                 }
             }
@@ -192,7 +192,7 @@ var After;
                     After.Storage.Areas[areaIndex].Occupants.splice(occupantIndex, 1);
                     After.Storage.Souls.splice(soulIndex, 1);
                     if (JsonMessage.Soul.CurrentLocation == After.Me.CurrentLocation) {
-                        After.Game.AddChatMessage(JsonMessage.Soul.Name + " has left.", "whitesmoke");
+                        After.UI.AddMessageNoSender(JsonMessage.Soul.Name + " has left.", "whitesmoke");
                     }
                 }
             }
@@ -223,13 +223,13 @@ var After;
                             After.Me.IsMoving = false;
                         }
                     });
-                    if (After.Settings.FollowPlayer) {
-                        for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 10) {
-                            window.setTimeout(() => {
-                                After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, false);
-                            }, i);
-                        }
-                    }
+                    //if (After.Settings.FollowPlayer) {
+                    //    for (var i = 0; i < Number(JsonMessage.TravelTime); i = i + 10) {
+                    //        window.setTimeout(() => {
+                    //            After.Canvas.CenterOnCoords(After.Me.XCoord, After.Me.YCoord, false, false);
+                    //        }, i)
+                    //    }
+                    //}
                 }
                 else {
                     for (var i = 0; i < 50; i++) {
@@ -279,18 +279,10 @@ var After;
             ReceiveChat(JsonData) {
                 switch (JsonData.Channel) {
                     case "Global":
-                        var spanMessage = document.createElement("span");
-                        spanMessage.style.color = "whitesmoke";
-                        var spanChannel = document.createElement("span");
-                        spanChannel.innerText = "(" + JsonData.Channel + ") " + JsonData.Username + ": ";
-                        spanChannel.style.color = "seagreen";
-                        spanMessage.innerText = JsonData.Message;
-                        $("#divChatMessageWindow").append(spanChannel);
-                        $("#divChatMessageWindow").append(spanMessage);
-                        $("#divChatMessageWindow").append("<br/>");
+                        After.UI.AddChatMessage("Global", After.Settings.UIColors.GlobalChat, JsonData.Username, JsonData.Message, "whitesmoke");
                         break;
                     case "System":
-                        After.Game.AddChatMessage(JsonData.Message, "whitesmoke");
+                        After.UI.AddMessageNoSender(JsonData.Message, "whitesmoke");
                         break;
                     default:
                         break;

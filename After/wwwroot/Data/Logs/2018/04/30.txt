@@ -1,0 +1,2 @@
+DIAGNOSTICS - 4/30/2018 6:25:31 AM - Boot time took 0.3840742 seconds.
+DIAGNOSTICS - 4/30/2018 6:40:09 AM - Boot time took 0.1648057 seconds.
