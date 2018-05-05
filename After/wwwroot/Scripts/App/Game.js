@@ -5,6 +5,35 @@ var After;
         class Game {
             constructor() {
             }
+            Init() {
+                After.Temp = {};
+                $("#divLogin").animate({ opacity: 0 }, 1000, function () {
+                    $("#divLogin").hide();
+                    After.Game.Load();
+                });
+            }
+            ;
+            Load() {
+                After.Canvas.Element = document.getElementById("canvasMap");
+                After.Canvas.Context2D = After.Canvas.Element.getContext("2d");
+                After.Canvas.Element.width = document.documentElement.clientWidth;
+                After.Canvas.Element.height = document.documentElement.clientHeight;
+                $("#divGame").animate({ opacity: 1 }, 1000);
+                // TODO: Revamp disconnect so page reload isn't necessary.
+                $("#divLogin").remove();
+                $("#divIntro").remove();
+                $("#divCreateAccount").remove();
+                if (After.Debug) {
+                    $("#divDebug").show();
+                }
+                After.Input.SetInputHandlers();
+                After.Game.PositionSideTabs();
+                var query = {
+                    "Category": "Queries",
+                    "Type": "FirstLoad"
+                };
+                After.Connection.Socket.send(JSON.stringify(query));
+            }
             AddPower(e) {
                 if ($("#divPowersFrame .tab-innerframe #divPowersCategory-" + e.Category).length == 0) {
                     var header = document.createElement("div");

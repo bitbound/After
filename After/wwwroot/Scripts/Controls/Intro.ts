@@ -16,7 +16,7 @@ After.Temp.Intro.Start = function () {
                             window.setTimeout(function () {
                                 $("#divLogo").animate({ opacity: 0 }, 1500, function () {
                                     $("#divLogo").remove();
-                                    After.Audio.StreamLoop("/Assets/Sounds/urupin__heartbeat.mp3");
+                                    After.Audio.PlayLoop("/Assets/Sounds/urupin__heartbeat.mp3", false, null);
                                     window.setTimeout(function () {
                                         ATI.Narrate();
                                         $("#buttonSkip").fadeIn();
@@ -35,7 +35,7 @@ After.Temp.Intro.Start = function () {
         ATI.Skip = function () {
             $("#divIntro").hide();
             $("#divLogo").hide();
-            After.Audio.StopStreamLoop();
+            After.Audio.StopLoop();
             $.get("/Controls/CreateCharacter.html", function (data) {
                 $(document.body).append(data);
                 After.Temp.CreateCharacter.Init();
@@ -46,7 +46,7 @@ After.Temp.Intro.Start = function () {
             window.setTimeout(function () {
                 if (ATI.CurrentPosition == ATI.AllLines.length) {
                     $("#divIntro").hide();
-                    After.Audio.StopStreamLoop();
+                    After.Audio.StopLoop();
                     $.get("/Controls/CreateAccount.html", function (data) {
                         $(document.body).append(data);
                     });
@@ -76,7 +76,7 @@ After.Temp.Intro.Start = function () {
                     $("#divIntro").one("click", function () {
                         ATI.IsPaused = false;
                         if ($("#divNarration").text().search("Your passing was") > -1) {
-                            After.Audio.StopStreamLoop();
+                            After.Audio.StopLoop();
                             $("#divNarration").html("");
                             $("#divIntro").hide();
                             $.get("/Controls/CreateCharacter.html", function (data) {

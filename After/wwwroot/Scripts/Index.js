@@ -12,16 +12,24 @@ function raiseParticle() {
     }
     catch (ex) { }
 }
-function streamAudio(sourceFile) {
-    var audio = document.createElement("audio");
-    audio.classList.add("audio-stream-loop");
-    audio.src = sourceFile;
-    audio.loop = true;
-    document.body.appendChild(audio);
-    audio.play();
+function playAudio(sourceFile) {
+    var audioCtx = new AudioContext();
+    var source = audioCtx.createBufferSource();
+    source.loop = true;
+    var request = new XMLHttpRequest();
+    request.responseType = "arraybuffer";
+    request.open("GET", sourceFile, true);
+    request.onload = function () {
+        audioCtx.decodeAudioData(request.response, function (buffer) {
+            source.buffer = buffer;
+            source.connect(audioCtx.destination);
+            source.start(0);
+        });
+    };
+    request.send();
 }
 $(document).ready(function () {
-    streamAudio("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
+    playAudio("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
     raiseParticle();
     $('#divSplash').animate({ opacity: "1" }, 2000, function () {
         $('#imgTunnel').addClass("glowing");

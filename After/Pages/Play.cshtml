@@ -36,7 +36,6 @@
     <script src="~/Scripts/Controls/CreateAccount.js"></script>
     <script src="~/Scripts/Controls/CreateCharacter.js"></script>
     <script src="~/Scripts/Controls/Intro.js"></script>
-    <script src="~/Scripts/Controls/Game.js"></script>
     <script defer src="~/Scripts/Play.js"></script>
 </head>
 <body>
@@ -73,52 +72,267 @@
             </div>
         </div>
         <div id="divLoginStatus" style="color: red; font-size: small; margin-top: 20px;"></div>
-        <style>
-            #divLogin {
-                height: 100%;
-                width: 100%;
-                text-align: center;
-            }
+    </div>
+    <div id="divGame" hidden>
+        <div id="divDebug"></div>
 
-            #divLoginImage {
-                height: 200px;
-                background-image: url('/Assets/Images/Tunnel.png');
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: contain;
-            }
+        <div id="divChatFrame" class="bottom-tab-frame transparent-menu">
+            <div id="divChatIconBorder" class="bottom-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/Message_16xLG.png" />
+                <br />
+                <span>Chat</span>
+            </div>
+            <div id="divChatInnerFrame" class="tab-outerframe">
+                <div id="divChatMessageWindow" class="tab-innerframe"></div>
+                <div id="divChatBottomBar">
+                    <select id="selectChatChannel">
+                        <option>Global</option>
+                        <option>Command</option>
+                    </select>
+                    <div id="divChatInputWrapper">
+                        <input type="text" id="inputChatInput" />
+                    </div>
+                    <button id="buttonChatSubmit" type="button">Submit</button>
+                </div>
+            </div>
+        </div>
 
-            #divLoginImage img {
-                position: relative;
-                top: 20%;
-            }
+        <div id="divAdminFrame" class="bottom-tab-frame transparent-menu hidden">
+            <div id="divAdminIconBorder" class="bottom-tab-icon transparent-menu font-sansserif">
+                <img src="/Assets/Images/Icons/Security_Shields_Blank_32xLG.png" />
+                <br />
+                <span>Admin</span>
+            </div>
+            <div class="tab-outerframe">
+                <div id="divAdminMessageWindow" class="tab-innerframe"></div>
+                <div id="divAdminBottomBar">
+                    <div id="divAdminInputWrapper">
+                        <input type="text" id="inputAdminInput" />
+                    </div>
+                    <button id="buttonAdminSubmit" type="button">Submit</button>
+                </div>
+            </div>
+        </div>
 
-            #divLoginForm {
-                text-align: left;
-                display: inline-block;
-            }
 
-            #divLoginForm label {
-                color: white;
-            }
+        <div id="divSideTabs" class="font-sansserif">
+            <div id="divCharacterFrame" class="side-tab-frame transparent-menu">
+                <div id="divCharacterIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                    <img src="/Assets/Images/Icons/abstract-user-flat-4-300px.png" />
+                    <br />
+                    <span>Character</span>
+                </div>
+                <div class="tab-outerframe">
+                    <div class="tab-innerframe">
+                        <div class="side-tab-item-header">
+                            Attributes
+                        </div>
+                        <div class="side-tab-item-group" hidden>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">Core Energy:</div>
+                                <div id="divCoreEnergy" class="side-tab-value"></div>
+                            </div>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">Energy Mod:</div>
+                                <div id="divEnergyMod" class="side-tab-value"></div>
+                            </div>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">Charge Mod:</div>
+                                <div id="divChargeMod" class="side-tab-value"></div>
+                            </div>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">Willpower Mod:</div>
+                                <div id="divWillpowerMod" class="side-tab-value"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            #divLoginForm a {
-                font-size: smaller;
-                text-decoration: none;
-                color: Highlight;
-                cursor: pointer;
-                display: inline-block;
-            }
+            <div id="divPowersFrame" class="side-tab-frame transparent-menu">
+                <div id="divPowersIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                    <img src="/Assets/Images/Icons/draw-star-2.png" />
+                    <br />
+                    <span>Powers</span>
+                </div>
+                <div class="tab-outerframe">
+                    <div class="tab-innerframe"></div>
+                </div>
+            </div>
 
-            #divLoginForm a:hover {
-                color: white;
-            }
+            <div id="divMemoriesFrame" class="side-tab-frame transparent-menu">
+                <div id="divMemoriesIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                    <img src="/Assets/Images/Icons/PinnedItem_32x.png" />
+                    <br />
+                    <span>Memories</span>
+                </div>
+                <div class="tab-outerframe">
+                    <div class="tab-innerframe"></div>
+                </div>
+            </div>
+            <div id="divSettingsFrame" class="side-tab-frame transparent-menu">
+                <div id="divSettingsIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                    <img src="/Assets/Images/Icons/gear_32xLG.png" />
+                    <br />
+                    <span>Settings</span>
+                </div>
+                <div class="tab-outerframe">
+                    <div class="tab-innerframe">
+                        <div class="side-tab-item-header">
+                            Interface
+                        </div>
+                        <div class="side-tab-item-group" hidden>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">Follow Player:</div>
+                                <div class="switch-outer side-tab-value" prop="FollowPlayer">
+                                    <div class="switch-inner"></div>
+                                </div>
+                            </div>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">Lock Tabs:</div>
+                                <div class="switch-outer side-tab-value" prop="LockTabs">
+                                    <div class="switch-inner"></div>
+                                </div>
+                            </div>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">D-Pad:</div>
+                                <div class="switch-outer side-tab-value" prop="DPad">
+                                    <div class="switch-inner"></div>
+                                </div>
+                            </div>
+                            <div class="side-tab-item">
+                                <div class="side-tab-key">Joystick:</div>
+                                <div class="switch-outer side-tab-value" prop="Joystick">
+                                    <div class="switch-inner"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="divMoreTabsFrame" class="side-tab-frame transparent-menu">
+                <div id="divMoreTabsIconBorder" class="side-tab-icon transparent-menu font-sansserif">
+                    <img src="/Assets/Images/Icons/Ellipsis_inverse_16x.png" />
+                    <br />
+                    <span>More</span>
+                </div>
+                <div class="tab-outerframe">
+                    <div class="tab-innerframe"></div>
+                </div>
+            </div>
 
-            #divRemember {
-                font-size: .8em;
-                margin-top: 5px;
-            }
-        </style>
+        </div>
+
+        <div id="divDPad" class="transparent-menu">
+            <div id="divDPadIconBorder" class="transparent-menu thumb-control">
+                <img src="/Assets/Images/Icons/MoveGlyph_16x.png" />
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe" style="overflow:hidden; border:1px solid gray">
+                    <svg id="svgDPad" height="120px" width="120px">
+                        <rect x="78.6" y="11.4" move-direction="ne" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                        <rect x="11.4" y="78.6" move-direction="sw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                        <rect x="11.4" y="11.4" move-direction="nw" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                        <rect x="78.6" y="78.6" move-direction="se" fill="black" stroke-linejoin="round" stroke="dimgray" stroke-opacity="1" width="30" height="30" class="dpad-direction" />
+                        <rect x="78" y="42" move-direction="e" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                        <rect x="42" y="78" move-direction="s" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                        <rect x="42" y="6" move-direction="n" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                        <rect x="6" y="42" move-direction="w" fill="#C8C8C8" fill-opacity="1" stroke-linejoin="round" stroke="#646464" stroke-opacity="1" width="36" height="36" class="dpad-direction" />
+                        <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 103.5,60L 88.5,52.5L 88.5,67.5L 103.5,60 Z " class="dpad-triangle" />
+                        <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 16.5,60L 31.5,67.5L 31.5,52.5L 16.5,60 Z " class="dpad-triangle" />
+                        <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 60,103.5L 67.5,88.5L 52.5,88.5L 60,103.5 Z " class="dpad-triangle" />
+                        <path fill="#323232" fill-opacity="1" stroke-linejoin="round" d="M 60,16.5L 52.5,31.5L 67.5,31.5L 60,16.5 Z " class="dpad-triangle" />
+                        <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 22.8645,22.8645L 26.4,33.4711L 33.4711,26.4L 22.8645,22.8645 Z " class="dpad-triangle" />
+                        <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,22.8645L 86.5289,26.4L 93.6,33.4711L 97.1355,22.8645 Z " class="dpad-triangle" />
+                        <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 22.8645,97.1355L 33.4711,93.6L 26.4,86.5289L 22.8645,97.1355 Z " class="dpad-triangle" />
+                        <path fill="#969696" fill-opacity="1" stroke-linejoin="round" d="M 97.1355,97.1355L 93.6,86.5289L 86.5289,93.6L 97.1355,97.1355 Z " class="dpad-triangle" />
+                        <circle id="circleDPadMiddle" cx="50%" cy="50%" r="10" fill="#969696"></circle>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div id="divJoystick" class="transparent-menu" style="display:none">
+            <div id="divJoystickIconBorder" class="transparent-menu thumb-control">
+                <img src="/Assets/Images/Icons/MoveGlyph_16x.png" />
+            </div>
+            <div class="tab-outerframe">
+                <div class="tab-innerframe" style="overflow:hidden; border:1px solid gray">
+                    <svg id="svgJoystick" height="60px" width="60px">
+                        <circle r="30px" stroke="gray" fill="white" cx="30px" cy="30px"></circle>
+                        <circle r="10px" stroke="dimgray" fill="white" cx="30px" cy="30px"></circle>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="divStatus" class="font-sansserif transparent-menu">
+            <div style="height: 1em">
+                <span class="pool-title" style="left:0">Energy</span>
+                <span class="pool-title" style="left:33.1%;">Charge</span>
+                <span class="pool-title" style="left:66.2%;">Willpower</span>
+            </div>
+            <div>
+                <div style="position:absolute; left:0; width:33%; text-align:center">
+                    <svg id="svgEnergy" style="height:60px; width:0">
+                        <defs>
+                            <radialGradient id="gradientEnergy" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                <stop offset="0%" style="stop-color:white;" />
+                                <stop offset="70%" style="stop-color:cyan;" />
+                                <stop offset="100%" style="stop-color:transparent;" />
+                            </radialGradient>
+                        </defs>
+                        <ellipse cx="50%" cy="50%" rx="45%" ry="20%" fill="url(#gradientEnergy)"></ellipse>
+                    </svg>
+                    <div style="position:absolute;width:100%; top:20px">
+                        <div class="pool-amount" id="divEnergyAmount">
+                            0
+                        </div>
+                    </div>
+                </div>
+
+                <div id="divButtonCharge" style="position:absolute; left:33.1%; width:33%; top:30px; text-align:center">
+                    <button id="buttonCharge" style="border-width:2px; height:30px">Tap to Charge</button>
+                </div>
+
+                <div id="divCharge" style="position:absolute; left:33.1%; width:33%; text-align:center; display:none">
+                    <svg id="svgCharge" style="height:60px; width:0; cursor:pointer">
+                        <defs>
+                            <radialGradient id="gradientCharge" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                <stop offset="0%" style="stop-color:white;" />
+                                <stop offset="70%" style="stop-color:magenta;" />
+                                <stop offset="100%" style="stop-color:transparent;" />
+                            </radialGradient>
+                        </defs>
+                        <ellipse cx="50%" cy="50%" rx="45%" ry="20%" fill="url(#gradientCharge)"></ellipse>
+                    </svg>
+                    <div style="position:absolute;width:100%; top:20px;cursor:pointer">
+                        <div class="pool-amount" id="divChargeAmount">
+                            0
+                        </div>
+                    </div>
+                </div>
+
+                <div style="position:absolute; left:66.2%; width:33%; text-align:center">
+                    <svg id="svgWillpower" style="height:60px; width:0">
+                        <defs>
+                            <radialGradient id="gradientWillpower" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                <stop offset="0%" style="stop-color:white;" />
+                                <stop offset="70%" style="stop-color:goldenrod;" />
+                                <stop offset="100%" style="stop-color:transparent;" />
+                            </radialGradient>
+                        </defs>
+                        <ellipse cx="50%" cy="50%" rx="45%" ry="20%" fill="url(#gradientWillpower)"></ellipse>
+                    </svg>
+                    <div style="position:absolute;width:100%; top:20px">
+                        <div class="pool-amount" id="divWillpowerAmount">
+                            0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

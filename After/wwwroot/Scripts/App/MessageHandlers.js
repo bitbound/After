@@ -11,7 +11,7 @@ var After;
                     if (localStorage["RememberMe"] == "true") {
                         localStorage["AuthenticationToken"] = JsonMessage.AuthenticationToken;
                     }
-                    After.Controls.Game.Init();
+                    After.Game.Init();
                 }
                 else {
                     if (JsonMessage.Result == "exists") {
@@ -49,7 +49,7 @@ var After;
                     if (localStorage["RememberMe"] == "true") {
                         localStorage["AuthenticationToken"] = JsonMessage.AuthenticationToken;
                     }
-                    After.Controls.Game.Init();
+                    After.Game.Init();
                 }
                 else if (JsonMessage.Result == "failed") {
                     $("#divLoginStatus").hide();

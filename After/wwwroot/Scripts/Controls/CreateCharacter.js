@@ -19,12 +19,12 @@ After.Temp.CreateCharacter.Init = function () {
             $("#divCreateCharacter").remove();
             document.getElementById("buttonSkip").onclick = function () {
                 $("#divIntro").hide();
-                After.Audio.StopStreamLoop();
+                After.Audio.StopLoop();
                 $.get("/Controls/CreateAccount.html", function (data) {
                     $(document.body).append(data);
                 });
             };
-            After.Audio.StreamLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3");
+            After.Audio.PlayLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", true, null);
             ATI.CurrentPosition = 6;
             ATI.IsPaused = false;
             $("#divNarration").html("");

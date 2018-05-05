@@ -2,7 +2,6 @@
     export var Debug = false;
     export var TouchScreen = false;
     export const Audio = new After.App.Audio();
-    export const Canvas = new After.App.Canvas();
     export const Connection = new After.App.Connection();
     export const Drawing = new After.App.Drawing();
     export const Game = new After.App.Game();
