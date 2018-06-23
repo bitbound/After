@@ -1,103 +1,45 @@
 ﻿@page
+@model IndexModel
 @{
+    ViewData["Title"] = "Home";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <title>After</title>
-    <link href="~/Assets/Images/A.png" rel="icon" />
-    <link href="~/manifest.json" rel="manifest" />
-    <meta id="viewport" name="viewport" content="width=device-width" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <link href="~/site.css" rel="stylesheet" />
-    <script src="~/Scripts/jQuery/jquery-3.1.1.min.js"></script>
-    <script defer src="~/Scripts/Index.js"></script>
-</head>
-<body>
-    <div id="divSplash">
-        <div style="text-align:center;">
-            <img id="imgTitle" src="/Assets/Images/AfterTitle.png" />
-        </div>
-        <div id="divTunnel" style="text-align:center">
-            <img id="imgTunnel" src="/Assets/Images/Tunnel and Shadow.png" style="height:250px; width:auto" />
-            <div id="divParticles" style="overflow:visible;"></div>
-        </div>
-        <div style="text-align:center; margin-top:20px;">
-            <a href="/play" class="link-button">Play</a>
-        </div>
-        <div style="margin-top:50px; margin-bottom: 25px; text-align: right; color:white; font-size:65%;">
-            Sound by <a href="http://www.freesound.org/people/ceich93/">Operation Contrast</a>.
-        </div>
-        <style>
-            body {
-                background-color: black;
-                vertical-align: middle;
-            }
-            #divSplash {
-                opacity: 0;
-            }
 
-            .divImg {
-                text-align: center;
-            }
 
-          
-            div.footer {
-                position: absolute;
-                right: 20px;
-                bottom: 20px;
-                text-align: right;
-                color: white;
-                font-size: 50%;
-                z-index: -1
-            }
-            .particle {
-                height: 1px;
-                width: 1px;
-                opacity: 1;
-                background-color: black;
-                border-radius: 100%;
-                position: absolute;
-                display: inline-block;
-                animation-name: particle-rise;
-                animation-iteration-count: infinite;
-                animation-duration: 6s;
-                animation-fill-mode: backwards;
-            }
-            @@keyframes particle-rise {
-                from {
-                    height: 1px;
-                    width: 1px;
-                    opacity: 1;
-                    background-color: black;
-                }
-                to {
-                    height: 6px;
-                    width: 6px;
-                    margin-top: -300px;
-                    opacity: 0;
-                    background-color: gray;
-                }
-            }
-            .glowing {
-                animation-name: glowing;
-                animation-duration: 3s;
-                animation-timing-function: ease-in-out;
-                animation-iteration-count: infinite;
-                animation-direction: alternate;
-            }
-            @@keyframes glowing {
-                from {
-                    opacity: 1;
-                }
-                to {
-                    opacity: .5;
-                }
-            }
-        </style>
+
+@if (User.Identity.IsAuthenticated)
+{
+    // TODO: Game div.
+}
+else
+{
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <a href="~/Identity/Account/Login" class="btn btn-primary btn-lg">
+                Login
+            </a>
+            <br /><br />
+            <a href="~/Identity/Account/Register" class="btn btn-default btn-lg">
+                Register
+            </a>
+        </div>
     </div>
-</body>
-</html>
+}
+
+
+
+@section Scripts {
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>
+            var waitForInit = () => {
+                if (typeof After == "undefined") {
+                    window.setTimeout(waitForInit, 250);
+                }
+                else {
+                    After.Init();
+                }
+            };
+            waitForInit();
+        </script>
+    }
+}

@@ -1,0 +1,99 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Scripts\App\Audio.ts" />
+    <Content Remove="wwwroot\Scripts\App\Connection.ts" />
+    <Content Remove="wwwroot\Scripts\App\Input.ts" />
+    <Content Remove="wwwroot\Scripts\App\Me.ts" />
+    <Content Remove="wwwroot\Scripts\App\Settings.ts" />
+    <Content Remove="wwwroot\Scripts\App\Temp.ts" />
+    <Content Remove="wwwroot\Scripts\App\UI.ts" />
+    <Content Remove="wwwroot\Scripts\App\Utilities.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\CreateAccount.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\CreateCharacter.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\Intro.ts" />
+    <Content Remove="wwwroot\Scripts\Controls\Splash.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Area.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Bases\Selectable.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Command.ts" />
+    <Content Remove="wwwroot\Scripts\Models\FreeParticle.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Landmark.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Occupant.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Particle.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Power.ts" />
+    <Content Remove="wwwroot\Scripts\Models\Soul.ts" />
+    <Content Remove="wwwroot\Scripts\Play.ts" />
+    <Content Remove="wwwroot\Scripts\typings\jquery\jquery.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Remove="Properties\PublishProfiles\WebServer.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jquery.TypeScript.DefinitelyTyped" Version="3.1.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.RazorPages" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.1.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Data\ClientErrors\" />
+    <Folder Include="wwwroot\Data\Errors\" />
+    <Folder Include="wwwroot\Data\Logs\" />
+    <Folder Include="wwwroot\Data\Storage\Locations\" />
+    <Folder Include="wwwroot\Data\Storage\Messages\" />
+    <Folder Include="wwwroot\Data\Storage\NPCs\" />
+    <Folder Include="wwwroot\Data\Storage\Players\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.js" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.min.js" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.js" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.min.js" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.min.map" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.js" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.js" />
+    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\Scripts\App\Audio.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\Connection.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\Input.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\Me.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\Settings.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\Temp.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\UI.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\Utilities.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Controls\CreateAccount.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Controls\CreateCharacter.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Controls\Intro.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Index.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\App\MessageHandlers.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Area.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Bases\Selectable.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Command.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\FreeParticle.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Landmark.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Occupant.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Particle.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Power.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Models\Soul.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\Play.ts" />
+    <TypeScriptCompile Include="wwwroot\Scripts\typings\jquery\jquery.d.ts" />
+  </ItemGroup>
+
+</Project>
