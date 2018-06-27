@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/manifest.json" rel="manifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <link rel="icon" href="~/favicon.ico" />
     <title>@ViewData["Title"] - After</title>
 
@@ -17,7 +20,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     <link href="~/css/Themes/darkly.min.css" rel="stylesheet" />
-    
+
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -29,7 +32,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-page="/Index" class="navbar-brand">After</a>
+                @*<a asp-page="/Index" class="navbar-brand">After</a>*@
+                <a asp-page="/Index">
+                    <img src="~/Assets/Images/A-128.png" height="60" />
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
