@@ -1,0 +1,31 @@
+﻿@page
+@model After.Pages.PlayModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>After</title>
+</head>
+<body>
+
+    @section Scripts {
+        @*<script type="module" src="~/ts/Play.js"></script>
+            <script>
+                var waitForInit = () => {
+                    if (typeof After == "undefined") {
+                        window.setTimeout(waitForInit, 250);
+                    }
+                    else {
+                        After.Init();
+                    }
+                };
+                waitForInit();
+            </script>*@
+    }
+</body>
+</html>

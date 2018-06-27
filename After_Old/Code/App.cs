@@ -1,4 +1,4 @@
-﻿using After.Models;
+﻿using After.Data;
 using After.Dependencies;
 using System;
 using System.Collections.Generic;
@@ -52,7 +52,7 @@ namespace After
                 var loc = Storage.Locations.Find(npc.CurrentLocation);
                 if (!loc?.Occupants.Exists(oc=>oc.StorageID == npc.StorageID) == true)
                 {
-                    loc.Occupants.Add(new Models.Occupant() { DisplayName = npc.DisplayName, StorageID = npc.StorageID });
+                    loc.Occupants.Add(new Data.Occupant() { DisplayName = npc.DisplayName, StorageID = npc.StorageID });
                 }
             });
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace After.Models
+namespace After.Data
 {
     public class Power
     {

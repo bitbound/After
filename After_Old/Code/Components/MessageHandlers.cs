@@ -1,4 +1,4 @@
-﻿using After.Models;
+﻿using After.Data;
 using After.Scripting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -283,7 +283,7 @@ namespace After.Code.Classes.WebSockets
         #region Events
         public static async Task ReceiveStartCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if (WSC.Player.MovementState != Models.Character.MovementStates.Ready)
+            if (WSC.Player.MovementState != Data.Character.MovementStates.Ready)
             {
                 return;
             }
@@ -291,7 +291,7 @@ namespace After.Code.Classes.WebSockets
         }
         public static async Task ReceiveStopCharging(dynamic JsonMessage, WebSocketClient WSC)
         {
-            if (WSC.Player.MovementState != Models.Character.MovementStates.Ready)
+            if (WSC.Player.MovementState != Data.Character.MovementStates.Ready)
             {
                 return;
             }

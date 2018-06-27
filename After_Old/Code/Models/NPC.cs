@@ -1,10 +1,10 @@
-﻿using After.Models;
+﻿using After.Data;
 using After.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace After.Models
+namespace After.Data
 {
     public class NPC : Character
     {

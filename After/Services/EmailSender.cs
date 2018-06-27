@@ -16,14 +16,17 @@ namespace After.Services
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
+#if DEBUG
+            return Task.CompletedTask; 
+#endif
             var mailClient = new SmtpClient();
-            mailClient.Host = "mail.lucent.rocks";
+            mailClient.Host = "mail.after-game.net";
             mailClient.Port = 25;
             mailClient.EnableSsl = false;
-            mailClient.Credentials = new NetworkCredential("hello@lucent.rocks", "OkZ92B@RwQK^");
+            mailClient.Credentials = new NetworkCredential("hello@after-game.net", "xH78eKysI%7D");
             mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
-            var from = new MailAddress("hello@lucent.rocks", "After Support");
+            var from = new MailAddress("hello@after-game.net", "After Support");
             var to = new MailAddress(email);
 
             var mailMessage = new MailMessage(from, to);
@@ -31,7 +34,7 @@ namespace After.Services
             mailMessage.Subject = subject;
             mailMessage.Body = message;
 
-            mailMessage.Bcc.Add("hello@lucent.rocks");
+            mailMessage.Bcc.Add("hello@after-game.net");
 
             mailClient.Send(mailMessage);
             return Task.CompletedTask;

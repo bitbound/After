@@ -1,0 +1,69 @@
+﻿div.footer {
+    margin-top: 50px;
+    margin-bottom: 25px;
+    text-align: right;
+    font-size: 75%;
+}
+
+.particle {
+    height: 1px;
+    width: 1px;
+    opacity: 1;
+    background-color: black;
+    border-radius: 100%;
+    position: absolute;
+    display: inline-block;
+    animation-name: particle-rise;
+    animation-iteration-count: infinite;
+    animation-duration: 6s;
+    animation-fill-mode: backwards;
+}
+
+@keyframes particle-rise {
+    from {
+        height: 1px;
+        width: 1px;
+        opacity: 1;
+        background-color: black;
+    }
+
+    to {
+        height: 6px;
+        width: 6px;
+        margin-top: -300px;
+        opacity: 0;
+        background-color: gray;
+    }
+}
+
+.glowing {
+    animation-name: glowing;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes glowing {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: .4;
+    }
+}
+
+#imgTunnel {
+    height: 250px;
+    width: auto
+}
+
+#divParticles {
+    overflow: visible;
+}
+
+#divTunnel {
+    margin-bottom: 20px;
+}
+

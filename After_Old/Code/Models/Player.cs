@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using After.Dependencies.WebSockets;
 
-namespace After.Models
+namespace After.Data
 {
     public class Player: Character
     {

@@ -1,7 +1,7 @@
 ﻿using After.Dependencies.StorageLists;
 using System;
 
-namespace After.Models
+namespace After.Data
 {
     public class Message : IStorageItem
     {

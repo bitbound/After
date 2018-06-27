@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\ts\Main.ts" />
+    <Content Remove="wwwroot\ts\Splash.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
@@ -17,6 +22,20 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="wwwroot\ts\Controls\" />
+    <Folder Include="wwwroot\ts\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.js" />
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.js.map" />
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.min.js" />
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.min.js.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\ts\Splash.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Main.ts" />
   </ItemGroup>
 
 </Project>

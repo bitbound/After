@@ -12,15 +12,34 @@
 }
 else
 {
+    <link href="~/css/intro.css" rel="stylesheet" />
+
+    <div class="row text-center">
+        <div class="col-sm-12">
+            <img id="imgTitle" src="~/Assets/Images/AfterTitle.png" />
+        </div>
+    </div>
+    <div class="row text-center">
+        <div id="divTunnel" class="col-sm-12">
+            <img id="imgTunnel" src="~/Assets/Images/Tunnel and Shadow.png" class="glowing" />
+            <div id="divParticles"></div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-sm-12 text-center">
-            <a href="~/Identity/Account/Login" class="btn btn-primary btn-lg">
+            <a href="~/Identity/Account/Login" class="btn btn-primary btn-lg login-button">
                 Login
             </a>
             <br /><br />
-            <a href="~/Identity/Account/Register" class="btn btn-default btn-lg">
+            <a href="~/Identity/Account/Register" class="btn btn-default btn-lg login-button">
                 Register
             </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 footer text-right">
+            Sound by <a href="http://www.freesound.org/people/ceich93/">Operation Contrast</a>.
         </div>
     </div>
 }
@@ -30,16 +49,10 @@ else
 @section Scripts {
     @if (User.Identity.IsAuthenticated)
     {
-        <script>
-            var waitForInit = () => {
-                if (typeof After == "undefined") {
-                    window.setTimeout(waitForInit, 250);
-                }
-                else {
-                    After.Init();
-                }
-            };
-            waitForInit();
-        </script>
+    }
+    else
+    {
+        <script src="~/ts/Splash.js"></script>
+
     }
 }

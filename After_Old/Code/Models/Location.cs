@@ -1,4 +1,4 @@
-using After.Models;
+using After.Data;
 using After.Scripting;
 using After.Dependencies;
 using System;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using After.Dependencies.WebSockets;
 using After.Dependencies.StorageLists;
 
-namespace After.Models
+namespace After.Data
 {
     public class Location : IStorageItem
     {
