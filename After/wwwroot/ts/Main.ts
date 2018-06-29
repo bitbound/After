@@ -1,4 +1,5 @@
 ﻿import * as Audio from "./App/Audio.js";
+import * as Utilities from "./App/Utilities.js";
 
 window.onload = (e) => {
     window["After"] = {
@@ -6,5 +7,6 @@ window.onload = (e) => {
         TouchScreen: false,
 
         Audio: Audio,
+        Utilities: Utilities
     }
 };

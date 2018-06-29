@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace After.Data.Migrations
+namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180627010547_Username")]
-    partial class Username
+    [Migration("20180628182823_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,35 +21,24 @@ namespace After.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("After.Data.PlayerCharacter", b =>
+            modelBuilder.Entity("After.Data.GameObject", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AfterUserId");
+                    b.Property<double>("AccelerationSpeed");
 
-                    b.Property<string>("Color");
+                    b.Property<double>("DeccelerationSpeed");
 
-                    b.Property<double>("CoreEnergy");
-
-                    b.Property<double>("CoreEnergyPeak");
-
-                    b.Property<double>("CurrentCharge");
-
-                    b.Property<double>("CurrentEnergy");
-
-                    b.Property<double>("CurrentWillpower");
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<int>("Height");
 
-                    b.Property<bool>("IsCollisionEnabled");
+                    b.Property<double>("VelocityX");
 
-                    b.Property<double>("MaxEnergyModifier");
-
-                    b.Property<double>("MaxWillpowerModifier");
-
-                    b.Property<string>("PortraitUri");
+                    b.Property<double>("VelocityY");
 
                     b.Property<int>("Width");
 
@@ -57,13 +46,15 @@ namespace After.Data.Migrations
 
                     b.Property<double>("YCoord");
 
-                    b.Property<double>("ZCoord");
+                    b.Property<string>("ZCoord");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("AfterUserId");
+                    b.HasIndex("XCoord", "YCoord", "ZCoord");
 
-                    b.ToTable("PlayerCharacter");
+                    b.ToTable("GameObject");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("GameObject");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -236,6 +227,43 @@ namespace After.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("After.Data.PlayerCharacter", b =>
+                {
+                    b.HasBaseType("After.Data.GameObject");
+
+                    b.Property<string>("AfterUserId");
+
+                    b.Property<string>("Color");
+
+                    b.Property<double>("CoreEnergy");
+
+                    b.Property<double>("CoreEnergyPeak");
+
+                    b.Property<double>("CurrentCharge");
+
+                    b.Property<double>("CurrentEnergy");
+
+                    b.Property<double>("CurrentWillpower");
+
+                    b.Property<double>("MaxEnergyModifier");
+
+                    b.Property<double>("MaxWillpowerModifier");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("PortraitUri");
+
+                    b.HasIndex("AfterUserId");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
+                    b.ToTable("PlayerCharacter");
+
+                    b.HasDiscriminator().HasValue("PlayerCharacter");
+                });
+
             modelBuilder.Entity("After.Data.AfterUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -244,13 +272,6 @@ namespace After.Data.Migrations
                     b.ToTable("AfterUser");
 
                     b.HasDiscriminator().HasValue("AfterUser");
-                });
-
-            modelBuilder.Entity("After.Data.PlayerCharacter", b =>
-                {
-                    b.HasOne("After.Data.AfterUser")
-                        .WithMany("Characters")
-                        .HasForeignKey("AfterUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -296,6 +317,13 @@ namespace After.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("After.Data.PlayerCharacter", b =>
+                {
+                    b.HasOne("After.Data.AfterUser")
+                        .WithMany("Characters")
+                        .HasForeignKey("AfterUserId");
                 });
 #pragma warning restore 612, 618
         }

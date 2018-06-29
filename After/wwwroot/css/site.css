@@ -1,7 +1,7 @@
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification 
 for details on configuring this project to bundle and minify static web assets. */
 body {
-    padding-top: 50px;
+    padding-top: 70px;
     padding-bottom: 20px;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -31,6 +31,10 @@ nav {
     background-color: rgb(50,50,50) !important;
 }
 
+/*.list-group-item {
+    color: #375a7f !important;
+}*/
+
 .login-button {
     width: 130px;
 }
@@ -41,4 +45,20 @@ nav {
 
 .margin-top-lg {
     margin-top: 40px !important;
+}
+
+.sliver-separator {
+    /*margin: auto;*/
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 100%
+}
+
+select {
+    background-color: #323232 !important;
+    color: white !important;
+}
+input[type=range] {
+    background-color: #323232 !important;
 }

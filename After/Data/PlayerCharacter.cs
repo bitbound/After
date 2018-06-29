@@ -8,7 +8,5 @@ namespace After.Data
 {
     public class PlayerCharacter : Character
     {
-        [Key]
-        public int ID { get; set; }
     }
 }

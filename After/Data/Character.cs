@@ -1,21 +1,27 @@
-﻿using System;
+﻿using After.Data.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace After.Data
 {
-    public class Character : IGameObject
+    public class Character : GameObject, ICollidable
     {
+        public Character()
+        {
+            Height = 20;
+            Width = 20;
+            XCoord = 0;
+            YCoord = 0;
+            ZCoord = "0";
+        }
+      
+        public string Name { get; set; }
         public string Color { get; set; } = "gray";
         public string PortraitUri { get; set; }
-        public int Height { get; set; } = 20;
-        public bool IsCollisionEnabled { get; set; } = true;
-        public int Width { get; set; } = 20;
-        public double XCoord { get; set; } = 0;
-        public double YCoord { get; set; } = 0;
-        public double ZCoord { get; set; } = 0;
 
 
         public double CoreEnergyPeak { get; set; }
@@ -67,13 +73,9 @@ namespace After.Data
             }
         }
 
-
-        public Rectangle Rect
+        public void OnCollision(GameObject collidingObject)
         {
-            get
-            {
-                return new Rectangle((int)XCoord, (int)YCoord, Width, Height);
-            }
+            throw new NotImplementedException();
         }
     }
 }

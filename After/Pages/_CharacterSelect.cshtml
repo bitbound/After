@@ -1,0 +1,36 @@
+﻿@page
+@inject UserManager<After.Data.AfterUser> UserManager
+@{
+    var afterUser = await UserManager.GetUserAsync(User);
+}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="h3">Characters</div>
+        <div class="margin-top-md list-group">
+            @if (afterUser.Characters?.Count > 0)
+            {
+                foreach (var character in afterUser.Characters)
+                {
+                    <a href="#" class="list-group-item">
+                        @character.Name
+                    </a>
+                }
+            }
+            else
+            {
+                <a href="#" class="list-group-item">
+                    No characters created.
+                </a>
+            }
+        </div>
+
+        <div class="margin-top-md">
+            <a asp-page="CharacterCreate" class="btn btn-primary">Create New</a>
+        </div>
+    </div>
+
+
+    <div class="col-sm-6">
+
+    </div>
+</div>

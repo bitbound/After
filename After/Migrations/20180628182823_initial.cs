@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace After.Data.Migrations
+namespace After.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,7 +40,8 @@ namespace After.Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,6 +154,45 @@ namespace After.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "GameObject",
+                columns: table => new
+                {
+                    AccelerationSpeed = table.Column<double>(nullable: false),
+                    DeccelerationSpeed = table.Column<double>(nullable: false),
+                    Height = table.Column<int>(nullable: false),
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    VelocityX = table.Column<double>(nullable: false),
+                    VelocityY = table.Column<double>(nullable: false),
+                    Width = table.Column<int>(nullable: false),
+                    XCoord = table.Column<double>(nullable: false),
+                    YCoord = table.Column<double>(nullable: false),
+                    ZCoord = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
+                    CoreEnergy = table.Column<double>(nullable: true),
+                    CoreEnergyPeak = table.Column<double>(nullable: true),
+                    CurrentCharge = table.Column<double>(nullable: true),
+                    CurrentEnergy = table.Column<double>(nullable: true),
+                    CurrentWillpower = table.Column<double>(nullable: true),
+                    MaxEnergyModifier = table.Column<double>(nullable: true),
+                    MaxWillpowerModifier = table.Column<double>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true),
+                    PortraitUri = table.Column<string>(nullable: true),
+                    AfterUserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameObject", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_GameObject_AspNetUsers_AfterUserId",
+                        column: x => x.AfterUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +231,23 @@ namespace After.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameObject_XCoord_YCoord_ZCoord",
+                table: "GameObject",
+                columns: new[] { "XCoord", "YCoord", "ZCoord" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameObject_AfterUserId",
+                table: "GameObject",
+                column: "AfterUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameObject_Name",
+                table: "GameObject",
+                column: "Name",
+                unique: true,
+                filter: "[Name] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -209,6 +266,9 @@ namespace After.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "GameObject");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
