@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180628182823_initial")]
+    [Migration("20180703142327_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace After.Migrations
 
                     b.HasIndex("XCoord", "YCoord", "ZCoord");
 
-                    b.ToTable("GameObject");
+                    b.ToTable("GameObjects");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("GameObject");
                 });
@@ -268,6 +268,8 @@ namespace After.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+
+                    b.HasIndex("UserName");
 
                     b.ToTable("AfterUser");
 

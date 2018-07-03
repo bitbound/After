@@ -1,15 +1,15 @@
 ﻿@page
-@inject UserManager<After.Data.AfterUser> UserManager
-@{
-    var afterUser = await UserManager.GetUserAsync(User);
+@inject DataService  DataService
+@{ 
+    var playerCharacters = DataService.GetPlayerCharacters(User.Identity.Name);
 }
 <div class="row">
     <div class="col-sm-6">
         <div class="h3">Characters</div>
         <div class="margin-top-md list-group">
-            @if (afterUser.Characters?.Count > 0)
+            @if (playerCharacters.Count() > 0)
             {
-                foreach (var character in afterUser.Characters)
+                foreach (var character in playerCharacters)
                 {
                     <a href="#" class="list-group-item">
                         @character.Name

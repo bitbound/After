@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using After.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,9 +11,36 @@ namespace After.Pages
 {
     public class CharacterCreateModel : PageModel
     {
+        private DataService DataService { get; set; }
+        public CharacterCreateModel(DataService dataService)
+        {
+            DataService = dataService;
+        }
         public void OnGet()
         {
             
+        }
+
+        public void OnPost(InputModel input)
+        {
+            if (ModelState.IsValid)
+            {
+                if (DataService.IsCharacterNameTaken(Input.CharacterName))
+                {
+                    ModelState.AddModelError("NameTaken", "Character name is already taken.");
+                }
+                else
+                {
+                    var newCharacter = new PlayerCharacter()
+                    {
+                        Name = input.CharacterName,
+                        Color = input.Color
+                    };
+                    
+                    DataService.AddNewCharacter(User.Identity.Name, newCharacter);
+                    Response.Redirect("/");
+                }
+            }
         }
 
         [BindProperty]

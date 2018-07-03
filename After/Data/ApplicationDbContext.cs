@@ -21,9 +21,16 @@ namespace After.Data
             builder.Entity<PlayerCharacter>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
+
+            builder.Entity<AfterUser>()
+                .HasIndex(x => x.UserName);
         }
 
         public new DbSet<AfterUser> Users { get; set; }
+
+        public DbSet<PlayerCharacter> PlayerCharacters { get; set; }
+
+        public DbSet<GameObject> GameObjects { get; set; }
 
     }
 }

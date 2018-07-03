@@ -11,6 +11,6 @@ namespace After.Data
 {
     public class AfterUser : IdentityUser
     {
-        public List<PlayerCharacter> Characters { get; set; }
+        public virtual List<PlayerCharacter> Characters { get; set; } = new List<PlayerCharacter>();
     }
 }

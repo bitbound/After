@@ -15,11 +15,11 @@
         <h4>
             Character Name
         </h4>
-        <form id="characterCreatForm" method="post">
+        <form id="characterCreateForm" method="post">
+            <input asp-for="Input.CharacterName" class="form-control" placeholder="Enter a character name..." />
+            <span asp-validation-for="Input.CharacterName" class="text-danger"></span>
+            <input id="soulColorInput" type="hidden" asp-for="Input.Color" value="gray" />
         </form>
-        <input asp-for="Input.CharacterName" form="characterCreatForm" class="form-control" placeholder="Enter a character name..." />
-        <span asp-validation-for="Input.CharacterName" class="text-danger"></span>
-        <input type="hidden" asp-for="Input.Color" value="gray" />
     </div>
 
 </div>
@@ -33,26 +33,26 @@
             <div>
                 <label style="color:red">Red:</label>
                 <br />
-                <input id="inputRed" type="range" min="0" max="255" value="125" class="form-control" onchange="evaluateColor()" />
+                <input id="inputRed" type="range" min="0" max="255" value="125" class="form-control" />
             </div>
             <div>
                 <label style="color:green">Green:</label>
                 <br />
-                <input id="inputGreen" type="range" min="0" max="255" value="125" class="form-control" onchange="evaluateColor()" />
+                <input id="inputGreen" type="range" min="0" max="255" value="125" class="form-control" />
             </div>
             <div>
                 <label style="color:blue">Blue:</label>
                 <br />
-                <input id="inputBlue" type="range" min="0" max="255" value="125" class="form-control" onchange="evaluateColor()" />
+                <input id="inputBlue" type="range" min="0" max="255" value="125" class="form-control" />
             </div>
             <div class="margin-top-md">
                 <label>Presets:</label>
                 <br />
-                <select class="form-control" id="selectColor" onchange="colorSelected()" style="width:100%"></select>
+                <select class="form-control" id="selectColor" style="width:100%"></select>
             </div>
         </div>
         <div class="text-right margin-top-md">
-            <button type="submit" form="characterCreateForm" class="btn btn-primary" onclick="submitColor()">Save</button>
+            <button type="submit" form="characterCreateForm" class="btn btn-primary">Save</button>
         </div>
     </div>
     <div class="col-sm-5 col-sm-offset-1">
@@ -64,45 +64,6 @@
         </div>
     </div>
 </div>
-
-@*<div id="divCreateCharacter" style="overflow: auto; color:white; text-align:center">
-
-        <div style="height:30px">
-
-            <svg id="svgRightEye" class="eye" style="transform: translate(-125%, 95px);">
-                <defs>
-                    <radialGradient id="gradientEye" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                        <stop offset="0%" style="stop-color:white;" />
-                        <stop class="iris-color" offset="70%" style="stop-color:gray;" />
-                        <stop offset="100%" style="stop-color:transparent;" />
-                    </radialGradient>
-                </defs>
-                <ellipse cx="50%" cy="50%" rx="50%" ry="45%" fill="url(#gradientEye)"></ellipse>
-            </svg>
-            <div class="eye-lid" style="transform: translate(-125%, 95px);"></div>
-
-
-            <svg id="svgLeftEye" class="eye" style="transform: translate(25%, 95px);">
-                <defs>
-                    <radialGradient id="gradientEye" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                        <stop offset="0%" style="stop-color:white;" />
-                        <stop class="iris-color" offset="70%" style="stop-color:gray;" />
-                        <stop offset="100%" style="stop-color:transparent;" />
-                    </radialGradient>
-                </defs>
-                <ellipse cx="50%" cy="50%" rx="50%" ry="45%" fill="url(#gradientEye)"></ellipse>
-            </svg>
-            <div class="eye-lid" style="transform: translate(25%, 95px);"></div>
-        </div>
-        <div style="text-align: center">
-            <img src="../Assets/Images/Portraits/DefaultPortrait-Short.png" height="200" />
-        </div>
-        <div>
-
-
-
-        </div>
-    </div>*@
 
 <style>
     .eye {
@@ -124,5 +85,8 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script type="module" src="~/ts/CharacterCreate.js"></script>
+    <script src="../lib/pixi.js/pixi.js"></script>
+    <script src="../lib/pixi-particles/dist/pixi-particles.js"></script>
+    <script type="module" src="~/ts/CharacterCreate.js">
+    </script>
 }

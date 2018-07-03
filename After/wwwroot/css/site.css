@@ -62,3 +62,7 @@ select {
 input[type=range] {
     background-color: #323232 !important;
 }
+
+canvas{
+    width: 100%;
+}

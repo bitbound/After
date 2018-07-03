@@ -48,6 +48,7 @@ namespace After
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSignalR();
             services.AddLogging();
+            services.AddScoped<DataService>();
             services.AddSingleton<IEmailSender, EmailSender>();
         }
 

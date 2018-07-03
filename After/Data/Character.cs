@@ -12,8 +12,8 @@ namespace After.Data
     {
         public Character()
         {
-            Height = 20;
-            Width = 20;
+            Height = 25;
+            Width = 25;
             XCoord = 0;
             YCoord = 0;
             ZCoord = "0";

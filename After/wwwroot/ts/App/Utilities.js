@@ -241,8 +241,24 @@ class Utilities {
         return div.innerHTML;
     }
     DownloadAsString(url) {
-        var xhr = new XMLHttpRequest();
-        // TODO
+        return new Promise(resolve => {
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", url);
+            xhr.onload = (e) => {
+                resolve(xhr.responseText);
+            };
+            xhr.send();
+        });
+    }
+    DoWhen(actionToPerform, shouldPerformAction) {
+        if (shouldPerformAction()) {
+            actionToPerform();
+        }
+        else {
+            window.setTimeout(() => {
+                this.DoWhen(actionToPerform, shouldPerformAction);
+            }, 10);
+        }
     }
 }
 export default new Utilities();

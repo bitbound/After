@@ -50,7 +50,7 @@ namespace After.Migrations
 
                     b.HasIndex("XCoord", "YCoord", "ZCoord");
 
-                    b.ToTable("GameObject");
+                    b.ToTable("GameObjects");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("GameObject");
                 });
@@ -266,6 +266,8 @@ namespace After.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+
+                    b.HasIndex("UserName");
 
                     b.ToTable("AfterUser");
 

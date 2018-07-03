@@ -8,10 +8,10 @@
 		"end": 0.5,
 		"minimumScaleMultiplier": 1
 	},
-	"color": {
-		"start": "#ffffff",
-		"end": "#4aff3d"
-	},
+  "color": {
+    "start": "#ffffff",
+    "end": "#808080"
+  },
 	"speed": {
 		"start": 50,
 		"end": 25,
@@ -45,9 +45,10 @@
 	},
 	"addAtBack": false,
 	"spawnType": "circle",
-	"spawnCircle": {
-		"x": 0,
-		"y": 0,
-		"r": 0
-	}
+  "spawnCircle": {
+    "x": 0,
+    "y": 0,
+    "r": 0
+  },
+  "autoUpdate":  true
 }
