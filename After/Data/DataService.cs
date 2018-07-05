@@ -30,5 +30,15 @@ namespace After.Data
             return DBContext.Users.Include(x => x.Characters)
                 .FirstOrDefault(x => x.UserName == userName)?.Characters.ToList();
         }
+
+        public void DeleteAllCharacters(string id)
+        {
+            var user = DBContext.Users.Include(x => x.Characters).FirstOrDefault(x => x.Id == id);
+            user?.Characters.ForEach(x =>
+            {
+                DBContext.PlayerCharacters.Remove(x);
+            });
+            DBContext.SaveChanges();
+        }
     }
 }

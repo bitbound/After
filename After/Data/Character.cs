@@ -12,6 +12,7 @@ namespace After.Data
     {
         public Character()
         {
+            CoreEnergy = 100;
             Height = 25;
             Width = 25;
             XCoord = 0;
