@@ -56,37 +56,16 @@
         </div>
     </div>
     <div class="col-sm-5 col-sm-offset-1">
-        <h5>
-            Preview
-        </h5>
         <div id="previewDiv">
             <canvas id="previewCanvas"></canvas>
         </div>
     </div>
 </div>
 
-<style>
-    .eye {
-        height: 30px;
-        width: 30px;
-        position: absolute;
-        left: 50%;
-    }
-
-    .eye-lid {
-        height: 0;
-        width: 30px;
-        position: absolute;
-        left: 50%;
-        background-color: black;
-        z-index: 1;
-    }
-</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="../lib/pixi.js/pixi.js"></script>
-    <script src="../lib/pixi-particles/dist/pixi-particles.js"></script>
-    <script type="module" src="~/ts/CharacterCreate.js">
-    </script>
+    <script src="~/lib/pixi.js/pixi.js"></script>
+    <script src="~/lib/pixi-particles/dist/pixi-particles.js"></script>
+    <script type="module" src="~/ts/Pages/CharacterCreate.js"></script>
 }

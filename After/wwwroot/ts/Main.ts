@@ -1,4 +1,5 @@
-﻿import * as Audio from "./App/Audio.js";
+﻿/// <reference path="../lib/pixi-particles/ambient.d.ts" />
+import * as Audio from "./App/Audio.js";
 import * as Utilities from "./App/Utilities.js";
 
 window.onload = (e) => {

@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
-    <Folder Include="wwwroot\ts\Controls\" />
     <Folder Include="wwwroot\ts\Models\" />
   </ItemGroup>
 
@@ -35,8 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\ts\CharacterSelect.ts" />
-    <TypeScriptCompile Include="wwwroot\ts\Splash.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Pages\CharacterSelect.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Pages\Splash.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Main.ts" />
   </ItemGroup>
 

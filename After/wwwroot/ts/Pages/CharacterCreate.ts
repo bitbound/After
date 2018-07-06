@@ -1,5 +1,4 @@
-﻿/// <reference path="../lib/pixi-particles/ambient.d.ts" />
-import Utilities from "./App/Utilities.js";
+﻿import Utilities from "../App/Utilities.js";
 import { Ellipse } from "pixi.js";
 
 var redInput = document.querySelector("#inputRed") as HTMLInputElement;
@@ -13,60 +12,60 @@ var emitterRight: PIXI.particles.Emitter;
 var emitterLeft: PIXI.particles.Emitter;
 var eyelidRight: PIXI.Graphics;
 var eyelidLeft: PIXI.Graphics;
-var eyeEmitterConfig = JSON.parse(`{
-	"alpha": {
-		"start": 1,
-		"end": 0.15
-	},
-	"scale": {
-		"start": 0.75,
-		"end": 0.75,
-		"minimumScaleMultiplier": 1
-	},
-  "color": {
-    "start": "#ffffff",
-    "end": "#808080"
-  },
-	"speed": {
-		"start": 30,
-		"end": 30,
-		"minimumSpeedMultiplier": 0.1
-	},
-	"acceleration": {
-		"x": 1,
-		"y": 1
-	},
-	"maxSpeed": 0,
-	"startRotation": {
-		"min": 0,
-		"max": 360
-	},
-	"noRotation": false,
-	"rotationSpeed": {
-		"min": 0,
-		"max": 0
-	},
-	"lifetime": {
-		"min": 0.5,
-		"max": 1.5
-	},
-	"blendMode": "normal",
-	"frequency": 0.001,
-	"emitterLifetime": -1,
-	"maxParticles": 500,
-	"pos": {
-		"x": 0,
-		"y": 0
-	},
-	"addAtBack": false,
-	"spawnType": "circle",
-  "spawnCircle": {
-    "x": 0,
-    "y": 0,
-    "r": 0
-  },
-  "autoUpdate":  true
-}`);
+var eyeEmitterConfig = {
+    "alpha": {
+        "start": 1,
+        "end": 0.15
+    },
+    "scale": {
+        "start": 0.75,
+        "end": 0.75,
+        "minimumScaleMultiplier": 1
+    },
+    "color": {
+        "start": "#ffffff",
+        "end": "#808080"
+    },
+    "speed": {
+        "start": 30,
+        "end": 30,
+        "minimumSpeedMultiplier": 0.1
+    },
+    "acceleration": {
+        "x": 1,
+        "y": 1
+    },
+    "maxSpeed": 0,
+    "startRotation": {
+        "min": 0,
+        "max": 360
+    },
+    "noRotation": false,
+    "rotationSpeed": {
+        "min": 0,
+        "max": 0
+    },
+    "lifetime": {
+        "min": 0.5,
+        "max": 1.5
+    },
+    "blendMode": "normal",
+    "frequency": 0.001,
+    "emitterLifetime": -1,
+    "maxParticles": 500,
+    "pos": {
+        "x": 0,
+        "y": 0
+    },
+    "addAtBack": false,
+    "spawnType": "circle",
+    "spawnCircle": {
+        "x": 0,
+        "y": 0,
+        "r": 0
+    },
+    "autoUpdate": true
+};
 
 function applyEventListeners() {
     selectColor.onchange = colorSelected;
@@ -102,11 +101,12 @@ function colorSelected() {
     changeEmitterColor([Number(redInput.value), Number(greenInput.value), Number(blueInput.value)]);
 }
 
-async function initRenderer() {
+function createRenderer() {
     app = new PIXI.Application({
-        view: document.querySelector("#previewCanvas")
+        view: document.querySelector("#previewCanvas"),
+        transparent: true
     });
-    var defaultPortrait = PIXI.Sprite.from("/Assets/Images/Portraits/DefaultPortrait-Short.png");
+    var defaultPortrait = PIXI.Sprite.from("/Assets/Images/Portraits/DefaultPortrait-Short2.png");
     app.stage.addChild(defaultPortrait);
 
     emitterLeft = new PIXI.particles.Emitter(app.stage, ["/Assets/Images/particle.png"], eyeEmitterConfig);
@@ -138,8 +138,8 @@ function populateColors() {
 }
 
 function randomAcceleration() {
-    var x = Utilities.GetRandom(0, 75, true);
-    var y = Utilities.GetRandom(-75, 0, true);
+    var x = Utilities.GetRandom(0, 50, true);
+    var y = Utilities.GetRandom(-50, 0, true);
     emitterLeft.acceleration.x = x;
     emitterLeft.acceleration.y = y;
     emitterRight.acceleration.x = x;
@@ -151,10 +151,10 @@ function randomAcceleration() {
         emitterRight.acceleration.x = 0;
         emitterRight.acceleration.y = 0;
     }, 500);
-    window.setTimeout(randomAcceleration, Utilities.GetRandom(1500, 5000, true));
+    window.setTimeout(randomAcceleration, Utilities.GetRandom(1500, 4000, true));
 }
 
 applyEventListeners();
 populateColors();
-initRenderer();
+createRenderer();
 window.setTimeout(randomAcceleration, 2000);
