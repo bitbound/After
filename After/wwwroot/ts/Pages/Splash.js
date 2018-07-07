@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+export default {};
 var splashEmitter;
 var app;
 var splashEmitterConfig = {
@@ -8,7 +8,7 @@ var splashEmitterConfig = {
     },
     "scale": {
         "start": 0.05,
-        "end": 0.2,
+        "end": 0.1,
         "minimumScaleMultiplier": 1
     },
     "color": {
@@ -16,7 +16,7 @@ var splashEmitterConfig = {
         "end": "#c2c2c2"
     },
     "speed": {
-        "start": 50,
+        "start": 75,
         "end": 100,
         "minimumSpeedMultiplier": 0.1
     },
@@ -43,8 +43,8 @@ var splashEmitterConfig = {
     "emitterLifetime": -1,
     "maxParticles": 500,
     "pos": {
-        "x": 0,
-        "y": 0
+        "x": 80,
+        "y": 150
     },
     "addAtBack": false,
     "spawnType": "rect",
@@ -57,9 +57,12 @@ var splashEmitterConfig = {
     "autoUpdate": true
 };
 function createRenderer() {
+    document.querySelector("#splashCanvas").style.maxWidth = "200px";
     app = new PIXI.Application({
         view: document.querySelector("#splashCanvas"),
-        transparent: true
+        transparent: true,
+        width: 224,
+        height: 329
     });
     var tunnelImage = PIXI.Sprite.from("/Assets/Images/Tunnel and Shadow.png");
     app.stage.addChild(tunnelImage);

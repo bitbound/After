@@ -192,6 +192,15 @@ class Utilities {
         b = parseInt(b, 16);
         return 'rgb(' + r + ',' + g + ',' + b + ')';
     };
+    RGBStringToArray(rgbColor: string): number[] {
+        var red = Number(rgbColor.trim().replace("rgb(", "").split(",")[0]);
+        var green = Number(rgbColor.trim().split(",")[1]);
+        var blue = Number(rgbColor.trim().replace(")", "").split(",")[2]);
+        return [red, green, blue];
+    }
+    HexStringToNumber(hexString: string) {
+        return parseInt(hexString.replace("#", ""), 16);
+    }
     Animate(Object: any, Property: string, FromValue: number, ToValue: number, MsTransition: number) {
         if (typeof Object[Property] != "number") {
             console.log("Property is not of type number.");
@@ -257,6 +266,31 @@ class Utilities {
                 this.DoWhen(actionToPerform, shouldPerformAction);
             }, 10);
         }
+    }
+    ShowModal(title:string, message:string, buttonsHTML:string) {
+        var modalHTML = `<div class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">${title}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                ${message}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="document.querySelector('.modal').remove()">Close</button>
+                ${buttonsHTML}
+              </div>
+            </div>
+          </div>
+        </div>`;
+        var wrapperDiv = document.createElement("div");
+        wrapperDiv.innerHTML = modalHTML;
+        document.body.appendChild(wrapperDiv);
+        $(".modal")["modal"]();
     }
 }
 

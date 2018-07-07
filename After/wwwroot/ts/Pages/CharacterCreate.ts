@@ -68,24 +68,32 @@ var eyeEmitterConfig = {
 };
 
 function applyEventListeners() {
-    selectColor.onchange = colorSelected;
-    redInput.onchange = evaluateColor;
-    greenInput.onchange = evaluateColor;
-    blueInput.onchange = evaluateColor;
+    selectColor.onchange = presetColorSelected;
+    redInput.onchange = colorSliderChanged;
+    greenInput.onchange = colorSliderChanged;
+    blueInput.onchange = colorSliderChanged;
 }
 
-function evaluateColor() {
+function colorSliderChanged() {
     selectColor.selectedIndex = 0;
     while (Number(redInput.value) + Number(greenInput.value) + Number(blueInput.value) < 125) {
         redInput.value = String(Number(redInput.value) + 1);
         greenInput.value = String(Number(greenInput.value) + 1);
         blueInput.value = String(Number(blueInput.value) + 1);
     }
-    soulColorInput.value = `rgb(${redInput.value}, ${greenInput.value}, ${blueInput.value})`;
+    var hexString = PIXI.utils.hex2string(
+        PIXI.utils.rgb2hex(
+            [
+                Number(redInput.value) / 255,
+                Number(greenInput.value) / 255,
+                Number(blueInput.value) / 255
+            ])
+    );
+    soulColorInput.value = hexString;
     changeEmitterColor([Number(redInput.value), Number(greenInput.value), Number(blueInput.value)]);
 }
 
-function colorSelected() {
+function presetColorSelected() {
     if (selectColor.value == "") {
         redInput.value = "125";
         greenInput.value = "125";
@@ -94,7 +102,7 @@ function colorSelected() {
     }
     var hexColor = Utilities.ColorNameToHex(selectColor.value);
     var rgbColor = Utilities.HexToRGB(hexColor);
-    soulColorInput.value = rgbColor;
+    soulColorInput.value = hexColor;
     redInput.value = rgbColor.replace("rgb(", "").split(",")[0];
     greenInput.value = rgbColor.split(",")[1];
     blueInput.value = rgbColor.replace(")", "").split(",")[2];

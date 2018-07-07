@@ -1,4 +1,4 @@
-﻿export default {};
+﻿import Utilities from "../App/Utilities.js";
 
 var app: PIXI.Application;
 var emitter: PIXI.particles.Emitter;
@@ -22,8 +22,8 @@ var characterPreviewEmitterConfig = {
 		"minimumSpeedMultiplier": 0.1
 	},
 	"acceleration": {
-		"x": 1,
-		"y": 1
+		"x": 0,
+		"y": 0
 	},
 	"maxSpeed": 0,
 	"startRotation": {
@@ -58,18 +58,25 @@ var characterPreviewEmitterConfig = {
 };
 
 function changeEmitterColor(rgb: number[]) {
-    (emitter.startColor.next.value as PIXI.particles.Color).r = rgb[0];
-    (emitter.startColor.next.value as PIXI.particles.Color).g = rgb[1];
-    (emitter.startColor.next.value as PIXI.particles.Color).b = rgb[2];
+    (emitter.startColor.next.value as PIXI.particles.Color).r = rgb[0] * 255;
+    (emitter.startColor.next.value as PIXI.particles.Color).g = rgb[1] * 255;
+    (emitter.startColor.next.value as PIXI.particles.Color).b = rgb[2] * 255;
+}
+
+function applyEventHandlers() {
+    document.querySelector("#deleteCharacterButton").addEventListener("click", ev => {
+        Utilities.ShowModal("Confirm Deletion",
+            "Are you sure you want to delete this character?<br><br>THIS CANNOT BE REVERSED!",
+            "<button class='btn btn-danger'>Delete</button>"
+        );
+    });
 }
 
 function selectCharacter(e) {
     document.querySelector("#divCharacterPreview").removeAttribute("hidden");
-    var rgbColor = (e.currentTarget as HTMLAnchorElement).getAttribute("character-color");
-    var red = Number(rgbColor.replace("rgb(", "").split(",")[0]);
-    var green = Number(rgbColor.split(",")[1]);
-    var blue = Number(rgbColor.replace(")", "").split(",")[2]);
-    changeEmitterColor([red, green, blue]);
+    var hexColor = (e.currentTarget as HTMLAnchorElement).getAttribute("character-color");
+    var hexNumber = Utilities.HexStringToNumber(hexColor);
+    changeEmitterColor(PIXI.utils.hex2rgb(hexNumber));
 }
 
 function createRenderer() {
@@ -86,4 +93,5 @@ document.querySelectorAll(".character-selector").forEach((value) => {
     value.addEventListener("click", (e) => { selectCharacter(e);})
 })
 
+applyEventHandlers();
 createRenderer();

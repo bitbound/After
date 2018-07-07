@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-sm-5">
         <div class="h3">Characters</div>
-        <div class="margin-top-md list-group">
+        <div class="margin-top-md list-group max-height-300 vscroll">
             @if (playerCharacters.Count() > 0)
             {
                 foreach (var character in playerCharacters)
@@ -33,15 +33,18 @@
 
     <div id="divCharacterPreview" class="col-sm-5 col-sm-offset-1" hidden>
         <div>
-
-        </div>
-        <div >
             <canvas id="previewCharacterCanvas"></canvas>
+        </div>
+        <div>
+            <div class="col-xs-6 text-center">
+                <button class="btn btn-primary">Enter</button>
+            </div>
+            <div id="deleteCharacterButton" class="col-xs-6 text-center">
+                <button class="btn btn-danger btn-sm">Delete</button>
+            </div>
         </div>
     </div>
 </div>
 
 
-<script src="/lib/pixi.js/pixi.js"></script>
-<script src="/lib/pixi-particles/dist/pixi-particles.js"></script>
 <script type="module" src="~/ts/Pages/CharacterSelect.js"></script>

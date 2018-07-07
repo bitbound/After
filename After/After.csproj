@@ -12,6 +12,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\ts\CharacterSelect.ts" />
     <Content Remove="wwwroot\ts\Main.ts" />
+    <Content Remove="wwwroot\ts\Pages\Intro.ts" />
     <Content Remove="wwwroot\ts\Splash.ts" />
   </ItemGroup>
 
@@ -35,6 +36,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\ts\Pages\CharacterSelect.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Pages\Intro.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Pages\Splash.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Main.ts" />
   </ItemGroup>
