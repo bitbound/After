@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\ts\App\Me.ts" />
     <Content Remove="wwwroot\ts\CharacterSelect.ts" />
     <Content Remove="wwwroot\ts\Main.ts" />
+    <Content Remove="wwwroot\ts\Models\GameObject.ts" />
+    <Content Remove="wwwroot\ts\Models\Scene.ts" />
     <Content Remove="wwwroot\ts\Pages\Intro.ts" />
     <Content Remove="wwwroot\ts\Splash.ts" />
   </ItemGroup>
@@ -24,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
-    <Folder Include="wwwroot\ts\Models\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\ts\App\Me.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\GameObject.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\Scene.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Pages\CharacterSelect.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Pages\Intro.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Pages\Splash.ts" />

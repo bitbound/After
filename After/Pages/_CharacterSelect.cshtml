@@ -9,9 +9,13 @@
         <div class="margin-top-md list-group max-height-300 vscroll">
             @if (playerCharacters.Count() > 0)
             {
+                <form id="deleteCharacterForm" method="post">
+                    <input id="characterNameInput" name="CharacterName" type="hidden" />
+                </form>
+                @Html.AntiForgeryToken()
                 foreach (var character in playerCharacters)
                 {
-                    <a href="#" class="list-group-item character-selector" character-color="@character.Color">
+                    <a href="#" class="list-group-item character-selector" character-name="@character.Name" character-color="@character.Color">
                         @character.Name
                         <span class="badge">Core Energy: @character.CoreEnergy</span>
                     </a>
@@ -37,10 +41,10 @@
         </div>
         <div>
             <div class="col-xs-6 text-center">
-                <button class="btn btn-primary">Enter</button>
+                <button id="enterButton" class="btn btn-primary">Enter</button>
             </div>
-            <div id="deleteCharacterButton" class="col-xs-6 text-center">
-                <button class="btn btn-danger btn-sm">Delete</button>
+            <div class="col-xs-6 text-center">
+                <button  id="deleteCharacterButton" class="btn btn-danger btn-sm">Delete</button>
             </div>
         </div>
     </div>

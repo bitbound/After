@@ -66,14 +66,25 @@ function changeEmitterColor(rgb: number[]) {
 function applyEventHandlers() {
     document.querySelector("#deleteCharacterButton").addEventListener("click", ev => {
         Utilities.ShowModal("Confirm Deletion",
-            "Are you sure you want to delete this character?<br><br>THIS CANNOT BE REVERSED!",
-            "<button class='btn btn-danger'>Delete</button>"
+            "Are you sure you want to delete this character?<br><br><strong>This cannot be reversed!</strong>",
+            "<button id='confirmDeleteButton' class='btn btn-danger'>Delete</button>"
         );
+        (document.querySelector("#confirmDeleteButton") as HTMLButtonElement).onclick = (ev) => {
+            var deleteCharacterForm = document.querySelector("#deleteCharacterForm") as HTMLFormElement;
+            deleteCharacterForm.submit();
+        }
     });
+    (document.querySelector("#enterButton") as HTMLButtonElement).onclick = (ev) => {
+        var characterInput = document.querySelector("#characterNameInput") as HTMLInputElement;
+        var characterName = characterInput.value;
+        location.assign("/play?character=" + characterName);
+    };
 }
 
 function selectCharacter(e) {
     document.querySelector("#divCharacterPreview").removeAttribute("hidden");
+    var characterInput = (document.querySelector("#characterNameInput") as HTMLInputElement);
+    characterInput.value = (e.currentTarget as HTMLAnchorElement).getAttribute("character-name");
     var hexColor = (e.currentTarget as HTMLAnchorElement).getAttribute("character-color");
     var hexNumber = Utilities.HexStringToNumber(hexColor);
     changeEmitterColor(PIXI.utils.hex2rgb(hexNumber));

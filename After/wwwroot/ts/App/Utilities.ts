@@ -1,4 +1,7 @@
 class Utilities {
+    ShowGenericError(): void {
+        this.ShowModal("Error", "An error occurred during the last operation.", "");
+    }
     NumberIsBetween(NumberAnalyzed: number, Min: number, Max: number, IncludeMinMax: boolean): boolean {
         if (IncludeMinMax) {
             if (NumberAnalyzed == Min || NumberAnalyzed == Max) {
@@ -281,7 +284,7 @@ class Utilities {
                 ${message}
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="document.querySelector('.modal').remove()">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 ${buttonsHTML}
               </div>
             </div>
@@ -290,6 +293,9 @@ class Utilities {
         var wrapperDiv = document.createElement("div");
         wrapperDiv.innerHTML = modalHTML;
         document.body.appendChild(wrapperDiv);
+        $(".modal").on("hidden.bs.modal", ev => {
+            ev.currentTarget.parentElement.remove();
+        });
         $(".modal")["modal"]();
     }
 }

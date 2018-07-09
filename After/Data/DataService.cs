@@ -24,6 +24,13 @@ namespace After.Data
             DBContext.SaveChanges();
         }
 
+        public void DeleteCharacter(string characterName)
+        {
+            var removeCharacter = DBContext.PlayerCharacters.FirstOrDefault(x => x.Name == characterName);
+            DBContext.PlayerCharacters.Remove(removeCharacter);
+            DBContext.SaveChanges();
+        }
+
         public List<PlayerCharacter> GetPlayerCharacters(string userName)
         {
             

@@ -62,11 +62,22 @@ function changeEmitterColor(rgb) {
 }
 function applyEventHandlers() {
     document.querySelector("#deleteCharacterButton").addEventListener("click", ev => {
-        Utilities.ShowModal("Confirm Deletion", "Are you sure you want to delete this character?<br><br>THIS CANNOT BE REVERSED!", "<button class='btn btn-danger'>Delete</button>");
+        Utilities.ShowModal("Confirm Deletion", "Are you sure you want to delete this character?<br><br><strong>This cannot be reversed!</strong>", "<button id='confirmDeleteButton' class='btn btn-danger'>Delete</button>");
+        document.querySelector("#confirmDeleteButton").onclick = (ev) => {
+            var deleteCharacterForm = document.querySelector("#deleteCharacterForm");
+            deleteCharacterForm.submit();
+        };
     });
+    document.querySelector("#enterButton").onclick = (ev) => {
+        var characterInput = document.querySelector("#characterNameInput");
+        var characterName = characterInput.value;
+        location.assign("/play?character=" + characterName);
+    };
 }
 function selectCharacter(e) {
     document.querySelector("#divCharacterPreview").removeAttribute("hidden");
+    var characterInput = document.querySelector("#characterNameInput");
+    characterInput.value = e.currentTarget.getAttribute("character-name");
     var hexColor = e.currentTarget.getAttribute("character-color");
     var hexNumber = Utilities.HexStringToNumber(hexColor);
     changeEmitterColor(PIXI.utils.hex2rgb(hexNumber));

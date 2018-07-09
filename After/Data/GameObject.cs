@@ -22,7 +22,7 @@ namespace After.Data
         public double VelocityX { get; set; }
         public double VelocityY { get; set; }
         public double AccelerationSpeed { get; set; }
-        public double DeccelerationSpeed { get; set; }
+        public double DecelerationSpeed { get; set; }
 
         public Rectangle Rect
         {
