@@ -74,7 +74,7 @@ namespace After
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<SocketHub>("/BrowserSocket");
+                routes.MapHub<SocketHub>("/SocketEndpoint");
             });
             app.UseMvc();
 

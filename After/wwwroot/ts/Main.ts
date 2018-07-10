@@ -3,6 +3,8 @@
 import Audio from "./App/Audio.js";
 import Utilities from "./App/Utilities.js";
 import Me from "./App/Me.js";
+import WebSockets from "./App/WebSockets.js";
+import Scene from "./Models/Scene.js";
 
 var after = new class {
     Debug: boolean = false;
@@ -11,18 +13,15 @@ var after = new class {
     Audio = Audio;
     Me = Me;
     Renderer: PIXI.Application;
+    Scene: Scene;
     Utilities = Utilities;
+    WebSockets = WebSockets;
 }
 
-function createRenderer() {
-    after.Renderer = new PIXI.Application({
-        view: document.querySelector("#playCanvas"),
-        transparent: true
-    });
-    Me.Create(after.Renderer);
-}
-
-createRenderer();
+after.Renderer = new PIXI.Application({
+    view: document.querySelector("#playCanvas")
+});
 
 window["After"] = after;
+WebSockets.Connect();
 export default after;

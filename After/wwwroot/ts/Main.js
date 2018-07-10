@@ -2,6 +2,7 @@
 import Audio from "./App/Audio.js";
 import Utilities from "./App/Utilities.js";
 import Me from "./App/Me.js";
+import WebSockets from "./App/WebSockets.js";
 var after = new class {
     constructor() {
         this.Debug = false;
@@ -9,16 +10,13 @@ var after = new class {
         this.Audio = Audio;
         this.Me = Me;
         this.Utilities = Utilities;
+        this.WebSockets = WebSockets;
     }
 };
-function createRenderer() {
-    after.Renderer = new PIXI.Application({
-        view: document.querySelector("#playCanvas"),
-        transparent: true
-    });
-    Me.Create(after.Renderer);
-}
-createRenderer();
+after.Renderer = new PIXI.Application({
+    view: document.querySelector("#playCanvas")
+});
 window["After"] = after;
+WebSockets.Connect();
 export default after;
 //# sourceMappingURL=Main.js.map

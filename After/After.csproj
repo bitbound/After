@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\ts\App\Me.ts" />
+    <Content Remove="wwwroot\ts\App\WebSockets.ts" />
     <Content Remove="wwwroot\ts\CharacterSelect.ts" />
     <Content Remove="wwwroot\ts\Main.ts" />
     <Content Remove="wwwroot\ts\Models\GameObject.ts" />
@@ -27,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="wwwroot\lib\types\signalr\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +40,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\ts\App\Me.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\WebSockets.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\GameObject.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\Scene.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Pages\CharacterSelect.ts" />

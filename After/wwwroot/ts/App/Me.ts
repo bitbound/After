@@ -1,6 +1,6 @@
 ﻿class Me {
     Emitter: PIXI.particles.Emitter;
-    private EmitterConfig = {
+    EmitterConfig = {
     "alpha": {
         "start": 1,
         "end": 0
@@ -59,5 +59,4 @@
         this.Emitter.updateSpawnPos(mainApp.screen.width / 2, mainApp.screen.height / 2);
     }
 }
-
 export default new Me();
