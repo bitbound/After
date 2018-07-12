@@ -1,3 +1,4 @@
+import { Sound } from "../App/Sound.js";
 export default {};
 var splashEmitter;
 var app;
@@ -84,6 +85,6 @@ function playAudio(sourceFile) {
     };
     request.send();
 }
-playAudio("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
+Sound.PlayLoop("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
 createRenderer();
 //# sourceMappingURL=Splash.js.map

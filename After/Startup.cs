@@ -46,7 +46,10 @@ namespace After
                 .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSignalR();
+            services.AddSignalR().AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+            });
             services.AddLogging();
             services.AddScoped<DataService>();
             services.AddSingleton<IEmailSender, EmailSender>();

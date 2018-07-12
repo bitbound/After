@@ -1,4 +1,5 @@
-﻿import Utilities from "../App/Utilities.js";
+﻿import { Utilities } from "../App/Utilities.js";
+import { Sound } from "../App/Sound.js";
 
 var introSoulEmitter: PIXI.particles.Emitter;
 var introFlybyEmitter: PIXI.particles.Emitter;
@@ -134,6 +135,7 @@ function createRenderer() {
 }
 
 createRenderer();
+Sound.PlayLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", null);
 
 document.querySelectorAll("div.hidden").forEach((value, index) => {
     window.setTimeout((value) => {

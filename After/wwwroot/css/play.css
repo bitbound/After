@@ -8,10 +8,36 @@
 }
 
 canvas {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     max-width: 99vw;
     max-height: 95vh;
+}
+
+.joystick-outer {
+    position: fixed;
+    left: 50px;
+    bottom: 50px;
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid dimgray;
+    overflow: hidden;
+}
+
+.joystick-inner {
+    margin: auto;
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid dimgray;
 }

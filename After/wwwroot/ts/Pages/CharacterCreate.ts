@@ -1,5 +1,4 @@
-﻿import Utilities from "../App/Utilities.js";
-import { Ellipse } from "pixi.js";
+﻿import { Utilities } from "../App/Utilities.js";
 
 var redInput = document.querySelector("#inputRed") as HTMLInputElement;
 var greenInput = document.querySelector("#inputGreen") as HTMLInputElement;

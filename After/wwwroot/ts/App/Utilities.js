@@ -1,42 +1,28 @@
-class Utilities {
-    ShowGenericError() {
-        this.ShowModal("Error", "An error occurred during the last operation.", "");
-    }
-    NumberIsBetween(NumberAnalyzed, Min, Max, IncludeMinMax) {
-        if (IncludeMinMax) {
-            if (NumberAnalyzed == Min || NumberAnalyzed == Max) {
-                return true;
-            }
-        }
-        if (NumberAnalyzed > Min && NumberAnalyzed < Max) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    ;
-    GetRandom(Min, Max, Round) {
-        if (Min > Max) {
-            throw "Min must be less than max.";
-        }
-        var ran = Math.random();
-        var diff = Max - Min;
-        var result = ran * diff;
-        if (Round) {
-            return Math.round(result + Min);
-        }
-        else {
-            return result + Min;
-        }
-    }
-    ;
-    Delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    ;
+export const Utilities = new class {
     get ColorNames() { return ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenrod", "DarkGray", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "Goldenrod", "Gray", "Green", "GreenYellow", "Honeydew", "HotPink", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenrodYellow", "LightGreen", "LightGrey", "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquamarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenrod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "Seashell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"]; }
     ;
+    get QueryStrings() {
+        var queryStrings = {};
+        location.search.replace("?", "").split("&").forEach(x => {
+            queryStrings[x.split("=")[0]] = x.split("=")[1];
+        });
+        return queryStrings;
+    }
+    Animate(Object, Property, FromValue, ToValue, MsTransition) {
+        if (typeof Object[Property] != "number") {
+            console.log("Property is not of type number.");
+            return;
+        }
+        var totalChange = ToValue - FromValue;
+        for (var i = 0; i < MsTransition; i = i + 20) {
+            window.setTimeout(function (currentTime) {
+                Object[Property] = FromValue + (currentTime / MsTransition * totalChange);
+                if (currentTime >= MsTransition) {
+                    Object[Property] = ToValue;
+                }
+            }, i, i);
+        }
+    }
     ColorNameToHex(colour) {
         var colours = {
             "aliceblue": "#f0f8ff",
@@ -185,73 +171,10 @@ class Utilities {
         return "";
     }
     ;
-    HexToRGB(col) {
-        var r, g, b;
-        if (col.charAt(0) == '#') {
-            col = col.substr(1);
-        }
-        r = col.charAt(0) + col.charAt(1);
-        g = col.charAt(2) + col.charAt(3);
-        b = col.charAt(4) + col.charAt(5);
-        r = parseInt(r, 16);
-        g = parseInt(g, 16);
-        b = parseInt(b, 16);
-        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    Delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
     ;
-    RGBStringToArray(rgbColor) {
-        var red = Number(rgbColor.trim().replace("rgb(", "").split(",")[0]);
-        var green = Number(rgbColor.trim().split(",")[1]);
-        var blue = Number(rgbColor.trim().replace(")", "").split(",")[2]);
-        return [red, green, blue];
-    }
-    HexStringToNumber(hexString) {
-        return parseInt(hexString.replace("#", ""), 16);
-    }
-    Animate(Object, Property, FromValue, ToValue, MsTransition) {
-        if (typeof Object[Property] != "number") {
-            console.log("Property is not of type number.");
-            return;
-        }
-        var totalChange = ToValue - FromValue;
-        for (var i = 0; i < MsTransition; i = i + 20) {
-            window.setTimeout(function (currentTime) {
-                Object[Property] = FromValue + (currentTime / MsTransition * totalChange);
-                if (currentTime >= MsTransition) {
-                    Object[Property] = ToValue;
-                }
-            }, i, i);
-        }
-    }
-    GetDistanceBetween(XYZ1, XYZ2) {
-        var xyz1Arr = XYZ1.split(",");
-        var xyz2Arr = XYZ2.split(",");
-        if (xyz1Arr[2] != xyz2Arr[2]) {
-            return Number.MAX_VALUE;
-        }
-        return Math.sqrt(Math.pow(Number(xyz1Arr[0]) - Number(xyz2Arr[0]), 2) +
-            Math.pow(Number(xyz1Arr[1]) - Number(xyz2Arr[1]), 2));
-    }
-    FormatObjectForHTML(serializableObject) {
-        var tempArray = new Array();
-        var jsonString = JSON.stringify(serializableObject, function (key, value) {
-            if (typeof value == "object" && value != null) {
-                if (tempArray.findIndex(x => x == value) > -1) {
-                    return "[Possible circular reference.]";
-                }
-                else {
-                    tempArray.push(value);
-                }
-            }
-            return value;
-        }, "&emsp;").split("\n").join("<br/>").split(" ").join("&nbsp;");
-        return jsonString;
-    }
-    EncodeForHTML(input) {
-        var div = document.createElement("div");
-        div.innerText = input;
-        return div.innerHTML;
-    }
     DownloadAsString(url) {
         return new Promise(resolve => {
             var xhr = new XMLHttpRequest();
@@ -271,6 +194,90 @@ class Utilities {
                 this.DoWhen(actionToPerform, shouldPerformAction);
             }, 10);
         }
+    }
+    EncodeForHTML(input) {
+        var div = document.createElement("div");
+        div.innerText = input;
+        return div.innerHTML;
+    }
+    FormatObjectForHTML(serializableObject) {
+        var tempArray = new Array();
+        var jsonString = JSON.stringify(serializableObject, function (key, value) {
+            if (typeof value == "object" && value != null) {
+                if (tempArray.findIndex(x => x == value) > -1) {
+                    return "[Possible circular reference.]";
+                }
+                else {
+                    tempArray.push(value);
+                }
+            }
+            return value;
+        }, "&emsp;").split("\n").join("<br/>").split(" ").join("&nbsp;");
+        return jsonString;
+    }
+    GetDistanceBetween(point1, point2) {
+        return Math.sqrt(Math.pow(point1.x - point2.x, 2) +
+            Math.pow(point1.y - point2.y, 2));
+    }
+    GetRandom(Min, Max, Round) {
+        if (Min > Max) {
+            throw "Min must be less than max.";
+        }
+        var ran = Math.random();
+        var diff = Max - Min;
+        var result = ran * diff;
+        if (Round) {
+            return Math.round(result + Min);
+        }
+        else {
+            return result + Min;
+        }
+    }
+    ;
+    HexStringToNumber(hexString) {
+        return parseInt(hexString.replace("#", ""), 16);
+    }
+    HexToRGB(col) {
+        var r, g, b;
+        if (col.charAt(0) == '#') {
+            col = col.substr(1);
+        }
+        r = col.charAt(0) + col.charAt(1);
+        g = col.charAt(2) + col.charAt(3);
+        b = col.charAt(4) + col.charAt(5);
+        r = parseInt(r, 16);
+        g = parseInt(g, 16);
+        b = parseInt(b, 16);
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+    ;
+    NumberIsBetween(NumberAnalyzed, Min, Max, IncludeMinMax) {
+        if (IncludeMinMax) {
+            if (NumberAnalyzed == Min || NumberAnalyzed == Max) {
+                return true;
+            }
+        }
+        if (NumberAnalyzed > Min && NumberAnalyzed < Max) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    ;
+    GetAngle(centerPoint, targetPoint) {
+        var dx = centerPoint.x - targetPoint.x;
+        var dy = centerPoint.y - targetPoint.y;
+        return Math.atan2(dy, dx) * 180 / Math.PI;
+    }
+    RGBStringToArray(rgbColor) {
+        var red = Number(rgbColor.trim().replace("rgb(", "").split(",")[0]);
+        var green = Number(rgbColor.trim().split(",")[1]);
+        var blue = Number(rgbColor.trim().replace(")", "").split(",")[2]);
+        return [red, green, blue];
+    }
+    ShowGenericError() {
+        this.ShowModal("Error", "An error occurred during the last operation.", "");
     }
     ShowModal(title, message, buttonsHTML) {
         var modalHTML = `<div class="modal fade" tabindex="-1" role="dialog">
@@ -300,6 +307,5 @@ class Utilities {
         });
         $(".modal")["modal"]();
     }
-}
-export default new Utilities();
+};
 //# sourceMappingURL=Utilities.js.map

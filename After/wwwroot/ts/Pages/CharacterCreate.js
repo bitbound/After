@@ -1,4 +1,4 @@
-import Utilities from "../App/Utilities.js";
+import { Utilities } from "../App/Utilities.js";
 var redInput = document.querySelector("#inputRed");
 var greenInput = document.querySelector("#inputGreen");
 var blueInput = document.querySelector("#inputBlue");

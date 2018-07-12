@@ -24,9 +24,10 @@ namespace After.Data
             DBContext.SaveChanges();
         }
 
-        public PlayerCharacter GetCharacter(string characterName)
+        public PlayerCharacter GetCharacter(string userName, string characterName)
         {
-            return DBContext.PlayerCharacters.FirstOrDefault(x => x.Name == characterName);
+            return DBContext.Users.Include(x=>x.Characters).FirstOrDefault(x=>x.UserName == userName)
+                ?.Characters?.FirstOrDefault(x => x.Name == characterName);
         }
 
         public void DeleteCharacter(string characterName)

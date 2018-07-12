@@ -11,10 +11,13 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\ts\App\Me.ts" />
-    <Content Remove="wwwroot\ts\App\WebSockets.ts" />
+    <Content Remove="wwwroot\ts\App\Sockets.ts" />
+    <Content Remove="wwwroot\ts\App\UI.ts" />
     <Content Remove="wwwroot\ts\CharacterSelect.ts" />
     <Content Remove="wwwroot\ts\Main.ts" />
+    <Content Remove="wwwroot\ts\Models\Character.ts" />
     <Content Remove="wwwroot\ts\Models\GameObject.ts" />
+    <Content Remove="wwwroot\ts\Models\PlayerCharacter.ts" />
     <Content Remove="wwwroot\ts\Models\Scene.ts" />
     <Content Remove="wwwroot\ts\Pages\Intro.ts" />
     <Content Remove="wwwroot\ts\Splash.ts" />
@@ -29,6 +32,7 @@
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="wwwroot\lib\types\signalr\" />
+    <Folder Include="wwwroot\ts\Entities\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,8 +44,11 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\ts\App\Me.ts" />
-    <TypeScriptCompile Include="wwwroot\ts\App\WebSockets.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\UI.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\Sockets.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\Character.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\GameObject.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\PlayerCharacter.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\Scene.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Pages\CharacterSelect.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Pages\Intro.ts" />

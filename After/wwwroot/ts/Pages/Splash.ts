@@ -1,4 +1,6 @@
-﻿export default {};
+﻿import { Sound } from "../App/Sound.js";
+
+export default {};
 
 var splashEmitter: PIXI.particles.Emitter;
 var app: PIXI.Application;
@@ -88,5 +90,5 @@ function playAudio(sourceFile: string) {
     request.send();
 }
 
-playAudio("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
+Sound.PlayLoop("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
 createRenderer();

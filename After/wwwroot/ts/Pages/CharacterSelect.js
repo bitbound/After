@@ -1,4 +1,4 @@
-import Utilities from "../App/Utilities.js";
+import { Utilities } from "../App/Utilities.js";
 var app;
 var emitter;
 var characterPreviewEmitterConfig = {
@@ -9,15 +9,15 @@ var characterPreviewEmitterConfig = {
     "scale": {
         "start": 2,
         "end": 2,
-        "minimumScaleMultiplier": 1
+        "minimumScaleMultiplier": 0.1
     },
     "color": {
         "start": "#ffffff",
         "end": "#808080"
     },
     "speed": {
-        "start": 50,
-        "end": 40,
+        "start": 75,
+        "end": 50,
         "minimumSpeedMultiplier": 0.1
     },
     "acceleration": {
@@ -35,8 +35,8 @@ var characterPreviewEmitterConfig = {
         "max": 0
     },
     "lifetime": {
-        "min": 1.0,
-        "max": 2.5
+        "min": 0.75,
+        "max": 2.0
     },
     "blendMode": "normal",
     "frequency": 0.001,

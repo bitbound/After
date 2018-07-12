@@ -1,27 +1,46 @@
 ﻿/// <reference path="../lib/pixi-particles/ambient.d.ts" />
 
-import Audio from "./App/Audio.js";
-import Utilities from "./App/Utilities.js";
-import Me from "./App/Me.js";
-import WebSockets from "./App/WebSockets.js";
-import Scene from "./Models/Scene.js";
+import { Sound } from "./App/Sound.js";
+import { Me } from "./App/Me.js";
+import { Scene } from "./Models/Scene.js";
+import { UI } from "./App/UI.js";
+import { Utilities } from "./App/Utilities.js";
+import { Sockets } from "./App/Sockets.js";
 
-var after = new class {
+
+const After = new class {
     Debug: boolean = false;
     TouchScreen: boolean = false;
 
-    Audio = Audio;
     Me = Me;
     Renderer: PIXI.Application;
     Scene: Scene;
+    Sound = Sound;
+    UI = UI;
     Utilities = Utilities;
-    WebSockets = WebSockets;
+    Sockets = Sockets;
 }
 
-after.Renderer = new PIXI.Application({
-    view: document.querySelector("#playCanvas")
-});
+function init() {
+    if (location.href.indexOf("localhost") > -1) {
+        After.Debug = true;
+    }
+    After.Renderer = new PIXI.Application({
+        view: document.querySelector("#playCanvas"),
+        width: 1280,
+        height: 720
+    });
 
-window["After"] = after;
-WebSockets.Connect();
-export default after;
+    After.Renderer.ticker.add(delta => gameLoop(delta));
+
+    window["After"] = After;
+    Sockets.Connect();
+}
+function gameLoop(delta) {
+    if (After.Debug) {
+       
+    }
+}
+
+init();
+export default After;

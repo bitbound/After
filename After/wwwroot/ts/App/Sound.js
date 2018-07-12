@@ -1,12 +1,8 @@
-﻿class AudioPlayback {
+export const Sound = new class {
     constructor() {
         this.Context = new AudioContext();
     }
-    Context: AudioContext;
-    PlaySource: AudioBufferSourceNode;
-    LoopSource: AudioBufferSourceNode;
-
-    PlaySound(SourceFile: string, Callback: () => void): void {
+    PlaySound(SourceFile, Callback) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.PlaySource = audioCtx.createBufferSource();
@@ -28,21 +24,22 @@
                 if (Callback) {
                     Callback();
                 }
-            })
-        }
+            });
+        };
         request.onerror = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.ontimeout = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.send();
-    };
-    LoadSound(SourceFile: string, Callback: () => void) {
+    }
+    ;
+    LoadSound(SourceFile, Callback) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.PlaySource = audioCtx.createBufferSource();
@@ -63,27 +60,28 @@
                 if (Callback) {
                     Callback();
                 }
-            })
-        }
+            });
+        };
         request.onerror = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.ontimeout = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.send();
-    };
-    StopSound(): void {
+    }
+    ;
+    StopSound() {
         if (this.PlaySource.buffer != null) {
             this.PlaySource.stop();
             this.PlaySource.disconnect();
         }
     }
-    PlayLoop(SourceFile: string, Callback: () => void): void {
+    PlayLoop(SourceFile, Callback = null) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.LoopSource = audioCtx.createBufferSource();
@@ -105,21 +103,22 @@
                 if (Callback) {
                     Callback();
                 }
-            })
-        }
+            });
+        };
         request.onerror = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.ontimeout = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.send();
-    };
-    LoadLoop(SourceFile: string, Callback: () => void) {
+    }
+    ;
+    LoadLoop(SourceFile, Callback) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.LoopSource = audioCtx.createBufferSource();
@@ -140,34 +139,34 @@
                 if (Callback) {
                     Callback();
                 }
-            })
-        }
+            });
+        };
         request.onerror = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.ontimeout = function () {
             if (Callback) {
                 Callback();
             }
-        }
+        };
         request.send();
-    };
-    StopLoop(): void {
+    }
+    ;
+    StopLoop() {
         if (this.LoopSource.buffer != null) {
             this.LoopSource.stop();
             this.LoopSource.disconnect();
         }
     }
-
     StreamSound(SourceFile) {
         var audio = document.createElement("audio");
         audio.classList.add("audio-stream");
         audio.src = SourceFile;
-        audio.onended = function (this, ev) {
+        audio.onended = function (ev) {
             document.body.removeChild(this);
-        }
+        };
         audio.play();
     }
     StreamLoop(SourceFile) {
@@ -175,24 +174,23 @@
         audio.classList.add("audio-stream-loop");
         audio.src = SourceFile;
         audio.loop = true;
-        audio.onended = function (this, ev) {
+        audio.onended = function (ev) {
             document.body.removeChild(this);
-        }
+        };
         document.body.appendChild(audio);
         audio.play();
     }
     StopStream() {
-        $("audio.audio-stream").each(function (index, elem: HTMLAudioElement) {
+        $("audio.audio-stream").each(function (index, elem) {
             elem.pause();
             $(elem).remove();
-        })
+        });
     }
     StopStreamLoop() {
-        $("audio.audio-stream-loop").each(function (index, elem: HTMLAudioElement) {
+        $("audio.audio-stream-loop").each(function (index, elem) {
             elem.pause();
             $(elem).remove();
-        })
+        });
     }
-}
-
-export default new AudioPlayback();
+};
+//# sourceMappingURL=Sound.js.map

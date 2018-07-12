@@ -1,4 +1,4 @@
-class Me {
+export const Me = new class {
     constructor() {
         this.EmitterConfig = {
             "alpha": {
@@ -8,16 +8,16 @@ class Me {
             "scale": {
                 "start": 0.5,
                 "end": 0.5,
-                "minimumScaleMultiplier": 1
+                "minimumScaleMultiplier": 0.1
             },
             "color": {
                 "start": "#ffffff",
                 "end": "#808080"
             },
             "speed": {
-                "start": 50,
-                "end": 25,
-                "minimumSpeedMultiplier": 0.1
+                "start": 30,
+                "end": 30,
+                "minimumSpeedMultiplier": 0.5
             },
             "acceleration": {
                 "x": 0,
@@ -34,8 +34,8 @@ class Me {
                 "max": 0
             },
             "lifetime": {
-                "min": 0.2,
-                "max": 0.9
+                "min": 0.5,
+                "max": 1.0
             },
             "blendMode": "normal",
             "frequency": 0.001,
@@ -55,10 +55,9 @@ class Me {
             "autoUpdate": true
         };
     }
-    Create(mainApp) {
+    CreateEmitter(mainApp) {
         this.Emitter = new PIXI.particles.Emitter(mainApp.stage, ["/Assets/Images/particle.png"], this.EmitterConfig);
-        this.Emitter.updateSpawnPos(mainApp.screen.width / 2, mainApp.screen.height / 2);
+        this.Emitter.updateOwnerPos(mainApp.screen.width / 2, mainApp.screen.height / 2);
     }
-}
-export default new Me();
+};
 //# sourceMappingURL=Me.js.map

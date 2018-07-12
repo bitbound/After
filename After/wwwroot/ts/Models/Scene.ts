@@ -1,3 +1,3 @@
-﻿export default class Scene {
+﻿export class Scene {
 
 }

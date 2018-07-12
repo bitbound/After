@@ -21,7 +21,7 @@ namespace After.Pages
         }
         public void OnGet(string character)
         {
-            var playerCharacter = DataService.GetCharacter(character);
+            var playerCharacter = DataService.GetCharacter(User.Identity.Name, character);
             if (playerCharacter == null)
             {
                 CharacterNotFound = true;

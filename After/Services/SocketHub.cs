@@ -1,5 +1,6 @@
 ﻿using After.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
@@ -13,9 +14,12 @@ namespace After.Services
     public class SocketHub : Hub
     {
         private DataService DataService { get; set; }
-        public SocketHub(DataService dataService)
+        private HttpContext HttpContext { get; set; }
+        public SocketHub(DataService dataService, IHttpContextAccessor contextAccessor)
         {
-            DataService = DataService;
+            DataService = dataService;
+            HttpContext = contextAccessor.HttpContext;
+            
         }
         public async Task SendMessage(JObject message)
         {
@@ -27,6 +31,18 @@ namespace After.Services
             return base.OnConnectedAsync();
         }
 
+        public void Init(string characterName)
+        {
+            Context.Items["CharacterName"] = characterName;
+            SendFullSceneUpdate();
+        }
+
+        public void SendFullSceneUpdate()
+        {
+            var characterName = Context.Items["CharacterName"].ToString();
+            var playerCharacter = DataService.GetCharacter(HttpContext.User.Identity.Name, characterName);
+            Clients.Caller.SendAsync("PlayerUpdate", playerCharacter);
+        }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
