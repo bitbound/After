@@ -1,5 +1,6 @@
-import After from "../Main.js";
+import { Main } from "../Main.js";
 import { Utilities } from "./Utilities.js";
+import { Input } from "./Input.js";
 export const Sockets = new class {
     Connect() {
         var signalR = window["signalR"];
@@ -9,6 +10,11 @@ export const Sockets = new class {
             .build();
         applyMessageHandlers(this.Connection);
         this.Connection.start().then(() => {
+            if (location.href.indexOf("localhost") > -1) {
+                Main.Settings.ShowDebug = true;
+            }
+            Main.StartGameLoop();
+            Input.ApplyInputHandlers();
             this.Connection.invoke("Init", Utilities.QueryStrings["character"]);
         }).catch(err => {
             console.error(err.toString());
@@ -20,9 +26,9 @@ export const Sockets = new class {
 };
 function applyMessageHandlers(hubConnection) {
     hubConnection.on("PlayerUpdate", (args) => {
-        After.Me.Character = args;
-        After.Me.EmitterConfig.color.end = After.Me.Character.Color;
-        After.Me.CreateEmitter(After.Renderer);
+        Main.Me.Character = args;
+        Main.Me.EmitterConfig.color.end = Main.Me.Character.Color;
+        Main.Me.CreateEmitter(Main.Renderer);
     });
 }
 //# sourceMappingURL=Sockets.js.map

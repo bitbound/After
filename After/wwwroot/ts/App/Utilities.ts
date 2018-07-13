@@ -7,17 +7,17 @@ export const Utilities = new class {
         });
         return queryStrings;
     }
-    Animate(Object: any, Property: string, FromValue: number, ToValue: number, MsTransition: number) {
-        if (typeof Object[Property] != "number") {
+    Animate(targetObject: any, targetProperty: string, fromValue: number, toValue: number, msTransition: number) {
+        if (typeof targetObject[targetProperty] != "number") {
             console.log("Property is not of type number.");
             return;
         }
-        var totalChange = ToValue - FromValue;
-        for (var i = 0; i < MsTransition; i = i + 20) {
+        var totalChange = toValue - fromValue;
+        for (var i = 0; i < msTransition; i = i + 60) {
             window.setTimeout(function (currentTime) {
-                Object[Property] = FromValue + (currentTime / MsTransition * totalChange);
-                if (currentTime >= MsTransition) {
-                    Object[Property] = ToValue;
+                targetObject[targetProperty] = fromValue + (currentTime / msTransition * totalChange);
+                if (currentTime >= msTransition) {
+                    targetObject[targetProperty] = toValue;
                 }
             }, i, i)
         }
@@ -214,12 +214,6 @@ export const Utilities = new class {
         }, "&emsp;").split("\n").join("<br/>").split(" ").join("&nbsp;");
         return jsonString;
     }
-    GetDistanceBetween(point1: PIXI.Point, point2: PIXI.Point) {
-        return Math.sqrt(
-            Math.pow(point1.x - point2.x, 2) +
-            Math.pow(point1.y - point2.y, 2)
-        );
-    }
     GetRandom(Min: number, Max: number, Round: boolean): number {
         if (Min > Max) {
             throw "Min must be less than max.";
@@ -263,11 +257,6 @@ export const Utilities = new class {
             return false;
         }
     };
-    GetAngle(centerPoint: PIXI.Point, targetPoint: PIXI.Point) {
-        var dx = centerPoint.x - targetPoint.x;
-        var dy = centerPoint.y - targetPoint.y;
-        return Math.atan2(dy, dx) * 180 / Math.PI;
-    }
     RGBStringToArray(rgbColor: string): number[] {
         var red = Number(rgbColor.trim().replace("rgb(", "").split(",")[0]);
         var green = Number(rgbColor.trim().split(",")[1]);

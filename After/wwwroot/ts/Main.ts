@@ -6,41 +6,40 @@ import { Scene } from "./Models/Scene.js";
 import { UI } from "./App/UI.js";
 import { Utilities } from "./App/Utilities.js";
 import { Sockets } from "./App/Sockets.js";
+import { Settings } from "./App/Settings.js";
+import { PixiHelper } from "./App/PixiHelper.js";
+import { Input } from "./App/Input.js";
 
-
-const After = new class {
-    Debug: boolean = false;
-    TouchScreen: boolean = false;
-
+var main = new class {
+    Input = Input;
     Me = Me;
-    Renderer: PIXI.Application;
-    Scene: Scene;
-    Sound = Sound;
-    UI = UI;
-    Utilities = Utilities;
-    Sockets = Sockets;
-}
-
-function init() {
-    if (location.href.indexOf("localhost") > -1) {
-        After.Debug = true;
-    }
-    After.Renderer = new PIXI.Application({
+    PixiHelper = PixiHelper;
+    Renderer: PIXI.Application = new PIXI.Application({
         view: document.querySelector("#playCanvas"),
         width: 1280,
         height: 720
     });
-
-    After.Renderer.ticker.add(delta => gameLoop(delta));
-
-    window["After"] = After;
-    Sockets.Connect();
-}
-function gameLoop(delta) {
-    if (After.Debug) {
-       
+    Scene: Scene;
+    Sound = Sound;
+    UI = UI;
+    Utilities = Utilities;
+    Settings = Settings;
+    Sockets = Sockets;
+    StartGameLoop() {
+        Main.Renderer.ticker.add(delta => gameLoop(delta));
     }
 }
 
-init();
-export default After;
+window["After"] = main;
+Sockets.Connect();
+
+export const Main = main;
+
+function gameLoop(delta) {
+    if (Main.Settings.ShowDebug) {
+        var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
+        if (UI.FPSSpan.innerText != currentFPS) {
+            UI.FPSSpan.innerText = currentFPS;
+        }
+    }
+}
