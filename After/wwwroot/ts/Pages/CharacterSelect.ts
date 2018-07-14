@@ -1,4 +1,5 @@
 ﻿import { Utilities } from "../App/Utilities.js";
+import { UI } from "../App/UI.js";
 
 var app: PIXI.Application;
 var emitter: PIXI.particles.Emitter;
@@ -65,7 +66,7 @@ function changeEmitterColor(rgb: number[]) {
 
 function applyEventHandlers() {
     document.querySelector("#deleteCharacterButton").addEventListener("click", ev => {
-        Utilities.ShowModal("Confirm Deletion",
+        UI.ShowModal("Confirm Deletion",
             "Are you sure you want to delete this character?<br><br><strong>This cannot be reversed!</strong>",
             "<button id='confirmDeleteButton' class='btn btn-danger'>Delete</button>"
         );

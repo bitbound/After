@@ -37,6 +37,11 @@ namespace After.Data
             DBContext.SaveChanges();
         }
 
+        public AfterUser GetUser(string name)
+        {
+            return DBContext.Users.FirstOrDefault(x => x.UserName == name);
+        }
+
         public List<PlayerCharacter> GetPlayerCharacters(string userName)
         {
             

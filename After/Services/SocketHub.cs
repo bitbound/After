@@ -13,21 +13,51 @@ namespace After.Services
     [Authorize]
     public class SocketHub : Hub
     {
+        public static Dictionary<string, string> ConnectionList { get; set; } = new Dictionary<string, string>();
         private DataService DataService { get; set; }
-        private HttpContext HttpContext { get; set; }
+        private string CharacterName {
+            get
+            {
+                return this.Context.Items["CharacterName"].ToString();
+            }
+            set
+            {
+                this.Context.Items["CharacterName"] = value;
+            }
+        }
+        private string UserName
+        {
+            get
+            {
+                return Context.User.Identity.Name;
+            }
+        }
+        private PlayerCharacter CurrentCharacter
+        {
+            get
+            {
+                return DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
+            }
+        }
+        private AfterUser CurrentUser
+        {
+            get
+            {
+                return DataService.GetUser(Context.User.Identity.Name);
+            }
+        }
         public SocketHub(DataService dataService, IHttpContextAccessor contextAccessor)
         {
             DataService = dataService;
-            HttpContext = contextAccessor.HttpContext;
             
         }
         public async Task SendChat(JObject data)
         {
-            var character = DataService.GetCharacter(HttpContext.User.Identity.Name, Context.Items["CharacterName"].ToString());
+            var character = DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
             switch (data["Channel"].ToString())
             {
                 case "Global":
-                    await Clients.All.SendAsync("ChatMessage", new {
+                    await Clients.All.SendAsync("ReceiveChat", new {
                         Channel = data["Channel"].ToString(),
                         CharacterName = character?.Name,
                         Message =  data["Message"].ToString(),
@@ -44,21 +74,31 @@ namespace After.Services
             return base.OnConnectedAsync();
         }
 
-        public void Init(string characterName)
+        public async Task Init(string characterName)
         {
-            Context.Items["CharacterName"] = characterName;
+            if (ConnectionList.ContainsKey(UserName))
+            {
+                await Clients.Client(ConnectionList[UserName]).SendAsync("DisconnectDuplicateConnection");
+                await Task.Delay(2000);
+                if (ConnectionList.ContainsKey(UserName))
+                {
+                    await Clients.Caller.SendAsync("FailLoginDueToExistingConnection");
+                    return;
+                }
+            }
+            ConnectionList.Add(UserName, Context.ConnectionId);
+            CharacterName = characterName;
             SendFullSceneUpdate();
         }
 
         public void SendFullSceneUpdate()
         {
-            var characterName = Context.Items["CharacterName"].ToString();
-            var playerCharacter = DataService.GetCharacter(HttpContext.User.Identity.Name, characterName);
-            Clients.Caller.SendAsync("PlayerUpdate", playerCharacter);
+            Clients.Caller.SendAsync("UpdatePlayer", CurrentCharacter);
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            ConnectionList.Remove(UserName);
             return base.OnDisconnectedAsync(exception);
         }
     }

@@ -34,7 +34,7 @@ export const UI = new class {
     get WillpowerProgress(): HTMLDivElement {
         return document.querySelector("#willpowerProgress");
     }
-    get ChatMessageWindow(): HTMLDivElement {
+    get ChatMessages(): HTMLDivElement {
         return document.querySelector("#chatMessages");
     }
     get ChatChannelSelect(): HTMLSelectElement {
@@ -43,20 +43,20 @@ export const UI = new class {
     get ChatInput(): HTMLInputElement {
         return document.querySelector("#chatInput");
     }
-    get ChatWindowFrame(): HTMLDivElement {
-        return document.querySelector("#chatWindow");
+    get ChatFrame(): HTMLDivElement {
+        return document.querySelector("#chatFrame");
     }
 
     AppendMessageToWindow(message: string) {
         var shouldScroll = false;
-        if (this.ChatMessageWindow.scrollTop + this.ChatMessageWindow.clientHeight >= this.ChatMessageWindow.scrollHeight) {
+        if (this.ChatMessages.scrollTop + this.ChatMessages.clientHeight >= this.ChatMessages.scrollHeight) {
             shouldScroll = true;
         }
         var messageDiv = document.createElement("div");
         messageDiv.innerHTML = message;
-        this.ChatMessageWindow.appendChild(messageDiv);
+        this.ChatMessages.appendChild(messageDiv);
         if (shouldScroll) {
-            this.ChatMessageWindow.scrollTop = this.ChatMessageWindow.scrollHeight;
+            this.ChatMessages.scrollTop = this.ChatMessages.scrollHeight;
         }
     }
     AddDebugMessage(message: string, jsonData: any, addBlankLines: number = 0) {
@@ -111,5 +111,36 @@ export const UI = new class {
                 <span style="color:${color}">${characterName}</span>: 
                 ${message}</div>`;
         this.AppendMessageToWindow(messageText);
-    }
+    };
+    ShowGenericError(): void {
+        this.ShowModal("Error", "An error occurred during the last operation.", "");
+    };
+    ShowModal(title: string, message: string, buttonsHTML: string = "") {
+        var modalHTML = `<div class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">${title}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                ${message}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                ${buttonsHTML}
+              </div>
+            </div>
+          </div>
+        </div>`;
+        var wrapperDiv = document.createElement("div");
+        wrapperDiv.innerHTML = modalHTML;
+        document.body.appendChild(wrapperDiv);
+        $(".modal").on("hidden.bs.modal", ev => {
+            ev.currentTarget.parentElement.remove();
+        });
+        $(".modal")["modal"]();
+    };
 }

@@ -47,12 +47,12 @@ function handleActionJoystick() {
 }
 function handleChatInput() {
     function chatBlur(e) {
-        Main.UI.ChatWindowFrame.classList.remove("chat-open");
-        Main.UI.ChatWindowFrame.classList.add("chat-closed");
+        Main.UI.ChatFrame.classList.remove("chat-focus");
+        Main.UI.ChatFrame.classList.add("chat-blur");
     }
     function chatFocus(e) {
-        Main.UI.ChatWindowFrame.classList.remove("chat-closed");
-        Main.UI.ChatWindowFrame.classList.add("chat-open");
+        Main.UI.ChatFrame.classList.remove("chat-blur");
+        Main.UI.ChatFrame.classList.add("chat-focus");
     }
     Main.UI.ChatInput.addEventListener("focus", chatFocus);
     Main.UI.ChatInput.addEventListener("blur", chatBlur);
@@ -66,6 +66,19 @@ function handleChatInput() {
                 Message: Main.UI.ChatInput.value
             });
             Main.UI.ChatInput.value = "";
+        }
+    });
+
+    document.querySelector("#chatOpenCloseWrapper span").addEventListener("click", (e) => {
+        if (Main.UI.ChatFrame.clientHeight <= 25) {
+            Main.UI.ChatFrame.style.height = "150px";
+            (e.currentTarget as HTMLElement).classList.add("glyphicon-triangle-bottom");
+            (e.currentTarget as HTMLElement).classList.remove("glyphicon-triangle-top");
+        }
+        else {
+            Main.UI.ChatFrame.style.height = "25px";
+            (e.currentTarget as HTMLElement).classList.remove("glyphicon-triangle-bottom");
+            (e.currentTarget as HTMLElement).classList.add("glyphicon-triangle-top");
         }
     });
 }

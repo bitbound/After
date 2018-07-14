@@ -24,6 +24,7 @@ export const Sockets = new class {
             Input.ApplyInputHandlers();
             this.Connection.invoke("Init", Utilities.QueryStrings["character"]);
         }).catch(err => {
+            Main.UI.ShowGenericError();
             console.error(err.toString());
         });
     }
@@ -33,7 +34,7 @@ export const Sockets = new class {
 }
 
 function applyMessageHandlers(hubConnection: any) {
-    hubConnection.on("PlayerUpdate", (args : PlayerCharacter) => {
+    hubConnection.on("UpdatePlayer", (args : PlayerCharacter) => {
         if (Main.Me.Character == null) {
             UI.AddSystemMessage("Welcome to After.");
             Main.Me.Character = args;
@@ -46,11 +47,19 @@ function applyMessageHandlers(hubConnection: any) {
         UI.UpdatePlayerStats();
     });
 
-    hubConnection.on("ChatMessage", data => {
+    hubConnection.on("ReceiveChat", data => {
         switch (data.Channel) {
             case "Global":
                 Main.UI.AddGlobalChat(data.CharacterName, data.Message, data.Color);
             default:
         }
     });
+
+    hubConnection.on("DisconnectDuplicateConnection", args => {
+        Main.UI.ShowModal("Connection Closed","Your account was logged into on another device.  This session has been closed.");
+        hubConnection.stop();
+    })
+    hubConnection.on("FailLoginDueToExistingConnection", args => {
+        Main.UI.ShowModal("Unable to Connection", "There is an existing connection on your account that is preventing your login.  The system was unable to disconnect it.  Please try again.");
+    })
 }

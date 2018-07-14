@@ -8,5 +8,6 @@ namespace After.Data
 {
     public class PlayerCharacter : Character
     {
+
     }
 }

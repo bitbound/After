@@ -263,35 +263,4 @@ export const Utilities = new class {
         var blue = Number(rgbColor.trim().replace(")", "").split(",")[2]);
         return [red, green, blue];
     }
-    ShowGenericError(): void {
-        this.ShowModal("Error", "An error occurred during the last operation.", "");
-    }
-    ShowModal(title:string, message:string, buttonsHTML:string) {
-        var modalHTML = `<div class="modal fade" tabindex="-1" role="dialog">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">${title}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                ${message}
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                ${buttonsHTML}
-              </div>
-            </div>
-          </div>
-        </div>`;
-        var wrapperDiv = document.createElement("div");
-        wrapperDiv.innerHTML = modalHTML;
-        document.body.appendChild(wrapperDiv);
-        $(".modal").on("hidden.bs.modal", ev => {
-            ev.currentTarget.parentElement.remove();
-        });
-        $(".modal")["modal"]();
-    }
 }

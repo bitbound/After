@@ -1,6 +1,9 @@
 ﻿@{ }
 
-<div id="chatWindow" class="well well-sm chat-closed">
+<div id="chatFrame" class="well well-sm chat-blur">
+    <div id="chatOpenCloseWrapper" class="text-center">
+        <span  class="glyphicon glyphicon-triangle-bottom"></span>
+    </div>
     <div id="chatMessages"></div>
     <div id="chatInputDiv">
         <select id="selectChatChannel">
@@ -10,3 +13,75 @@
 
     </div>
 </div>
+
+<style>
+    #chatFrame {
+        position: fixed;
+        display: grid;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 5px;
+        width: 50vw;
+        min-width: 200px;
+        overflow: hidden;
+        grid-template-rows: min-content auto min-content;
+    }
+
+    #chatOpenCloseWrapper {
+        grid-row: 1;
+        grid-row-gap: 0;
+    }
+
+    #chatOpenCloseWrapper span {
+        cursor: pointer;
+    }
+
+    #chatFrame {
+        height: 150px;
+    }
+
+    #chatFrame #chatMessages {
+        grid-row: 2;
+        overflow: auto;
+    }
+
+    #chatFrame.chat-focus {
+        background-color: rgba(50,50,50,0.5);
+        transition: all linear 250ms;
+    }
+
+    #chatFrame.chat-blur {
+        background-color: rgba(50,50,50,0.2);
+        transition: all linear 250ms;
+    }
+
+    #chatInputDiv {
+        grid-row: 3;
+        margin-top: 5px;
+        display: grid;
+        grid-template-columns: min-content auto;
+        grid-column-gap: 1em;
+    }
+
+    #chatFrame.chat-blur #chatInputDiv {
+        opacity: .25;
+        transition: all linear 500ms;
+    }
+
+    #chatFrame.chat-focus #chatInputDiv {
+        opacity: 1;
+        transition: all linear 500ms;
+    }
+
+
+    #selectChatChannel {
+        grid-column: 1;
+        color: black;
+        font-size: .8em;
+    }
+
+    #inputChat {
+        grid-column: 2;
+        width: 100%;
+    }
+</style>
