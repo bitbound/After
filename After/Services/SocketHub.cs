@@ -21,9 +21,22 @@ namespace After.Services
             HttpContext = contextAccessor.HttpContext;
             
         }
-        public async Task SendMessage(JObject message)
+        public async Task SendChat(JObject data)
         {
-           
+            var character = DataService.GetCharacter(HttpContext.User.Identity.Name, Context.Items["CharacterName"].ToString());
+            switch (data["Channel"].ToString())
+            {
+                case "Global":
+                    await Clients.All.SendAsync("ChatMessage", new {
+                        Channel = data["Channel"].ToString(),
+                        CharacterName = character?.Name,
+                        Message =  data["Message"].ToString(),
+                        Color = character?.Color
+                    });
+                    break;
+                default:
+                    break;
+            }
         }
 
         public override Task OnConnectedAsync()

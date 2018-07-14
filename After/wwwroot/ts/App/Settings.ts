@@ -2,27 +2,18 @@
 import { UI } from "./UI.js";
 
 export const Settings = new class {
-    get ShowDebug(): boolean {
-        return UI.DeubgWindow.hidden;
-        //return Main.Renderer.stage.getChildByName("Debug") != null;
+    Colors = {
+        GlobalChat: "rgb(0, 255, 64)",
+        VoidChat: "rgb(0, 220, 255)",
+        Whisper: "magenta",
+        SystemMessage: "lightgray",
+        DebugMessage: "rgb(150,50,50)"
+    };
+    get IsDebugEnabled(): boolean {
+        return UI.DebugWindow.hidden;
     }
-    set ShowDebug(value: boolean) {
-        UI.DeubgWindow.hidden = value;
-        //var debug = Main.Renderer.stage.getChildByName("Debug") as PIXI.Text;
-        //if (debug == null) {
-        //    debug = new PIXI.Text(
-        //        `FPS: ${Main.Renderer.ticker.FPS.toString()}`,
-        //        new PIXI.TextStyle({
-        //            fill: "white",
-        //            fontSize: "14px"
-        //        })
-        //    );
-        //    debug.x = Main.Renderer.screen.width - (debug.width + 10);
-        //    debug.y = 10;
-        //    debug.name = "Debug";
-        //    Main.Renderer.stage.addChild(debug);
-        //}
-        //debug.renderable = value;
+    set IsDebugEnabled(value: boolean) {
+        UI.DebugWindow.hidden = value;
     }
 
     private touchscreen: boolean;

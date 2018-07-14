@@ -31,12 +31,11 @@ var main = new class {
 }
 
 window["After"] = main;
-Sockets.Connect();
-
+window.onload = (e) => { Sockets.Connect(); };
 export const Main = main;
 
 function gameLoop(delta) {
-    if (Main.Settings.ShowDebug) {
+    if (Main.Settings.IsDebugEnabled) {
         var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
         if (UI.FPSSpan.innerText != currentFPS) {
             UI.FPSSpan.innerText = currentFPS;

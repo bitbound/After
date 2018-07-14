@@ -15,7 +15,36 @@ canvas {
     max-height: 95vh;
 }
 
-#joystickOuter {
+
+#characterInfo {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    width: 15vw;
+}
+
+#characterInfo .progress {
+    margin-bottom: 5px;
+    background-color: lightgray;
+}
+
+.progress-bar-energy {
+    background-color: cyan !important;
+}
+
+.progress-bar-willpower {
+    background-color: gold !important;
+}
+
+.progress-bar-charge {
+    background-color: magenta !important;
+}
+
+.pool-title {
+    font-size: .8em;
+}
+
+#moveJoystickOuter {
     position: fixed;
     left: 50px;
     bottom: 50px;
@@ -27,7 +56,7 @@ canvas {
     overflow: hidden;
 }
 
-#joystickInner {
+#moveJoystickInner {
     margin: auto;
     position: absolute;
     height: 20px;
@@ -46,4 +75,90 @@ canvas {
     position: fixed;
     top: 10px;
     right: 10px;
+}
+
+#chatWindow {
+    position: fixed;
+    display: grid;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 5px;
+    width: 50vw;
+    min-width: 200px;
+    grid-template-rows: auto min-content;
+    grid-row-gap: 1em;
+}
+
+#chatWindow {
+    height: 20vh;
+    min-height: 150px;
+}
+
+#chatWindow #chatMessages {
+    grid-row: 1;
+    overflow: auto;
+}
+
+#chatWindow.chat-open {
+    background-color: rgba(50,50,50,0.5);
+    transition: all linear 500ms;
+}
+#chatWindow.chat-closed {
+    background-color: rgba(50,50,50,0.2);
+    transition: all linear 500ms;
+}
+
+#chatInputDiv {
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: min-content  auto;
+    grid-column-gap: 1em;
+}
+
+#chatWindow.chat-closed #chatInputDiv {
+    opacity: .25;
+    transition: all linear 500ms;
+}
+
+#chatWindow.chat-open #chatInputDiv {
+    opacity: 1;
+    transition: all linear 500ms;
+}
+
+
+#selectChatChannel {
+    grid-column: 1;
+    color: black;
+    font-size: .8em;
+}
+
+#inputChat {
+    grid-column: 2;
+    width: 100%;
+}
+
+#actionJoystickOuter {
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid dimgray;
+    overflow: hidden;
+}
+
+#actionJoystickInner {
+    margin: auto;
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid dimgray;
 }

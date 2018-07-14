@@ -2,6 +2,7 @@
 import { Main } from "../Main.js";
 import { Utilities } from "./Utilities.js";
 import { Input } from "./Input.js";
+import { UI } from "./UI.js";
 
 
 export const Sockets = new class {
@@ -17,7 +18,7 @@ export const Sockets = new class {
 
         this.Connection.start().then(() => {
             if (location.href.indexOf("localhost") > -1) {
-                Main.Settings.ShowDebug = true;
+                Main.Settings.IsDebugEnabled = true;
             }
             Main.StartGameLoop();
             Input.ApplyInputHandlers();
@@ -32,9 +33,24 @@ export const Sockets = new class {
 }
 
 function applyMessageHandlers(hubConnection: any) {
-    hubConnection.on("PlayerUpdate", (args) => {
-        Main.Me.Character = args as PlayerCharacter;
-        Main.Me.EmitterConfig.color.end = Main.Me.Character.Color;
-        Main.Me.CreateEmitter(Main.Renderer);
+    hubConnection.on("PlayerUpdate", (args : PlayerCharacter) => {
+        if (Main.Me.Character == null) {
+            UI.AddSystemMessage("Welcome to After.");
+            Main.Me.Character = args;
+            Main.Me.EmitterConfig.color.end = Main.Me.Character.Color;
+            Main.Me.CreateEmitter(Main.Renderer);
+        }
+        else {
+            $.extend(true, Main.Me.Character, args);
+        }
+        UI.UpdatePlayerStats();
+    });
+
+    hubConnection.on("ChatMessage", data => {
+        switch (data.Channel) {
+            case "Global":
+                Main.UI.AddGlobalChat(data.CharacterName, data.Message, data.Color);
+            default:
+        }
     });
 }
