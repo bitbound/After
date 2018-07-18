@@ -32,5 +32,7 @@ namespace After.Data
 
         public DbSet<GameObject> GameObjects { get; set; }
 
+        public DbSet<Error> ErrorLog { get; set; }
+
     }
 }

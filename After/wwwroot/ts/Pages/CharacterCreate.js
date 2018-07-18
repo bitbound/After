@@ -104,6 +104,7 @@ function createRenderer() {
         view: document.querySelector("#previewCanvas"),
         transparent: true
     });
+    app.renderer.plugins.interaction.autoPreventDefault = false;
     var defaultPortrait = PIXI.Sprite.from("/Assets/Images/Portraits/DefaultPortrait-Short2.png");
     app.stage.addChild(defaultPortrait);
     emitterLeft = new PIXI.particles.Emitter(app.stage, ["/Assets/Images/particle.png"], eyeEmitterConfig);

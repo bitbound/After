@@ -1,5 +1,4 @@
-﻿@page
-@inject DataService  DataService
+﻿@inject DataService  DataService
 @{
     var playerCharacters = DataService.GetPlayerCharacters(User.Identity.Name);
 }

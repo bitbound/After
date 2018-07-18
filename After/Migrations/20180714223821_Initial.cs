@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace After.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -168,7 +168,7 @@ namespace After.Migrations
                     VelocityX = table.Column<double>(nullable: false),
                     VelocityY = table.Column<double>(nullable: false),
                     AccelerationSpeed = table.Column<double>(nullable: false),
-                    DeccelerationSpeed = table.Column<double>(nullable: false),
+                    DecelerationSpeed = table.Column<double>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Color = table.Column<string>(nullable: true),

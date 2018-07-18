@@ -28,7 +28,6 @@ namespace After.Areas.Identity.Pages.Account.Manage
             _emailSender = emailSender;
         }
 
-        public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 
@@ -40,9 +39,6 @@ namespace After.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
-            [StringLength(20, MinimumLength = 4)]
-            [RegularExpression(@"^[a-zA-Z0-9_\-]*$", ErrorMessage = "Username can only contain letters, numbers, hyphens, and underscores.")]
             [Display(Name = "Username")]
             public string Username { get; set; }
 
@@ -67,10 +63,9 @@ namespace After.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            Username = userName;
-
             Input = new InputModel
             {
+                Username = userName,
                 Email = email,
                 PhoneNumber = phoneNumber
             };

@@ -33,8 +33,10 @@ export const Main = main;
 function gameLoop(delta) {
     if (Main.Settings.IsDebugEnabled) {
         var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
-        if (UI.FPSSpan.innerText != currentFPS) {
+        if (UI.FPSSpan.innerText != currentFPS &&
+            (UI.FPSSpan.getAttribute("last-set") == null || Date.now() - parseInt(UI.FPSSpan.getAttribute("last-set")) > 1000)) {
             UI.FPSSpan.innerText = currentFPS;
+            UI.FPSSpan.setAttribute("last-set", Date.now().toString());
         }
     }
 }

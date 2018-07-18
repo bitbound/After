@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180703142327_initial")]
-    partial class initial
+    [Migration("20180717211030_ErrorTimestamp")]
+    partial class ErrorTimestamp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,29 @@ namespace After.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("After.Data.Error", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("PathWhereOccurred");
+
+                    b.Property<string>("Source");
+
+                    b.Property<string>("StackTrace");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.Property<string>("User");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ErrorLog");
+                });
+
             modelBuilder.Entity("After.Data.GameObject", b =>
                 {
                     b.Property<int>("ID")
@@ -29,7 +52,7 @@ namespace After.Migrations
 
                     b.Property<double>("AccelerationSpeed");
 
-                    b.Property<double>("DeccelerationSpeed");
+                    b.Property<double>("DecelerationSpeed");
 
                     b.Property<string>("Discriminator")
                         .IsRequired();

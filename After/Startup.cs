@@ -74,7 +74,6 @@ namespace After
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
             app.UseSignalR(routes =>
             {
                 routes.MapHub<SocketHub>("/SocketEndpoint");

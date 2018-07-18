@@ -1,6 +1,5 @@
 import { Utilities } from "./Utilities.js";
 import { Me } from "./Me.js";
-import { Main } from "../Main.js";
 import { Settings } from "./Settings.js";
 export const UI = new class {
     UpdatePlayerStats() {
@@ -14,8 +13,8 @@ export const UI = new class {
     get ChargeProgress() {
         return document.querySelector("#chargeProgress");
     }
-    get DebugWindow() {
-        return document.querySelector("#debugWindow");
+    get StatsFrame() {
+        return document.querySelector("#statsFrame");
     }
     get EnergyProgress() {
         return document.querySelector("#energyProgress");
@@ -54,7 +53,7 @@ export const UI = new class {
         }
     }
     AddDebugMessage(message, jsonData, addBlankLines = 0) {
-        if (Main.Settings.IsDebugEnabled) {
+        if (Settings.IsDebugEnabled) {
             var temp = new Array();
             var jsonHTML = "";
             if (jsonData) {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180708023720_DunnoWhatIDid")]
-    partial class DunnoWhatIDid
+    [Migration("20180716010843_ErrorLogs")]
+    partial class ErrorLogs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,27 @@ namespace After.Migrations
                 .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("After.Data.Error", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("PathWhereOccurred");
+
+                    b.Property<string>("Source");
+
+                    b.Property<string>("StackTrace");
+
+                    b.Property<string>("User");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ErrorLog");
+                });
 
             modelBuilder.Entity("After.Data.GameObject", b =>
                 {

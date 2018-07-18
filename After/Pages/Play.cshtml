@@ -15,17 +15,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <link rel="icon" href="~/favicon.ico" />
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/play.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/play.css" asp-append-version="true" />
-    </environment>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/css/Themes/darkly.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/play.css" />
+
 </head>
 <body>
     @if (Model.CharacterNotFound)
@@ -34,8 +27,21 @@
     }
     else
     {
-        <partial name="GameUI/_Main" />
+        <canvas id="playCanvas"></canvas>
+        <partial name="GameUI/_StatsFrame" />
+        <partial name="GameUI/_CharacterInfo" />
+        <partial name="GameUI/_Menu" />
+        <partial name="GameUI/_MoveJoystick" />
+        <partial name="GameUI/_Chat" />
+        <partial name="GameUI/_ActionArea" />
 
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/signalr/signalr.min.js"></script>
+        <script src="/lib/pixi.js/pixi.js"></script>
+        <script src="/lib/pixi-particles/dist/pixi-particles.js"></script>
+        <script type="module" src="~/ts/Main.js">
+        </script>
     }
 </body>
 </html>

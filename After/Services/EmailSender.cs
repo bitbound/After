@@ -16,9 +16,6 @@ namespace After.Services
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
-#if DEBUG
-            return Task.CompletedTask; 
-#endif
             var mailClient = new SmtpClient();
             mailClient.Host = "mail.after-game.net";
             mailClient.Port = 25;
@@ -36,7 +33,12 @@ namespace After.Services
 
             mailMessage.Bcc.Add("hello@after-game.net");
 
-            mailClient.Send(mailMessage);
+            try
+            {
+                mailClient.Send(mailMessage);
+            }
+            catch { }
+
             return Task.CompletedTask;
         }
     }

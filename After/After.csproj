@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\GameUI\_DebugWindow.cshtml" />
     <Content Remove="wwwroot\ts\App\Enums.ts" />
     <Content Remove="wwwroot\ts\App\Input.ts" />
     <Content Remove="wwwroot\ts\App\Me.ts" />
@@ -30,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
   </ItemGroup>
 
@@ -48,7 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="Pages\GameUI\_DebugWindow.cshtml" />
     <TypeScriptCompile Include="wwwroot\ts\App\Enums.ts" />
     <TypeScriptCompile Include="wwwroot\ts\App\Input.ts" />
     <TypeScriptCompile Include="wwwroot\ts\App\Me.ts" />

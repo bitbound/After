@@ -65,6 +65,7 @@ function createRenderer() {
         width: 224,
         height: 329
     });
+    app.renderer.plugins.interaction.autoPreventDefault = false;
     var tunnelImage = PIXI.Sprite.from("/Assets/Images/Tunnel and Shadow.png");
     app.stage.addChild(tunnelImage);
     splashEmitter = new PIXI.particles.Emitter(app.stage, ["/Assets/Images/particle.png"], splashEmitterConfig);

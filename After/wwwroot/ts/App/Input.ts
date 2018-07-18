@@ -13,8 +13,13 @@ export const Input = new class {
 function handleActionJoystick() {
     var outer = document.querySelector("#actionJoystickOuter") as HTMLDivElement;
     var inner = document.querySelector("#actionJoystickInner") as HTMLDivElement;
+    var pointerID;
 
-    function moveInnerJoystick(ev: PointerEvent) {
+    function handlePointerMove(ev: PointerEvent) {
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
         var wrapperRect = outer.getBoundingClientRect();
         var centerX = wrapperRect.left + (wrapperRect.width / 2);
         var centerY = wrapperRect.top + (wrapperRect.height / 2);
@@ -27,22 +32,25 @@ function handleActionJoystick() {
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
 
-    function pointerMoveEvent(ev: PointerEvent) {
-        moveInnerJoystick(ev);
-    }
     function pointerUpEvent(ev: PointerEvent) {
-        window.removeEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
+        window.removeEventListener("pointermove", handlePointerMove);
         window.removeEventListener("pointerup", pointerUpEvent);
         inner.style.transform = "";
         inner.style.backgroundColor = "";
     }
 
     outer.addEventListener("pointerdown", ev => {
-        window.addEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        pointerID = ev.pointerId;
+        window.addEventListener("pointermove", handlePointerMove);
         window.addEventListener("pointerup", pointerUpEvent);
 
         inner.style.backgroundColor = "white";
-        moveInnerJoystick(ev);
+        handlePointerMove(ev);
     });
 }
 function handleChatInput() {
@@ -85,12 +93,17 @@ function handleChatInput() {
 function handleMovementJoystick() {
     var outer = document.querySelector("#moveJoystickOuter") as HTMLDivElement;
     var inner = document.querySelector("#moveJoystickInner") as HTMLDivElement;
+    var pointerID;
 
-    function moveInnerJoystick(ev: PointerEvent) {
+    function handlePointerMove(ev: PointerEvent) {
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
         var wrapperRect = outer.getBoundingClientRect();
         var centerX = wrapperRect.left + (wrapperRect.width / 2);
         var centerY = wrapperRect.top + (wrapperRect.height / 2);
-
+        
         var centerPoint = new PIXI.Point(centerX, centerY);
         var evPoint = new PIXI.Point(ev.x, ev.y);
 
@@ -99,21 +112,24 @@ function handleMovementJoystick() {
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
 
-    function pointerMoveEvent(ev: PointerEvent) {
-        moveInnerJoystick(ev);
-    }
     function pointerUpEvent(ev: PointerEvent) {
-        window.removeEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
+        window.removeEventListener("pointermove", handlePointerMove);
         window.removeEventListener("pointerup", pointerUpEvent);
         inner.style.transform = "";
         inner.style.backgroundColor = "";
     }
 
     outer.addEventListener("pointerdown", ev => {
-        window.addEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        pointerID = ev.pointerId;
+        window.addEventListener("pointermove", handlePointerMove);
         window.addEventListener("pointerup", pointerUpEvent);
 
         inner.style.backgroundColor = "white";
-        moveInnerJoystick(ev);
+        handlePointerMove(ev);
     });
 }

@@ -2,7 +2,6 @@
 import { PixiHelper } from "./PixiHelper.js";
 import { Input } from "./Input.js";
 import { Me } from "./Me.js";
-import { Main } from "../Main.js";
 import { Settings } from "./Settings.js";
 
 export const UI = new class {
@@ -19,8 +18,8 @@ export const UI = new class {
     get ChargeProgress(): HTMLDivElement {
         return document.querySelector("#chargeProgress");
     }
-    get DebugWindow():HTMLDivElement {
-        return document.querySelector("#debugWindow");
+    get StatsFrame():HTMLDivElement {
+        return document.querySelector("#statsFrame");
     }
     get EnergyProgress(): HTMLDivElement {
         return document.querySelector("#energyProgress");
@@ -60,7 +59,7 @@ export const UI = new class {
         }
     }
     AddDebugMessage(message: string, jsonData: any, addBlankLines: number = 0) {
-        if (Main.Settings.IsDebugEnabled) {
+        if (Settings.IsDebugEnabled) {
             var temp = new Array<any>();
             var jsonHTML = "";
             if (jsonData) {

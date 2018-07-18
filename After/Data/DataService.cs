@@ -58,5 +58,11 @@ namespace After.Data
             });
             DBContext.SaveChanges();
         }
+
+        public void AddError(Error error)
+        {
+            DBContext.ErrorLog.Add(error);
+            DBContext.SaveChanges();
+        }
     }
 }

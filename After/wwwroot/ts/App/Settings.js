@@ -10,10 +10,15 @@ export const Settings = new class {
         };
     }
     get IsDebugEnabled() {
-        return UI.DebugWindow.hidden;
+        return UI.StatsFrame.style.display == "";
     }
     set IsDebugEnabled(value) {
-        UI.DebugWindow.hidden = value;
+        if (value) {
+            UI.StatsFrame.style.display = "";
+        }
+        else {
+            UI.StatsFrame.style.display = "none";
+        }
     }
     get Touchscreen() {
         return this.touchscreen;

@@ -10,10 +10,15 @@ export const Settings = new class {
         DebugMessage: "rgb(150,50,50)"
     };
     get IsDebugEnabled(): boolean {
-        return UI.DebugWindow.hidden;
+        return UI.StatsFrame.style.display == "";
     }
     set IsDebugEnabled(value: boolean) {
-        UI.DebugWindow.hidden = value;
+        if (value) {
+            UI.StatsFrame.style.display = "";
+        }
+        else {
+            UI.StatsFrame.style.display = "none";
+        }
     }
 
     private touchscreen: boolean;

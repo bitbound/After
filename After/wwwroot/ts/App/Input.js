@@ -10,7 +10,12 @@ export const Input = new class {
 function handleActionJoystick() {
     var outer = document.querySelector("#actionJoystickOuter");
     var inner = document.querySelector("#actionJoystickInner");
-    function moveInnerJoystick(ev) {
+    var pointerID;
+    function handlePointerMove(ev) {
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
         var wrapperRect = outer.getBoundingClientRect();
         var centerX = wrapperRect.left + (wrapperRect.width / 2);
         var centerY = wrapperRect.top + (wrapperRect.height / 2);
@@ -20,20 +25,23 @@ function handleActionJoystick() {
         var angle = PixiHelper.GetAngle(centerPoint, evPoint);
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
-    function pointerMoveEvent(ev) {
-        moveInnerJoystick(ev);
-    }
     function pointerUpEvent(ev) {
-        window.removeEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
+        window.removeEventListener("pointermove", handlePointerMove);
         window.removeEventListener("pointerup", pointerUpEvent);
         inner.style.transform = "";
         inner.style.backgroundColor = "";
     }
     outer.addEventListener("pointerdown", ev => {
-        window.addEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        pointerID = ev.pointerId;
+        window.addEventListener("pointermove", handlePointerMove);
         window.addEventListener("pointerup", pointerUpEvent);
         inner.style.backgroundColor = "white";
-        moveInnerJoystick(ev);
+        handlePointerMove(ev);
     });
 }
 function handleChatInput() {
@@ -74,7 +82,12 @@ function handleChatInput() {
 function handleMovementJoystick() {
     var outer = document.querySelector("#moveJoystickOuter");
     var inner = document.querySelector("#moveJoystickInner");
-    function moveInnerJoystick(ev) {
+    var pointerID;
+    function handlePointerMove(ev) {
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
         var wrapperRect = outer.getBoundingClientRect();
         var centerX = wrapperRect.left + (wrapperRect.width / 2);
         var centerY = wrapperRect.top + (wrapperRect.height / 2);
@@ -84,20 +97,23 @@ function handleMovementJoystick() {
         var angle = PixiHelper.GetAngle(centerPoint, evPoint);
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
-    function pointerMoveEvent(ev) {
-        moveInnerJoystick(ev);
-    }
     function pointerUpEvent(ev) {
-        window.removeEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        if (ev.pointerId != pointerID) {
+            return;
+        }
+        window.removeEventListener("pointermove", handlePointerMove);
         window.removeEventListener("pointerup", pointerUpEvent);
         inner.style.transform = "";
         inner.style.backgroundColor = "";
     }
     outer.addEventListener("pointerdown", ev => {
-        window.addEventListener("pointermove", pointerMoveEvent);
+        ev.preventDefault();
+        pointerID = ev.pointerId;
+        window.addEventListener("pointermove", handlePointerMove);
         window.addEventListener("pointerup", pointerUpEvent);
         inner.style.backgroundColor = "white";
-        moveInnerJoystick(ev);
+        handlePointerMove(ev);
     });
 }
 //# sourceMappingURL=Input.js.map

@@ -1,8 +1,6 @@
-﻿@{ }
-
-<div id="chatFrame" class="well well-sm chat-blur">
+﻿<div id="chatFrame" class="well well-sm chat-blur">
     <div id="chatOpenCloseWrapper" class="text-center">
-        <span  class="glyphicon glyphicon-triangle-bottom"></span>
+        <span class="glyphicon glyphicon-triangle-bottom"></span>
     </div>
     <div id="chatMessages"></div>
     <div id="chatInputDiv">
@@ -48,11 +46,13 @@
     #chatFrame.chat-focus {
         background-color: rgba(50,50,50,0.5);
         transition: all linear 250ms;
+        opacity: 1;
     }
 
     #chatFrame.chat-blur {
         background-color: rgba(50,50,50,0.2);
         transition: all linear 250ms;
+        opacity: .75;
     }
 
     #chatInputDiv {
@@ -80,7 +80,7 @@
         font-size: .8em;
     }
 
-    #inputChat {
+    #chatInput {
         grid-column: 2;
         width: 100%;
     }

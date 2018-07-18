@@ -4,13 +4,11 @@
     ViewData["Title"] = "Home";
 }
 
-
-
 @if (User.Identity.IsAuthenticated)
 {
-    <partial name="_CharacterSelect" model="null"/>
+    <partial name="_CharacterSelect"/>
 }
 else
 {
-    <partial name="_Splash" model="null" />
+    <partial name="_Splash" />
 }

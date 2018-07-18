@@ -86,8 +86,9 @@ function selectCharacter(e) {
 function createRenderer() {
     app = new PIXI.Application({
         view: document.querySelector("#previewCharacterCanvas"),
-        transparent: true
+        transparent: true,
     });
+    app.renderer.plugins.interaction.autoPreventDefault = false;
     emitter = new PIXI.particles.Emitter(app.stage, ["/Assets/Images/particle.png"], characterPreviewEmitterConfig);
     emitter.updateSpawnPos(app.screen.width / 2, app.screen.height / 2);
 }

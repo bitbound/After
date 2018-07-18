@@ -1,6 +1,6 @@
 ﻿<div id="characterInfo">
     <div>
-        @Context.Request.Query["character"]
+        @Context?.Request?.Query?["character"]
     </div>
 
 
@@ -48,5 +48,4 @@
     .pool-title {
         font-size: .8em;
     }
-
 </style>

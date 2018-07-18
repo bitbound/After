@@ -116,6 +116,7 @@ function createRenderer() {
         view: document.querySelector("#introCanvas"),
         transparent: true
     });
+    app.renderer.plugins.interaction.autoPreventDefault = false;
     introSoulEmitter = new PIXI.particles.Emitter(app.stage, ["/Assets/Images/particle.png"], introSoulEmitterConfig);
     introFlybyEmitter = new PIXI.particles.Emitter(app.stage, ["/Assets/Images/particle.png"], introFlybyEmitterConfig);
     var config2 = JSON.parse(JSON.stringify(introFlybyEmitterConfig));
