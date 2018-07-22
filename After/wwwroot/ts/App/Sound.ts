@@ -6,7 +6,7 @@
     PlaySource: AudioBufferSourceNode;
     LoopSource: AudioBufferSourceNode;
 
-    PlaySound(SourceFile: string, Callback: () => void): void {
+    PlaySound(sourceFile: string) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.PlaySource = audioCtx.createBufferSource();
@@ -14,35 +14,17 @@
         source.loop = false;
         var request = new XMLHttpRequest();
         request.responseType = "arraybuffer";
-        request.open("GET", SourceFile, true);
+        request.open("GET", sourceFile, true);
         request.onload = function () {
             audioCtx.decodeAudioData(request.response, function (buffer) {
                 source.buffer = buffer;
                 source.connect(audioCtx.destination);
                 source.start(0);
-                if (Callback) {
-                    Callback();
-                }
-            }, function () {
-                // Error callback.
-                if (Callback) {
-                    Callback();
-                }
-            })
-        }
-        request.onerror = function () {
-            if (Callback) {
-                Callback();
-            }
-        }
-        request.ontimeout = function () {
-            if (Callback) {
-                Callback();
-            }
+            });
         }
         request.send();
-    };
-    LoadSound(SourceFile: string, Callback: () => void) {
+    }
+    LoadSound(sourceFile: string) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.PlaySource = audioCtx.createBufferSource();
@@ -50,30 +32,12 @@
         source.loop = false;
         var request = new XMLHttpRequest();
         request.responseType = "arraybuffer";
-        request.open("GET", SourceFile, true);
+        request.open("GET", sourceFile, true);
         request.onload = function () {
             audioCtx.decodeAudioData(request.response, function (buffer) {
                 source.buffer = buffer;
                 source.connect(audioCtx.destination);
-                if (Callback) {
-                    Callback();
-                }
-            }, function () {
-                // Error callback.
-                if (Callback) {
-                    Callback();
-                }
-            })
-        }
-        request.onerror = function () {
-            if (Callback) {
-                Callback();
-            }
-        }
-        request.ontimeout = function () {
-            if (Callback) {
-                Callback();
-            }
+            });
         }
         request.send();
     };
@@ -83,7 +47,7 @@
             this.PlaySource.disconnect();
         }
     }
-    PlayLoop(SourceFile: string, Callback: () => void = null): void {
+    PlayLoop(sourceFile: string) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.LoopSource = audioCtx.createBufferSource();
@@ -91,35 +55,17 @@
         source.loop = true;
         var request = new XMLHttpRequest();
         request.responseType = "arraybuffer";
-        request.open("GET", SourceFile, true);
+        request.open("GET", sourceFile, true);
         request.onload = function () {
             audioCtx.decodeAudioData(request.response, function (buffer) {
                 source.buffer = buffer;
                 source.connect(audioCtx.destination);
                 source.start(0);
-                if (Callback) {
-                    Callback();
-                }
-            }, function () {
-                // Error callback.
-                if (Callback) {
-                    Callback();
-                }
-            })
-        }
-        request.onerror = function () {
-            if (Callback) {
-                Callback();
-            }
-        }
-        request.ontimeout = function () {
-            if (Callback) {
-                Callback();
-            }
+            });
         }
         request.send();
     };
-    LoadLoop(SourceFile: string, Callback: () => void) {
+    LoadLoop(sourceFile: string) {
         this.Context = this.Context || new AudioContext();
         var audioCtx = this.Context;
         this.LoopSource = audioCtx.createBufferSource();
@@ -127,30 +73,12 @@
         source.loop = false;
         var request = new XMLHttpRequest();
         request.responseType = "arraybuffer";
-        request.open("GET", SourceFile, true);
+        request.open("GET", sourceFile, true);
         request.onload = function () {
             audioCtx.decodeAudioData(request.response, function (buffer) {
                 source.buffer = buffer;
                 source.connect(audioCtx.destination);
-                if (Callback) {
-                    Callback();
-                }
-            }, function () {
-                // Error callback.
-                if (Callback) {
-                    Callback();
-                }
-            })
-        }
-        request.onerror = function () {
-            if (Callback) {
-                Callback();
-            }
-        }
-        request.ontimeout = function () {
-            if (Callback) {
-                Callback();
-            }
+            });
         }
         request.send();
     };
@@ -159,38 +87,5 @@
             this.LoopSource.stop();
             this.LoopSource.disconnect();
         }
-    }
-
-    StreamSound(SourceFile) {
-        var audio = document.createElement("audio");
-        audio.classList.add("audio-stream");
-        audio.src = SourceFile;
-        audio.onended = function (this, ev) {
-            document.body.removeChild(this);
-        }
-        audio.play();
-    }
-    StreamLoop(SourceFile) {
-        var audio = document.createElement("audio");
-        audio.classList.add("audio-stream-loop");
-        audio.src = SourceFile;
-        audio.loop = true;
-        audio.onended = function (this, ev) {
-            document.body.removeChild(this);
-        }
-        document.body.appendChild(audio);
-        audio.play();
-    }
-    StopStream() {
-        $("audio.audio-stream").each(function (index, elem: HTMLAudioElement) {
-            elem.pause();
-            $(elem).remove();
-        })
-    }
-    StopStreamLoop() {
-        $("audio.audio-stream-loop").each(function (index, elem: HTMLAudioElement) {
-            elem.pause();
-            $(elem).remove();
-        })
     }
 }

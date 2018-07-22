@@ -7,17 +7,30 @@ export const Utilities = new class {
         });
         return queryStrings;
     }
-    Animate(targetObject: any, targetProperty: string, fromValue: number, toValue: number, msTransition: number) {
-        if (typeof targetObject[targetProperty] != "number") {
-            console.log("Property is not of type number.");
+    Animate(targetObject: any, targetProperty: string, fromValue: number, toValue: number, measurementUnit:string = null, msTransition: number = 400) {
+        if (parseInt(targetObject[targetProperty]) == NaN) {
+            console.log("Property is not a number.");
             return;
         }
         var totalChange = toValue - fromValue;
-        for (var i = 0; i < msTransition; i = i + 60) {
+        for (var i = 0; i <= msTransition; i = i + 20) {
             window.setTimeout(function (currentTime) {
-                targetObject[targetProperty] = fromValue + (currentTime / msTransition * totalChange);
-                if (currentTime >= msTransition) {
-                    targetObject[targetProperty] = toValue;
+                var newValue = fromValue + (currentTime / msTransition * totalChange);
+                if (measurementUnit) {
+                    targetObject[targetProperty] = newValue + measurementUnit;
+                }
+                else {
+                    targetObject[targetProperty] = newValue;
+                }
+               
+               
+                if (currentTime + 20 >= msTransition) {
+                    if (measurementUnit) {
+                        targetObject[targetProperty] = toValue + measurementUnit;
+                    }
+                    else {
+                        targetObject[targetProperty] = toValue;
+                    }
                 }
             }, i, i)
         }

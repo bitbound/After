@@ -1,6 +1,6 @@
 ﻿<div id="chatFrame" class="well well-sm chat-blur">
     <div id="chatOpenCloseWrapper" class="text-center">
-        <span class="glyphicon glyphicon-triangle-bottom"></span>
+        <span class="glyphicon glyphicon-resize-vertical"></span>
     </div>
     <div id="chatMessages"></div>
     <div id="chatInputDiv">
@@ -30,7 +30,7 @@
         grid-row-gap: 0;
     }
 
-    #chatOpenCloseWrapper span {
+    #chatOpenCloseWrapper {
         cursor: pointer;
     }
 
@@ -45,15 +45,20 @@
 
     #chatFrame.chat-focus {
         background-color: rgba(50,50,50,0.5);
-        transition: all linear 250ms;
         opacity: 1;
+        transition-property: opacity, background-color;
+        transition-duration: 200ms;
+        transition-timing-function: linear;
     }
 
     #chatFrame.chat-blur {
         background-color: rgba(50,50,50,0.2);
-        transition: all linear 250ms;
         opacity: .75;
+        transition-property: opacity, background-color;
+        transition-duration: 200ms;
+        transition-timing-function: linear;
     }
+
 
     #chatInputDiv {
         grid-row: 3;
@@ -65,12 +70,12 @@
 
     #chatFrame.chat-blur #chatInputDiv {
         opacity: .25;
-        transition: all linear 500ms;
+        transition: opacity linear 500ms;
     }
 
     #chatFrame.chat-focus #chatInputDiv {
         opacity: 1;
-        transition: all linear 500ms;
+        transition: opacity linear 500ms;
     }
 
 

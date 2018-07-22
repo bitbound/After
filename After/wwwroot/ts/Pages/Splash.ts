@@ -91,5 +91,5 @@ function playAudio(sourceFile: string) {
     request.send();
 }
 
-Sound.PlayLoop("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
+Sound.PlaySound("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
 createRenderer();

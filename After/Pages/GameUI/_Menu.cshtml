@@ -1,1 +1,113 @@
-﻿<div id="menuWrapper"></div>
+﻿<div id="menuWrapper">
+    <div>
+        <span id="menuButton" class="glyphicon glyphicon-menu-hamburger"></span>
+    </div>
+    <hr />
+    <div class="menu-section">
+        <div class="menu-header">
+            <span class="glyphicon glyphicon-user"></span>
+            Character
+        </div>
+        <div class="menu-body menu-body-closed">
+            <div class="menu-item">
+                <span class="menu-item-left">Name:</span>
+                <span class="menu-item-right">@Context?.Request?.Query?["character"]</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-item-left">Core&nbsp;Energy:</span>
+                <span class="menu-item-right" data-bind="After.Me.Character.CoreEnergy"></span>
+            </div>
+        </div>
+    </div>
+    <div class="menu-section">
+        <div class="menu-header">
+            <span class="glyphicon glyphicon-star"></span>
+            Powers
+        </div>
+        <div class="menu-body menu-body-closed">
+            <div class="menu-item">
+
+            </div>
+        </div>
+    </div>
+    <div class="menu-section">
+        <div class="menu-header">
+            <span class="glyphicon glyphicon-wrench"></span>
+            Options
+        </div>
+        <div class="menu-body menu-body-closed">
+            <div class="menu-item">
+                <span class="menu-item-left">Fullscreen:</span>
+                <span class="menu-item-right">
+                    <button id="buttonFullscreen">Go</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #menuWrapper {
+        position: fixed;
+        top: 5px;
+        right: 5px;
+        width: 150px;
+        background-color: rgba(75,75,75,0.75);
+        padding: 10px;
+        max-height: 90vh;
+        overflow: auto;
+    }
+
+    #menuButton {
+        cursor: pointer;
+    }
+    #menuWrapper hr {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .menu-section {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .menu-header {
+        padding: 10px;
+        background-color: rgba(20, 20, 20, 0.75);
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .menu-header:hover {
+        background-color: rgba(100, 100, 100, 0.75);
+    }
+    .menu-header:active {
+        background-color: rgba(200, 200, 200, 0.75);
+    }
+    .menu-body {
+        padding: 10px;
+        overflow: hidden;
+        font-size: .8em;
+        transition-property: height padding;
+        transition-timing-function: linear;
+        transition-duration: 200ms;
+    }
+    .menu-body-closed {
+        height: 0;
+        padding: 0;
+        transition-property: height padding;
+        transition-timing-function: linear;
+        transition-duration: 200ms;
+    }
+    .menu-item {
+        display: grid;
+        grid-auto-rows: auto;
+        grid-template-columns: 1fr 1fr;
+        overflow: hidden;
+    }
+  
+    .menu-item-left {
+        grid-column: 1;
+    }
+    .menu-item-right {
+        grid-column: 2;
+        text-align: right;
+    }
+</style>

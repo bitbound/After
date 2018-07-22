@@ -49,6 +49,24 @@ namespace After.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ErrorLog",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    PathWhereOccurred = table.Column<string>(nullable: true),
+                    User = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: true),
+                    StackTrace = table.Column<string>(nullable: true),
+                    Source = table.Column<string>(nullable: true),
+                    Timestamp = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ErrorLog", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -271,6 +289,9 @@ namespace After.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ErrorLog");
 
             migrationBuilder.DropTable(
                 name: "GameObjects");

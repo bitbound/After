@@ -15,6 +15,21 @@ canvas {
     max-width: 99vw;
     max-height: 95vh;
     -ms-touch-action: pan-y !important;
+    touch-action: pan-y !important;
 }
 
 
+button {
+    background-color: black;
+    border: 1px solid gray;
+    padding: 5px 10px
+}
+button:hover {
+    border: 1px solid white;
+    background-color: rgb(30, 30, 30);
+
+}
+button:active {
+    border: 1px solid dimgray;
+    background-color: rgb(60, 60, 60);
+}

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180717211030_ErrorTimestamp")]
-    partial class ErrorTimestamp
+    [Migration("20180719141552_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

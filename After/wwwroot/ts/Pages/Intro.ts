@@ -135,12 +135,10 @@ function createRenderer() {
 }
 
 createRenderer();
-Sound.PlayLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", null);
+Sound.PlayLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3");
 
-document.querySelectorAll("div.hidden").forEach((value, index) => {
+document.querySelectorAll("#introTextWrapper div").forEach((value, index) => {
     window.setTimeout((value) => {
-        $(value).hide();
-        $(value).removeClass("hidden");
-        $(value).fadeIn(1500);
-    }, (index + 1) * 2000, value);
+        Utilities.Animate(value.style, "opacity", 0, 1, null, 1500);
+    }, (index + 1) * 1500, value);
 });
