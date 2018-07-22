@@ -9,24 +9,6 @@ export class Character extends GameObject {
         this.YCoord = 0;
         this.ZCoord = "0";
     }
-    get CoreEnergy() {
-        return this.coreEnergy;
-    }
-    set CoreEnergy(value) {
-        this.coreEnergy = value;
-        if (value > this.CoreEnergyPeak) {
-            this.CoreEnergyPeak = value;
-        }
-    }
-    get MaxEnergy() {
-        return this.CoreEnergy + this.MaxEnergyModifier;
-    }
-    get MaxWillpower() {
-        return this.CoreEnergy + this.MaxWillpowerModifier;
-    }
-    get WillpowerPercent() {
-        return this.CurrentWillpower / this.MaxWillpower;
-    }
     OnCollision(collidingObject) {
     }
 }

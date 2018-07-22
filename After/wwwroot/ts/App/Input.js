@@ -16,14 +16,29 @@ export const Input = new class {
 };
 function handleMenuOptionsButtons() {
     document.querySelector("#buttonFullscreen").addEventListener("click", ev => {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
+        if (document.body.requestFullscreen) {
+            if (document.fullscreenElement) {
+                document.body.requestFullscreen();
+            }
+            else {
+                document.exitFullscreen();
+            }
         }
-        else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
+        else if (document.body.mozRequestFullScreen) {
+            if (document.mozFullScreen) {
+                document.mozCancelFullScreen();
+            }
+            else {
+                document.body.mozRequestFullScreen();
+            }
         }
-        else if (document.documentElement.webkitRequestFullScreen) {
-            document.documentElement.webkitRequestFullScreen();
+        else if (document.body.webkitRequestFullScreen) {
+            if (document.webkitIsFullScreen) {
+                document.webkitExitFullscreen();
+            }
+            else {
+                document.body.webkitRequestFullScreen();
+            }
         }
     });
 }
@@ -136,28 +151,29 @@ function handleChatResize() {
         var preventClick = false;
         var startY = ev.y;
         var startHeight = UI.ChatFrame.clientHeight;
-        function pointerMove(ev2) {
-            if (ev2.pointerId != pointerID) {
+        function pointerMove(ev) {
+            if (ev.pointerId != pointerID) {
                 return;
             }
-            if (Math.abs(startY - ev2.y) > 5) {
+            ev.preventDefault();
+            if (Math.abs(startY - ev.y) > 5) {
                 preventClick = true;
             }
-            UI.ChatFrame.style.height = String(Math.max(30, startHeight + startY - Math.max(0, ev2.y))) + "px";
+            UI.ChatFrame.style.height = String(Math.max(35, startHeight + startY - Math.max(0, ev.y))) + "px";
         }
         ;
-        function pointerUp(ev3) {
-            if (ev3.pointerId != pointerID) {
+        function pointerUp(ev) {
+            if (ev.pointerId != pointerID) {
                 return;
             }
             window.removeEventListener("pointerup", pointerUp);
             window.removeEventListener("pointermove", pointerMove);
             if (!preventClick) {
-                if (Main.UI.ChatFrame.clientHeight <= 30) {
+                if (Main.UI.ChatFrame.clientHeight <= 35) {
                     Utilities.Animate(UI.ChatFrame.style, "height", UI.ChatFrame.clientHeight, 150, "px", 200);
                 }
                 else {
-                    Utilities.Animate(UI.ChatFrame.style, "height", UI.ChatFrame.clientHeight, 30, "px", 200);
+                    Utilities.Animate(UI.ChatFrame.style, "height", UI.ChatFrame.clientHeight, 35, "px", 200);
                 }
             }
         }
@@ -173,29 +189,27 @@ function handleMenuButton() {
         var preventClick = false;
         var startX = ev.x;
         var startWidth = wrapper.clientWidth;
-        function pointerMove(ev2) {
-            if (ev2.pointerId != pointerID) {
+        function pointerMove(ev) {
+            if (ev.pointerId != pointerID) {
                 return;
             }
-            if (ev2.pointerId != pointerID) {
-                return;
-            }
-            if (Math.abs(startX - ev2.x) > 5) {
+            ev.preventDefault();
+            if (Math.abs(startX - ev.x) > 5) {
                 preventClick = true;
             }
-            wrapper.style.width = String(Math.max(30, startWidth + startX - Math.max(0, ev2.x))) + "px";
+            wrapper.style.width = String(Math.max(30, startWidth + startX - Math.max(0, ev.x))) + "px";
             wrapper.style.height = null;
             wrapper.style.overflow = "auto";
         }
-        function pointerUp(ev3) {
-            if (ev3.pointerId != pointerID) {
+        function pointerUp(ev) {
+            if (ev.pointerId != pointerID) {
                 return;
             }
             window.removeEventListener("pointermove", pointerMove);
             window.removeEventListener("pointerup", pointerUp);
             if (!preventClick) {
                 if (wrapper.clientWidth <= 35) {
-                    Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 150, "px", 200);
+                    Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 200, "px", 200);
                     wrapper.style.height = null;
                     wrapper.style.overflow = "auto";
                 }
@@ -215,91 +229,6 @@ function handleMenuHeaderClick() {
         value.addEventListener("click", ev => {
             ev.currentTarget.nextElementSibling.classList.toggle("menu-body-closed");
         });
-    });
-}
-function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback, preGetterCallback) {
-    var backingValue;
-    Object.defineProperty(dataObject, objectProperty, {
-        configurable: true,
-        enumerable: true,
-        get() {
-            if (preGetterCallback) {
-                preGetterCallback(backingValue);
-            }
-            return backingValue;
-        },
-        set(value) {
-            backingValue = value;
-            if (elementPropertyKey in element) {
-                element[elementPropertyKey] = value;
-            }
-            else {
-                element.setAttribute(elementPropertyKey, value);
-            }
-            if (postSetterCallback) {
-                postSetterCallback(value);
-            }
-        }
-    });
-}
-;
-function dataBindTwoWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback, preGetterCallback, elementEventTriggers) {
-    var backingValue;
-    Object.defineProperty(dataObject, objectProperty, {
-        configurable: true,
-        enumerable: true,
-        get() {
-            if (preGetterCallback) {
-                preGetterCallback(backingValue);
-            }
-            return backingValue;
-        },
-        set(value) {
-            backingValue = value;
-            if (elementPropertyKey in element) {
-                element[elementPropertyKey] = value;
-            }
-            else {
-                element.setAttribute(elementPropertyKey, value);
-            }
-            if (postSetterCallback) {
-                postSetterCallback(value);
-            }
-        }
-    });
-    elementEventTriggers.forEach(trigger => {
-        eval(`Element.${trigger} = function(e) {
-            ${element.getAttribute("data-object")}.${element.getAttribute("data-property")} = e.currentTarget${element.hasAttribute(elementPropertyKey) ? ".getAttribute(" + elementPropertyKey + ")" : "['" + elementPropertyKey + "']"};
-        };`);
-    });
-}
-;
-function setAllDatabinds(dataChangedCallback) {
-    $("input[data-object][data-property]").each((index, elem) => {
-        dataBindTwoWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "value", null, null, ["onchange"]);
-    });
-    $("div[data-object][data-property]").each((index, elem) => {
-        dataBindOneWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "innerHTML", null, null);
-    });
-    $(".toggle-switch-outer[data-object][data-property]").each((index, elem) => {
-        dataBindOneWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "on", null, null);
-    });
-    if (dataChangedCallback) {
-        $("input[data-object][data-property]").on("change", (e) => {
-            dataChangedCallback();
-        });
-    }
-    $(".toggle-switch-outer[data-object][data-property]").on("click", e => {
-        if (e.currentTarget.getAttribute("on") == "true") {
-            e.currentTarget.setAttribute("on", "false");
-        }
-        else {
-            e.currentTarget.setAttribute("on", "true");
-        }
-        eval(e.currentTarget.getAttribute("data-object") + "." + e.currentTarget.getAttribute("data-property") + " = " + e.currentTarget.getAttribute("on"));
-        if (dataChangedCallback) {
-            dataChangedCallback();
-        }
     });
 }
 //# sourceMappingURL=Input.js.map

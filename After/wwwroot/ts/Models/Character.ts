@@ -13,31 +13,22 @@ export class Character extends GameObject {
     public Name: string;
     public Color: string;
     public PortraitUri: string;
+
+    // Energy.
+    public CoreEnergy: number;
     public CoreEnergyPeak: number;
-    private coreEnergy: number;
-    public get CoreEnergy(): number {
-        return this.coreEnergy;
-    }
-    public set CoreEnergy(value: number) {
-        this.coreEnergy = value;
-        if (value > this.CoreEnergyPeak) {
-            this.CoreEnergyPeak = value;
-        }
-    }
     public MaxEnergyModifier: number;
-    public get MaxEnergy(): number {
-        return this.CoreEnergy + this.MaxEnergyModifier;
-    }
+    public MaxEnergy: number;
     public CurrentEnergy: number;
+
+    // Charge.
     public CurrentCharge: number;
+
+    // Willpower.
     public MaxWillpowerModifier: number;
-    public get MaxWillpower(): number {
-        return this.CoreEnergy + this.MaxWillpowerModifier;
-    }
+    public MaxWillpower: number;
     public CurrentWillpower: number;
-    public get WillpowerPercent(): number {
-        return this.CurrentWillpower / this.MaxWillpower;
-    }
+
     public OnCollision(collidingObject: GameObject): void {
         
     }

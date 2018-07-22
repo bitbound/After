@@ -19,10 +19,11 @@ canvas {
 }
 
 
-button {
+button, select, input {
     background-color: black;
     border: 1px solid gray;
-    padding: 5px 10px
+    padding: 5px 10px;
+    color: white;
 }
 button:hover {
     border: 1px solid white;
@@ -32,4 +33,7 @@ button:hover {
 button:active {
     border: 1px solid dimgray;
     background-color: rgb(60, 60, 60);
+}
+select:hover, input:hover {
+    border: 1px solid white;
 }

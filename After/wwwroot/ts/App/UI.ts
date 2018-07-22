@@ -143,3 +143,116 @@ export const UI = new class {
         $(".modal")["modal"]();
     };
 }
+
+function dataBindOneWay(dataObject: Object, objectProperty: string,
+    element: HTMLElement, elementPropertyKey: string,
+    postSetterCallback: Function, preGetterCallback: Function) {
+    var backingValue;
+    Object.defineProperty(dataObject, objectProperty, {
+        configurable: true,
+
+        enumerable: true,
+
+        get() {
+            if (preGetterCallback) {
+                preGetterCallback(backingValue);
+            }
+
+            return backingValue;
+        },
+
+        set(value: any) {
+            backingValue = value;
+
+            if (elementPropertyKey in element) {
+                element[elementPropertyKey] = value;
+            }
+
+            else {
+                element.setAttribute(elementPropertyKey, value);
+            }
+
+            if (postSetterCallback) {
+                postSetterCallback(value);
+            }
+        }
+    });
+};
+
+function dataBindTwoWay(dataObject: Object, objectProperty: string,
+    element: HTMLElement, elementPropertyKey: string,
+    postSetterCallback: Function, preGetterCallback: Function,
+    elementEventTriggers: Array<string>) {
+
+    var backingValue;
+
+    Object.defineProperty(dataObject, objectProperty, {
+        configurable: true,
+
+        enumerable: true,
+
+        get() {
+            if (preGetterCallback) {
+                preGetterCallback(backingValue);
+            }
+
+            return backingValue;
+        },
+
+        set(value: any) {
+            backingValue = value;
+
+            if (elementPropertyKey in element) {
+                element[elementPropertyKey] = value;
+            }
+
+            else {
+                element.setAttribute(elementPropertyKey, value);
+            }
+
+            if (postSetterCallback) {
+                postSetterCallback(value);
+            }
+        }
+    })
+
+    elementEventTriggers.forEach(trigger => {
+        eval(`Element.${trigger} = function(e) {
+            ${element.getAttribute("data-object")}.${element.getAttribute("data-property")} = e.currentTarget${element.hasAttribute(elementPropertyKey) ? ".getAttribute(" + elementPropertyKey + ")" : "['" + elementPropertyKey + "']"};
+        };`)
+    });
+};
+
+function setAllDatabinds(dataChangedCallback: Function) {
+    $("input[data-object][data-property]").each((index, elem: HTMLElement) => {
+        dataBindTwoWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "value", null, null, ["onchange"]);
+    })
+
+    $("div[data-object][data-property]").each((index, elem: HTMLElement) => {
+        dataBindOneWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "innerHTML", null, null);
+    })
+
+    $(".toggle-switch-outer[data-object][data-property]").each((index, elem: HTMLElement) => {
+        dataBindOneWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "on", null, null);
+    })
+
+    if (dataChangedCallback) {
+        $("input[data-object][data-property]").on("change", (e) => {
+            dataChangedCallback();
+        })
+    }
+
+    $(".toggle-switch-outer[data-object][data-property]").on("click", e => {
+        if (e.currentTarget.getAttribute("on") == "true") {
+            e.currentTarget.setAttribute("on", "false");
+        } else {
+            e.currentTarget.setAttribute("on", "true");
+        }
+
+        eval(e.currentTarget.getAttribute("data-object") + "." + e.currentTarget.getAttribute("data-property") + " = " + e.currentTarget.getAttribute("on"));
+
+        if (dataChangedCallback) {
+            dataChangedCallback();
+        }
+    })
+}

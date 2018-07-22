@@ -15,7 +15,28 @@
             </div>
             <div class="menu-item">
                 <span class="menu-item-left">Core&nbsp;Energy:</span>
-                <span class="menu-item-right" data-bind="After.Me.Character.CoreEnergy"></span>
+                <span class="menu-item-right" data-bind="Main.Me.Character.CoreEnergy"></span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-item-left">Max&nbsp;Energy:</span>
+                <span class="menu-item-right" data-bind="Main.Me.Character.MaxEnergy"></span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-item-left">Energy&nbsp;Mod:</span>
+                <span class="menu-item-right" data-bind="Main.Me.Character.MaxEnergyModifier"></span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-item-left">Energy&nbsp;Peak:</span>
+                <span class="menu-item-right"  data-bind="Main.Me.Character.CoreEnergyPeak"></span>
+            </div>
+
+            <div class="menu-item">
+                <span class="menu-item-left">Max&nbsp;Willpower:</span>
+                <span class="menu-item-right" data-bind="Main.Me.Character.MaxWillpower"></span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-item-left">Willpower&nbsp;Mod:</span>
+                <span class="menu-item-right" data-bind="Main.Me.Character.MaxWillpowerModifier"></span>
             </div>
         </div>
     </div>
@@ -39,7 +60,7 @@
             <div class="menu-item">
                 <span class="menu-item-left">Fullscreen:</span>
                 <span class="menu-item-right">
-                    <button id="buttonFullscreen">Go</button>
+                    <button id="buttonFullscreen">Toggle</button>
                 </span>
             </div>
         </div>
@@ -51,11 +72,12 @@
         position: fixed;
         top: 5px;
         right: 5px;
-        width: 150px;
+        width: 200px;
         background-color: rgba(75,75,75,0.75);
         padding: 10px;
         max-height: 90vh;
         overflow: auto;
+        z-index: 2;
     }
 
     #menuButton {
@@ -85,6 +107,7 @@
         padding: 10px;
         overflow: hidden;
         font-size: .8em;
+        height: auto;
         transition-property: height padding;
         transition-timing-function: linear;
         transition-duration: 200ms;
