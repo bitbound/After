@@ -28,8 +28,10 @@ var main = new class {
     }
 };
 window["After"] = main;
-window.onload = (e) => { Sockets.Connect(); };
 export const Main = main;
+if (location.pathname.search("play") > -1) {
+    window.onload = (e) => { Sockets.Connect(); };
+}
 function gameLoop(delta) {
     if (Main.Settings.IsDebugEnabled) {
         var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();

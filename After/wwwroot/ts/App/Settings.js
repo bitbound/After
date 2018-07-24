@@ -20,11 +20,16 @@ export const Settings = new class {
             UI.StatsFrame.style.display = "none";
         }
     }
-    get Touchscreen() {
-        return this.touchscreen;
+    get AreTouchControlsEnabled() {
+        return this.areTouchControlsEnabled;
     }
-    set Touchscreen(value) {
-        this.touchscreen = value;
+    set AreTouchControlsEnabled(value) {
+        this.areTouchControlsEnabled = value;
+        if (value) {
+            // TODO
+        }
+        else {
+        }
     }
 };
 //# sourceMappingURL=Settings.js.map

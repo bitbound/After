@@ -21,11 +21,16 @@ export const Settings = new class {
         }
     }
 
-    private touchscreen: boolean;
-    get Touchscreen(): boolean {
-        return this.touchscreen;
+    private areTouchControlsEnabled: boolean;
+    get AreTouchControlsEnabled(): boolean {
+        return this.areTouchControlsEnabled;
     }
-    set Touchscreen(value: boolean) {
-        this.touchscreen = value;
+    set AreTouchControlsEnabled(value: boolean) {
+        this.areTouchControlsEnabled = value;
+        if (value) {
+            // TODO
+        } else {
+
+        }
     }
 }

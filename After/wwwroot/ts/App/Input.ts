@@ -160,7 +160,7 @@ function handleChatTextInput() {
     });
 }
 function handleChatResize() {
-    document.querySelector("#chatOpenCloseWrapper").addEventListener("pointerdown", (ev: PointerEvent) => {
+    document.querySelector("#chatResizeBar").addEventListener("pointerdown", (ev: PointerEvent) => {
         var pointerID = ev.pointerId;
         var preventClick = false;
         var startY = ev.y;
@@ -212,12 +212,16 @@ function handleMenuButton() {
                 return;
             }
             ev.preventDefault();
+
             if (Math.abs(startX - ev.x) > 5) {
                 preventClick = true;
             }
+
             wrapper.style.width = String(Math.max(30, startWidth + startX - Math.max(0, ev.x))) + "px";
-            wrapper.style.height = null;
+
+            wrapper.style.height = "auto";
             wrapper.style.overflow = "auto";
+          
         }
         function pointerUp(ev: PointerEvent) {
             if (ev.pointerId != pointerID) {
@@ -228,7 +232,7 @@ function handleMenuButton() {
             if (!preventClick) {
                 if (wrapper.clientWidth <= 35) {
                     Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 200, "px", 200);
-                    wrapper.style.height = null;
+                    wrapper.style.height = "auto";
                     wrapper.style.overflow = "auto";
                 }
                 else {

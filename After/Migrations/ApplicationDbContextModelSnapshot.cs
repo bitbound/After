@@ -44,11 +44,14 @@ namespace After.Migrations
 
             modelBuilder.Entity("After.Data.GameObject", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("APpliedForceY");
 
                     b.Property<double>("AccelerationSpeed");
+
+                    b.Property<double>("AppliedForceX");
 
                     b.Property<double>("DecelerationSpeed");
 

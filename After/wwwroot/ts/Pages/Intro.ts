@@ -6,22 +6,58 @@ var introFlybyEmitter: PIXI.particles.Emitter;
 var app: PIXI.Application;
 var introSoulEmitterConfig = {
     "alpha": {
-        "start": 1,
-        "end": 0.15
+        "list": [
+            {
+                "value": 1,
+                "time": 0
+            },
+            {
+                "value": 0,
+                "time": 1
+            }
+        ],
+        "isStepped": false
     },
     "scale": {
-        "start": 1,
-        "end": .25,
-        "minimumScaleMultiplier": 1
+        "list": [
+            {
+                "value": 1,
+                "time": 0
+            },
+            {
+                "value": .9,
+                "time": 1
+            }
+        ],
+        "isStepped": false,
+        "minimumScaleMultiplier": 0.1
     },
     "color": {
-        "start": "#ffffff",
-        "end": window["soulColor"]
+        "list": [
+            {
+                "value": "#ffffff",
+                "time": 0
+            },
+            {
+                "value": window["soulColor"],
+                "time": 1
+            }
+        ],
+        "isStepped": false
     },
     "speed": {
-        "start": 50,
-        "end": 50,
-        "minimumSpeedMultiplier": 0.1
+        "list": [
+            {
+                "value": 50,
+                "time": 0
+            },
+            {
+                "value": 40,
+                "time": 1
+            }
+        ],
+        "isStepped": false,
+        "minimumSpeedMultiplier": 0.5
     },
     "acceleration": {
         "x": -150,
@@ -44,7 +80,7 @@ var introSoulEmitterConfig = {
     "blendMode": "normal",
     "frequency": 0.001,
     "emitterLifetime": -1,
-    "maxParticles": 500,
+    "maxParticles": 1000,
     "pos": {
         "x": 400,
         "y": 300

@@ -1,22 +1,59 @@
+import { Main } from "../Main.js";
 export const Me = new class {
     constructor() {
         this.EmitterConfig = {
             "alpha": {
-                "start": 1,
-                "end": 0
+                "list": [
+                    {
+                        "value": 1,
+                        "time": 0
+                    },
+                    {
+                        "value": 0,
+                        "time": 1
+                    }
+                ],
+                "isStepped": false
             },
             "scale": {
-                "start": 0.5,
-                "end": 0.5,
+                "list": [
+                    {
+                        "value": 0.6,
+                        "time": 0
+                    },
+                    {
+                        "value": 0.5,
+                        "time": 1
+                    }
+                ],
+                "isStepped": false,
                 "minimumScaleMultiplier": 0.1
             },
             "color": {
-                "start": "#ffffff",
-                "end": "#808080"
+                "list": [
+                    {
+                        "value": "#ffffff",
+                        "time": 0
+                    },
+                    {
+                        "value": "#808080",
+                        "time": 1
+                    }
+                ],
+                "isStepped": false
             },
             "speed": {
-                "start": 30,
-                "end": 30,
+                "list": [
+                    {
+                        "value": 40,
+                        "time": 0
+                    },
+                    {
+                        "value": 20,
+                        "time": 1
+                    }
+                ],
+                "isStepped": false,
                 "minimumSpeedMultiplier": 0.5
             },
             "acceleration": {
@@ -40,7 +77,7 @@ export const Me = new class {
             "blendMode": "normal",
             "frequency": 0.001,
             "emitterLifetime": -1,
-            "maxParticles": 500,
+            "maxParticles": 750,
             "pos": {
                 "x": 0,
                 "y": 0
@@ -56,8 +93,11 @@ export const Me = new class {
         };
     }
     CreateEmitter(mainApp) {
-        this.Emitter = new PIXI.particles.Emitter(mainApp.stage, ["/Assets/Images/particle.png"], this.EmitterConfig);
-        this.Emitter.updateOwnerPos(mainApp.screen.width / 2, mainApp.screen.height / 2);
+        this.ParticleContainer = new PIXI.particles.ParticleContainer();
+        Main.Renderer.stage.addChild(this.ParticleContainer);
+        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
+        this.ParticleContainer.x = mainApp.screen.width / 2;
+        this.ParticleContainer.y = mainApp.screen.height / 2;
     }
 };
 //# sourceMappingURL=Me.js.map

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180719141552_Initial")]
+    [Migration("20180724132452_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,11 +46,14 @@ namespace After.Migrations
 
             modelBuilder.Entity("After.Data.GameObject", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("APpliedForceY");
 
                     b.Property<double>("AccelerationSpeed");
+
+                    b.Property<double>("AppliedForceX");
 
                     b.Property<double>("DecelerationSpeed");
 

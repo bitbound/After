@@ -72,16 +72,19 @@
         position: fixed;
         top: 5px;
         right: 5px;
-        width: 200px;
+        width: 35px;
+        height: 35px;
         background-color: rgba(75,75,75,0.75);
         padding: 10px;
         max-height: 90vh;
-        overflow: auto;
+        overflow: hidden;
         z-index: 2;
     }
 
     #menuButton {
         cursor: pointer;
+        -ms-touch-action: none;
+        touch-action: none;
     }
     #menuWrapper hr {
         margin-top: 5px;

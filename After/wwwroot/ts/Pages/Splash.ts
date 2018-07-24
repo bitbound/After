@@ -6,21 +6,57 @@ var splashEmitter: PIXI.particles.Emitter;
 var app: PIXI.Application;
 var splashEmitterConfig = {
     "alpha": {
-        "start": 1,
-        "end": 0
+        "list": [
+            {
+                "value": 1,
+                "time": 0
+            },
+            {
+                "value": 0,
+                "time": 1
+            }
+        ],
+        "isStepped": false
     },
     "scale": {
-        "start": 0.05,
-        "end": 0.1,
-        "minimumScaleMultiplier": 1
+        "list": [
+            {
+                "value": 0.05,
+                "time": 0
+            },
+            {
+                "value": 0.1,
+                "time": 1
+            }
+        ],
+        "isStepped": false,
+        "minimumScaleMultiplier": 0.5
     },
     "color": {
-        "start": "#000000",
-        "end": "#c2c2c2"
+        "list": [
+            {
+                "value": "#000000",
+                "time": 0
+            },
+            {
+                "value": "#c2c2c2",
+                "time": 1
+            }
+        ],
+        "isStepped": false
     },
     "speed": {
-        "start": 75,
-        "end": 100,
+        "list": [
+            {
+                "value": 75,
+                "time": 0
+            },
+            {
+                "value": 100,
+                "time": 1
+            }
+        ],
+        "isStepped": false,
         "minimumSpeedMultiplier": 0.1
     },
     "acceleration": {
@@ -44,7 +80,7 @@ var splashEmitterConfig = {
     "blendMode": "normal",
     "frequency": 0.1,
     "emitterLifetime": -1,
-    "maxParticles": 500,
+    "maxParticles": 750,
     "pos": {
         "x": 80,
         "y": 150

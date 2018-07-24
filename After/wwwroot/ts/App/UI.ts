@@ -114,7 +114,7 @@ export const UI = new class {
     ShowGenericError(): void {
         this.ShowModal("Error", "An error occurred during the last operation.", "");
     };
-    ShowModal(title: string, message: string, buttonsHTML: string = "") {
+    ShowModal(title: string, message: string, buttonsHTML: string = "", onDismissCallback: VoidFunction = null) {
         var modalHTML = `<div class="modal fade" tabindex="-1" role="dialog">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -138,7 +138,12 @@ export const UI = new class {
         wrapperDiv.innerHTML = modalHTML;
         document.body.appendChild(wrapperDiv);
         $(".modal").on("hidden.bs.modal", ev => {
-            ev.currentTarget.parentElement.remove();
+            try {
+                onDismissCallback();
+            }
+            finally {
+                ev.currentTarget.parentElement.remove();
+            }
         });
         $(".modal")["modal"]();
     };

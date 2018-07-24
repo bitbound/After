@@ -6,7 +6,7 @@
     <div class="col-sm-5">
         <div class="h3">Characters</div>
         <div class="margin-top-md list-group max-height-300 vscroll">
-            @if (playerCharacters.Count() > 0)
+            @if (playerCharacters?.Count() > 0)
             {
                 <form id="deleteCharacterForm" method="post">
                     <input id="characterNameInput" name="CharacterName" type="hidden" />

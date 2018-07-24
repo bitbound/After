@@ -36,7 +36,6 @@
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="wwwroot\lib\types\signalr\" />
-    <Folder Include="wwwroot\ts\Entities\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿<div id="chatFrame" class="well well-sm chat-blur">
-    <div id="chatOpenCloseWrapper" class="text-center">
+    <div id="chatResizeBar" class="text-center">
         <span class="glyphicon glyphicon-resize-vertical"></span>
     </div>
     <div id="chatMessages"></div>
@@ -25,13 +25,12 @@
         grid-template-rows: min-content auto min-content;
     }
 
-    #chatOpenCloseWrapper {
+    #chatResizeBar {
         grid-row: 1;
         grid-row-gap: 0;
-    }
-
-    #chatOpenCloseWrapper {
         cursor: pointer;
+        -ms-touch-action: none;
+        touch-action: none;
     }
 
     #chatFrame {

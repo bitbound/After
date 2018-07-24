@@ -1,24 +1,59 @@
-import { Utilities } from "../App/Utilities.js";
-import { UI } from "../App/UI.js";
+import { Main } from "../Main.js";
 var app;
 var emitter;
 var characterPreviewEmitterConfig = {
     "alpha": {
-        "start": 1,
-        "end": 0.15
+        "list": [
+            {
+                "value": 1,
+                "time": 0
+            },
+            {
+                "value": 0,
+                "time": 1
+            }
+        ],
+        "isStepped": false
     },
     "scale": {
-        "start": 2,
-        "end": 2,
+        "list": [
+            {
+                "value": 2,
+                "time": 0
+            },
+            {
+                "value": 1.5,
+                "time": 1
+            }
+        ],
+        "isStepped": false,
         "minimumScaleMultiplier": 0.1
     },
     "color": {
-        "start": "#ffffff",
-        "end": "#808080"
+        "list": [
+            {
+                "value": "#ffffff",
+                "time": 0
+            },
+            {
+                "value": "#808080",
+                "time": 1
+            }
+        ],
+        "isStepped": false
     },
     "speed": {
-        "start": 75,
-        "end": 50,
+        "list": [
+            {
+                "value": 60,
+                "time": 0
+            },
+            {
+                "value": 50,
+                "time": 1
+            }
+        ],
+        "isStepped": false,
         "minimumSpeedMultiplier": 0.1
     },
     "acceleration": {
@@ -40,7 +75,7 @@ var characterPreviewEmitterConfig = {
         "max": 2.0
     },
     "blendMode": "normal",
-    "frequency": 0.001,
+    "frequency": 0.002,
     "emitterLifetime": -1,
     "maxParticles": 500,
     "pos": {
@@ -63,7 +98,7 @@ function changeEmitterColor(rgb) {
 }
 function applyEventHandlers() {
     document.querySelector("#deleteCharacterButton").addEventListener("click", ev => {
-        UI.ShowModal("Confirm Deletion", "Are you sure you want to delete this character?<br><br><strong>This cannot be reversed!</strong>", "<button id='confirmDeleteButton' class='btn btn-danger'>Delete</button>");
+        Main.UI.ShowModal("Confirm Deletion", "Are you sure you want to delete this character?<br><br><strong>This cannot be reversed!</strong>", "<button id='confirmDeleteButton' class='btn btn-danger'>Delete</button>");
         document.querySelector("#confirmDeleteButton").onclick = (ev) => {
             var deleteCharacterForm = document.querySelector("#deleteCharacterForm");
             deleteCharacterForm.submit();
@@ -80,7 +115,7 @@ function selectCharacter(e) {
     var characterInput = document.querySelector("#characterNameInput");
     characterInput.value = e.currentTarget.getAttribute("character-name");
     var hexColor = e.currentTarget.getAttribute("character-color");
-    var hexNumber = Utilities.HexStringToNumber(hexColor);
+    var hexNumber = Main.Utilities.HexStringToNumber(hexColor);
     changeEmitterColor(PIXI.utils.hex2rgb(hexNumber));
 }
 function createRenderer() {

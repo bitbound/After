@@ -10,7 +10,7 @@ namespace After.Data
     public class GameObject
     {
         [Key]
-        public int ID { get; set; }
+        public Guid ID { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
 
@@ -21,6 +21,8 @@ namespace After.Data
 
         public double VelocityX { get; set; }
         public double VelocityY { get; set; }
+        public double AppliedForceX { get; set; }
+        public double APpliedForceY { get; set; }
         public double AccelerationSpeed { get; set; }
         public double DecelerationSpeed { get; set; }
 

@@ -176,8 +176,7 @@ namespace After.Migrations
                 name: "GameObjects",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ID = table.Column<Guid>(nullable: false),
                     Height = table.Column<int>(nullable: false),
                     Width = table.Column<int>(nullable: false),
                     XCoord = table.Column<double>(nullable: false),
@@ -185,6 +184,8 @@ namespace After.Migrations
                     ZCoord = table.Column<string>(nullable: true),
                     VelocityX = table.Column<double>(nullable: false),
                     VelocityY = table.Column<double>(nullable: false),
+                    AppliedForceX = table.Column<double>(nullable: false),
+                    APpliedForceY = table.Column<double>(nullable: false),
                     AccelerationSpeed = table.Column<double>(nullable: false),
                     DecelerationSpeed = table.Column<double>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),

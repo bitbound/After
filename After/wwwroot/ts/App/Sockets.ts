@@ -24,8 +24,8 @@ export const Sockets = new class {
             Input.ApplyInputHandlers();
             this.Connection.invoke("Init", Utilities.QueryStrings["character"]);
         }).catch(err => {
-            Main.UI.ShowGenericError();
             console.error(err.toString());
+            Main.UI.ShowModal("Connection Failure", "Your connection was lost.", "", () => { location.assign("/"); });
         });
     }
     Invoke(methodName: string, args: any) {
@@ -38,7 +38,7 @@ function applyMessageHandlers(hubConnection: any) {
         if (Main.Me.Character == null) {
             UI.AddSystemMessage("Welcome to After.");
             Main.Me.Character = args;
-            Main.Me.EmitterConfig.color.end = Main.Me.Character.Color;
+            Main.Me.EmitterConfig.color.list[1].value = Main.Me.Character.Color;
             Main.Me.CreateEmitter(Main.Renderer);
         }
         else {
