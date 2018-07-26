@@ -25,9 +25,23 @@ export const Sockets = new class {
             this.Connection.invoke("Init", Utilities.QueryStrings["character"]);
         }).catch(err => {
             console.error(err.toString());
-            Main.UI.ShowModal("Connection Failure", "Your connection was lost.", "", () => { location.assign("/"); });
+            if (!this.IsDisconnectExpected) {
+                Main.UI.ShowModal("Connection Failure", "Your connection was lost.", "", () => { location.assign("/"); });
+            }
+            else {
+                location.assign("/");
+            }
+        });
+        this.Connection.closedCallbacks.push((ev) => {
+            if (!this.IsDisconnectExpected) {
+                Main.UI.ShowModal("Connection Failure", "Your connection was lost.", "", () => { location.assign("/"); });
+            }
+            else {
+                location.assign("/");
+            }
         });
     }
+    IsDisconnectExpected: boolean = false;
     Invoke(methodName: string, args: any) {
         this.Connection.invoke(methodName, args);
     }
@@ -40,11 +54,12 @@ function applyMessageHandlers(hubConnection: any) {
             Main.Me.Character = args;
             Main.Me.EmitterConfig.color.list[1].value = Main.Me.Character.Color;
             Main.Me.CreateEmitter(Main.Renderer);
+            UI.ApplyDataBinds();
         }
         else {
             $.extend(true, Main.Me.Character, args);
         }
-        UI.UpdatePlayerStats();
+        UI.UpdateStatBars();
     });
 
     hubConnection.on("ReceiveChat", data => {
@@ -56,7 +71,7 @@ function applyMessageHandlers(hubConnection: any) {
     });
 
     hubConnection.on("DisconnectDuplicateConnection", args => {
-        Main.UI.ShowModal("Connection Closed","Your account was logged into on another device.  This session has been closed.");
+        Main.UI.ShowModal("Connection Closed", "Your account was logged into on another device.  This session has been closed.", "", () => { location.assign("/"); });
         hubConnection.stop();
     })
     hubConnection.on("FailLoginDueToExistingConnection", args => {

@@ -56,7 +56,23 @@ namespace After.Data
         }
         public double CurrentEnergy { get; set; }
 
+
+        public double MaxChargeModifier { get; set; }
+        public double MaxCharge
+        {
+            get
+            {
+                return CoreEnergy + MaxChargeModifier;
+            }
+        }
         public double CurrentCharge { get; set; }
+        public double ChargePercent
+        {
+            get
+            {
+                return CurrentCharge / MaxCharge;
+            }
+        }
 
 
         public double MaxWillpowerModifier { get; set; }

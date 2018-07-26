@@ -2,19 +2,11 @@ import { Utilities } from "./Utilities.js";
 import { Me } from "./Me.js";
 import { Settings } from "./Settings.js";
 export const UI = new class {
-    UpdatePlayerStats() {
-        this.ChargeProgress.innerText = String(Me.Character.CurrentCharge);
-        this.ChargeProgress.style.width = String(Me.Character.CurrentCharge / Me.Character.MaxEnergy * 100) + "%";
-        this.EnergyProgress.innerText = String(Me.Character.CurrentEnergy);
-        this.EnergyProgress.style.width = String(Me.Character.CurrentEnergy / Me.Character.MaxEnergy * 100) + "%";
-        this.WillpowerProgress.innerText = String(Me.Character.CurrentWillpower);
-        this.WillpowerProgress.style.width = String(Me.Character.CurrentWillpower / Me.Character.MaxWillpower * 100) + "%";
-    }
     get ChargeProgress() {
         return document.querySelector("#chargeProgress");
     }
-    get StatsFrame() {
-        return document.querySelector("#statsFrame");
+    get DebugFrame() {
+        return document.querySelector("#debugFrame");
     }
     get EnergyProgress() {
         return document.querySelector("#energyProgress");
@@ -39,6 +31,15 @@ export const UI = new class {
     }
     get ChatFrame() {
         return document.querySelector("#chatFrame");
+    }
+    ;
+    UpdateStatBars() {
+        this.ChargeProgress.innerText = String(Me.Character.CurrentCharge);
+        this.ChargeProgress.style.width = String(Me.Character.CurrentCharge / Me.Character.MaxEnergy * 100) + "%";
+        this.EnergyProgress.innerText = String(Me.Character.CurrentEnergy);
+        this.EnergyProgress.style.width = String(Me.Character.CurrentEnergy / Me.Character.MaxEnergy * 100) + "%";
+        this.WillpowerProgress.innerText = String(Me.Character.CurrentWillpower);
+        this.WillpowerProgress.style.width = String(Me.Character.CurrentWillpower / Me.Character.MaxWillpower * 100) + "%";
     }
     AppendMessageToWindow(message) {
         var shouldScroll = false;
@@ -108,6 +109,27 @@ export const UI = new class {
         this.AppendMessageToWindow(messageText);
     }
     ;
+    ApplyDataBinds() {
+        document.querySelectorAll("[data-bind]").forEach((elem, index) => {
+            var qualifiedObject = elem.getAttribute("data-bind");
+            var lastDot = qualifiedObject.lastIndexOf(".");
+            var dataObject = eval(qualifiedObject.substring(0, lastDot));
+            var propertyName = qualifiedObject.substring(lastDot + 1);
+            if (elem.classList.contains("toggle-switch-outer")) {
+                dataBindOneWay(dataObject, propertyName, elem, "on", null, null);
+                elem.addEventListener("click", ev => {
+                    ev.currentTarget.setAttribute("on", String(ev.currentTarget.getAttribute("on") == "true"));
+                    eval(ev.currentTarget.getAttribute("data-bind") + " = " + ev.currentTarget.getAttribute("on"));
+                });
+            }
+            else if (elem.hasAttribute("value")) {
+                dataBindTwoWay(dataObject, propertyName, elem, "value", null, null, ["onchange"]);
+            }
+            else {
+                dataBindOneWay(dataObject, propertyName, elem, "innerHTML", null, null);
+            }
+        });
+    }
     ShowGenericError() {
         this.ShowModal("Error", "An error occurred during the last operation.", "");
     }
@@ -117,7 +139,7 @@ export const UI = new class {
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">${title}</h5>
+                <h3 class="modal-title">${title}</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -137,7 +159,9 @@ export const UI = new class {
         document.body.appendChild(wrapperDiv);
         $(".modal").on("hidden.bs.modal", ev => {
             try {
-                onDismissCallback();
+                if (onDismissCallback) {
+                    onDismissCallback();
+                }
             }
             finally {
                 ev.currentTarget.parentElement.remove();
@@ -147,8 +171,8 @@ export const UI = new class {
     }
     ;
 };
-function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback, preGetterCallback) {
-    var backingValue;
+function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback = null, preGetterCallback = null) {
+    var backingValue = dataObject[objectProperty];
     Object.defineProperty(dataObject, objectProperty, {
         configurable: true,
         enumerable: true,
@@ -171,10 +195,11 @@ function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey,
             }
         }
     });
+    dataObject[objectProperty] = backingValue;
 }
 ;
-function dataBindTwoWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback, preGetterCallback, elementEventTriggers) {
-    var backingValue;
+function dataBindTwoWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback = null, preGetterCallback = null, elementEventTriggers) {
+    var backingValue = dataObject[objectProperty];
     Object.defineProperty(dataObject, objectProperty, {
         configurable: true,
         enumerable: true,
@@ -197,39 +222,12 @@ function dataBindTwoWay(dataObject, objectProperty, element, elementPropertyKey,
             }
         }
     });
+    dataObject[objectProperty] = backingValue;
     elementEventTriggers.forEach(trigger => {
-        eval(`Element.${trigger} = function(e) {
-            ${element.getAttribute("data-object")}.${element.getAttribute("data-property")} = e.currentTarget${element.hasAttribute(elementPropertyKey) ? ".getAttribute(" + elementPropertyKey + ")" : "['" + elementPropertyKey + "']"};
+        eval(`element.${trigger} = function(e) {
+            ${element.getAttribute("data-bind")} = e.currentTarget${element.hasAttribute(elementPropertyKey) ? ".getAttribute(" + elementPropertyKey + ")" : "['" + elementPropertyKey + "']"};
         };`);
     });
 }
 ;
-function setAllDatabinds(dataChangedCallback) {
-    $("input[data-object][data-property]").each((index, elem) => {
-        dataBindTwoWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "value", null, null, ["onchange"]);
-    });
-    $("div[data-object][data-property]").each((index, elem) => {
-        dataBindOneWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "innerHTML", null, null);
-    });
-    $(".toggle-switch-outer[data-object][data-property]").each((index, elem) => {
-        dataBindOneWay(eval(elem.getAttribute("data-object")), elem.getAttribute("data-property"), elem, "on", null, null);
-    });
-    if (dataChangedCallback) {
-        $("input[data-object][data-property]").on("change", (e) => {
-            dataChangedCallback();
-        });
-    }
-    $(".toggle-switch-outer[data-object][data-property]").on("click", e => {
-        if (e.currentTarget.getAttribute("on") == "true") {
-            e.currentTarget.setAttribute("on", "false");
-        }
-        else {
-            e.currentTarget.setAttribute("on", "true");
-        }
-        eval(e.currentTarget.getAttribute("data-object") + "." + e.currentTarget.getAttribute("data-property") + " = " + e.currentTarget.getAttribute("on"));
-        if (dataChangedCallback) {
-            dataChangedCallback();
-        }
-    });
-}
 //# sourceMappingURL=UI.js.map

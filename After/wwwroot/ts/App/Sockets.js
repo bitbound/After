@@ -3,6 +3,9 @@ import { Utilities } from "./Utilities.js";
 import { Input } from "./Input.js";
 import { UI } from "./UI.js";
 export const Sockets = new class {
+    constructor() {
+        this.IsDisconnectExpected = false;
+    }
     Connect() {
         var signalR = window["signalR"];
         this.Connection = new signalR.HubConnectionBuilder()
@@ -19,7 +22,20 @@ export const Sockets = new class {
             this.Connection.invoke("Init", Utilities.QueryStrings["character"]);
         }).catch(err => {
             console.error(err.toString());
-            Main.UI.ShowModal("Connection Failure", "Your connection was lost.", "", () => { location.assign("/"); });
+            if (!this.IsDisconnectExpected) {
+                Main.UI.ShowModal("Connection Failure", "Your connection was lost.", "", () => { location.assign("/"); });
+            }
+            else {
+                location.assign("/");
+            }
+        });
+        this.Connection.closedCallbacks.push((ev) => {
+            if (!this.IsDisconnectExpected) {
+                Main.UI.ShowModal("Connection Failure", "Your connection was lost.", "", () => { location.assign("/"); });
+            }
+            else {
+                location.assign("/");
+            }
         });
     }
     Invoke(methodName, args) {
@@ -33,11 +49,12 @@ function applyMessageHandlers(hubConnection) {
             Main.Me.Character = args;
             Main.Me.EmitterConfig.color.list[1].value = Main.Me.Character.Color;
             Main.Me.CreateEmitter(Main.Renderer);
+            UI.ApplyDataBinds();
         }
         else {
             $.extend(true, Main.Me.Character, args);
         }
-        UI.UpdatePlayerStats();
+        UI.UpdateStatBars();
     });
     hubConnection.on("ReceiveChat", data => {
         switch (data.Channel) {
@@ -47,7 +64,7 @@ function applyMessageHandlers(hubConnection) {
         }
     });
     hubConnection.on("DisconnectDuplicateConnection", args => {
-        Main.UI.ShowModal("Connection Closed", "Your account was logged into on another device.  This session has been closed.");
+        Main.UI.ShowModal("Connection Closed", "Your account was logged into on another device.  This session has been closed.", "", () => { location.assign("/"); });
         hubConnection.stop();
     });
     hubConnection.on("FailLoginDueToExistingConnection", args => {

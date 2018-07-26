@@ -1,4 +1,5 @@
 ﻿import { Main } from "../Main.js";
+import { Utilities } from "../App/Utilities.js";
 
 var app: PIXI.Application;
 var emitter: PIXI.particles.Emitter;
@@ -125,6 +126,19 @@ function selectCharacter(e) {
     var hexColor = (e.currentTarget as HTMLAnchorElement).getAttribute("character-color");
     var hexNumber = Main.Utilities.HexStringToNumber(hexColor);
     changeEmitterColor(PIXI.utils.hex2rgb(hexNumber));
+    
+    Utilities.Animate(document.documentElement,
+        "scrollTop",
+        document.documentElement.scrollTop,
+        document.querySelector("#divCharacterPreview").getBoundingClientRect().top,
+        null,
+        200);
+    Utilities.Animate(document.body,
+        "scrollTop",
+        document.body.scrollTop,
+        document.querySelector("#divCharacterPreview").getBoundingClientRect().top,
+        null,
+        200);
 }
 
 function createRenderer() {

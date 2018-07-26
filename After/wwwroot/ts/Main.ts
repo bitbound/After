@@ -11,6 +11,7 @@ import { PixiHelper } from "./App/PixiHelper.js";
 import { Input } from "./App/Input.js";
 
 var main = new class {
+    ErrorLog: string = "";
     Input = Input;
     Me = Me;
     PixiHelper = PixiHelper;
@@ -30,6 +31,11 @@ var main = new class {
     }
 }
 
+window.onerror = (ev: Event, source, fileNo, columnNo, error: Error) => {
+    var errorMessage = `${new Date().toLocaleString()}  |  File: ${fileNo}  |  Column: ${columnNo}  |  Message: ${error.message}  |  Stack: ${error.stack}`.replace("\r\n", "<br>");
+    main.ErrorLog += errorMessage + "<br><br>";
+};
+
 window["After"] = main;
 export const Main = main;
 
@@ -38,14 +44,5 @@ if (location.pathname.search("play") > -1) {
 }
 
 function gameLoop(delta) {
-    if (Main.Settings.IsDebugEnabled) {
-        var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
-        if (
-            UI.FPSSpan.innerText != currentFPS &&
-            (UI.FPSSpan.getAttribute("last-set") == null || Date.now() - parseInt(UI.FPSSpan.getAttribute("last-set")) > 1000)
-        ) {
-            UI.FPSSpan.innerText = currentFPS;
-            UI.FPSSpan.setAttribute("last-set", Date.now().toString());
-        }
-    }
+   
 }

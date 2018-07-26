@@ -1,10 +1,12 @@
 ﻿<div id="menuWrapper">
-    <div>
-        <span id="menuButton" class="glyphicon glyphicon-menu-hamburger"></span>
+    <div class="menu-buttons-bar">
+        <span id="menuButton" title="Main Menu" class="glyphicon glyphicon-menu-hamburger menu-item-left"></span>
+        <span id="addToHomeButton" title="Add to Home Screen" class="glyphicon glyphicon-home menu-item-center"></span>
+        <span id="logoutButton" title="Log Out" class="glyphicon glyphicon-off menu-item-right"></span>
     </div>
     <hr />
     <div class="menu-section">
-        <div class="menu-header">
+        <div class="menu-section-header">
             <span class="glyphicon glyphicon-user"></span>
             Character
         </div>
@@ -15,33 +17,33 @@
             </div>
             <div class="menu-item">
                 <span class="menu-item-left">Core&nbsp;Energy:</span>
-                <span class="menu-item-right" data-bind="Main.Me.Character.CoreEnergy"></span>
+                <span class="menu-item-right" data-bind="After.Me.Character.CoreEnergy"></span>
             </div>
             <div class="menu-item">
                 <span class="menu-item-left">Max&nbsp;Energy:</span>
-                <span class="menu-item-right" data-bind="Main.Me.Character.MaxEnergy"></span>
+                <span class="menu-item-right" data-bind="After.Me.Character.MaxEnergy"></span>
             </div>
             <div class="menu-item">
                 <span class="menu-item-left">Energy&nbsp;Mod:</span>
-                <span class="menu-item-right" data-bind="Main.Me.Character.MaxEnergyModifier"></span>
+                <span class="menu-item-right" data-bind="After.Me.Character.MaxEnergyModifier"></span>
             </div>
             <div class="menu-item">
                 <span class="menu-item-left">Energy&nbsp;Peak:</span>
-                <span class="menu-item-right"  data-bind="Main.Me.Character.CoreEnergyPeak"></span>
+                <span class="menu-item-right"  data-bind="After.Me.Character.CoreEnergyPeak"></span>
             </div>
 
             <div class="menu-item">
                 <span class="menu-item-left">Max&nbsp;Willpower:</span>
-                <span class="menu-item-right" data-bind="Main.Me.Character.MaxWillpower"></span>
+                <span class="menu-item-right" data-bind="After.Me.Character.MaxWillpower"></span>
             </div>
             <div class="menu-item">
                 <span class="menu-item-left">Willpower&nbsp;Mod:</span>
-                <span class="menu-item-right" data-bind="Main.Me.Character.MaxWillpowerModifier"></span>
+                <span class="menu-item-right" data-bind="After.Me.Character.MaxWillpowerModifier"></span>
             </div>
         </div>
     </div>
     <div class="menu-section">
-        <div class="menu-header">
+        <div class="menu-section-header">
             <span class="glyphicon glyphicon-star"></span>
             Powers
         </div>
@@ -52,7 +54,7 @@
         </div>
     </div>
     <div class="menu-section">
-        <div class="menu-header">
+        <div class="menu-section-header">
             <span class="glyphicon glyphicon-wrench"></span>
             Options
         </div>
@@ -62,6 +64,22 @@
                 <span class="menu-item-right">
                     <button id="buttonFullscreen">Toggle</button>
                 </span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-item-left">Touch Controls:</span>
+                <div class="menu-item-right">
+                    <div id="toggleTouchControls" class="toggle-switch-outer" on="false">
+                        <div class="toggle-switch-inner"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span class="menu-item-left">Debug Info:</span>
+                <div class="menu-item-right">
+                    <div id="toggleDebugWindow" class="toggle-switch-outer" on="false">
+                        <div class="toggle-switch-inner"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -81,11 +99,12 @@
         z-index: 2;
     }
 
-    #menuButton {
+    #menuButton, #addToHomeButton, #logoutButton {
         cursor: pointer;
         -ms-touch-action: none;
         touch-action: none;
     }
+
     #menuWrapper hr {
         margin-top: 5px;
         margin-bottom: 5px;
@@ -94,16 +113,16 @@
         margin-top: 5px;
         margin-bottom: 5px;
     }
-    .menu-header {
+    .menu-section-header {
         padding: 10px;
         background-color: rgba(20, 20, 20, 0.75);
         cursor: pointer;
         overflow: hidden;
     }
-    .menu-header:hover {
+    .menu-section-header:hover {
         background-color: rgba(100, 100, 100, 0.75);
     }
-    .menu-header:active {
+    .menu-section-header:active {
         background-color: rgba(200, 200, 200, 0.75);
     }
     .menu-body {
@@ -115,6 +134,7 @@
         transition-timing-function: linear;
         transition-duration: 200ms;
     }
+    
     .menu-body-closed {
         height: 0;
         padding: 0;
@@ -125,15 +145,26 @@
     .menu-item {
         display: grid;
         grid-auto-rows: auto;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+        overflow: hidden;
+        margin-top: 5px;
+    }
+    .menu-buttons-bar {
+        display: grid;
+        grid-auto-rows: auto;
+        grid-template-columns: 1fr 1fr 1fr;
         overflow: hidden;
     }
-  
+
     .menu-item-left {
         grid-column: 1;
     }
-    .menu-item-right {
+    .menu-item-center {
         grid-column: 2;
+        text-align: center;
+    }
+    .menu-item-right {
+        grid-column: 3;
         text-align: right;
     }
 </style>

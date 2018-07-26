@@ -22,6 +22,8 @@ export class Character extends GameObject {
     public CurrentEnergy: number;
 
     // Charge.
+    public MaxChargeModifier: number;
+    public MaxCharge: number;
     public CurrentCharge: number;
 
     // Willpower.
@@ -32,7 +34,7 @@ export class Character extends GameObject {
     public OnCollision(collidingObject: GameObject): void {
         
     }
-    public EmitterConfig: any = {
+    public EmitterConfig = {
         "alpha": {
             "list": [
                 {

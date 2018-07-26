@@ -75,7 +75,7 @@ export const Me = new class {
                 "max": 1.0
             },
             "blendMode": "normal",
-            "frequency": 0.001,
+            "frequency": 0.002,
             "emitterLifetime": -1,
             "maxParticles": 750,
             "pos": {

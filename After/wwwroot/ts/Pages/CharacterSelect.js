@@ -1,4 +1,5 @@
 import { Main } from "../Main.js";
+import { Utilities } from "../App/Utilities.js";
 var app;
 var emitter;
 var characterPreviewEmitterConfig = {
@@ -117,6 +118,8 @@ function selectCharacter(e) {
     var hexColor = e.currentTarget.getAttribute("character-color");
     var hexNumber = Main.Utilities.HexStringToNumber(hexColor);
     changeEmitterColor(PIXI.utils.hex2rgb(hexNumber));
+    Utilities.Animate(document.documentElement, "scrollTop", document.documentElement.scrollTop, document.querySelector("#divCharacterPreview").getBoundingClientRect().top, null, 200);
+    Utilities.Animate(document.body, "scrollTop", document.body.scrollTop, document.querySelector("#divCharacterPreview").getBoundingClientRect().top, null, 200);
 }
 function createRenderer() {
     app = new PIXI.Application({

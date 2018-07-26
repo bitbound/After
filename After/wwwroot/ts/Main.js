@@ -9,6 +9,7 @@ import { PixiHelper } from "./App/PixiHelper.js";
 import { Input } from "./App/Input.js";
 var main = new class {
     constructor() {
+        this.ErrorLog = "";
         this.Input = Input;
         this.Me = Me;
         this.PixiHelper = PixiHelper;
@@ -27,19 +28,15 @@ var main = new class {
         Main.Renderer.ticker.add(delta => gameLoop(delta));
     }
 };
+window.onerror = (ev, source, fileNo, columnNo, error) => {
+    var errorMessage = `${new Date().toLocaleString()}  |  File: ${fileNo}  |  Column: ${columnNo}  |  Message: ${error.message}  |  Stack: ${error.stack}`.replace("\r\n", "<br>");
+    main.ErrorLog += errorMessage + "<br><br>";
+};
 window["After"] = main;
 export const Main = main;
 if (location.pathname.search("play") > -1) {
     window.onload = (e) => { Sockets.Connect(); };
 }
 function gameLoop(delta) {
-    if (Main.Settings.IsDebugEnabled) {
-        var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
-        if (UI.FPSSpan.innerText != currentFPS &&
-            (UI.FPSSpan.getAttribute("last-set") == null || Date.now() - parseInt(UI.FPSSpan.getAttribute("last-set")) > 1000)) {
-            UI.FPSSpan.innerText = currentFPS;
-            UI.FPSSpan.setAttribute("last-set", Date.now().toString());
-        }
-    }
 }
 //# sourceMappingURL=Main.js.map

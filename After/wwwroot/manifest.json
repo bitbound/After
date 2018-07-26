@@ -5,7 +5,9 @@
   "start_url": "https://after-game.net",
   "display": "standalone",
   "background_color": "black",
-  "description": "A MUD-like, infinite-progression, online RPG.",
+  "theme_color": "white",
+  "categories": ["online", "multiplayer", "rpg" ],
+  "description": "An online action-RPG set in an abstract, infinite afterlife.",
   "icons": [
     {
       "src": "https://after-game.net/Assets/Images/A-128.png",
@@ -20,7 +22,16 @@
   ],
   "related_applications": [
     {
-      "platform": "web"
+      "platform": "windows",
+      "url": " https://after-game.net"
+    },
+    {
+      "platform": "play",
+      "url": " https://after-game.net"
+    },
+    {
+      "platform": "itunes",
+      "url": " https://after-game.net"
     }
   ]
 }

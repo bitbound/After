@@ -1,4 +1,9 @@
-﻿body {
+﻿html {
+    background-color: #222222;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+body {
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -49,7 +54,7 @@ select:hover, input:hover {
 
 
 /***  Toggle Switch ***/
-.switch-outer {
+.toggle-switch-outer {
     height: 25px;
     width: 45px;
     border-radius: 10px;
@@ -58,17 +63,17 @@ select:hover, input:hover {
     vertical-align: middle;
 }
 
-.switch-outer[on="true"] {
+.toggle-switch-outer[on="true"] {
     background-color: steelblue;
     transition: .5s;
 }
 
-.switch-outer[on="false"] {
+.toggle-switch-outer[on="false"] {
     background-color: gray;
     transition: .5s;
 }
 
-.switch-inner {
+.toggle-switch-inner {
     border-radius: 100%;
     background-color: white;
     height: 20px;
@@ -80,12 +85,12 @@ select:hover, input:hover {
     transform: translate(-50%, -50%);
 }
 
-.switch-outer[on="true"] .switch-inner {
+.toggle-switch-outer[on="true"] .toggle-switch-inner {
     margin-left: 24%;
     transition: .5s;
 }
 
-.switch-outer[on="false"] .switch-inner {
+.toggle-switch-outer[on="false"] .toggle-switch-inner {
     margin-left: -24%;
     transition: .5s;
 }

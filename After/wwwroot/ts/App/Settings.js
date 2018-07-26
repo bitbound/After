@@ -1,3 +1,4 @@
+import { Main } from "../Main.js";
 import { UI } from "./UI.js";
 export const Settings = new class {
     constructor() {
@@ -10,14 +11,24 @@ export const Settings = new class {
         };
     }
     get IsDebugEnabled() {
-        return UI.StatsFrame.style.display == "";
+        return UI.DebugFrame.style.display == "";
     }
     set IsDebugEnabled(value) {
+        var fpsUpdateTicker = (delta => {
+            var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
+            if (UI.FPSSpan.innerText != currentFPS &&
+                (UI.FPSSpan.getAttribute("last-set") == null || Date.now() - parseInt(UI.FPSSpan.getAttribute("last-set")) > 1000)) {
+                UI.FPSSpan.innerText = currentFPS;
+                UI.FPSSpan.setAttribute("last-set", Date.now().toString());
+            }
+        });
         if (value) {
-            UI.StatsFrame.style.display = "";
+            Main.Renderer.ticker.add(fpsUpdateTicker);
+            UI.DebugFrame.style.display = "";
         }
         else {
-            UI.StatsFrame.style.display = "none";
+            Main.Renderer.ticker.remove(fpsUpdateTicker);
+            UI.DebugFrame.style.display = "none";
         }
     }
     get AreTouchControlsEnabled() {
@@ -26,9 +37,12 @@ export const Settings = new class {
     set AreTouchControlsEnabled(value) {
         this.areTouchControlsEnabled = value;
         if (value) {
-            // TODO
+            document.querySelector("#movementTouchArea").hidden = false;
+            document.querySelector("#actionTouchArea").hidden = false;
         }
         else {
+            document.querySelector("#movementTouchArea").hidden = true;
+            document.querySelector("#actionTouchArea").hidden = true;
         }
     }
 };

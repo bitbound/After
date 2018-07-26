@@ -2,6 +2,9 @@
 import { Main } from "../Main.js";
 import { UI } from "./UI.js";
 import { Utilities } from "./Utilities.js";
+import { Me } from "./Me.js";
+import { Sockets } from "./Sockets.js";
+import { Settings } from "./Settings.js";
 
 export const Input = new class {
     ApplyInputHandlers() {
@@ -13,35 +16,62 @@ export const Input = new class {
         handleMenuButton();
         handleMenuHeaderClick();
         handleMenuOptionsButtons();
+        handleAddToHomeButtonClick();
+        handleDebugFrame();
     }
+}
+function handleDebugFrame() {
+    document.querySelector("#jsErrorsLink").addEventListener("click", ev => {
+        UI.ShowModal("Error Log", Main.ErrorLog);
+    })
+}
+function handleAddToHomeButtonClick() {
+    document.querySelector("#addToHomeButton").addEventListener("click", ev => {
+        UI.ShowModal("Add to Home Screen", `
+            You can install this web app to your mobile device for a native-app-like feel!<br><br>
+            From your mobile device, use your browser's Add to Home Screen feature to create a shortcut on your home screen.
+            When you launch After from that shortcut, it will open and run like a normal app.`);
+    });
 }
 function handleMenuOptionsButtons() {
     document.querySelector("#buttonFullscreen").addEventListener("click", ev => {
-        if (document.body.requestFullscreen) {
+        if (document.documentElement.requestFullscreen) {
             if (document.fullscreenElement) {
-                document.body.requestFullscreen();
-            }
-            else {
                 document.exitFullscreen();
             }
+            else {
+                document.documentElement.requestFullscreen();
+            }
         }
-        else if ((document.body as any).mozRequestFullScreen) {
+        else if ((document.documentElement as any).mozRequestFullScreen) {
             if ((document as any).mozFullScreen) {
                 (document as any).mozCancelFullScreen();
             }
             else {
-                (document.body as any).mozRequestFullScreen();
+                (document.documentElement as any).mozRequestFullScreen();
             }
         }
-        else if (document.body.webkitRequestFullScreen) {
+        else if (document.documentElement.webkitRequestFullScreen) {
             if (document.webkitIsFullScreen) {
                 document.webkitExitFullscreen();
             }
             else {
-                document.body.webkitRequestFullScreen();
+                document.documentElement.webkitRequestFullScreen();
             }
         }
-    })
+    });
+    document.querySelector("#toggleDebugWindow").addEventListener("click", ev => {
+        Settings.IsDebugEnabled = !Settings.IsDebugEnabled;
+        (ev.currentTarget as HTMLElement).setAttribute("on", String(Settings.IsDebugEnabled));
+    });
+    document.querySelector("#logoutButton").addEventListener("click", ev => {
+        Sockets.IsDisconnectExpected = true;
+        Sockets.Connection.stop();
+    });
+    document.querySelector("#toggleTouchControls").addEventListener("click", ev => {
+        Settings.AreTouchControlsEnabled = !Settings.AreTouchControlsEnabled;
+        (ev.currentTarget as HTMLElement).setAttribute("on", String(Settings.AreTouchControlsEnabled));
+    });
 }
 function handleActionJoystick() {
     var outer = document.querySelector("#actionJoystickOuter") as HTMLDivElement;
@@ -249,7 +279,7 @@ function handleMenuButton() {
 }
 
 function handleMenuHeaderClick() {
-    document.querySelectorAll("#menuWrapper .menu-header").forEach((value, index) => {
+    document.querySelectorAll("#menuWrapper .menu-section-header").forEach((value, index) => {
         value.addEventListener("click", ev => {
             (ev.currentTarget as HTMLElement).nextElementSibling.classList.toggle("menu-body-closed");
         })
