@@ -97,7 +97,6 @@ var splashEmitterConfig = {
 };
 
 function createRenderer() {
-    (document.querySelector("#splashCanvas") as HTMLCanvasElement).style.maxWidth = "200px";
     app = new PIXI.Application({
         view: document.querySelector("#splashCanvas"),
         transparent: true,
@@ -110,22 +109,6 @@ function createRenderer() {
     splashEmitter = new PIXI.particles.Emitter(app.stage, ["/Assets/Images/particle.png"], splashEmitterConfig);
 }
 
-function playAudio(sourceFile: string) {
-    var audioCtx = new AudioContext();
-    var source = audioCtx.createBufferSource();
-    source.loop = true;
-    var request = new XMLHttpRequest();
-    request.responseType = "arraybuffer";
-    request.open("GET", sourceFile, true);
-    request.onload = function () {
-        audioCtx.decodeAudioData(request.response, function (buffer) {
-            source.buffer = buffer;
-            source.connect(audioCtx.destination);
-            source.start(0);
-        });
-    }
-    request.send();
-}
 
-Sound.PlaySound("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3");
+Sound.Play("/Assets/Sounds/ceich93_drone-ominousdistortion.mp3", true);
 createRenderer();

@@ -17,9 +17,6 @@ export const Sockets = new class {
         applyMessageHandlers(this.Connection);
 
         this.Connection.start().then(() => {
-            if (location.href.indexOf("localhost") > -1) {
-                Main.Settings.IsDebugEnabled = true;
-            }
             Main.StartGameLoop();
             Input.ApplyInputHandlers();
             this.Connection.invoke("Init", Utilities.QueryStrings["character"]);

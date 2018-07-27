@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180724132452_Initial")]
+    [Migration("20180726204945_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -270,6 +270,8 @@ namespace After.Migrations
                     b.Property<double>("CurrentEnergy");
 
                     b.Property<double>("CurrentWillpower");
+
+                    b.Property<double>("MaxChargeModifier");
 
                     b.Property<double>("MaxEnergyModifier");
 

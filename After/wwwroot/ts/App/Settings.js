@@ -9,11 +9,16 @@ export const Settings = new class {
             SystemMessage: "lightgray",
             DebugMessage: "rgb(150,50,50)"
         };
+        this.RendererResolution = {
+            Width: 1280,
+            Height: 720
+        };
     }
     get IsDebugEnabled() {
-        return UI.DebugFrame.style.display == "";
+        return localStorage["IsDebugEnabled"] == 'true';
     }
     set IsDebugEnabled(value) {
+        localStorage["IsDebugEnabled"] = value;
         var fpsUpdateTicker = (delta => {
             var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
             if (UI.FPSSpan.innerText != currentFPS &&
@@ -30,12 +35,16 @@ export const Settings = new class {
             Main.Renderer.ticker.remove(fpsUpdateTicker);
             UI.DebugFrame.style.display = "none";
         }
+        document.querySelector("#toggleDebugWindow").setAttribute("on", String(value));
     }
     get AreTouchControlsEnabled() {
-        return this.areTouchControlsEnabled;
+        if (localStorage["AreTouchControlsEnabled"] == undefined) {
+            localStorage["AreTouchControlsEnabled"] = 'true';
+        }
+        return localStorage["AreTouchControlsEnabled"] == 'true';
     }
     set AreTouchControlsEnabled(value) {
-        this.areTouchControlsEnabled = value;
+        localStorage["AreTouchControlsEnabled"] = value;
         if (value) {
             document.querySelector("#movementTouchArea").hidden = false;
             document.querySelector("#actionTouchArea").hidden = false;
@@ -44,6 +53,7 @@ export const Settings = new class {
             document.querySelector("#movementTouchArea").hidden = true;
             document.querySelector("#actionTouchArea").hidden = true;
         }
+        document.querySelector("#toggleTouchControls").setAttribute("on", String(value));
     }
 };
 //# sourceMappingURL=Settings.js.map

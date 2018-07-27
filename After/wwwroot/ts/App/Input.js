@@ -2,7 +2,6 @@ import { PixiHelper } from "./PixiHelper.js";
 import { Main } from "../Main.js";
 import { UI } from "./UI.js";
 import { Utilities } from "./Utilities.js";
-import { Sockets } from "./Sockets.js";
 import { Settings } from "./Settings.js";
 export const Input = new class {
     ApplyInputHandlers() {
@@ -60,15 +59,16 @@ function handleMenuOptionsButtons() {
     });
     document.querySelector("#toggleDebugWindow").addEventListener("click", ev => {
         Settings.IsDebugEnabled = !Settings.IsDebugEnabled;
-        ev.currentTarget.setAttribute("on", String(Settings.IsDebugEnabled));
     });
     document.querySelector("#logoutButton").addEventListener("click", ev => {
-        Sockets.IsDisconnectExpected = true;
-        Sockets.Connection.stop();
+        UI.ShowModal("Confirm Logout", "Are you sure you want to log out?", `
+            <button class="btn btn-primary" onclick="
+            After.Sockets.IsDisconnectExpected = true;
+            After.Sockets.Connection.stop();">Logout</button>
+        `);
     });
     document.querySelector("#toggleTouchControls").addEventListener("click", ev => {
         Settings.AreTouchControlsEnabled = !Settings.AreTouchControlsEnabled;
-        ev.currentTarget.setAttribute("on", String(Settings.AreTouchControlsEnabled));
     });
 }
 function handleActionJoystick() {

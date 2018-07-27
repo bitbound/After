@@ -1,91 +1,42 @@
-﻿export const Sound = new class {
+﻿import { Utilities } from "./Utilities.js";
+
+export const Sound = new class {
     constructor() {
         this.Context = new AudioContext();
     }
-    Context: AudioContext;
-    PlaySource: AudioBufferSourceNode;
-    LoopSource: AudioBufferSourceNode;
+    Context: AudioContext = new AudioContext();
+    AudioElements: Array<HTMLAudioElement> = new Array<HTMLAudioElement>();
+    SourceNodes: Array<MediaElementAudioSourceNode> = new Array<MediaElementAudioSourceNode>();
 
-    PlaySound(sourceFile: string) {
-        this.Context = this.Context || new AudioContext();
-        var audioCtx = this.Context;
-        this.PlaySource = audioCtx.createBufferSource();
-        var source = this.PlaySource;
-        source.loop = false;
-        var request = new XMLHttpRequest();
-        request.responseType = "arraybuffer";
-        request.open("GET", sourceFile, true);
-        request.onload = function () {
-            audioCtx.decodeAudioData(request.response, function (buffer) {
-                source.buffer = buffer;
-                source.connect(audioCtx.destination);
-                source.start(0);
-            });
+    Play(sourceFile: string, loop: boolean): string {
+        var audioElement = new Audio(sourceFile);
+        this.AudioElements.push(audioElement);
+        if (loop) {
+            audioElement.loop = true;
         }
-        request.send();
-    }
-    LoadSound(sourceFile: string) {
-        this.Context = this.Context || new AudioContext();
-        var audioCtx = this.Context;
-        this.PlaySource = audioCtx.createBufferSource();
-        var source = this.PlaySource;
-        source.loop = false;
-        var request = new XMLHttpRequest();
-        request.responseType = "arraybuffer";
-        request.open("GET", sourceFile, true);
-        request.onload = function () {
-            audioCtx.decodeAudioData(request.response, function (buffer) {
-                source.buffer = buffer;
-                source.connect(audioCtx.destination);
-            });
+        audioElement.id = Utilities.CreateGUID();
+        var sourceNode = this.Context.createMediaElementSource(audioElement);
+        this.SourceNodes.push(sourceNode);
+
+        audioElement.onended = (ev) => {
+            audioElement.pause();
+            sourceNode.disconnect();
+            Utilities.RemoveFromArray(this.AudioElements, audioElement);
+            Utilities.RemoveFromArray(this.SourceNodes, sourceNode);
         }
-        request.send();
+
+        sourceNode.connect(this.Context.destination);
+        audioElement.play();
+
+        return audioElement.id;
     };
-    StopSound(): void {
-        if (this.PlaySource.buffer != null) {
-            this.PlaySource.stop();
-            this.PlaySource.disconnect();
-        }
-    }
-    PlayLoop(sourceFile: string) {
-        this.Context = this.Context || new AudioContext();
-        var audioCtx = this.Context;
-        this.LoopSource = audioCtx.createBufferSource();
-        var source = this.LoopSource;
-        source.loop = true;
-        var request = new XMLHttpRequest();
-        request.responseType = "arraybuffer";
-        request.open("GET", sourceFile, true);
-        request.onload = function () {
-            audioCtx.decodeAudioData(request.response, function (buffer) {
-                source.buffer = buffer;
-                source.connect(audioCtx.destination);
-                source.start(0);
-            });
-        }
-        request.send();
-    };
-    LoadLoop(sourceFile: string) {
-        this.Context = this.Context || new AudioContext();
-        var audioCtx = this.Context;
-        this.LoopSource = audioCtx.createBufferSource();
-        var source = this.LoopSource;
-        source.loop = false;
-        var request = new XMLHttpRequest();
-        request.responseType = "arraybuffer";
-        request.open("GET", sourceFile, true);
-        request.onload = function () {
-            audioCtx.decodeAudioData(request.response, function (buffer) {
-                source.buffer = buffer;
-                source.connect(audioCtx.destination);
-            });
-        }
-        request.send();
-    };
-    StopLoop(): void {
-        if (this.LoopSource.buffer != null) {
-            this.LoopSource.stop();
-            this.LoopSource.disconnect();
+    Stop(audioID:string): void {
+        var index = this.AudioElements.findIndex((value, index) => {
+            return value.id == audioID;
+        });
+        if (index > -1) {
+            this.AudioElements[index].pause();
+            this.AudioElements[index].onended(null);
         }
     }
 }

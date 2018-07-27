@@ -33,14 +33,6 @@ export const UI = new class {
         return document.querySelector("#chatFrame");
     }
     ;
-    UpdateStatBars() {
-        this.ChargeProgress.innerText = String(Me.Character.CurrentCharge);
-        this.ChargeProgress.style.width = String(Me.Character.CurrentCharge / Me.Character.MaxEnergy * 100) + "%";
-        this.EnergyProgress.innerText = String(Me.Character.CurrentEnergy);
-        this.EnergyProgress.style.width = String(Me.Character.CurrentEnergy / Me.Character.MaxEnergy * 100) + "%";
-        this.WillpowerProgress.innerText = String(Me.Character.CurrentWillpower);
-        this.WillpowerProgress.style.width = String(Me.Character.CurrentWillpower / Me.Character.MaxWillpower * 100) + "%";
-    }
     AppendMessageToWindow(message) {
         var shouldScroll = false;
         if (this.ChatMessages.scrollTop + this.ChatMessages.clientHeight >= this.ChatMessages.scrollHeight) {
@@ -148,8 +140,8 @@ export const UI = new class {
                 ${message}
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 ${buttonsHTML}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
@@ -170,6 +162,14 @@ export const UI = new class {
         $(".modal")["modal"]();
     }
     ;
+    UpdateStatBars() {
+        this.ChargeProgress.innerText = String(Me.Character.CurrentCharge);
+        this.ChargeProgress.style.width = String(Me.Character.CurrentCharge / Me.Character.MaxEnergy * 100) + "%";
+        this.EnergyProgress.innerText = String(Me.Character.CurrentEnergy);
+        this.EnergyProgress.style.width = String(Me.Character.CurrentEnergy / Me.Character.MaxEnergy * 100) + "%";
+        this.WillpowerProgress.innerText = String(Me.Character.CurrentWillpower);
+        this.WillpowerProgress.style.width = String(Me.Character.CurrentWillpower / Me.Character.MaxWillpower * 100) + "%";
+    }
 };
 function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback = null, preGetterCallback = null) {
     var backingValue = dataObject[objectProperty];

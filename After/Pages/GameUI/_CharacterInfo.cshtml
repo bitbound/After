@@ -1,15 +1,22 @@
 ﻿<div id="characterInfo">
-    <div class="pool-title">Energy</div>
+   
+    <div class="info-title">Location</div>
+    <div class="location-frame">
+        X: <span data-bind="After.Me.Character.XCoord"></span> |
+        Y: <span data-bind="After.Me.Character.YCoord"></span> |
+        Z: <span data-bind="After.Me.Character.ZCoord"></span>
+    </div>
+    <div class="info-title">Energy</div>
     <div class="progress">
         <div id="energyProgress" class="progress-bar progress-bar-energy"></div>
     </div>
 
-    <div class="pool-title">Willpower</div>
+    <div class="info-title">Willpower</div>
     <div class="progress">
         <div id="willpowerProgress" class="progress-bar progress-bar-willpower"></div>
     </div>
 
-    <div class="pool-title">Charge</div>
+    <div class="info-title">Charge</div>
     <div class="progress">
         <div id="chargeProgress" class="progress-bar progress-bar-charge"></div>
     </div>
@@ -41,7 +48,10 @@
         background-color: magenta !important;
     }
 
-    .pool-title {
+    .info-title {
         font-size: .8em;
+    }
+    .location-frame {
+        font-size: .7em;
     }
 </style>

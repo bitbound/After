@@ -17,8 +17,8 @@ var main = new class {
     PixiHelper = PixiHelper;
     Renderer: PIXI.Application = new PIXI.Application({
         view: document.querySelector("#playCanvas"),
-        width: 1280,
-        height: 720
+        width: Settings.RendererResolution.Width,
+        height: Settings.RendererResolution.Height
     });
     Scene: Scene;
     Sound = Sound;
@@ -39,8 +39,37 @@ window.onerror = (ev: Event, source, fileNo, columnNo, error: Error) => {
 window["After"] = main;
 export const Main = main;
 
+// Register service worker.
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/ts/Worker.js', {scope: "/ts/"})
+        .then(function (reg) {
+            console.log("Service worker registered.");
+        }).catch(function (err) {
+            console.log("Error registering service worker:", err)
+        });
+}
+
+// Catch add to home prompt.
+window.addEventListener("beforeinstallprompt", (ev:any) => {
+    ev.preventDefault();
+    (document.querySelector("#addToHomeButton") as HTMLSpanElement).onclick = () => ev.prompt();
+});
+
+
+// Init.
 if (location.pathname.search("play") > -1) {
-    window.onload = (e) => { Sockets.Connect(); };
+    window.onload = (e) => {
+        if (location.href.indexOf("localhost") > -1) {
+            Settings.IsDebugEnabled = true;
+        }
+        else {
+            Settings.IsDebugEnabled = main.Settings.IsDebugEnabled;
+        }
+        Settings.AreTouchControlsEnabled = main.Settings.AreTouchControlsEnabled;
+        PixiHelper.LoadBackgroundEmitter();
+        Sound.Play("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", true);
+        Sockets.Connect();
+    };
 }
 
 function gameLoop(delta) {

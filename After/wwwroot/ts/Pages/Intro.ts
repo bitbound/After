@@ -100,9 +100,9 @@ var introFlybyEmitterConfig = {
         "end": 1
     },
     "scale": {
-        "start": 0.1,
-        "end": 0.1,
-        "minimumScaleMultiplier": 1
+        "start": 0.2,
+        "end": 0.19,
+        "minimumScaleMultiplier": 0.1
     },
     "color": {
         "start": "#fdfdfd",
@@ -171,7 +171,7 @@ function createRenderer() {
 }
 
 createRenderer();
-Sound.PlayLoop("/Assets/Sounds/ceich93__drone-darkemptiness.mp3");
+Sound.Play("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", true);
 
 document.querySelectorAll("#introTextWrapper div").forEach((value, index) => {
     window.setTimeout((value) => {

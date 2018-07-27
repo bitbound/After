@@ -196,6 +196,7 @@ namespace After.Migrations
                     CoreEnergy = table.Column<double>(nullable: true),
                     MaxEnergyModifier = table.Column<double>(nullable: true),
                     CurrentEnergy = table.Column<double>(nullable: true),
+                    MaxChargeModifier = table.Column<double>(nullable: true),
                     CurrentCharge = table.Column<double>(nullable: true),
                     MaxWillpowerModifier = table.Column<double>(nullable: true),
                     CurrentWillpower = table.Column<double>(nullable: true),

@@ -94,6 +94,7 @@ export const Me = new class {
     }
     CreateEmitter(mainApp) {
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
+        this.ParticleContainer.name = "My Particle Container";
         Main.Renderer.stage.addChild(this.ParticleContainer);
         this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
         this.ParticleContainer.x = mainApp.screen.width / 2;

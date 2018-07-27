@@ -10,9 +10,10 @@ export const Settings = new class {
         DebugMessage: "rgb(150,50,50)"
     };
     get IsDebugEnabled(): boolean {
-        return UI.DebugFrame.style.display == "";
+        return localStorage["IsDebugEnabled"] == 'true';
     }
     set IsDebugEnabled(value: boolean) {
+        localStorage["IsDebugEnabled"] = value;
         var fpsUpdateTicker = (delta => {
             var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
             if (
@@ -31,14 +32,17 @@ export const Settings = new class {
             Main.Renderer.ticker.remove(fpsUpdateTicker);
             UI.DebugFrame.style.display = "none";
         }
+        document.querySelector("#toggleDebugWindow").setAttribute("on", String(value));
     }
 
-    private areTouchControlsEnabled: boolean;
     get AreTouchControlsEnabled(): boolean {
-        return this.areTouchControlsEnabled;
+        if (localStorage["AreTouchControlsEnabled"] == undefined) {
+            localStorage["AreTouchControlsEnabled"] = 'true';
+        }
+        return localStorage["AreTouchControlsEnabled"] == 'true';
     }
     set AreTouchControlsEnabled(value: boolean) {
-        this.areTouchControlsEnabled = value;
+        localStorage["AreTouchControlsEnabled"] = value;
         if (value) {
             (document.querySelector("#movementTouchArea") as HTMLElement).hidden = false;
             (document.querySelector("#actionTouchArea") as HTMLElement).hidden = false;
@@ -46,5 +50,10 @@ export const Settings = new class {
             (document.querySelector("#movementTouchArea") as HTMLElement).hidden = true;
             (document.querySelector("#actionTouchArea") as HTMLElement).hidden = true;
         }
+        document.querySelector("#toggleTouchControls").setAttribute("on", String(value));
+    }
+    RendererResolution = {
+        Width: 1280,
+        Height: 720
     }
 }

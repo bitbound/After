@@ -182,6 +182,13 @@ export const Utilities = new class {
         return "";
     }
     ;
+    CreateGUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+    ;
     Delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -277,6 +284,20 @@ export const Utilities = new class {
         var green = Number(rgbColor.trim().split(",")[1]);
         var blue = Number(rgbColor.trim().replace(")", "").split(",")[2]);
         return [red, green, blue];
+    }
+    RemoveFromArray(array, item) {
+        var index = array.indexOf(item);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
+    ;
+    RemoveAll(inputArray, predicate) {
+        var matches = inputArray.filter(predicate);
+        for (var i = 0; i < matches.length; i++) {
+            var index = inputArray.indexOf(matches[i]);
+            matches.splice(index, 1);
+        }
     }
 };
 //# sourceMappingURL=Utilities.js.map

@@ -184,6 +184,12 @@ export const Utilities = new class {
 
         return "";
     };
+    CreateGUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    };
     Delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     };
@@ -275,5 +281,18 @@ export const Utilities = new class {
         var green = Number(rgbColor.trim().split(",")[1]);
         var blue = Number(rgbColor.trim().replace(")", "").split(",")[2]);
         return [red, green, blue];
+    }
+    RemoveFromArray(array: Array<any>, item: any) {
+        var index = array.indexOf(item);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    };
+    RemoveAll(inputArray: Array<any>, predicate: (value: any, index: number, obj: any[]) => boolean) {
+        var matches = inputArray.filter(predicate);
+        for (var i = 0; i < matches.length; i++) {
+            var index = inputArray.indexOf(matches[i]);
+            matches.splice(index, 1);
+        }
     }
 }
