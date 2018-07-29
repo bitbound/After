@@ -53,11 +53,13 @@ namespace After
             });
             services.AddLogging();
             services.AddScoped<DataService>();
+            services.AddScoped<GameEngine>();
             services.AddSingleton<EmailSender>();
+            services.AddSingleton<SceneManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataService dataService)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataService dataService, GameEngine gameEngine)
         {
             if (env.IsDevelopment())
             {
@@ -82,6 +84,7 @@ namespace After
             app.UseMvc();
 
             dataService.StartupCleanup();
+            gameEngine.Init();
         }
     }
 }

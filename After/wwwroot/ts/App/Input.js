@@ -79,7 +79,6 @@ function handleActionJoystick() {
         if (ev.pointerId != pointerID) {
             return;
         }
-        ev.preventDefault();
         var wrapperRect = outer.getBoundingClientRect();
         var centerX = wrapperRect.left + (wrapperRect.width / 2);
         var centerY = wrapperRect.top + (wrapperRect.height / 2);
@@ -93,14 +92,12 @@ function handleActionJoystick() {
         if (ev.pointerId != pointerID) {
             return;
         }
-        ev.preventDefault();
         window.removeEventListener("pointermove", actionMove);
         window.removeEventListener("pointerup", actionUp);
         inner.style.transform = "";
         inner.style.backgroundColor = "";
     }
     outer.addEventListener("pointerdown", ev => {
-        ev.preventDefault();
         pointerID = ev.pointerId;
         window.addEventListener("pointermove", actionMove);
         window.addEventListener("pointerup", actionUp);
@@ -116,7 +113,6 @@ function handleMovementJoystick() {
         if (ev.pointerId != pointerID) {
             return;
         }
-        ev.preventDefault();
         var wrapperRect = outer.getBoundingClientRect();
         var centerX = wrapperRect.left + (wrapperRect.width / 2);
         var centerY = wrapperRect.top + (wrapperRect.height / 2);
@@ -130,14 +126,12 @@ function handleMovementJoystick() {
         if (ev.pointerId != pointerID) {
             return;
         }
-        ev.preventDefault();
         window.removeEventListener("pointermove", movementMove);
         window.removeEventListener("pointerup", movementUp);
         inner.style.transform = "";
         inner.style.backgroundColor = "";
     }
     outer.addEventListener("pointerdown", ev => {
-        ev.preventDefault();
         pointerID = ev.pointerId;
         window.addEventListener("pointermove", movementMove);
         window.addEventListener("pointerup", movementUp);

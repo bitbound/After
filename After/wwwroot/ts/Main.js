@@ -59,7 +59,7 @@ if (location.pathname.search("play") > -1) {
         }
         Settings.AreTouchControlsEnabled = main.Settings.AreTouchControlsEnabled;
         PixiHelper.LoadBackgroundEmitter();
-        Sound.PlayBackground();
+        //Sound.PlayBackground();
         Sockets.Connect();
     };
 }

@@ -26,7 +26,7 @@ namespace After.Code.Models
         public double AccelerationSpeed { get; set; }
         public double DecelerationSpeed { get; set; }
 
-        public Rectangle Rect
+        public Rectangle Location
         {
             get
             {

@@ -17,14 +17,17 @@ namespace After.Code.Services
         public SocketHub(DataService dataService,
             IHttpContextAccessor contextAccessor,
             UserManager<AfterUser> userManager,
-            SignInManager<AfterUser> signInManager)
+            SignInManager<AfterUser> signInManager,
+            SceneManager sceneManager)
         {
             DataService = dataService;
             UserManager = userManager;
             SignInManager = signInManager;
+            SceneManager = sceneManager;
         }
 
-        public static Dictionary<string, string> ConnectionList { get; set; } = new Dictionary<string, string>();
+        public static List<ConnectionDetails> ConnectionList { get; set; } = new List<ConnectionDetails>();
+
         private string CharacterName
         {
             get
@@ -56,6 +59,7 @@ namespace After.Code.Services
         private DataService DataService { get; set; }
         private UserManager<AfterUser> UserManager { get; }
         private SignInManager<AfterUser> SignInManager { get; }
+        private SceneManager SceneManager { get; }
 
         private string UserName
         {
@@ -64,22 +68,46 @@ namespace After.Code.Services
                 return Context.User.Identity.Name;
             }
         }
+
         public async Task Init(string characterName)
         {
-            if (ConnectionList.ContainsKey(UserName))
+            if (ConnectionList.Any(x => x.UserName == UserName))
             {
-                await Clients.Client(ConnectionList[UserName]).SendAsync("DisconnectDuplicateConnection");
-                await Task.Delay(2000);
-                if (ConnectionList.ContainsKey(UserName))
+                await ConnectionList.FirstOrDefault(x => x.UserName == UserName).ClientProxy.SendAsync("DisconnectDuplicateConnection");
+                var startWait = DateTime.Now;
+                while (ConnectionList.Any(x => x.UserName == UserName))
                 {
-                    await Clients.Caller.SendAsync("FailLoginDueToExistingConnection");
-                    return;
+                    await Task.Delay(100);
+                    if (DateTime.Now > startWait.AddSeconds(3))
+                    {
+                        await Clients.Caller.SendAsync("FailLoginDueToExistingConnection");
+                        return;
+                    }
                 }
             }
-            ConnectionList.Add(UserName, Context.ConnectionId);
+            lock (ConnectionList) {
+                ConnectionList.Add(
+                   new ConnectionDetails()
+                   {
+                       CharacterName = characterName,
+                       UserName = UserName,
+                       ConnectionID = Context.ConnectionId,
+                       ClientProxy = Clients.Caller
+                   }
+                );
+            }
+
             CharacterName = characterName;
-            SendFullSceneUpdate();
+            MyScene = new Scene()
+            {
+                Anchor = DataService.GetCharacter(UserName, CharacterName),
+                ClientProxy = Clients.Caller
+            };
+            SceneManager.AddScene(MyScene);
+
+            //SendFullSceneUpdate();
         }
+        private Scene MyScene { get; set; }
 
         public override Task OnConnectedAsync()
         {
@@ -88,7 +116,8 @@ namespace After.Code.Services
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            ConnectionList.Remove(UserName);
+            ConnectionList.RemoveAll(x=>x.UserName == UserName);
+            SceneManager.RemoveScene(MyScene);
             await base.OnDisconnectedAsync(exception);
         }
 
@@ -98,17 +127,20 @@ namespace After.Code.Services
             switch (data["Channel"].ToString())
             {
                 case "Global":
-                    await Clients.All.SendAsync("ReceiveChat", new {
+                    await Clients.All.SendAsync("ReceiveChat", new
+                    {
                         Channel = data["Channel"].ToString(),
                         CharacterName = character?.Name,
-                        Message =  data["Message"].ToString(),
+                        Message = data["Message"].ToString(),
                         Color = character?.Color
                     });
                     break;
+
                 default:
                     break;
             }
         }
+
         public void SendFullSceneUpdate()
         {
             Clients.Caller.SendAsync("UpdatePlayer", CurrentCharacter);

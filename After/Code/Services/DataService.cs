@@ -28,7 +28,9 @@ namespace After.Code.Services
 
         public PlayerCharacter GetCharacter(string userName, string characterName)
         {
-            return DBContext.Users.Include(x=>x.Characters).FirstOrDefault(x=>x.UserName == userName)
+            return DBContext.Users
+                .Include(x=>x.Characters)
+                .FirstOrDefault(x=>x.UserName == userName)
                 ?.Characters?.FirstOrDefault(x => x.Name == characterName);
         }
 

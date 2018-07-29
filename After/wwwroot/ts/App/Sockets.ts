@@ -68,6 +68,7 @@ function applyMessageHandlers(hubConnection: any) {
     });
 
     hubConnection.on("DisconnectDuplicateConnection", args => {
+        Main.Sockets.IsDisconnectExpected = true;
         Main.UI.ShowModal("Connection Closed", "Your account was logged into on another device.  This session has been closed.", "", () => { location.assign("/"); });
         hubConnection.stop();
     })
