@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using After.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using After.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using After.Code;
+using After.Code.Models;
+using After.Code.Services;
 
 namespace After
 {
@@ -52,11 +53,11 @@ namespace After
             });
             services.AddLogging();
             services.AddScoped<DataService>();
-            services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddSingleton<EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataService dataService)
         {
             if (env.IsDevelopment())
             {
@@ -80,7 +81,7 @@ namespace After
             });
             app.UseMvc();
 
-
+            dataService.StartupCleanup();
         }
     }
 }

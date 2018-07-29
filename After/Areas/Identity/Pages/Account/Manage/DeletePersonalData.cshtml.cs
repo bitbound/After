@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using After.Data;
+using After.Code.Models;
+using After.Code.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -69,7 +70,7 @@ namespace After.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-            DataService.DeleteAllCharacters(user.Id);
+            DataService.DeleteAllCharacters(user.UserName);
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)

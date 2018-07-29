@@ -1,4 +1,5 @@
-﻿using After.Data.Interfaces;
+﻿using After.Code.Interfaces;
+using After.Code.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace After.Data
+namespace After.Code.Models
 {
     public class Character : GameObject, ICollidable
     {
@@ -20,10 +21,11 @@ namespace After.Data
             XCoord = 0;
             YCoord = 0;
             ZCoord = "0";
+            Color = Utilities.GetRandomHexColor();
         }
       
         public string Name { get; set; }
-        public string Color { get; set; } = "gray";
+        public string Color { get; set; }
         public string PortraitUri { get; set; }
 
 
@@ -46,23 +48,25 @@ namespace After.Data
                 }
             }
         }
-        public double MaxEnergyModifier { get; set; }
         public double MaxEnergy
         {
             get
             {
-                return CoreEnergy + MaxEnergyModifier;
+                return CoreEnergy + StatusEffects
+                    .Where(x => x.Target == Enums.StatusEffectTargets.MaxEnergy)
+                    .Sum(x => x.Amount);
             }
         }
         public double CurrentEnergy { get; set; }
 
 
-        public double MaxChargeModifier { get; set; }
         public double MaxCharge
         {
             get
             {
-                return CoreEnergy + MaxChargeModifier;
+                return CoreEnergy + StatusEffects
+                    .Where(x => x.Target == Enums.StatusEffectTargets.MaxCharge)
+                    .Sum(x => x.Amount);
             }
         }
         public double CurrentCharge { get; set; }
@@ -75,12 +79,13 @@ namespace After.Data
         }
 
 
-        public double MaxWillpowerModifier { get; set; }
         public double MaxWillpower
         {
             get
             {
-                return CoreEnergy + MaxWillpowerModifier;
+                return CoreEnergy + StatusEffects
+                    .Where(x => x.Target == Enums.StatusEffectTargets.MaxCharge)
+                    .Sum(x => x.Amount);
             }
         }
         public double CurrentWillpower { get; set; }
@@ -92,6 +97,7 @@ namespace After.Data
             }
         }
 
+        public List<StatusEffect> StatusEffects { get; set; } = new List<StatusEffect>();
         public void OnCollision(GameObject collidingObject)
         {
             throw new NotImplementedException();

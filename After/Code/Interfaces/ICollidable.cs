@@ -1,9 +1,10 @@
-﻿using System;
+﻿using After.Code.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace After.Data.Interfaces
+namespace After.Code.Interfaces
 {
     public interface ICollidable
     {

@@ -1,12 +1,19 @@
 ﻿import { Utilities } from "./Utilities.js";
+import { SoundTrack } from "../Models/SoundTrack.js";
 
 export const Sound = new class {
     constructor() {
         this.Context = new AudioContext();
+        this.BackgroundAudio = new Audio();
+        this.BackgroundNode = this.Context.createMediaElementSource(this.BackgroundAudio);
+        this.BackgroundNode.connect(this.Context.destination);
     }
-    Context: AudioContext = new AudioContext();
+    Context: AudioContext;
     AudioElements: Array<HTMLAudioElement> = new Array<HTMLAudioElement>();
     SourceNodes: Array<MediaElementAudioSourceNode> = new Array<MediaElementAudioSourceNode>();
+
+    BackgroundAudio: HTMLAudioElement;
+    BackgroundNode: MediaElementAudioSourceNode;
 
     Play(sourceFile: string, loop: boolean): string {
         var audioElement = new Audio(sourceFile);
@@ -39,4 +46,34 @@ export const Sound = new class {
             this.AudioElements[index].onended(null);
         }
     }
+
+    PlayBackground(trackName: string = null) {
+        this.BackgroundAudio.pause();
+        if (trackName) {
+            var src = this.TrackList.find(x => x.Name == trackName).URL;
+            this.BackgroundAudio.src = src;
+        }
+        else {
+            var src = this.TrackList[Math.round(Math.random() * (this.TrackList.length - 1))].URL;
+            this.BackgroundAudio.src = src;
+        }
+        this.BackgroundAudio.play();
+    }
+
+    StopBackground() {
+        this.BackgroundAudio.pause();
+    }
+
+    TrackList: Array<SoundTrack> = [
+        {
+            Name: "Dark Emptiness",
+            URL: "/Assets/Sounds/ceich93__drone-darkemptiness.mp3",
+            IsBackground: true
+        },
+        {
+            Name: "Ominous Distortion",
+            URL: "/Assets/Sounds/ceich93_drone-ominousdistortion.mp3",
+            IsBackground: true
+        },
+    ]
 }

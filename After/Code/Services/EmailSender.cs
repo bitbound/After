@@ -8,13 +8,13 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace After.Services
+namespace After.Code.Services
 {
     // This class is used by the application to send email for account confirmation and password reset.
     // For more details see https://go.microsoft.com/fwlink/?LinkID=532713
-    public class EmailSender : IEmailSender
+    public class EmailSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        public Task SendEmailAsync(string email, string replyTo, string subject, string message)
         {
             var mailClient = new SmtpClient();
             mailClient.Host = "mail.after-game.net";
@@ -30,6 +30,7 @@ namespace After.Services
             mailMessage.IsBodyHtml = true;
             mailMessage.Subject = subject;
             mailMessage.Body = message;
+            mailMessage.ReplyTo = new MailAddress(replyTo);
 
             mailMessage.Bcc.Add("hello@after-game.net");
 

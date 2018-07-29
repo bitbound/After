@@ -1,4 +1,5 @@
 ﻿import { GameObject } from "./GameObject.js";
+import { StatusEffect } from "./StatusEffect.js";
 
 export class Character extends GameObject {
     constructor() {
@@ -17,19 +18,19 @@ export class Character extends GameObject {
     // Energy.
     public CoreEnergy: number;
     public CoreEnergyPeak: number;
-    public MaxEnergyModifier: number;
     public MaxEnergy: number;
     public CurrentEnergy: number;
 
     // Charge.
-    public MaxChargeModifier: number;
     public MaxCharge: number;
     public CurrentCharge: number;
 
     // Willpower.
-    public MaxWillpowerModifier: number;
     public MaxWillpower: number;
     public CurrentWillpower: number;
+
+
+    public StatusEffects: Array<StatusEffect>;
 
     public OnCollision(collidingObject: GameObject): void {
         

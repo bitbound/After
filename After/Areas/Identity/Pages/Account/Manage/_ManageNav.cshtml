@@ -1,4 +1,4 @@
-﻿@inject SignInManager<After.Data.AfterUser> SignInManager
+﻿@inject SignInManager<After.Code.Models.AfterUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

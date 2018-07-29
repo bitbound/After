@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using After.Code.Models;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace After.Data
+namespace After.Code.Services
 {
     public class DataService
     {
@@ -50,9 +51,9 @@ namespace After.Data
                 .FirstOrDefault(x => x.UserName == userName)?.Characters.ToList();
         }
 
-        public void DeleteAllCharacters(string id)
+        public void DeleteAllCharacters(string userName)
         {
-            var user = DBContext.Users.Include(x => x.Characters).FirstOrDefault(x => x.Id == id);
+            var user = DBContext.Users.Include(x => x.Characters).FirstOrDefault(x => x.UserName == userName);
             user?.Characters.ForEach(x =>
             {
                 DBContext.PlayerCharacters.Remove(x);
@@ -62,7 +63,30 @@ namespace After.Data
 
         public void AddError(Error error)
         {
-            DBContext.ErrorLog.Add(error);
+            DBContext.Errors.Add(error);
+            DBContext.SaveChanges();
+        }
+
+        internal void DeleteUser(string userName)
+        {
+            DeleteAllCharacters(userName);
+            var user = DBContext.Users.FirstOrDefault(x => x.UserName == userName);
+            DBContext.Users.Remove(user);
+            DBContext.SaveChanges();
+        }
+
+        public void StartupCleanup()
+        {
+            DBContext.Users
+                .Where(x => x.IsTemporary && x.LastLogin < DateTime.Now.AddDays(-14))
+                .ToList()
+                .ForEach(x => DeleteUser(x.UserName)
+            );
+        }
+
+        internal void SetLastLogin(string userName, DateTime loginDate)
+        {
+            var user = DBContext.Users.FirstOrDefault(x => x.UserName == userName).LastLogin = loginDate;
             DBContext.SaveChanges();
         }
     }

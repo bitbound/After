@@ -1,8 +1,15 @@
 ﻿<div id="menuWrapper">
     <div class="menu-buttons-bar">
-        <span id="menuButton" title="Main Menu" class="glyphicon glyphicon-menu-hamburger menu-item-left"></span>
-        <span id="addToHomeButton" title="Add to Home Screen" class="glyphicon glyphicon-home menu-item-center"></span>
-        <span id="logoutButton" title="Log Out" class="glyphicon glyphicon-off menu-item-right"></span>
+        <div class="menu-item-left">
+            <span id="menuButton" title="Main Menu" class="glyphicon glyphicon-menu-hamburger"></span>
+        </div>
+        <div class="menu-item-center">
+            <span id="addToHomeButton" title="Add to Home Screen" class="glyphicon glyphicon-home"></span>
+        </div>
+        <div class="menu-item-right">
+            <span id="logoutButton" title="Log Out" class="glyphicon glyphicon-off"></span>
+        </div>
+  
     </div>
     <hr />
     <div class="menu-section">
@@ -23,23 +30,22 @@
                 <span class="menu-item-left">Max&nbsp;Energy:</span>
                 <span class="menu-item-right" data-bind="After.Me.Character.MaxEnergy"></span>
             </div>
-            <div class="menu-item">
-                <span class="menu-item-left">Energy&nbsp;Mod:</span>
-                <span class="menu-item-right" data-bind="After.Me.Character.MaxEnergyModifier"></span>
-            </div>
+
             <div class="menu-item">
                 <span class="menu-item-left">Energy&nbsp;Peak:</span>
-                <span class="menu-item-right"  data-bind="After.Me.Character.CoreEnergyPeak"></span>
+                <span class="menu-item-right" data-bind="After.Me.Character.CoreEnergyPeak"></span>
             </div>
 
             <div class="menu-item">
                 <span class="menu-item-left">Max&nbsp;Willpower:</span>
                 <span class="menu-item-right" data-bind="After.Me.Character.MaxWillpower"></span>
             </div>
+
             <div class="menu-item">
-                <span class="menu-item-left">Willpower&nbsp;Mod:</span>
-                <span class="menu-item-right" data-bind="After.Me.Character.MaxWillpowerModifier"></span>
+                <span class="menu-item-left">Max&nbsp;Charge:</span>
+                <span class="menu-item-right" data-bind="After.Me.Character.MaxCharge"></span>
             </div>
+
         </div>
     </div>
     <div class="menu-section">

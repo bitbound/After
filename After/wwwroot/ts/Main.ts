@@ -67,7 +67,7 @@ if (location.pathname.search("play") > -1) {
         }
         Settings.AreTouchControlsEnabled = main.Settings.AreTouchControlsEnabled;
         PixiHelper.LoadBackgroundEmitter();
-        Sound.Play("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", true);
+        Sound.PlayBackground();
         Sockets.Connect();
     };
 }

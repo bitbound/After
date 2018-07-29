@@ -1,6 +1,7 @@
-﻿using After.Data;
+﻿using After.Code.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
@@ -8,14 +9,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace After.Services
+namespace After.Code.Services
 {
     [Authorize]
     public class SocketHub : Hub
     {
+        public SocketHub(DataService dataService,
+            IHttpContextAccessor contextAccessor,
+            UserManager<AfterUser> userManager,
+            SignInManager<AfterUser> signInManager)
+        {
+            DataService = dataService;
+            UserManager = userManager;
+            SignInManager = signInManager;
+        }
+
         public static Dictionary<string, string> ConnectionList { get; set; } = new Dictionary<string, string>();
-        private DataService DataService { get; set; }
-        private string CharacterName {
+        private string CharacterName
+        {
             get
             {
                 return this.Context.Items["CharacterName"].ToString();
@@ -25,13 +36,7 @@ namespace After.Services
                 this.Context.Items["CharacterName"] = value;
             }
         }
-        private string UserName
-        {
-            get
-            {
-                return Context.User.Identity.Name;
-            }
-        }
+
         private PlayerCharacter CurrentCharacter
         {
             get
@@ -39,6 +44,7 @@ namespace After.Services
                 return DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
             }
         }
+
         private AfterUser CurrentUser
         {
             get
@@ -46,34 +52,18 @@ namespace After.Services
                 return DataService.GetUser(Context.User.Identity.Name);
             }
         }
-        public SocketHub(DataService dataService, IHttpContextAccessor contextAccessor)
+
+        private DataService DataService { get; set; }
+        private UserManager<AfterUser> UserManager { get; }
+        private SignInManager<AfterUser> SignInManager { get; }
+
+        private string UserName
         {
-            DataService = dataService;
-            
-        }
-        public async Task SendChat(JObject data)
-        {
-            var character = DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
-            switch (data["Channel"].ToString())
+            get
             {
-                case "Global":
-                    await Clients.All.SendAsync("ReceiveChat", new {
-                        Channel = data["Channel"].ToString(),
-                        CharacterName = character?.Name,
-                        Message =  data["Message"].ToString(),
-                        Color = character?.Color
-                    });
-                    break;
-                default:
-                    break;
+                return Context.User.Identity.Name;
             }
         }
-
-        public override Task OnConnectedAsync()
-        {
-            return base.OnConnectedAsync();
-        }
-
         public async Task Init(string characterName)
         {
             if (ConnectionList.ContainsKey(UserName))
@@ -91,15 +81,37 @@ namespace After.Services
             SendFullSceneUpdate();
         }
 
+        public override Task OnConnectedAsync()
+        {
+            return base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            ConnectionList.Remove(UserName);
+            await base.OnDisconnectedAsync(exception);
+        }
+
+        public async Task SendChat(JObject data)
+        {
+            var character = DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
+            switch (data["Channel"].ToString())
+            {
+                case "Global":
+                    await Clients.All.SendAsync("ReceiveChat", new {
+                        Channel = data["Channel"].ToString(),
+                        CharacterName = character?.Name,
+                        Message =  data["Message"].ToString(),
+                        Color = character?.Color
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
         public void SendFullSceneUpdate()
         {
             Clients.Caller.SendAsync("UpdatePlayer", CurrentCharacter);
-        }
-
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            ConnectionList.Remove(UserName);
-            return base.OnDisconnectedAsync(exception);
         }
     }
 }

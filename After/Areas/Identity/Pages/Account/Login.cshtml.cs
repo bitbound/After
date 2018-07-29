@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using After.Data;
+using After.Code.Models;
+using After.Code.Services;
 
 namespace After.Areas.Identity.Pages.Account
 {
@@ -18,11 +19,13 @@ namespace After.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AfterUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private DataService DataService { get; set; }
 
-        public LoginModel(SignInManager<AfterUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<AfterUser> signInManager, ILogger<LoginModel> logger, DataService dataService)
         {
             _signInManager = signInManager;
             _logger = logger;
+            DataService = dataService;
         }
 
         [BindProperty]
@@ -79,6 +82,7 @@ namespace After.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    DataService.SetLastLogin(Input.Username.Trim(), DateTime.Now);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using After.Code.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace After.Data
+namespace After.Code
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -32,7 +33,9 @@ namespace After.Data
 
         public DbSet<GameObject> GameObjects { get; set; }
 
-        public DbSet<Error> ErrorLog { get; set; }
+        public DbSet<Error> Errors { get; set; }
+
+        public DbSet<StatusEffect> StatusEffects { get; set; }
 
     }
 }

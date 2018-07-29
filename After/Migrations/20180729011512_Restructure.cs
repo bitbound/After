@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace After.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Restructure : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,9 @@ namespace After.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false)
+                    Discriminator = table.Column<string>(nullable: false),
+                    IsTemporary = table.Column<bool>(nullable: true),
+                    LastLogin = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,11 +196,8 @@ namespace After.Migrations
                     PortraitUri = table.Column<string>(nullable: true),
                     CoreEnergyPeak = table.Column<double>(nullable: true),
                     CoreEnergy = table.Column<double>(nullable: true),
-                    MaxEnergyModifier = table.Column<double>(nullable: true),
                     CurrentEnergy = table.Column<double>(nullable: true),
-                    MaxChargeModifier = table.Column<double>(nullable: true),
                     CurrentCharge = table.Column<double>(nullable: true),
-                    MaxWillpowerModifier = table.Column<double>(nullable: true),
                     CurrentWillpower = table.Column<double>(nullable: true),
                     AfterUserId = table.Column<string>(nullable: true)
                 },
@@ -210,6 +209,26 @@ namespace After.Migrations
                         column: x => x.AfterUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StatusEffect",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    Target = table.Column<int>(nullable: false),
+                    Amount = table.Column<double>(nullable: false),
+                    PlayerCharacterID = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StatusEffect", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_StatusEffect_GameObjects_PlayerCharacterID",
+                        column: x => x.PlayerCharacterID,
+                        principalTable: "GameObjects",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -273,6 +292,11 @@ namespace After.Migrations
                 column: "Name",
                 unique: true,
                 filter: "[Name] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StatusEffect_PlayerCharacterID",
+                table: "StatusEffect",
+                column: "PlayerCharacterID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -296,10 +320,13 @@ namespace After.Migrations
                 name: "ErrorLog");
 
             migrationBuilder.DropTable(
-                name: "GameObjects");
+                name: "StatusEffect");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "GameObjects");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

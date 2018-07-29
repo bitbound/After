@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using After.Data;
+using After.Code.Models;
+using After.Code.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace After.Pages
     public class IndexModel : PageModel
     {
         private DataService DataService { get; set; }
+        private SignInManager<AfterUser> SignInManager { get; set; }
         public IndexModel(DataService dataService)
         {
             DataService = dataService;

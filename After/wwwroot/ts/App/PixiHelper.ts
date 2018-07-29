@@ -30,7 +30,7 @@ var backgroundEmitterConfig = {
                 "time": 0
             },
             {
-                "value": 0.5,
+                "value": 0.25,
                 "time": 0.5
             },
             {
@@ -43,7 +43,7 @@ var backgroundEmitterConfig = {
     "scale": {
         "list": [
             {
-                "value": 0.3,
+                "value": 0.1,
                 "time": 0
             },
             {
@@ -100,7 +100,7 @@ var backgroundEmitterConfig = {
         "max": 10
     },
     "blendMode": "normal",
-    "frequency": 0.001,
+    "frequency": 0.01,
     "emitterLifetime": -1,
     "maxParticles": 1000,
     "pos": {

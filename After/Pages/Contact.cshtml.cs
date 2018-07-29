@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using After.Code.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,8 +12,8 @@ namespace After.Pages
     public class ContactModel : PageModel
     {
         public InputModel Input { get; set; }
-        private IEmailSender EmailSender { get; set; }
-        public ContactModel(IEmailSender emailSender)
+        private EmailSender EmailSender { get; set; }
+        public ContactModel(EmailSender emailSender)
         {
             EmailSender = emailSender;
         }
@@ -21,7 +22,7 @@ namespace After.Pages
         }
         public async Task OnPost(InputModel input)
         {
-            await EmailSender.SendEmailAsync("jared@lucent.rocks", "Message from After", $"From {input.Name} (mailto:{input.Email}):<br><br>{input.Message.Replace(Environment.NewLine, "<br>")}");
+            await EmailSender.SendEmailAsync($"jared@lucent.rocks", input.Email, "Message from After", $"From {input.Name} (mailto:{input.Email}):<br><br>{input.Message.Replace(Environment.NewLine, "<br>")}");
             Response.Redirect("/Contact?success=true");
         }
         public class InputModel
