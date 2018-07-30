@@ -68,5 +68,8 @@ function applyMessageHandlers(hubConnection) {
     hubConnection.on("FailLoginDueToExistingConnection", args => {
         Main.UI.ShowModal("Unable to Connection", "There is an existing connection on your account that is preventing your login.  The system was unable to disconnect it.  Please try again.");
     });
+    hubConnection.on("UpdateScene", args => {
+        var scene = args[0];
+    });
 }
 //# sourceMappingURL=Sockets.js.map

@@ -47,11 +47,7 @@ namespace After.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<double>("APpliedForceY");
-
                     b.Property<double>("AccelerationSpeed");
-
-                    b.Property<double>("AppliedForceX");
 
                     b.Property<double>("DecelerationSpeed");
 
@@ -59,6 +55,12 @@ namespace After.Migrations
                         .IsRequired();
 
                     b.Property<int>("Height");
+
+                    b.Property<double>("MaxVelocity");
+
+                    b.Property<double>("MovementAngle");
+
+                    b.Property<double>("MovementForce");
 
                     b.Property<double>("VelocityX");
 
@@ -286,6 +288,8 @@ namespace After.Migrations
                     b.Property<double>("CurrentEnergy");
 
                     b.Property<double>("CurrentWillpower");
+
+                    b.Property<bool>("IsCharging");
 
                     b.Property<string>("Name");
 

@@ -2,6 +2,7 @@ import { PixiHelper } from "./PixiHelper.js";
 import { Main } from "../Main.js";
 import { UI } from "./UI.js";
 import { Utilities } from "./Utilities.js";
+import { Sockets } from "./Sockets.js";
 import { Settings } from "./Settings.js";
 export const Input = new class {
     ApplyInputHandlers() {
@@ -120,12 +121,16 @@ function handleMovementJoystick() {
         var evPoint = new PIXI.Point(ev.x, ev.y);
         var distance = Math.min(PixiHelper.GetDistanceBetween(centerPoint, evPoint), outer.clientWidth / 2);
         var angle = PixiHelper.GetAngle(centerPoint, evPoint);
+        var xForce = (ev.x - centerX) / (outer.clientWidth / 2);
+        var yForce = (ev.y - centerY) / (outer.clientWidth / 2);
+        Sockets.Invoke("UpdateMovementInput", { Angle: angle, Force: (distance / outer.clientHeight / 2) });
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
     function movementUp(ev) {
         if (ev.pointerId != pointerID) {
             return;
         }
+        Sockets.Invoke("UpdateMovementInput", { Angle: 0, Force: 0 });
         window.removeEventListener("pointermove", movementMove);
         window.removeEventListener("pointerup", movementUp);
         inner.style.transform = "";

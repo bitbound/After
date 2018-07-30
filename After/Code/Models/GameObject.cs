@@ -19,12 +19,17 @@ namespace After.Code.Models
         public string ZCoord { get; set; }
 
 
+        public double MovementAngle { get; set; }
+        public double MovementForce { get; set; }
+
+
         public double VelocityX { get; set; }
         public double VelocityY { get; set; }
-        public double AppliedForceX { get; set; }
-        public double APpliedForceY { get; set; }
-        public double AccelerationSpeed { get; set; }
-        public double DecelerationSpeed { get; set; }
+
+        public double MaxVelocity { get; set; }
+
+        public double AccelerationSpeed { get; set; } = 1;
+        public double DecelerationSpeed { get; set; } = 1;
 
         public Rectangle Location
         {

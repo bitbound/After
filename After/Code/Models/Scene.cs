@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+
 
 namespace After.Code.Models
 {
@@ -11,6 +13,7 @@ namespace After.Code.Models
     {
         public GameObject Anchor { get; set; }
 
+        [JsonIgnore]
         public Rectangle Location
         {
             get
@@ -19,7 +22,13 @@ namespace After.Code.Models
             }
         }
 
-        public List<GameObject> SceneObjects { get; set; }
+        [JsonIgnore]
+        public Scene ShadowScene { get; set; }
+
+        public List<GameObject> SceneObjects { get; set; } = new List<GameObject>();
+
+        [JsonIgnore]
         public IClientProxy ClientProxy { get; internal set; }
+
     }
 }

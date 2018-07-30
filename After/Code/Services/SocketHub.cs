@@ -100,14 +100,24 @@ namespace After.Code.Services
             CharacterName = characterName;
             MyScene = new Scene()
             {
-                Anchor = DataService.GetCharacter(UserName, CharacterName),
+                Anchor = CurrentCharacter,
                 ClientProxy = Clients.Caller
             };
             SceneManager.AddScene(MyScene);
 
             //SendFullSceneUpdate();
         }
-        private Scene MyScene { get; set; }
+        private Scene MyScene
+        {
+            get
+            {
+                return Context.Items["MyScene"] as Scene;
+            }
+            set
+            {
+                Context.Items["MyScene"] = value;
+            }
+        }
 
         public override Task OnConnectedAsync()
         {
@@ -121,7 +131,7 @@ namespace After.Code.Services
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendChat(JObject data)
+        public async Task SendChat(dynamic data)
         {
             var character = DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
             switch (data["Channel"].ToString())
@@ -129,9 +139,9 @@ namespace After.Code.Services
                 case "Global":
                     await Clients.All.SendAsync("ReceiveChat", new
                     {
-                        Channel = data["Channel"].ToString(),
+                        Channel = data["Channel"],
                         CharacterName = character?.Name,
-                        Message = data["Message"].ToString(),
+                        Message = data["Message"],
                         Color = character?.Color
                     });
                     break;
@@ -144,6 +154,11 @@ namespace After.Code.Services
         public void SendFullSceneUpdate()
         {
             Clients.Caller.SendAsync("UpdatePlayer", CurrentCharacter);
+        }
+        public void UpdateMovementInput(dynamic data)
+        {
+            MyScene.Anchor.MovementAngle = data.Angle;
+            MyScene.Anchor.MovementForce = data.Force;
         }
     }
 }

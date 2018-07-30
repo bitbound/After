@@ -1,4 +1,5 @@
 ﻿using After.Code.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,17 @@ namespace After.Code.Services
     public class SceneManager
     {
         private List<Scene> Scenes { get; set; } = new List<Scene>();
+
+        public List<Scene> AllScenes
+        {
+            get
+            {
+                lock (Scenes)
+                {
+                    return Scenes.ToList();
+                }
+            }
+        }
 
         internal void AddScene(Scene scene)
         {
@@ -24,6 +36,11 @@ namespace After.Code.Services
             {
                 Scenes.Remove(scene);
             }
+        }
+
+        public Scene CloneScene(Scene scene)
+        {
+            return JsonConvert.DeserializeObject<Scene>(JsonConvert.SerializeObject(scene));
         }
     }
 }

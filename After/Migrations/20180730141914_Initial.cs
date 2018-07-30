@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace After.Migrations
 {
-    public partial class Restructure : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,7 +51,7 @@ namespace After.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ErrorLog",
+                name: "Errors",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -65,7 +65,7 @@ namespace After.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ErrorLog", x => x.ID);
+                    table.PrimaryKey("PK_Errors", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,10 +184,11 @@ namespace After.Migrations
                     XCoord = table.Column<double>(nullable: false),
                     YCoord = table.Column<double>(nullable: false),
                     ZCoord = table.Column<string>(nullable: true),
+                    MovementAngle = table.Column<double>(nullable: false),
+                    MovementForce = table.Column<double>(nullable: false),
                     VelocityX = table.Column<double>(nullable: false),
                     VelocityY = table.Column<double>(nullable: false),
-                    AppliedForceX = table.Column<double>(nullable: false),
-                    APpliedForceY = table.Column<double>(nullable: false),
+                    MaxVelocity = table.Column<double>(nullable: false),
                     AccelerationSpeed = table.Column<double>(nullable: false),
                     DecelerationSpeed = table.Column<double>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
@@ -199,6 +200,7 @@ namespace After.Migrations
                     CurrentEnergy = table.Column<double>(nullable: true),
                     CurrentCharge = table.Column<double>(nullable: true),
                     CurrentWillpower = table.Column<double>(nullable: true),
+                    IsCharging = table.Column<bool>(nullable: true),
                     AfterUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -213,7 +215,7 @@ namespace After.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StatusEffect",
+                name: "StatusEffects",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
@@ -223,9 +225,9 @@ namespace After.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StatusEffect", x => x.ID);
+                    table.PrimaryKey("PK_StatusEffects", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_StatusEffect_GameObjects_PlayerCharacterID",
+                        name: "FK_StatusEffects_GameObjects_PlayerCharacterID",
                         column: x => x.PlayerCharacterID,
                         principalTable: "GameObjects",
                         principalColumn: "ID",
@@ -294,8 +296,8 @@ namespace After.Migrations
                 filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StatusEffect_PlayerCharacterID",
-                table: "StatusEffect",
+                name: "IX_StatusEffects_PlayerCharacterID",
+                table: "StatusEffects",
                 column: "PlayerCharacterID");
         }
 
@@ -317,10 +319,10 @@ namespace After.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ErrorLog");
+                name: "Errors");
 
             migrationBuilder.DropTable(
-                name: "StatusEffect");
+                name: "StatusEffects");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -10,7 +10,7 @@ namespace After.Code.Services
 {
     public class DataService
     {
-        private ApplicationDbContext DBContext { get; set; }
+        public ApplicationDbContext DBContext { get; set; }
         public DataService(ApplicationDbContext dbContext)
         {
             DBContext = dbContext;
@@ -51,6 +51,12 @@ namespace After.Code.Services
             
             return DBContext.Users.Include(x => x.Characters)
                 .FirstOrDefault(x => x.UserName == userName)?.Characters.ToList();
+        }
+
+        internal void UpdateScene(Scene scene)
+        {
+            DBContext.PlayerCharacters.Update(scene.Anchor as PlayerCharacter);
+            DBContext.SaveChanges();
         }
 
         public void DeleteAllCharacters(string userName)
