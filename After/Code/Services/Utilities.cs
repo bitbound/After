@@ -25,7 +25,7 @@ namespace After.Code.Services
 
         public static bool IsDifferent(dynamic firstObject, dynamic secondObject)
         {
-            return JsonConvert.SerializeObject(firstObject) == JsonConvert.SerializeObject(secondObject);
+            return JsonConvert.SerializeObject(firstObject) != JsonConvert.SerializeObject(secondObject);
         }
     }
 }

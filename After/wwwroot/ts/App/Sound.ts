@@ -15,12 +15,10 @@ export const Sound = new class {
     BackgroundAudio: HTMLAudioElement;
     BackgroundNode: MediaElementAudioSourceNode;
 
-    Play(sourceFile: string, loop: boolean): string {
+    Play(sourceFile: string, loop: boolean = false): string {
         var audioElement = new Audio(sourceFile);
         this.AudioElements.push(audioElement);
-        if (loop) {
-            audioElement.loop = true;
-        }
+        audioElement.loop = loop;
         audioElement.id = Utilities.CreateGUID();
         var sourceNode = this.Context.createMediaElementSource(audioElement);
         this.SourceNodes.push(sourceNode);

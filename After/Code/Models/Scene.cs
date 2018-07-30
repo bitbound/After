@@ -29,6 +29,6 @@ namespace After.Code.Models
 
         [JsonIgnore]
         public IClientProxy ClientProxy { get; internal set; }
-
+        public Guid AnchorID { get; internal set; }
     }
 }

@@ -53,12 +53,6 @@ namespace After.Code.Services
                 .FirstOrDefault(x => x.UserName == userName)?.Characters.ToList();
         }
 
-        internal void UpdateScene(Scene scene)
-        {
-            DBContext.PlayerCharacters.Update(scene.Anchor as PlayerCharacter);
-            DBContext.SaveChanges();
-        }
-
         public void DeleteAllCharacters(string userName)
         {
             var user = DBContext.Users.Include(x => x.Characters).FirstOrDefault(x => x.UserName == userName);

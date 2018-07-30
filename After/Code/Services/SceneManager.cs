@@ -9,6 +9,7 @@ namespace After.Code.Services
 {
     public class SceneManager
     {
+        public GameEngine GameEngine { get; set; }
         private List<Scene> Scenes { get; set; } = new List<Scene>();
 
         public List<Scene> AllScenes
@@ -24,6 +25,7 @@ namespace After.Code.Services
 
         internal void AddScene(Scene scene)
         {
+            scene.Anchor = GameEngine.DBContext.GameObjects.Find(scene.AnchorID);
             lock (Scenes)
             {
                 Scenes.Add(scene);

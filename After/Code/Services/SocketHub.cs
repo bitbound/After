@@ -100,7 +100,7 @@ namespace After.Code.Services
             CharacterName = characterName;
             MyScene = new Scene()
             {
-                Anchor = CurrentCharacter,
+                AnchorID = CurrentCharacter.ID,
                 ClientProxy = Clients.Caller
             };
             SceneManager.AddScene(MyScene);

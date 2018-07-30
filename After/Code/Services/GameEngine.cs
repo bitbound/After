@@ -12,15 +12,18 @@ namespace After.Code.Services
 {
     public class GameEngine
     {
-        public GameEngine(DataService dataService, SceneManager sceneManager, ILogger<GameEngine> logger)
+        public static GameEngine Current { get; private set; }
+        public GameEngine(ApplicationDbContext dbContext, SceneManager sceneManager, ILogger<GameEngine> logger)
         {
-            DataService = dataService;
+            DBContext = dbContext;
             SceneManager = sceneManager;
+            SceneManager.GameEngine = this;
             Logger = logger;
         }
-
+        public ApplicationDbContext DBContext { get; set; }
         public void Init()
         {
+            Current = this;
             LastTick = DateTime.Now;
             MainLoop = Task.Run(new Action(RunMainLoop));
         }
@@ -46,30 +49,31 @@ namespace After.Code.Services
 
             var activeScenes = SceneManager.AllScenes;
 
-            ApplyStatusEffects(activeScenes, delta);
-
-            ApplyInputUpdates(activeScenes, delta);
-
-            UpdatePositionsFromVelociy(activeScenes, delta);
-
-            AddAndRemoveSceneObjectsInEachScene(activeScenes, delta);
-
             activeScenes.ForEach(x =>
             {
+                ApplyStatusEffects(x, delta);
+                ApplyInputUpdates(x, delta);
+                UpdatePositionsFromVelociy(x, delta);
                 if (Utilities.IsDifferent(x, x.ShadowScene))
                 {
                     x.ShadowScene = x;
-                    DataService.UpdateScene(x);
-                    x.ClientProxy.SendCoreAsync("UpdateScene", new object[] { x.Anchor });
+                    DBContext.GameObjects.Update(x.Anchor);
+                    x.SceneObjects.ForEach(y =>
+                    {
+                        DBContext.GameObjects.Update(y);
+                    });
+                    if (x.ClientProxy != null)
+                    {
+                        x.ClientProxy.SendCoreAsync("UpdateScene", new object[] { x });
+                    }
                 }
             });
 
-
-            System.Threading.Thread.Sleep(10);
+            DBContext.SaveChanges();
             RunMainLoop();
         }
 
-        private void ApplyInputUpdates(List<Scene> scenes, double delta)
+        private void ApplyInputUpdates(Scene scene, double delta)
         {
             var updateFunc = new Action<GameObject>(x =>
             {
@@ -105,29 +109,35 @@ namespace After.Code.Services
 
             });
 
-            scenes.ForEach(x =>
+            updateFunc(scene.Anchor);
+            scene.SceneObjects.ForEach(x =>
             {
-                updateFunc(x.Anchor);
-                x.SceneObjects.ForEach(y =>
-                {
-                    updateFunc(y);
-                });
+                updateFunc(x);
             });
         }
 
-        private void ApplyStatusEffects(List<Scene> scenes, double delta)
+        private void ApplyStatusEffects(Scene scenes, double delta)
         {
             
         }
 
-        private void AddAndRemoveSceneObjectsInEachScene(List<Scene> scenes, double delta)
+        private void AddAndRemoveSceneObjectsInEachScene(Scene scenes, double delta)
         {
             
         }
 
-        private void UpdatePositionsFromVelociy(List<Scene> scenes, double delta)
+        private void UpdatePositionsFromVelociy(Scene scene, double delta)
         {
-            
+            var updateFunc = new Action<GameObject>(x =>
+            {
+
+            });
+
+            updateFunc(scene.Anchor);
+            scene.SceneObjects.ForEach(y =>
+            {
+                updateFunc(y);
+            });
         }
 
 
