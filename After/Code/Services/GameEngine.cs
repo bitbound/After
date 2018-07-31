@@ -31,36 +31,43 @@ namespace After.Code.Services
         private ApplicationDbContext DBContext { get; set; }
         private ILogger<GameEngine> Logger { get; set; }
         private Task MainLoop { get; set; }
-        private void RunMainLoop()
+        private async void RunMainLoop()
         {
-            var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
-            if (delta < 1)
+            while (true)
             {
-                System.Threading.Thread.Sleep(10);
-                RunMainLoop();
-                return;
+                var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
+                while (delta < 1)
+                {
+                    System.Threading.Thread.Sleep(1);
+                    delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
+                }
+
+
+                if (delta > 2)
+                {
+                    Logger.LogWarning($"Slow game loop.  Delta: {delta.ToString()}");
+                }
+                LastTick = DateTime.Now;
+
+
+
+                var activeConnections = SocketHub.ConnectionList.ToList();
+                var playerCharacters = DBContext.PlayerCharacters.Where(x => activeConnections.Exists(y => y.CharacterID == x.ID)).ToList();
+
+                var visibleObjects = GetVisibleObjects(playerCharacters);
+
+                var playerIDs = activeConnections.Select(x => x.CharacterID).ToList();
+
+                //ApplyStatusEffects(playerIDs, delta);
+                //Logger.LogDebug($"Before ApplyInput: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
+                //ApplyInputUpdates(playerIDs, delta);
+                //Logger.LogDebug($"After ApplyInput: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
+                //UpdatePositionsFromVelociy(playerIDs, delta);
+                //Logger.LogDebug($"Before Diff: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
+                //DiffScenesAndSendUpdates(activeConnections);
+                //Logger.LogDebug($"After Diff: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
             }
-            if (delta > 2)
-            {
-                Logger.LogWarning($"Slow game loop.  Delta: {delta.ToString()}");
-            }
-            LastTick = DateTime.Now;
-
-            var activeConnections = SocketHub.ConnectionList.ToList();
-            
-            var playerIDs = activeConnections.Select(x => x.CharacterID).ToList();
-
-            ApplyStatusEffects(playerIDs, delta);
-            Logger.LogDebug($"Before ApplyInput: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
-            ApplyInputUpdates(playerIDs, delta);
-            Logger.LogDebug($"After ApplyInput: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
-            UpdatePositionsFromVelociy(playerIDs, delta);
-            Logger.LogDebug($"Before Diff: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
-            DiffScenesAndSendUpdates(activeConnections);
-            Logger.LogDebug($"After Diff: {(DateTime.Now - LastTick).TotalMilliseconds / 50}");
-
-            System.Threading.Thread.Sleep(1);
-            RunMainLoop();
+     
         }
 
         private void DiffScenesAndSendUpdates(List<ConnectionDetails> activeConnections)
@@ -144,6 +151,15 @@ namespace After.Code.Services
                     Math.Abs(x.YCoord - anchor.YCoord) < AppConstants.RendererHeight);
 
             return scene.ToList();
+        }
+
+        private List<GameObject> GetVisibleObjects(List<PlayerCharacter> playerCharacters)
+        {
+            return DBContext.GameObjects.AsNoTracking().Where(go =>
+                playerCharacters.Exists(pc=> pc.ZCoord == go.ZCoord) &&
+                playerCharacters.Exists(pc=> Math.Abs(go.XCoord - pc.XCoord) < AppConstants.RendererWidth) &&
+                playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight)
+            ).ToList();
         }
 
         private GameObject GetGameObject(Guid id)
