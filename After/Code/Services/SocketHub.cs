@@ -17,26 +17,24 @@ namespace After.Code.Services
         public SocketHub(DataService dataService,
             IHttpContextAccessor contextAccessor,
             UserManager<AfterUser> userManager,
-            SignInManager<AfterUser> signInManager,
-            SceneManager sceneManager)
+            SignInManager<AfterUser> signInManager)
         {
             DataService = dataService;
             UserManager = userManager;
             SignInManager = signInManager;
-            SceneManager = sceneManager;
         }
 
         public static List<ConnectionDetails> ConnectionList { get; set; } = new List<ConnectionDetails>();
 
-        private string CharacterName
+        private ConnectionDetails ConnectionDetails
         {
             get
             {
-                return this.Context.Items["CharacterName"].ToString();
+                return this.Context.Items["ConnectionDetails"] as ConnectionDetails;
             }
             set
             {
-                this.Context.Items["CharacterName"] = value;
+                this.Context.Items["ConnectionDetails"] = value;
             }
         }
 
@@ -44,7 +42,7 @@ namespace After.Code.Services
         {
             get
             {
-                return DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
+                return DataService.GetCharacter(Context.User.Identity.Name, ConnectionDetails.CharacterName);
             }
         }
 
@@ -59,7 +57,6 @@ namespace After.Code.Services
         private DataService DataService { get; set; }
         private UserManager<AfterUser> UserManager { get; }
         private SignInManager<AfterUser> SignInManager { get; }
-        private SceneManager SceneManager { get; }
 
         private string UserName
         {
@@ -85,40 +82,21 @@ namespace After.Code.Services
                     }
                 }
             }
-            lock (ConnectionList) {
-                ConnectionList.Add(
-                   new ConnectionDetails()
-                   {
-                       CharacterName = characterName,
-                       UserName = UserName,
-                       ConnectionID = Context.ConnectionId,
-                       ClientProxy = Clients.Caller
-                   }
-                );
-            }
-
-            CharacterName = characterName;
-            MyScene = new Scene()
+            var characterID = DataService.GetCharacter(UserName, characterName).ID;
+            ConnectionDetails = new ConnectionDetails()
             {
-                AnchorID = CurrentCharacter.ID,
+                CharacterName = characterName,
+                CharacterID = characterID,
+                UserName = UserName,
+                ConnectionID = Context.ConnectionId,
                 ClientProxy = Clients.Caller
             };
-            SceneManager.AddScene(MyScene);
 
+            lock (ConnectionList) {
+                ConnectionList.Add(ConnectionDetails);
+            }
             //SendFullSceneUpdate();
         }
-        private Scene MyScene
-        {
-            get
-            {
-                return Context.Items["MyScene"] as Scene;
-            }
-            set
-            {
-                Context.Items["MyScene"] = value;
-            }
-        }
-
         public override Task OnConnectedAsync()
         {
             return base.OnConnectedAsync();
@@ -127,13 +105,12 @@ namespace After.Code.Services
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             ConnectionList.RemoveAll(x=>x.UserName == UserName);
-            SceneManager.RemoveScene(MyScene);
             await base.OnDisconnectedAsync(exception);
         }
 
         public async Task SendChat(dynamic data)
         {
-            var character = DataService.GetCharacter(Context.User.Identity.Name, CharacterName);
+            var character = DataService.GetCharacter(Context.User.Identity.Name, ConnectionDetails.CharacterName);
             switch (data["Channel"].ToString())
             {
                 case "Global":
@@ -157,8 +134,7 @@ namespace After.Code.Services
         }
         public void UpdateMovementInput(dynamic data)
         {
-            MyScene.Anchor.MovementAngle = data.Angle;
-            MyScene.Anchor.MovementForce = data.Force;
+            DataService.UpdateCharacterMovement(ConnectionDetails.CharacterID, (double)data.Angle, (double)data.Force);
         }
     }
 }

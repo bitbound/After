@@ -10,7 +10,7 @@ namespace After.Code.Services
 {
     public class DataService
     {
-        public ApplicationDbContext DBContext { get; set; }
+        private ApplicationDbContext DBContext { get; set; }
         public DataService(ApplicationDbContext dbContext)
         {
             DBContext = dbContext;
@@ -28,7 +28,7 @@ namespace After.Code.Services
 
         public PlayerCharacter GetCharacter(string userName, string characterName)
         {
-            return DBContext.Users
+            return DBContext.Users.AsNoTracking()
                 .Include(x=>x.Characters)
                 .FirstOrDefault(x=>x.UserName == userName)
                 ?.Characters?.FirstOrDefault(x => x.Name == characterName);
@@ -63,6 +63,9 @@ namespace After.Code.Services
             DBContext.SaveChanges();
         }
 
+       
+       
+
         public void AddError(Error error)
         {
             DBContext.Errors.Add(error);
@@ -84,11 +87,20 @@ namespace After.Code.Services
                 .ToList()
                 .ForEach(x => DeleteUser(x.UserName)
             );
+            DBContext.SaveChanges();
         }
 
         internal void SetLastLogin(string userName, DateTime loginDate)
         {
             var user = DBContext.Users.FirstOrDefault(x => x.UserName == userName).LastLogin = loginDate;
+            DBContext.SaveChanges();
+        }
+
+        internal void UpdateCharacterMovement(Guid characterID, double angle, double force)
+        {
+            var character = DBContext.PlayerCharacters.Find(characterID);
+            character.MovementAngle = angle;
+            character.MovementForce = force;
             DBContext.SaveChanges();
         }
     }

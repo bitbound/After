@@ -53,9 +53,8 @@ namespace After
             });
             services.AddLogging();
             services.AddScoped<DataService>();
-            services.AddScoped<GameEngine>();
+            services.AddSingleton<GameEngine>();
             services.AddSingleton<EmailSender>();
-            services.AddSingleton<SceneManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

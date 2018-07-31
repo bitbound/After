@@ -11,6 +11,8 @@ namespace After.Code.Models
         public string UserName { get; set; }
         public string ConnectionID { get; set; }
         public string CharacterName { get; set; }
+        public Guid CharacterID { get; set; }
+        public List<GameObject> CachedScene { get; set; } = new List<GameObject>();
         public IClientProxy ClientProxy { get; internal set; }
     }
 }

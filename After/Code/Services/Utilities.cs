@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using After.Code.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace After.Code.Services
             var random = new Random();
             return $"#{random.Next(0x1000000):X6}";
         }
-        public static double GetRadiensFromDegrees(double degrees)
+        public static double GetRadiansFromDegrees(double degrees)
         {
             return (Math.PI / 180) * degrees;
         }
@@ -23,9 +24,10 @@ namespace After.Code.Services
             return Math.Abs(currentVelocity + vector) > Math.Abs(currentVelocity);
         }
 
-        public static bool IsDifferent(dynamic firstObject, dynamic secondObject)
+        public static bool AreDifferent(dynamic firstObject, dynamic secondObject)
         {
             return JsonConvert.SerializeObject(firstObject) != JsonConvert.SerializeObject(secondObject);
         }
+
     }
 }
