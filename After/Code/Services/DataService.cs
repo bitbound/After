@@ -95,7 +95,6 @@ namespace After.Code.Services
             var user = DBContext.Users.FirstOrDefault(x => x.UserName == userName).LastLogin = loginDate;
             DBContext.SaveChanges();
         }
-
         internal void UpdateCharacterMovement(Guid characterID, double angle, double force)
         {
             var character = DBContext.PlayerCharacters.Find(characterID);

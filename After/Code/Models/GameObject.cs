@@ -31,6 +31,8 @@ namespace After.Code.Models
         public double AccelerationSpeed { get; set; } = 1;
         public double DecelerationSpeed { get; set; } = 1;
 
+        public bool ModifiedThisGameLoop { get; set; }
+
         public Rectangle Location
         {
             get

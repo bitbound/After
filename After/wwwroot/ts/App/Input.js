@@ -5,6 +5,9 @@ import { Utilities } from "./Utilities.js";
 import { Sockets } from "./Sockets.js";
 import { Settings } from "./Settings.js";
 export const Input = new class {
+    constructor() {
+        this.LastStateUpdate = Date.now();
+    }
     ApplyInputHandlers() {
         handleMovementJoystick();
         handleChatBlurFocus();
@@ -16,6 +19,19 @@ export const Input = new class {
         handleMenuOptionsButtons();
         handleAddToHomeButtonClick();
         handleDebugFrame();
+    }
+    ;
+    QueueInputStateUpdate(methodName, args) {
+        var waitRequired = 50 - Date.now() + this.LastStateUpdate;
+        window.clearTimeout(this.SendUpdateTimeout);
+        if (waitRequired <= 0) {
+            Sockets.Invoke(methodName, args);
+        }
+        else {
+            this.SendUpdateTimeout = window.setTimeout(() => {
+                Sockets.Invoke(methodName, args);
+            }, waitRequired);
+        }
     }
 };
 function handleDebugFrame() {
@@ -123,14 +139,14 @@ function handleMovementJoystick() {
         var angle = PixiHelper.GetAngle(centerPoint, evPoint);
         var xForce = (ev.x - centerX) / (outer.clientWidth / 2);
         var yForce = (ev.y - centerY) / (outer.clientWidth / 2);
-        Sockets.Invoke("UpdateMovementInput", { Angle: angle, Force: (distance / outer.clientHeight / 2) });
+        Input.QueueInputStateUpdate("UpdateMovementInput", { Angle: angle, Force: (distance / outer.clientHeight / 2) });
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
     function movementUp(ev) {
         if (ev.pointerId != pointerID) {
             return;
         }
-        Sockets.Invoke("UpdateMovementInput", { Angle: 0, Force: 0 });
+        Input.QueueInputStateUpdate("UpdateMovementInput", { Angle: 0, Force: 0 });
         window.removeEventListener("pointermove", movementMove);
         window.removeEventListener("pointerup", movementUp);
         inner.style.transform = "";

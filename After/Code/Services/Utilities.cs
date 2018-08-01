@@ -28,6 +28,5 @@ namespace After.Code.Services
         {
             return JsonConvert.SerializeObject(firstObject) != JsonConvert.SerializeObject(secondObject);
         }
-
     }
 }

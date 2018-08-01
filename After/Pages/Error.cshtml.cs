@@ -19,9 +19,9 @@ namespace After.Pages
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-        private IEmailSender EmailSender { get; set; }
+        private EmailSender EmailSender { get; set; }
         private DataService DataService { get; set; }
-        public ErrorModel(IEmailSender emailSender, DataService dataSerivce)
+        public ErrorModel(EmailSender emailSender, DataService dataSerivce)
         {
             EmailSender = emailSender;
             DataService = dataSerivce;
@@ -56,7 +56,7 @@ namespace After.Pages
                 try
                 {
                     DataService.AddError(error);
-                    await EmailSender.SendEmailAsync("jared@lucent.rocks", "After Server Error", JsonConvert.SerializeObject(error));
+                    await EmailSender.SendEmailAsync("jared@lucent.rocks", "jared@lucent.rocks", "After Server Error", JsonConvert.SerializeObject(error));
                 }
                 catch{ }
             }

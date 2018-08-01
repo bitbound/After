@@ -73,5 +73,5 @@ if (location.pathname.search("play") > -1) {
 }
 
 function gameLoop(delta) {
-   
+
 }
