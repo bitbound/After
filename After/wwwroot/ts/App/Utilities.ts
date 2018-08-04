@@ -288,11 +288,4 @@ export const Utilities = new class {
             array.splice(index, 1);
         }
     };
-    RemoveAll(inputArray: Array<any>, predicate: (value: any, index: number, obj: any[]) => boolean) {
-        var matches = inputArray.filter(predicate);
-        for (var i = 0; i < matches.length; i++) {
-            var index = inputArray.indexOf(matches[i]);
-            matches.splice(index, 1);
-        }
-    }
 }

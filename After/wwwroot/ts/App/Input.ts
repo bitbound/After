@@ -9,6 +9,7 @@ import { Settings } from "./Settings.js";
 export const Input = new class {
     ApplyInputHandlers() {
         handleMovementJoystick();
+        handleKeyboardInput();
         handleChatBlurFocus();
         handleChatResize();
         handleChatTextInput();
@@ -19,20 +20,61 @@ export const Input = new class {
         handleAddToHomeButtonClick();
         handleDebugFrame();
     };
-    private SendUpdateTimeout: number;
-    private LastStateUpdate: number = Date.now();
-    QueueInputStateUpdate(methodName: string, args: any) {
-        var waitRequired = 50 - Date.now() + this.LastStateUpdate;
-        window.clearTimeout(this.SendUpdateTimeout);
+    private SendMovementTimeout: number;
+    private LastMovementSent: number = Date.now();
+    QueueMovementStateUpdate(methodName: string, args: any) {
+        var waitRequired = 100 - Date.now() + this.LastMovementSent;
+        window.clearTimeout(this.SendMovementTimeout);
         if (waitRequired <= 0) {
+            this.LastMovementSent = Date.now();
             Sockets.Invoke(methodName, args);
         }
         else {
-            this.SendUpdateTimeout = window.setTimeout(() => {
+            this.SendMovementTimeout = window.setTimeout(() => {
+                this.LastMovementSent = Date.now();
                 Sockets.Invoke(methodName, args);
             }, waitRequired);
         }
+    };
+    InputKeyStates = {
+        Up: false,
+        Right: false,
+        Down: false,
+        Left: false,
+        Charge: false
     }
+}
+
+function handleKeyboardInput() {
+
+    window.addEventListener("blur", e => {
+        // Release all keydowns on window blur.
+        Object.keys(Input.InputKeyStates).forEach(x => {
+            Input.InputKeyStates[x] = false;
+        })
+    });
+    window.addEventListener("keydown", e => {
+        if (document.querySelectorAll("input:focus").length > 0) {
+            return;
+        }
+        e.preventDefault();
+        var keybind = Settings.Keybinds.find(x => x.Key == e.key);
+        if (keybind != null) {
+            Input.InputKeyStates[keybind.Name] = true;
+            sendKeyboardMovementState();
+        }
+    });
+    window.addEventListener("keyup", e => {
+        if (document.querySelectorAll("input:focus").length > 0) {
+            return;
+        }
+        e.preventDefault();
+        var keybind = Settings.Keybinds.find(x => x.Key == e.key);
+        if (keybind != null) {
+            Input.InputKeyStates[keybind.Name] = false;
+            sendKeyboardMovementState();
+        }
+    });
 }
 function handleDebugFrame() {
     document.querySelector("#jsErrorsLink").addEventListener("click", ev => {
@@ -147,9 +189,7 @@ function handleMovementJoystick() {
 
         var distance = Math.min(PixiHelper.GetDistanceBetween(centerPoint, evPoint), outer.clientWidth / 2);
         var angle = PixiHelper.GetAngle(centerPoint, evPoint);
-        var xForce = (ev.x - centerX) / (outer.clientWidth / 2);
-        var yForce = (ev.y - centerY) / (outer.clientWidth / 2);
-        Input.QueueInputStateUpdate("UpdateMovementInput", { Angle: angle, Force: (distance / outer.clientHeight / 2) });
+        Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: angle, Force: (distance / outer.clientHeight) });
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
 
@@ -157,7 +197,7 @@ function handleMovementJoystick() {
         if (ev.pointerId != pointerID) {
             return;
         }
-        Input.QueueInputStateUpdate("UpdateMovementInput", { Angle: 0, Force: 0 });
+        Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: 0, Force: 0 });
         window.removeEventListener("pointermove", movementMove);
         window.removeEventListener("pointerup", movementUp);
         inner.style.transform = "";
@@ -298,4 +338,26 @@ function handleMenuHeaderClick() {
             (ev.currentTarget as HTMLElement).nextElementSibling.classList.toggle("menu-body-closed");
         })
     });
+}
+
+function sendKeyboardMovementState() {
+    var xVector = 0;
+    var yVector = 0;
+    if (Input.InputKeyStates.Left) {
+        xVector--;
+    }
+    if (Input.InputKeyStates.Right) {
+        xVector++;
+    }
+    if (Input.InputKeyStates.Up) {
+        yVector--;
+    }
+    if (Input.InputKeyStates.Down) {
+        yVector++;
+    }
+    var angle = PixiHelper.GetAngle(new PIXI.Point(0, 0), new PIXI.Point(xVector, yVector));
+
+    var force = Math.min(Math.abs(xVector) + Math.abs(yVector), .5);
+    
+    Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: angle, Force: force });
 }

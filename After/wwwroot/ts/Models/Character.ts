@@ -1,5 +1,6 @@
 ﻿import { GameObject } from "./GameObject.js";
 import { StatusEffect } from "./StatusEffect.js";
+import { Main } from "../Main.js";
 
 export class Character extends GameObject {
     constructor() {
@@ -29,12 +30,34 @@ export class Character extends GameObject {
     public MaxWillpower: number;
     public CurrentWillpower: number;
 
+    public MaxVelocity: number;
 
     public StatusEffects: Array<StatusEffect>;
 
     public OnCollision(collidingObject: GameObject): void {
         
     }
+    public Emitter: PIXI.particles.Emitter;
+    public ParticleContainer: PIXI.particles.ParticleContainer;
+
+    public CreateEmitter() {
+        this.EmitterConfig.color.list[1].value = this.Color;
+        this.ParticleContainer = new PIXI.particles.ParticleContainer();
+        this.ParticleContainer.x = Main.Renderer.PixiApp.screen.width / 2;
+        this.ParticleContainer.y = Main.Renderer.PixiApp.screen.height / 2;
+        this.ParticleContainer.name = this.ID;
+        if (this.ID == Main.Me.Character.ID) {
+         
+            Main.Renderer.PixiApp.stage.addChild(this.ParticleContainer);
+            this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
+  
+        }
+        else {
+            Main.Renderer.SceneContainer.addChild(this.ParticleContainer);
+            this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
+        }
+
+    };
     public EmitterConfig = {
         "alpha": {
             "list": [
@@ -109,7 +132,7 @@ export class Character extends GameObject {
             "max": 1.0
         },
         "blendMode": "normal",
-        "frequency": 0.001,
+        "frequency": 0.002,
         "emitterLifetime": -1,
         "maxParticles": 750,
         "pos": {

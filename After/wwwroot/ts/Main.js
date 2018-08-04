@@ -7,17 +7,14 @@ import { Sockets } from "./App/Sockets.js";
 import { Settings } from "./App/Settings.js";
 import { PixiHelper } from "./App/PixiHelper.js";
 import { Input } from "./App/Input.js";
+import { Renderer } from "./App/Renderer.js";
 var main = new class {
     constructor() {
         this.ErrorLog = "";
         this.Input = Input;
         this.Me = Me;
         this.PixiHelper = PixiHelper;
-        this.Renderer = new PIXI.Application({
-            view: document.querySelector("#playCanvas"),
-            width: Settings.RendererResolution.Width,
-            height: Settings.RendererResolution.Height
-        });
+        this.Renderer = Renderer;
         this.Sound = Sound;
         this.UI = UI;
         this.Utilities = Utilities;
@@ -25,7 +22,7 @@ var main = new class {
         this.Sockets = Sockets;
     }
     StartGameLoop() {
-        Main.Renderer.ticker.add(delta => gameLoop(delta));
+        Main.Renderer.PixiApp.ticker.add(delta => gameLoop(delta));
     }
 };
 window.onerror = (ev, source, fileNo, columnNo, error) => {
@@ -51,18 +48,30 @@ window.addEventListener("beforeinstallprompt", (ev) => {
 // Init.
 if (location.pathname.search("play") > -1) {
     window.onload = (e) => {
-        if (location.href.indexOf("localhost") > -1) {
-            Settings.IsDebugEnabled = true;
-        }
-        else {
-            Settings.IsDebugEnabled = main.Settings.IsDebugEnabled;
-        }
-        Settings.AreTouchControlsEnabled = main.Settings.AreTouchControlsEnabled;
-        PixiHelper.LoadBackgroundEmitter();
         //Sound.PlayBackground();
         Sockets.Connect();
     };
 }
 function gameLoop(delta) {
+    Main.Me.Scene.GameObjects.forEach(x => {
+        if (x.Discriminator == "Character" || x.Discriminator == "PlayerCharacter") {
+            if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
+                x.CreateEmitter();
+            }
+            else {
+                x.ParticleContainer.x = (x.XCoord - Main.Me.Character.XCoord) - x.Emitter.spawnPos.x + (Main.Renderer.PixiApp.screen.width / 2);
+                x.ParticleContainer.y = (x.YCoord - Main.Me.Character.YCoord) - x.Emitter.spawnPos.y + (Main.Renderer.PixiApp.screen.height / 2);
+                x.ParticleContainer.children.forEach(part => {
+                    part.x -= x.VelocityX * .5;
+                    part.y -= x.VelocityY * .5;
+                });
+            }
+        }
+    });
+    Main.Renderer.SceneContainer.children.forEach(value => {
+        if (!Main.Me.Scene.GameObjects.some(go => go.ID == value.name)) {
+            Main.Renderer.SceneContainer.removeChild(value);
+        }
+    });
 }
 //# sourceMappingURL=Main.js.map

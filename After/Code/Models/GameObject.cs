@@ -28,10 +28,12 @@ namespace After.Code.Models
 
         public double MaxVelocity { get; set; }
 
-        public double AccelerationSpeed { get; set; } = 1;
-        public double DecelerationSpeed { get; set; } = 1;
+        public double AccelerationSpeed { get; set; }
+        public double DecelerationSpeed { get; set; }
 
-        public bool ModifiedThisGameLoop { get; set; }
+        public string Discriminator { get; set; }
+
+        public bool Modified { get; set; }
 
         public Rectangle Location
         {

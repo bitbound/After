@@ -1,5 +1,6 @@
 ﻿import { Main } from "../Main.js";
 import { UI } from "./UI.js";
+import { Keybind } from "../Models/Keybind.js";
 
 export const Settings = new class {
     Colors = {
@@ -15,7 +16,7 @@ export const Settings = new class {
     set IsDebugEnabled(value: boolean) {
         localStorage["IsDebugEnabled"] = value;
         var fpsUpdateTicker = (delta => {
-            var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
+            var currentFPS = Math.round(Main.Renderer.PixiApp.ticker.FPS).toString();
             if (
                 UI.FPSSpan.innerText != currentFPS &&
                 (UI.FPSSpan.getAttribute("last-set") == null || Date.now() - parseInt(UI.FPSSpan.getAttribute("last-set")) > 1000)
@@ -25,11 +26,11 @@ export const Settings = new class {
             }
         });
         if (value) {
-            Main.Renderer.ticker.add(fpsUpdateTicker);
+            Main.Renderer.PixiApp.ticker.add(fpsUpdateTicker);
             UI.DebugFrame.style.display = "";
         }
         else {
-            Main.Renderer.ticker.remove(fpsUpdateTicker);
+            Main.Renderer.PixiApp.ticker.remove(fpsUpdateTicker);
             UI.DebugFrame.style.display = "none";
         }
         document.querySelector("#toggleDebugWindow").setAttribute("on", String(value));
@@ -52,6 +53,13 @@ export const Settings = new class {
         }
         document.querySelector("#toggleTouchControls").setAttribute("on", String(value));
     }
+    Keybinds: Array<Keybind> = [
+        { Name: "Up", Key: "w" },
+        { Name: "Left", Key: "a" },
+        { Name: "Down", Key: "s" },
+        { Name: "Right", Key: "d" }
+    ]
+    // TODO: Send this from server prior to init.
     RendererResolution = {
         Width: 1280,
         Height: 720

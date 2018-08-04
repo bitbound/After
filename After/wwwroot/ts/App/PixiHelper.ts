@@ -17,7 +17,7 @@ export const PixiHelper = new class {
     LoadBackgroundEmitter(): any {
         var backgroundContainer = new PIXI.particles.ParticleContainer();
         backgroundContainer.name = "Background Emitter";
-        Main.Renderer.stage.addChild(backgroundContainer);
+        Main.Renderer.PixiApp.stage.addChild(backgroundContainer);
         this.BackgroundEmitter = new PIXI.particles.Emitter(backgroundContainer, ["/Assets/Images/particle.png"], backgroundEmitterConfig);
     }
 }

@@ -13,6 +13,7 @@
     <Content Remove="wwwroot\ts\App\Input.ts" />
     <Content Remove="wwwroot\ts\App\Me.ts" />
     <Content Remove="wwwroot\ts\App\PixiHelper.ts" />
+    <Content Remove="wwwroot\ts\App\Renderer.ts" />
     <Content Remove="wwwroot\ts\App\Settings.ts" />
     <Content Remove="wwwroot\ts\App\Sockets.ts" />
     <Content Remove="wwwroot\ts\App\UI.ts" />
@@ -21,8 +22,8 @@
     <Content Remove="wwwroot\ts\Main.ts" />
     <Content Remove="wwwroot\ts\Models\Character.ts" />
     <Content Remove="wwwroot\ts\Models\GameObject.ts" />
+    <Content Remove="wwwroot\ts\Models\Keybind.ts" />
     <Content Remove="wwwroot\ts\Models\PlayerCharacter.ts" />
-    <Content Remove="wwwroot\ts\Models\Scene.ts" />
     <Content Remove="wwwroot\ts\Models\SoundTrack.ts" />
     <Content Remove="wwwroot\ts\Models\StatusEffect.ts" />
     <Content Remove="wwwroot\ts\Pages\Intro.ts" />
@@ -52,12 +53,14 @@
     <TypeScriptCompile Include="wwwroot\ts\App\Input.ts" />
     <TypeScriptCompile Include="wwwroot\ts\App\Me.ts" />
     <TypeScriptCompile Include="wwwroot\ts\App\PixiHelper.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\Renderer.ts" />
     <TypeScriptCompile Include="wwwroot\ts\App\Settings.ts" />
     <TypeScriptCompile Include="wwwroot\ts\App\UI.ts" />
     <TypeScriptCompile Include="wwwroot\ts\App\Sockets.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Enums\StatusEffectTarget.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\Character.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\GameObject.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\Keybind.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\PlayerCharacter.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\Scene.ts" />
     <TypeScriptCompile Include="wwwroot\ts\Models\SoundTrack.ts" />

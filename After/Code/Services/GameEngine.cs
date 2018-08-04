@@ -37,8 +37,7 @@ namespace After.Code.Services
             {
                 try
                 {
-                    var options = new DbContextOptions<ApplicationDbContext>();
-                    DBContext = new ApplicationDbContext(options, Configuration);
+                    DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
 
 
                     var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
@@ -52,6 +51,13 @@ namespace After.Code.Services
                     if (delta > 2)
                     {
                         Logger.LogWarning($"Slow game loop.  Delta: {delta.ToString()}");
+                        var error = new Error()
+                        {
+                            PathWhereOccurred = "Main Engine Loop",
+                            Message = $"Slow game loop.  Delta: {delta.ToString()}",
+                            Timestamp = DateTime.Now
+                        };
+                        DBContext.Errors.Add(error);
                     }
                     LastTick = DateTime.Now;
 
@@ -67,16 +73,20 @@ namespace After.Code.Services
                         ApplyStatusEffects(x, delta);
                         ApplyInputUpdates(x, delta);
                         UpdatePositionsFromVelociy(x, delta);
+                        
+
+                    });
+                    visibleObjects.ForEach(x =>
+                    {
                         if (x is PlayerCharacter)
                         {
                             SendUpdates(visibleObjects, activeConnections, x as PlayerCharacter);
                         }
-
                     });
-
+                    
                     visibleObjects.ForEach(x =>
                     {
-                        x.ModifiedThisGameLoop = false;
+                        x.Modified = false;
                     });
                     DBContext.SaveChanges();
                 }
@@ -107,7 +117,7 @@ namespace After.Code.Services
             var connectionDetails = activeConnections.Find(x => x.CharacterID == playerCharacters.ID);
             var currentScene = GetCurrentScene(playerCharacters, visibleObjects);
     
-            var modifiedObjects = currentScene?.Where(x => x.ModifiedThisGameLoop);
+            var modifiedObjects = currentScene?.Where(x => x.Modified);
             var addedObjects = currentScene?.Where(x => connectionDetails.CachedScene?.Any(y => y.ID == x.ID) == false);
             var removedObjects = connectionDetails.CachedScene?.Where(x => currentScene?.Any(y => y.ID == x.ID) == false);
             if (modifiedObjects.Count() > 0 || addedObjects.Count() > 0 || removedObjects.Count() > 0)
@@ -121,37 +131,54 @@ namespace After.Code.Services
 
         private void ApplyInputUpdates(GameObject gameObject, double delta)
         {
-            if (gameObject.MovementForce > 0)
-            {
-                var radians = Utilities.GetRadiansFromDegrees(gameObject.MovementAngle);
-                var xVector = -Math.Cos(radians) * gameObject.MovementForce * gameObject.AccelerationSpeed * delta;
-                var yVector = -Math.Sin(radians) * gameObject.MovementForce * gameObject.AccelerationSpeed * delta;
-                if (!Utilities.IsAccelerating(gameObject.VelocityX, xVector))
-                {
-                    xVector *= gameObject.DecelerationSpeed;
-                }
-                if (!Utilities.IsAccelerating(gameObject.VelocityY, yVector))
-                {
-                    yVector *= gameObject.DecelerationSpeed;
-                }
-                gameObject.VelocityX += xVector;
-                gameObject.VelocityY += yVector;
-                gameObject.VelocityX = Math.Max(gameObject.MaxVelocity, Math.Min(0, gameObject.VelocityX));
-                gameObject.VelocityY = Math.Max(gameObject.MaxVelocity, Math.Min(0, gameObject.VelocityY));
-                gameObject.ModifiedThisGameLoop = true;
-            }
-            else if (gameObject.MovementForce == 0)
+            var radians = Utilities.GetRadiansFromDegrees(gameObject.MovementAngle);
+            var xAcceleration = -Math.Cos(radians) * gameObject.MovementForce * gameObject.AccelerationSpeed * delta;
+            var yAcceleration = -Math.Sin(radians) * gameObject.MovementForce * gameObject.AccelerationSpeed * delta;
+            ApplyAcceleration(gameObject, delta, xAcceleration, yAcceleration);
+            ApplyDeceleration(gameObject, delta, xAcceleration, yAcceleration);
+        }
+
+        private void ApplyDeceleration(GameObject gameObject, double delta, double xAcceleration, double yAcceleration)
+        {
+            if (xAcceleration * gameObject.VelocityX <= 0 && gameObject.VelocityX != 0)
             {
                 if (gameObject.VelocityX > 0)
                 {
-                    gameObject.VelocityX = Math.Min(0, gameObject.VelocityX - (gameObject.DecelerationSpeed * delta));
-                    gameObject.ModifiedThisGameLoop = true;
+                    gameObject.VelocityX = Math.Max(0, gameObject.VelocityX - (gameObject.DecelerationSpeed * delta));
+                    gameObject.Modified = true;
                 }
+                else if (gameObject.VelocityX < 0)
+                {
+                    gameObject.VelocityX = Math.Min(0, gameObject.VelocityX + (gameObject.DecelerationSpeed * delta));
+                    gameObject.Modified = true;
+                }
+            }
+            if (yAcceleration * gameObject.VelocityY <= 0 && gameObject.VelocityY != 0)
+            {
                 if (gameObject.VelocityY > 0)
                 {
-                    gameObject.VelocityY = Math.Min(0, gameObject.VelocityY - (gameObject.DecelerationSpeed * delta));
-                    gameObject.ModifiedThisGameLoop = true;
+                    gameObject.VelocityY = Math.Max(0, gameObject.VelocityY - (gameObject.DecelerationSpeed * delta));
+                    gameObject.Modified = true;
                 }
+                else if (gameObject.VelocityY < 0)
+                {
+                    gameObject.VelocityY = Math.Min(0, gameObject.VelocityY + (gameObject.DecelerationSpeed * delta));
+                    gameObject.Modified = true;
+                }
+            }
+        }
+
+        private void ApplyAcceleration(GameObject gameObject, double delta, double xAcceleration, double yAcceleration)
+        {
+            if (gameObject.MovementForce > 0)
+            {
+                var maxVelocityX = gameObject.MaxVelocity * (xAcceleration / (xAcceleration + yAcceleration));
+                var maxVelocityY = gameObject.MaxVelocity * (yAcceleration / (xAcceleration + yAcceleration));
+                gameObject.VelocityX += xAcceleration;
+                gameObject.VelocityY += yAcceleration;
+                gameObject.VelocityX = Math.Max(-maxVelocityX, Math.Min(maxVelocityX, gameObject.VelocityX));
+                gameObject.VelocityY = Math.Max(-maxVelocityY, Math.Min(maxVelocityY, gameObject.VelocityY));
+                gameObject.Modified = true;
             }
         }
 
@@ -162,26 +189,23 @@ namespace After.Code.Services
 
         private void UpdatePositionsFromVelociy(GameObject gameObject, double delta)
         {
-            if (gameObject.VelocityX > 0)
+            if (gameObject.VelocityX != 0)
             {
-                gameObject.XCoord += gameObject.VelocityX;
-                gameObject.ModifiedThisGameLoop = true;
+                gameObject.XCoord = Math.Round(gameObject.XCoord + gameObject.VelocityX);
+                gameObject.Modified = true;
             }
-            if (gameObject.VelocityY > 0)
+            if (gameObject.VelocityY != 0)
             {
-                gameObject.YCoord += gameObject.VelocityY;
-                gameObject.ModifiedThisGameLoop = true;
+                gameObject.YCoord = Math.Round(gameObject.YCoord + gameObject.VelocityY);
+                gameObject.Modified = true;
             }
         }
-
-
-
 
         private DateTime LastTick { get; set; }
 
         private List<GameObject> GetAllVisibleObjects(List<PlayerCharacter> playerCharacters)
         {
-            return DBContext.GameObjects.AsNoTracking().Where(go =>
+            return DBContext.GameObjects.Where(go =>
                 playerCharacters.Exists(pc=> pc.ZCoord == go.ZCoord) &&
                 playerCharacters.Exists(pc=> Math.Abs(go.XCoord - pc.XCoord) < AppConstants.RendererWidth) &&
                 playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight) &&

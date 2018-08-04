@@ -292,12 +292,5 @@ export const Utilities = new class {
         }
     }
     ;
-    RemoveAll(inputArray, predicate) {
-        var matches = inputArray.filter(predicate);
-        for (var i = 0; i < matches.length; i++) {
-            var index = inputArray.indexOf(matches[i]);
-            matches.splice(index, 1);
-        }
-    }
 };
 //# sourceMappingURL=Utilities.js.map

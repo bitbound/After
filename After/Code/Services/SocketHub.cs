@@ -83,6 +83,7 @@ namespace After.Code.Services
                 }
             }
             var characterID = DataService.GetCharacter(UserName, characterName).ID;
+            DataService.UpdateCharacterMovement(characterID, 0, 0);
             ConnectionDetails = new ConnectionDetails()
             {
                 CharacterName = characterName,
@@ -91,11 +92,11 @@ namespace After.Code.Services
                 ConnectionID = Context.ConnectionId,
                 ClientProxy = Clients.Caller
             };
+            SendInitialUpdate();
 
             lock (ConnectionList) {
                 ConnectionList.Add(ConnectionDetails);
             }
-            //SendFullSceneUpdate();
         }
         public override Task OnConnectedAsync()
         {
@@ -128,9 +129,9 @@ namespace After.Code.Services
             }
         }
 
-        public void SendFullSceneUpdate()
+        public void SendInitialUpdate()
         {
-            Clients.Caller.SendAsync("UpdatePlayer", CurrentCharacter);
+            Clients.Caller.SendAsync("InitialUpdate", new { CurrentCharacter, AppConstants.RendererWidth, AppConstants.RendererHeight } );
         }
         public void UpdateMovementInput(dynamic data)
         {

@@ -2,32 +2,28 @@
 
 import { Sound } from "./App/Sound.js";
 import { Me } from "./App/Me.js";
-import { Scene } from "./Models/Scene.js";
 import { UI } from "./App/UI.js";
 import { Utilities } from "./App/Utilities.js";
 import { Sockets } from "./App/Sockets.js";
 import { Settings } from "./App/Settings.js";
 import { PixiHelper } from "./App/PixiHelper.js";
 import { Input } from "./App/Input.js";
+import { Renderer } from "./App/Renderer.js";
+import { Character } from "./Models/Character.js";
 
 var main = new class {
     ErrorLog: string = "";
     Input = Input;
     Me = Me;
     PixiHelper = PixiHelper;
-    Renderer: PIXI.Application = new PIXI.Application({
-        view: document.querySelector("#playCanvas"),
-        width: Settings.RendererResolution.Width,
-        height: Settings.RendererResolution.Height
-    });
-    Scene: Scene;
+    Renderer = Renderer;
     Sound = Sound;
     UI = UI;
     Utilities = Utilities;
     Settings = Settings;
     Sockets = Sockets;
     StartGameLoop() {
-        Main.Renderer.ticker.add(delta => gameLoop(delta));
+        Main.Renderer.PixiApp.ticker.add(delta => gameLoop(delta));
     }
 }
 
@@ -59,19 +55,30 @@ window.addEventListener("beforeinstallprompt", (ev:any) => {
 // Init.
 if (location.pathname.search("play") > -1) {
     window.onload = (e) => {
-        if (location.href.indexOf("localhost") > -1) {
-            Settings.IsDebugEnabled = true;
-        }
-        else {
-            Settings.IsDebugEnabled = main.Settings.IsDebugEnabled;
-        }
-        Settings.AreTouchControlsEnabled = main.Settings.AreTouchControlsEnabled;
-        PixiHelper.LoadBackgroundEmitter();
         //Sound.PlayBackground();
         Sockets.Connect();
     };
 }
 
 function gameLoop(delta) {
-
+    Main.Me.Scene.GameObjects.forEach(x => {
+        if (x.Discriminator == "Character" || x.Discriminator == "PlayerCharacter") {
+            if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
+                (x as Character).CreateEmitter();
+            }
+            else {
+                (x as Character).ParticleContainer.x = (x.XCoord - Main.Me.Character.XCoord) - (x as Character).Emitter.spawnPos.x + (Main.Renderer.PixiApp.screen.width / 2);
+                (x as Character).ParticleContainer.y = (x.YCoord - Main.Me.Character.YCoord) - (x as Character).Emitter.spawnPos.y + (Main.Renderer.PixiApp.screen.height / 2);
+                (x as Character).ParticleContainer.children.forEach(part => {
+                    part.x -= x.VelocityX * .5;
+                    part.y -= x.VelocityY * .5;
+                })
+            }
+        }
+    });
+    Main.Renderer.SceneContainer.children.forEach( value => {
+        if (!Main.Me.Scene.GameObjects.some(go => go.ID == value.name)) {
+            Main.Renderer.SceneContainer.removeChild(value);
+        }
+    });
 }

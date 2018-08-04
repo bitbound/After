@@ -3,6 +3,11 @@ import { Main } from "../Main.js";
 import { Utilities } from "./Utilities.js";
 import { Input } from "./Input.js";
 import { UI } from "./UI.js";
+import { GameObject } from "../Models/GameObject.js";
+import { Me } from "./Me.js";
+import { Settings } from "./Settings.js";
+import { PixiHelper } from "./PixiHelper.js";
+import { Character } from "../Models/Character.js";
 
 
 export const Sockets = new class {
@@ -17,8 +22,6 @@ export const Sockets = new class {
         applyMessageHandlers(this.Connection);
 
         this.Connection.start().then(() => {
-            Main.StartGameLoop();
-            Input.ApplyInputHandlers();
             this.Connection.invoke("Init", Utilities.QueryStrings["character"]);
         }).catch(err => {
             console.error(err.toString());
@@ -45,18 +48,24 @@ export const Sockets = new class {
 }
 
 function applyMessageHandlers(hubConnection: any) {
-    hubConnection.on("UpdatePlayer", (args : PlayerCharacter) => {
-        if (Main.Me.Character == null) {
-            UI.AddSystemMessage("Welcome to After.");
-            Main.Me.Character = args;
-            Main.Me.EmitterConfig.color.list[1].value = Main.Me.Character.Color;
-            Main.Me.CreateEmitter(Main.Renderer);
-            UI.ApplyDataBinds();
+    hubConnection.on("InitialUpdate", (args) => {
+        UI.AddSystemMessage("Welcome to After.");
+        UI.ApplyDataBinds();
+        Input.ApplyInputHandlers();
+        Main.Renderer.CreatePixiApp(args.RendererWidth, args.RendererHeight);
+        if (location.href.indexOf("localhost") > -1) {
+            Settings.IsDebugEnabled = true;
         }
         else {
-            $.extend(true, Main.Me.Character, args);
+            Settings.IsDebugEnabled = Settings.IsDebugEnabled;
         }
+
+        Settings.AreTouchControlsEnabled = Settings.AreTouchControlsEnabled;
+        PixiHelper.LoadBackgroundEmitter();
+        $.extend(true, Main.Me.Character, args.CurrentCharacter);
         UI.UpdateStatBars();
+        Main.Me.Character.CreateEmitter();
+        Main.StartGameLoop();
     });
 
     hubConnection.on("ReceiveChat", data => {
@@ -76,8 +85,43 @@ function applyMessageHandlers(hubConnection: any) {
         Main.UI.ShowModal("Unable to Connection", "There is an existing connection on your account that is preventing your login.  The system was unable to disconnect it.  Please try again.");
     })
 
-    hubConnection.on("UpdateGameState", args => {
-        window["LastUpdate"] = args;
-        console.log(args);
+    hubConnection.on("UpdateGameState", (args:Array<GameObject>) => {
+        args.forEach(x => {
+            if (x.ID == Me.Character.ID) {
+                $.extend(true, Me.Character, x);
+                UI.UpdateStatBars();
+            }
+            else {
+                var index = Main.Me.Scene.GameObjects.findIndex(y => y.ID == x.ID);
+                if (index > -1) {
+                    $.extend(true, Main.Me.Scene.GameObjects[index], x);
+                }
+                else {
+                    var newObject;
+                    switch (x.Discriminator) {
+                        case "Character":
+                            newObject = new Character();
+                            break;
+                        case "PlayerCharacter":
+                            newObject = new PlayerCharacter();
+                            break;
+                        default:
+                            newObject = new GameObject();
+                            break;
+                    }
+                    $.extend(true, newObject, x);
+                    Main.Me.Scene.GameObjects.push(newObject);
+                }
+            }
+        });
+        Main.Me.Scene.GameObjects.forEach(go => {
+            if (!args.some(arg => arg.ID == go.ID)) {
+                var index = Main.Me.Scene.GameObjects.indexOf(go);
+                Main.Me.Scene.GameObjects.splice(index, 1);
+                if (go["Emitter"]) {
+                    (go as Character).Emitter.destroy();
+                }
+            }
+        })
     })
 }

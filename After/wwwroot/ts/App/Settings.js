@@ -9,6 +9,13 @@ export const Settings = new class {
             SystemMessage: "lightgray",
             DebugMessage: "rgb(150,50,50)"
         };
+        this.Keybinds = [
+            { Name: "Up", Key: "w" },
+            { Name: "Left", Key: "a" },
+            { Name: "Down", Key: "s" },
+            { Name: "Right", Key: "d" }
+        ];
+        // TODO: Send this from server prior to init.
         this.RendererResolution = {
             Width: 1280,
             Height: 720
@@ -20,7 +27,7 @@ export const Settings = new class {
     set IsDebugEnabled(value) {
         localStorage["IsDebugEnabled"] = value;
         var fpsUpdateTicker = (delta => {
-            var currentFPS = Math.round(Main.Renderer.ticker.FPS).toString();
+            var currentFPS = Math.round(Main.Renderer.PixiApp.ticker.FPS).toString();
             if (UI.FPSSpan.innerText != currentFPS &&
                 (UI.FPSSpan.getAttribute("last-set") == null || Date.now() - parseInt(UI.FPSSpan.getAttribute("last-set")) > 1000)) {
                 UI.FPSSpan.innerText = currentFPS;
@@ -28,11 +35,11 @@ export const Settings = new class {
             }
         });
         if (value) {
-            Main.Renderer.ticker.add(fpsUpdateTicker);
+            Main.Renderer.PixiApp.ticker.add(fpsUpdateTicker);
             UI.DebugFrame.style.display = "";
         }
         else {
-            Main.Renderer.ticker.remove(fpsUpdateTicker);
+            Main.Renderer.PixiApp.ticker.remove(fpsUpdateTicker);
             UI.DebugFrame.style.display = "none";
         }
         document.querySelector("#toggleDebugWindow").setAttribute("on", String(value));
