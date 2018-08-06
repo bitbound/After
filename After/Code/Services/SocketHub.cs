@@ -17,11 +17,13 @@ namespace After.Code.Services
         public SocketHub(DataService dataService,
             IHttpContextAccessor contextAccessor,
             UserManager<AfterUser> userManager,
-            SignInManager<AfterUser> signInManager)
+            SignInManager<AfterUser> signInManager,
+            GameEngine gameEngine)
         {
             DataService = dataService;
             UserManager = userManager;
             SignInManager = signInManager;
+            GameEngine = gameEngine;
         }
 
         public static List<ConnectionDetails> ConnectionList { get; set; } = new List<ConnectionDetails>();
@@ -57,6 +59,7 @@ namespace After.Code.Services
         private DataService DataService { get; set; }
         private UserManager<AfterUser> UserManager { get; }
         private SignInManager<AfterUser> SignInManager { get; }
+        private GameEngine GameEngine { get; }
 
         private string UserName
         {
@@ -100,12 +103,21 @@ namespace After.Code.Services
         }
         public override Task OnConnectedAsync()
         {
+            if (!GameEngine.IsRunning)
+            {
+                GameEngine.Start();
+            }
             return base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             ConnectionList.RemoveAll(x=>x.UserName == UserName);
+            if (ConnectionList.Count == 0)
+            {
+                GameEngine.Stop();
+                DataService.CleanupTempUsers();
+            }
             await base.OnDisconnectedAsync(exception);
         }
 
@@ -128,7 +140,14 @@ namespace After.Code.Services
                     break;
             }
         }
-
+        public void BeginCharging(dynamic data)
+        {
+            DataService.BeginCharging(CurrentCharacter.ID);
+        }
+        public void ReleaseCharging(dynamic data)
+        {
+            DataService.ReleaseCharging(CurrentCharacter.ID, (double)data.Angle);
+        }
         public void SendInitialUpdate()
         {
             Clients.Caller.SendAsync("InitialUpdate", new { CurrentCharacter, AppConstants.RendererWidth, AppConstants.RendererHeight } );

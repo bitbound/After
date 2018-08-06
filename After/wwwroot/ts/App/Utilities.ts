@@ -7,13 +7,17 @@ export const Utilities = new class {
         });
         return queryStrings;
     }
-    Animate(targetObject: any, targetProperty: string, fromValue: number, toValue: number, measurementUnit:string = null, msTransition: number = 400) {
+    Animate(targetObject: any, targetProperty: string, fromValue: number, toValue: number, measurementUnit:string = null, msTransition: number = 400, msKeyframeSpeed: number = 20) {
         if (parseInt(targetObject[targetProperty]) == NaN) {
             console.log("Property is not a number.");
             return;
         }
+        if (!fromValue) {
+            fromValue = targetObject[targetProperty];
+        }
+        
         var totalChange = toValue - fromValue;
-        for (var i = 0; i <= msTransition; i = i + 20) {
+        for (var i = 0; i <= msTransition; i = i + msKeyframeSpeed) {
             window.setTimeout(function (currentTime) {
                 var newValue = fromValue + (currentTime / msTransition * totalChange);
                 if (measurementUnit) {
@@ -24,7 +28,7 @@ export const Utilities = new class {
                 }
                
                
-                if (currentTime + 20 >= msTransition) {
+                if (currentTime + msKeyframeSpeed >= msTransition) {
                     if (measurementUnit) {
                         targetObject[targetProperty] = toValue + measurementUnit;
                     }
@@ -288,4 +292,10 @@ export const Utilities = new class {
             array.splice(index, 1);
         }
     };
+    GetCenterPoint(ev: MouseEvent | PointerEvent) : PIXI.Point {
+        var clientRect = (ev.currentTarget as HTMLElement).getBoundingClientRect();
+        var centerX = clientRect.left + (clientRect.width / 2);
+        var centerY = clientRect.top + (clientRect.height / 2);
+        return new PIXI.Point(centerX, centerY);
+    }
 }

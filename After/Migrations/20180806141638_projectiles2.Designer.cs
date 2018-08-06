@@ -4,14 +4,16 @@ using After.Code;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180806141638_projectiles2")]
+    partial class projectiles2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,13 +94,13 @@ namespace After.Migrations
 
                     b.Property<double>("Amount");
 
-                    b.Property<Guid?>("CharacterID");
+                    b.Property<Guid?>("PlayerCharacterID");
 
                     b.Property<int>("Target");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CharacterID");
+                    b.HasIndex("PlayerCharacterID");
 
                     b.ToTable("StatusEffects");
                 });
@@ -273,9 +275,11 @@ namespace After.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("After.Code.Models.Character", b =>
+            modelBuilder.Entity("After.Code.Models.PlayerCharacter", b =>
                 {
                     b.HasBaseType("After.Code.Models.GameObject");
+
+                    b.Property<string>("AfterUserId");
 
                     b.Property<string>("Color");
 
@@ -295,9 +299,15 @@ namespace After.Migrations
 
                     b.Property<string>("PortraitUri");
 
-                    b.ToTable("Character");
+                    b.HasIndex("AfterUserId");
 
-                    b.HasDiscriminator().HasValue("Character");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
+                    b.ToTable("PlayerCharacter");
+
+                    b.HasDiscriminator().HasValue("PlayerCharacter");
                 });
 
             modelBuilder.Entity("After.Code.Models.Projectile", b =>
@@ -328,28 +338,11 @@ namespace After.Migrations
                     b.HasDiscriminator().HasValue("AfterUser");
                 });
 
-            modelBuilder.Entity("After.Code.Models.PlayerCharacter", b =>
-                {
-                    b.HasBaseType("After.Code.Models.Character");
-
-                    b.Property<string>("AfterUserId");
-
-                    b.HasIndex("AfterUserId");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
-
-                    b.ToTable("PlayerCharacter");
-
-                    b.HasDiscriminator().HasValue("PlayerCharacter");
-                });
-
             modelBuilder.Entity("After.Code.Models.StatusEffect", b =>
                 {
-                    b.HasOne("After.Code.Models.Character")
+                    b.HasOne("After.Code.Models.PlayerCharacter")
                         .WithMany("StatusEffects")
-                        .HasForeignKey("CharacterID");
+                        .HasForeignKey("PlayerCharacterID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

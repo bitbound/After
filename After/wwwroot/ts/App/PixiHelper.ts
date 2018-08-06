@@ -2,23 +2,29 @@
 import { Settings } from "./Settings.js";
 
 export const PixiHelper = new class {
-    BackgroundEmitter: any;
+    
     GetDistanceBetween(point1: PIXI.Point, point2: PIXI.Point) {
         return Math.sqrt(
             Math.pow(point1.x - point2.x, 2) +
             Math.pow(point1.y - point2.y, 2)
         );
     }
-    GetAngle(centerPoint: PIXI.Point, targetPoint: PIXI.Point) {
+    GetAngleInDegrees(centerPoint: PIXI.Point, targetPoint: PIXI.Point) {
         var dx = centerPoint.x - targetPoint.x;
         var dy = centerPoint.y - targetPoint.y;
         return Math.atan2(dy, dx) * 180 / Math.PI;
     }
+    GetAngleInRadians(centerPoint: PIXI.Point, targetPoint: PIXI.Point) {
+        var dx = centerPoint.x - targetPoint.x;
+        var dy = centerPoint.y - targetPoint.y;
+        return Math.atan2(dy, dx);
+    }
     LoadBackgroundEmitter(): any {
-        var backgroundContainer = new PIXI.particles.ParticleContainer();
-        backgroundContainer.name = "Background Emitter";
-        Main.Renderer.PixiApp.stage.addChild(backgroundContainer);
-        this.BackgroundEmitter = new PIXI.particles.Emitter(backgroundContainer, ["/Assets/Images/particle.png"], backgroundEmitterConfig);
+        var container = new PIXI.particles.ParticleContainer;
+        Main.Renderer.BackgroundParticleContainer = container;
+        container.name = "Background Emitter";
+        Main.Renderer.PixiApp.stage.addChild(container);
+        Main.Renderer.BackgroundEmitter = new PIXI.particles.Emitter(container, ["/Assets/Images/particle.png"], backgroundEmitterConfig);
     }
 }
 
@@ -28,6 +34,10 @@ var backgroundEmitterConfig = {
             {
                 "value": 0,
                 "time": 0
+            },
+            {
+                "value": 0.25,
+                "time": 0.1
             },
             {
                 "value": 0.25,

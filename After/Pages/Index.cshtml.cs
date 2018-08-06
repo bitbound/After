@@ -24,9 +24,10 @@ namespace After.Pages
         }
 
         [Authorize]
-        public void OnPost(string characterName)
+        public IActionResult OnPost(string characterName)
         {
             DataService.DeleteCharacter(characterName);
+            return LocalRedirect("/");
         }
     }
 }

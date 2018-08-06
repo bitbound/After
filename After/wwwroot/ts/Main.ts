@@ -25,6 +25,25 @@ var main = new class {
     StartGameLoop() {
         Main.Renderer.PixiApp.ticker.add(delta => gameLoop(delta));
     }
+    Init(currentCharacter:Character, rendererWidth:number, rendererHeight:number) {
+        UI.AddSystemMessage("Welcome to After.");
+        UI.ApplyDataBinds();
+        this.Renderer.CreatePixiApp(rendererWidth, rendererHeight);
+        Input.ApplyInputHandlers();
+        if (location.href.indexOf("localhost") > -1) {
+            Settings.IsDebugEnabled = true;
+        }
+        else {
+            Settings.IsDebugEnabled = Settings.IsDebugEnabled;
+        }
+
+        Settings.AreTouchControlsEnabled = Settings.AreTouchControlsEnabled;
+        PixiHelper.LoadBackgroundEmitter();
+        $.extend(true, this.Me.Character, currentCharacter);
+        UI.UpdateStatBars();
+        this.Me.Character.CreateEmitter();
+        this.StartGameLoop();
+    }
 }
 
 window.onerror = (ev: Event, source, fileNo, columnNo, error: Error) => {
@@ -35,45 +54,93 @@ window.onerror = (ev: Event, source, fileNo, columnNo, error: Error) => {
 window["After"] = main;
 export const Main = main;
 
-// Register service worker.
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/ts/Worker.js', {scope: "/ts/"})
-        .then(function (reg) {
-            console.log("Service worker registered.");
-        }).catch(function (err) {
-            console.log("Error registering service worker:", err)
-        });
-}
-
-// Catch add to home prompt.
-window.addEventListener("beforeinstallprompt", (ev:any) => {
-    ev.preventDefault();
-    (document.querySelector("#addToHomeButton") as HTMLSpanElement).onclick = () => ev.prompt();
-});
 
 
-// Init.
+// Initial connect.
 if (location.pathname.search("play") > -1) {
     window.onload = (e) => {
-        //Sound.PlayBackground();
+        // Register service worker.
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/ts/Worker.js', { scope: "/ts/" })
+                .then(function (reg) {
+                    console.log("Service worker registered.");
+                }).catch(function (err) {
+                    console.log("Error registering service worker:", err)
+                });
+        }
+
+        // Catch add to home prompt.
+        window.addEventListener("beforeinstallprompt", (ev: any) => {
+            ev.preventDefault();
+            (document.querySelector("#addToHomeButton") as HTMLSpanElement).onclick = () => ev.prompt();
+        });
+
+        window.addEventListener("beforeunload", ev => {
+            if (location.href.indexOf("localhost") == -1) {
+                ev.returnValue = "Are you sure you want to exit?";
+            }
+        })
         Sockets.Connect();
     };
 }
 
 function gameLoop(delta) {
+    Main.Me.Character.ParticleContainer.children.forEach(part => {
+        part.x -= Main.Me.Character.VelocityX * .5;
+        part.y -= Main.Me.Character.VelocityY * .5;
+    });
+    Main.Renderer.BackgroundParticleContainer.children.forEach(part => {
+        part.x -= Main.Me.Character.VelocityX * .25;
+        part.y -= Main.Me.Character.VelocityY * .25;
+    });
     Main.Me.Scene.GameObjects.forEach(x => {
-        if (x.Discriminator == "Character" || x.Discriminator == "PlayerCharacter") {
-            if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
-                (x as Character).CreateEmitter();
-            }
-            else {
-                (x as Character).ParticleContainer.x = (x.XCoord - Main.Me.Character.XCoord) - (x as Character).Emitter.spawnPos.x + (Main.Renderer.PixiApp.screen.width / 2);
-                (x as Character).ParticleContainer.y = (x.YCoord - Main.Me.Character.YCoord) - (x as Character).Emitter.spawnPos.y + (Main.Renderer.PixiApp.screen.height / 2);
-                (x as Character).ParticleContainer.children.forEach(part => {
-                    part.x -= x.VelocityX * .5;
-                    part.y -= x.VelocityY * .5;
-                })
-            }
+        switch (x.Discriminator) {
+            case "Character":
+            case "PlayerCharacter":
+                if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
+                    (x as Character).CreateEmitter();
+                }
+                else {
+                    var targetX = (x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
+                    var targetY = (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
+                    var fromX = (x as Character).ParticleContainer.x;
+                    var fromY = (x as Character).ParticleContainer.y;
+                    if (targetX != fromX) {
+                        Utilities.Animate((x as Character).ParticleContainer, "x", null, targetX, null, 20, 1);
+                    }
+                    if (targetY != fromY) {
+                        Utilities.Animate((x as Character).ParticleContainer, "y", null, targetY, null, 20, 1);
+                    }
+                    (x as Character).ParticleContainer.children.forEach(part => {
+                        part.x -= x.VelocityX * .5;
+                        part.y -= x.VelocityY * .5;
+                    })
+                }
+                break;
+            case "Projectile":
+                if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
+                    var projectile = new PIXI.Graphics();
+                    // TODO:
+                }
+                else {
+                    var targetX = (x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
+                    var targetY = (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
+                    var fromX = (x as Character).ParticleContainer.x;
+                    var fromY = (x as Character).ParticleContainer.y;
+                    if (targetX != fromX) {
+                        Utilities.Animate((x as Character).ParticleContainer, "x", null, targetX, null, 20, 1);
+                    }
+                    if (targetY != fromY) {
+                        Utilities.Animate((x as Character).ParticleContainer, "y", null, targetY, null, 20, 1);
+                    }
+                    (x as Character).ParticleContainer.children.forEach(part => {
+                        part.x -= x.VelocityX * .5;
+                        part.y -= x.VelocityY * .5;
+                    })
+                }
+                break;
+            default:
+                break;
         }
     });
     Main.Renderer.SceneContainer.children.forEach( value => {

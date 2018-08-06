@@ -80,7 +80,7 @@ namespace After.Code.Services
             DBContext.SaveChanges();
         }
 
-        public void StartupCleanup()
+        public void CleanupTempUsers()
         {
             DBContext.Users
                 .Where(x => x.IsTemporary && x.LastLogin < DateTime.Now.AddDays(-14))
@@ -101,6 +101,36 @@ namespace After.Code.Services
             character.MovementAngle = angle;
             character.MovementForce = force;
             DBContext.SaveChanges();
+        }
+
+        internal void BeginCharging(Guid characterID)
+        {
+            var character = DBContext.PlayerCharacters.Find(characterID);
+            if (character != null)
+            {
+                character.IsCharging = true;
+            }
+            DBContext.SaveChanges();
+        }
+
+        internal void ReleaseCharging(Guid characterID, double Angle)
+        {
+            var character = DBContext.PlayerCharacters.Find(characterID);
+            if (character != null)
+            {
+                character.IsCharging = false;
+                character.CurrentCharge = 0;
+                var projectile = new Projectile()
+                {
+                    XCoord = character.XCoord,
+                    YCoord = character.YCoord,
+                    ZCoord = character.ZCoord,
+                    Owner = characterID
+                };
+                projectile.MovementAngle = Angle;
+                DBContext.GameObjects.Add(projectile);
+                DBContext.SaveChanges();
+            }
         }
     }
 }

@@ -8,13 +8,16 @@ export const Utilities = new class {
         });
         return queryStrings;
     }
-    Animate(targetObject, targetProperty, fromValue, toValue, measurementUnit = null, msTransition = 400) {
+    Animate(targetObject, targetProperty, fromValue, toValue, measurementUnit = null, msTransition = 400, msKeyframeSpeed = 20) {
         if (parseInt(targetObject[targetProperty]) == NaN) {
             console.log("Property is not a number.");
             return;
         }
+        if (!fromValue) {
+            fromValue = targetObject[targetProperty];
+        }
         var totalChange = toValue - fromValue;
-        for (var i = 0; i <= msTransition; i = i + 20) {
+        for (var i = 0; i <= msTransition; i = i + msKeyframeSpeed) {
             window.setTimeout(function (currentTime) {
                 var newValue = fromValue + (currentTime / msTransition * totalChange);
                 if (measurementUnit) {
@@ -23,7 +26,7 @@ export const Utilities = new class {
                 else {
                     targetObject[targetProperty] = newValue;
                 }
-                if (currentTime + 20 >= msTransition) {
+                if (currentTime + msKeyframeSpeed >= msTransition) {
                     if (measurementUnit) {
                         targetObject[targetProperty] = toValue + measurementUnit;
                     }
@@ -292,5 +295,11 @@ export const Utilities = new class {
         }
     }
     ;
+    GetCenterPoint(ev) {
+        var clientRect = ev.currentTarget.getBoundingClientRect();
+        var centerX = clientRect.left + (clientRect.width / 2);
+        var centerY = clientRect.top + (clientRect.height / 2);
+        return new PIXI.Point(centerX, centerY);
+    }
 };
 //# sourceMappingURL=Utilities.js.map

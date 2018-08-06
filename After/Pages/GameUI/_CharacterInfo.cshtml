@@ -1,10 +1,10 @@
 ﻿<div id="characterInfo">
    
-    <div class="info-title">Location</div>
+    <div class="info-title">Location <span class="small">(x100)</span></div>
     <div class="location-frame">
-        X: <span data-bind="After.Me.Character.XCoord"></span> |
-        Y: <span data-bind="After.Me.Character.YCoord"></span> |
-        Z: <span data-bind="After.Me.Character.ZCoord"></span>
+        X: <span data-bind="After.Me.Character.XCoord" data-render="(value)=>{return Math.round(value / 100);}"></span> |
+        Y: <span data-bind="After.Me.Character.YCoord" data-render="(value)=>{return Math.round(value / 100);}"></span> |
+        Z: <span data-bind="After.Me.Character.ZCoord" data-render="(value)=>{return Math.round(value / 100);}"></span>
     </div>
     <div class="info-title">Energy</div>
     <div class="progress">

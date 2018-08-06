@@ -1,4 +1,5 @@
-﻿using After.Code.Models;
+﻿using After.Code.Interfaces;
+using After.Code.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,18 +15,26 @@ namespace After.Code.Services
 {
     public class GameEngine
     {
-        public static GameEngine Current { get; private set; }
         public GameEngine(ILogger<GameEngine> logger, IConfiguration configuration, EmailSender emailSender)
         {
-            Current = this;
             Logger = logger;
             Configuration = configuration;
             EmailSender = emailSender;
         }
-        public void Init()
+        public void Start()
         {
+            if (IsRunning)
+            {
+                return;
+            }
+            IsRunning = true;
             MainLoop = Task.Run(new Action(RunMainLoop));
         }
+        public void Stop()
+        {
+            IsRunning = false;
+        }
+        public bool IsRunning { get; private set; }
         private EmailSender EmailSender { get; set; }
         private IConfiguration Configuration { get; }
         private ApplicationDbContext DBContext { get; set; }
@@ -33,14 +42,14 @@ namespace After.Code.Services
         private Task MainLoop { get; set; }
         private void RunMainLoop()
         {
-            while (true)
+            while (IsRunning)
             {
                 try
                 {
                     DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
 
-
                     var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
+                    
                     while (delta < 1)
                     {
                         System.Threading.Thread.Sleep(1);
@@ -70,11 +79,15 @@ namespace After.Code.Services
 
                     visibleObjects.ForEach(x =>
                     {
+                        if (x is IExpirable && (x as IExpirable).Expiration < DateTime.Now)
+                        {
+                            DBContext.GameObjects.Remove(x);
+                            return;
+                        }
                         ApplyStatusEffects(x, delta);
                         ApplyInputUpdates(x, delta);
                         UpdatePositionsFromVelociy(x, delta);
-                        
-
+                        // TODO: Check collisions.
                     });
                     visibleObjects.ForEach(x =>
                     {
@@ -89,6 +102,9 @@ namespace After.Code.Services
                         x.Modified = false;
                     });
                     DBContext.SaveChanges();
+
+                    DBContext.Database.CloseConnection();
+                    DBContext.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -172,8 +188,9 @@ namespace After.Code.Services
         {
             if (gameObject.MovementForce > 0)
             {
-                var maxVelocityX = gameObject.MaxVelocity * (xAcceleration / (xAcceleration + yAcceleration));
-                var maxVelocityY = gameObject.MaxVelocity * (yAcceleration / (xAcceleration + yAcceleration));
+                var totalAcceleration = (Math.Abs(xAcceleration) + Math.Abs(yAcceleration));
+                var maxVelocityX = gameObject.MaxVelocity * (Math.Abs(xAcceleration) / totalAcceleration);
+                var maxVelocityY = gameObject.MaxVelocity * (Math.Abs(yAcceleration) / totalAcceleration);
                 gameObject.VelocityX += xAcceleration;
                 gameObject.VelocityY += yAcceleration;
                 gameObject.VelocityX = Math.Max(-maxVelocityX, Math.Min(maxVelocityX, gameObject.VelocityX));

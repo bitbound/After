@@ -107,18 +107,19 @@ export const UI = new class {
             var lastDot = qualifiedObject.lastIndexOf(".");
             var dataObject = eval(qualifiedObject.substring(0, lastDot));
             var propertyName = qualifiedObject.substring(lastDot + 1);
+            var dataRender = elem.getAttribute("data-render");
             if (elem.classList.contains("toggle-switch-outer")) {
-                dataBindOneWay(dataObject, propertyName, elem, "on", null, null);
+                dataBindOneWay(dataObject, propertyName, elem, "on", null, null, eval(dataRender));
                 elem.addEventListener("click", ev => {
                     ev.currentTarget.setAttribute("on", String(ev.currentTarget.getAttribute("on") == "true"));
                     eval(ev.currentTarget.getAttribute("data-bind") + " = " + ev.currentTarget.getAttribute("on"));
                 });
             }
             else if (elem.hasAttribute("value")) {
-                dataBindTwoWay(dataObject, propertyName, elem, "value", null, null, ["onchange"]);
+                dataBindTwoWay(dataObject, propertyName, elem, "value", null, null, ["onchange"], eval(dataRender));
             }
             else {
-                dataBindOneWay(dataObject, propertyName, elem, "innerHTML", null, null);
+                dataBindOneWay(dataObject, propertyName, elem, "innerHTML", null, null, eval(dataRender));
             }
         });
     }
@@ -171,7 +172,7 @@ export const UI = new class {
         this.WillpowerProgress.style.width = String(Me.Character.CurrentWillpower / Me.Character.MaxWillpower * 100) + "%";
     }
 };
-function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback = null, preGetterCallback = null) {
+function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback = null, preGetterCallback = null, dataRenderCallback = null) {
     var backingValue = dataObject[objectProperty];
     Object.defineProperty(dataObject, objectProperty, {
         configurable: true,
@@ -185,10 +186,20 @@ function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey,
         set(value) {
             backingValue = value;
             if (elementPropertyKey in element) {
-                element[elementPropertyKey] = value;
+                if (dataRenderCallback) {
+                    element[elementPropertyKey] = dataRenderCallback(value);
+                }
+                else {
+                    element[elementPropertyKey] = value;
+                }
             }
             else {
-                element.setAttribute(elementPropertyKey, value);
+                if (dataRenderCallback) {
+                    element.setAttribute(elementPropertyKey, String(dataRenderCallback(value)));
+                }
+                else {
+                    element.setAttribute(elementPropertyKey, value);
+                }
             }
             if (postSetterCallback) {
                 postSetterCallback(value);
@@ -198,7 +209,7 @@ function dataBindOneWay(dataObject, objectProperty, element, elementPropertyKey,
     dataObject[objectProperty] = backingValue;
 }
 ;
-function dataBindTwoWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback = null, preGetterCallback = null, elementEventTriggers) {
+function dataBindTwoWay(dataObject, objectProperty, element, elementPropertyKey, postSetterCallback = null, preGetterCallback = null, elementEventTriggers, dataRenderCallback = null) {
     var backingValue = dataObject[objectProperty];
     Object.defineProperty(dataObject, objectProperty, {
         configurable: true,
@@ -212,10 +223,20 @@ function dataBindTwoWay(dataObject, objectProperty, element, elementPropertyKey,
         set(value) {
             backingValue = value;
             if (elementPropertyKey in element) {
-                element[elementPropertyKey] = value;
+                if (dataRenderCallback) {
+                    element[elementPropertyKey] = dataRenderCallback(value);
+                }
+                else {
+                    element[elementPropertyKey] = value;
+                }
             }
             else {
-                element.setAttribute(elementPropertyKey, value);
+                if (dataRenderCallback) {
+                    element.setAttribute(elementPropertyKey, String(dataRenderCallback(value)));
+                }
+                else {
+                    element.setAttribute(elementPropertyKey, value);
+                }
             }
             if (postSetterCallback) {
                 postSetterCallback(value);

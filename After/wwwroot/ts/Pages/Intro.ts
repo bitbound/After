@@ -39,7 +39,7 @@ var introSoulEmitterConfig = {
                 "time": 0
             },
             {
-                "value": window["soulColor"],
+                "value": sessionStorage["NewSoulColor"],
                 "time": 1
             }
         ],

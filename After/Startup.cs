@@ -81,9 +81,6 @@ namespace After
                 routes.MapHub<SocketHub>("/SocketEndpoint");
             });
             app.UseMvc();
-
-            dataService.StartupCleanup();
-            gameEngine.Init();
         }
     }
 }

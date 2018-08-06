@@ -8,6 +8,7 @@ import { Me } from "./Me.js";
 import { Settings } from "./Settings.js";
 import { PixiHelper } from "./PixiHelper.js";
 import { Character } from "../Models/Character.js";
+import { Projectile } from "../Models/Projectile.js";
 
 
 export const Sockets = new class {
@@ -49,23 +50,8 @@ export const Sockets = new class {
 
 function applyMessageHandlers(hubConnection: any) {
     hubConnection.on("InitialUpdate", (args) => {
-        UI.AddSystemMessage("Welcome to After.");
-        UI.ApplyDataBinds();
-        Input.ApplyInputHandlers();
-        Main.Renderer.CreatePixiApp(args.RendererWidth, args.RendererHeight);
-        if (location.href.indexOf("localhost") > -1) {
-            Settings.IsDebugEnabled = true;
-        }
-        else {
-            Settings.IsDebugEnabled = Settings.IsDebugEnabled;
-        }
-
-        Settings.AreTouchControlsEnabled = Settings.AreTouchControlsEnabled;
-        PixiHelper.LoadBackgroundEmitter();
-        $.extend(true, Main.Me.Character, args.CurrentCharacter);
-        UI.UpdateStatBars();
-        Main.Me.Character.CreateEmitter();
-        Main.StartGameLoop();
+        Main.Init(args.CurrentCharacter, args.RendererWidth, args.RendererHeight);
+      
     });
 
     hubConnection.on("ReceiveChat", data => {
@@ -104,6 +90,9 @@ function applyMessageHandlers(hubConnection: any) {
                             break;
                         case "PlayerCharacter":
                             newObject = new PlayerCharacter();
+                            break;
+                        case "Projectile":
+                            newObject = new Projectile();
                             break;
                         default:
                             newObject = new GameObject();

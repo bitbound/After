@@ -40,11 +40,14 @@ namespace After.Code
 
         public DbSet<PlayerCharacter> PlayerCharacters { get; set; }
 
+        public DbSet<Character> Characters { get; set; }
+
         public DbSet<GameObject> GameObjects { get; set; }
 
         public DbSet<Error> Errors { get; set; }
 
         public DbSet<StatusEffect> StatusEffects { get; set; }
+        public DbSet<Projectile> Projectiles { get; set; }
 
     }
 }

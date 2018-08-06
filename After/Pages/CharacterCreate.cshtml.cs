@@ -39,7 +39,6 @@ namespace After.Pages
                     };
                     
                     DataService.AddNewCharacter(User.Identity.Name, newCharacter);
-                    TempData.Add("Color", input.Color);
                     Response.Redirect("/Intro");
                 }
             }

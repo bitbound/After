@@ -125,6 +125,7 @@ function colorSliderChanged() {
             ])
     );
     soulColorInput.value = hexString;
+    sessionStorage["NewSoulColor"] = hexString;
     changeEmitterColor([Number(redInput.value), Number(greenInput.value), Number(blueInput.value)]);
 }
 
@@ -138,6 +139,7 @@ function presetColorSelected() {
     var hexColor = Utilities.ColorNameToHex(selectColor.value);
     var rgbColor = Utilities.HexToRGB(hexColor);
     soulColorInput.value = hexColor;
+    sessionStorage["NewSoulColor"] = hexColor;
     redInput.value = rgbColor.replace("rgb(", "").split(",")[0];
     greenInput.value = rgbColor.split(",")[1];
     blueInput.value = rgbColor.replace(")", "").split(",")[2];
