@@ -47,7 +47,7 @@ namespace After.Code
         public DbSet<Error> Errors { get; set; }
 
         public DbSet<StatusEffect> StatusEffects { get; set; }
-        public DbSet<Projectile> Projectiles { get; set; }
+        
 
     }
 }

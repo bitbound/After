@@ -11,10 +11,13 @@ namespace After.Code.Services
     public class DataService
     {
         private ApplicationDbContext DBContext { get; set; }
-        public DataService(ApplicationDbContext dbContext)
+        private GameEngine GameEngine { get; set; }
+        public DataService(ApplicationDbContext dbContext, GameEngine gameEngine)
         {
             DBContext = dbContext;
+            GameEngine = gameEngine;
         }
+
         public bool IsCharacterNameTaken(string name)
         {
             return DBContext.Users.Include(x => x.Characters).Any(x => x.Characters.Any(y => y.Name == name));
@@ -128,8 +131,10 @@ namespace After.Code.Services
                     Owner = characterID
                 };
                 projectile.MovementAngle = Angle;
-                DBContext.GameObjects.Add(projectile);
-                DBContext.SaveChanges();
+                lock (GameEngine.MemoryOnlyObjects)
+                {
+                    GameEngine.MemoryOnlyObjects.Add(projectile);
+                }
             }
         }
     }
