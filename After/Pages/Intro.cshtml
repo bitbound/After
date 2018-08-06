@@ -1,0 +1,59 @@
+﻿@page
+@model After.Pages.IntroModel
+@{
+    ViewData["Title"] = "The Transition";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <canvas id="introCanvas"></canvas>
+    </div>
+</div>
+<div class="row">
+    <div id="introTextWrapper" class="col-sm-6 col-sm-offset-3">
+        <div>
+            They say your life flashes before your eyes when you die.
+        </div>
+        <br />
+        <div>
+            You see your loved ones.  You revisit your most cherished memories.
+        </div>
+        <br />
+        <div>
+            All the happiness from your mortal life, everything that filled your heart with joy and warmth, is there to ease you into what comes after.
+        </div>
+        <br />
+        <div>
+            You feel an unwavering and comforting peace, and you know that all will be well.
+        </div>
+        <br />
+        <div>
+            At least, that's what they say.
+        </div>
+        <br />
+        <div>
+            Your passing was somewhat different.
+        </div>
+        <br />
+        <div>
+            In your afterlife, there was only the continuing struggle to survive.
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3 text-right margin-top-md">
+        <a asp-page="Index" class="btn btn-primary">Continue</a>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="module" src="~/ts/Pages/Intro.js">
+    </script>
+}
+
+<style>
+    #introTextWrapper div {
+        opacity: 0;
+    }
+</style>

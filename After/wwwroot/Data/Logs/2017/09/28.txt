@@ -1,5 +1,0 @@
-DIAGNOSTICS - 9/28/2017 12:20:16 PM - Boot time took 0.2615245 seconds.
-DIAGNOSTICS - 9/28/2017 12:20:26 PM - Boot time took 0.1686098 seconds.
-DIAGNOSTICS - 9/28/2017 12:33:13 PM - Boot time took 0.1791509 seconds.
-DIAGNOSTICS - 9/28/2017 12:34:48 PM - Boot time took 0.1769571 seconds.
-DIAGNOSTICS - 9/28/2017 12:36:16 PM - Boot time took 0.2012329 seconds.

@@ -1,0 +1,80 @@
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification 
+for details on configuring this project to bundle and minify static web assets. */
+body {
+    padding-top: 70px;
+    padding-bottom: 20px;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+#qrCode img {
+    border: 3px solid white;
+}
+
+
+nav {
+    background-color: rgb(50,50,50) !important;
+}
+
+/*.list-group-item {
+    color: #375a7f !important;
+}*/
+
+.login-button {
+    width: 130px;
+}
+.margin-top-sm {
+    margin-top: 10px !important;
+}
+
+.margin-top-md {
+    margin-top: 20px !important;
+}
+
+.margin-top-lg {
+    margin-top: 40px !important;
+}
+
+.sliver-separator {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 100%
+}
+
+select {
+    background-color: #323232 !important;
+    color: white !important;
+}
+input[type=range] {
+    background-color: #323232 !important;
+}
+
+canvas {
+    width: 100%;
+    -ms-touch-action: pan-y !important;
+    touch-action: pan-y !important;
+}
+
+.max-height-300 {
+    max-height: 300px;
+}
+
+.vscroll {
+    overflow-y: auto;
+}

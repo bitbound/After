@@ -1,0 +1,53 @@
+﻿@inject DataService  DataService
+@{
+    var playerCharacters = DataService.GetPlayerCharacters(User.Identity.Name);
+}
+<div class="row">
+    <div class="col-sm-5">
+        <div class="h3">Characters</div>
+        <div class="margin-top-md list-group max-height-300 vscroll">
+            @if (playerCharacters?.Count() > 0)
+            {
+                <form id="deleteCharacterForm" method="post">
+                    <input id="characterNameInput" name="CharacterName" type="hidden" />
+                </form>
+                @Html.AntiForgeryToken()
+                foreach (var character in playerCharacters)
+                {
+                    <a href="#" class="list-group-item character-selector" character-name="@character.Name" character-color="@character.Color">
+                        @character.Name
+                        <span class="badge">Core Energy: @character.CoreEnergy</span>
+                    </a>
+                }
+            }
+            else
+            {
+                <a href="#" class="list-group-item">
+                    No characters created.
+                </a>
+            }
+        </div>
+
+        <div class="margin-top-md">
+            <a asp-page="CharacterCreate" class="btn btn-primary">Create New</a>
+        </div>
+    </div>
+
+
+    <div id="divCharacterPreview" class="col-sm-5 col-sm-offset-1" hidden>
+        <div>
+            <canvas id="previewCharacterCanvas"></canvas>
+        </div>
+        <div>
+            <div class="col-xs-6 text-center">
+                <button id="enterButton" class="btn btn-primary">Enter</button>
+            </div>
+            <div class="col-xs-6 text-center">
+                <button  id="deleteCharacterButton" class="btn btn-danger btn-sm">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="module" src="~/ts/Pages/CharacterSelect.js"></script>

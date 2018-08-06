@@ -1,0 +1,47 @@
+﻿@page
+@model After.Pages.PlayModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>After</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=0.8, maximum-scale=0.8, minimum-scale=0.8">
+    <link href="~/manifest.json" rel="manifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/Themes/darkly.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/play.css" />
+
+</head>
+<body>
+    @if (Model.CharacterNotFound)
+    {
+        <partial name="_CharacterNotFound" />
+    }
+    else
+    {
+        <canvas id="playCanvas"></canvas>
+        <partial name="GameUI/_DebugFrame" />
+        <partial name="GameUI/_CharacterInfo" />
+        <partial name="GameUI/_Menu" />
+        <partial name="GameUI/_MoveJoystick" />
+        <partial name="GameUI/_Chat" />
+        <partial name="GameUI/_ActionArea" />
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/signalr/signalr.min.js"></script>
+        <script src="/lib/pixi.js/pixi.js"></script>
+        <script src="/lib/pixi-particles/dist/pixi-particles.js"></script>
+        <script type="module" src="~/ts/Main.js">
+        </script>
+    }
+</body>
+</html>

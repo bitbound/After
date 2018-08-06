@@ -1,0 +1,44 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-sm-4">
+        <h3>Cookies and Tracking</h3>
+        <div>
+            Put simply, I don't use any cookies for tracking or gathering personal data.
+            This website is built using only standard ASP.NET Core libraries from Microsoft, except
+            for a few extra packages for graphics rendering and styling (such as Pixi.js).  The only
+            cookies used are part of Microsoft's Identity framework and are necessary for providing
+            secure login functionality.
+            <br /><br />
+            My web server logs access information, including IP addresses, of people who access the site.
+            This logging behavior is a normal and default part of Microsoft IIS web servers, and the
+            information they contain is only used for debugging purposes when needed.  The only "personal"
+            data in them is the IP address.  No personally identifiable information is gathered.  Logging
+            IP addresses is also necessary for preventing Denial of Service attacks.
+            <br /><br />
+            The only information saved on a user's browser is their acceptance of this policy and, if
+            they check "Remember Me" when logging in, the authentication token necessary for logging
+            you in automatically on the next visit to the site.
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <h3>Data Handling and Privacy Protection</h3>
+        <div>
+            This site uses Microsoft's Identity system for handling authentication.  User accounts
+            and passwords are handled by Microsoft's code libraries that are built into
+            ASP.NET Core.
+            <br /><br />
+            Identity does not save passwords on the server.  Instead, it salts and hashes them, then
+            saves the hash.  These hashes can be used to make sure the correct password is entered
+            each time the user logs in.  However, they can never be reversed back to the original
+            password.  So even if the database were compromised, the passwords would still be safe.
+            <br /><br />
+            You can learn more about Identity on <a href="https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-2.1">Microsoft Docs.</a>
+        </div>
+    </div>
+</div>

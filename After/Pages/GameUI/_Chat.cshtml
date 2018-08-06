@@ -1,0 +1,91 @@
+﻿<div id="chatFrame" class="well well-sm chat-blur">
+    <div id="chatResizeBar" class="text-center">
+        <span class="glyphicon glyphicon-resize-vertical"></span>
+    </div>
+    <div id="chatMessages"></div>
+    <div id="chatInputDiv">
+        <select id="selectChatChannel">
+            <option value="Global">Global</option>
+        </select>
+        <input id="chatInput" />
+
+    </div>
+</div>
+
+<style>
+    #chatFrame {
+        position: fixed;
+        display: grid;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 5px;
+        margin-bottom: 0;
+        width: 50vw;
+        min-width: 200px;
+        overflow: hidden;
+        grid-template-rows: min-content auto min-content;
+    }
+
+    #chatResizeBar {
+        grid-row: 1;
+        grid-row-gap: 0;
+        cursor: pointer;
+        -ms-touch-action: none;
+        touch-action: none;
+    }
+
+    #chatFrame {
+        height: 150px;
+    }
+
+    #chatFrame #chatMessages {
+        grid-row: 2;
+        overflow: auto;
+    }
+
+    #chatFrame.chat-focus {
+        background-color: rgba(50,50,50,0.5);
+        opacity: 1;
+        transition-property: opacity, background-color;
+        transition-duration: 200ms;
+        transition-timing-function: linear;
+    }
+
+    #chatFrame.chat-blur {
+        background-color: rgba(50,50,50,0.2);
+        opacity: .75;
+        transition-property: opacity, background-color;
+        transition-duration: 200ms;
+        transition-timing-function: linear;
+    }
+
+
+    #chatInputDiv {
+        grid-row: 3;
+        margin-top: 5px;
+        display: grid;
+        grid-template-columns: min-content auto;
+        grid-column-gap: 1em;
+    }
+
+    #chatFrame.chat-blur #chatInputDiv {
+        opacity: .25;
+        transition: opacity linear 500ms;
+    }
+
+    #chatFrame.chat-focus #chatInputDiv {
+        opacity: 1;
+        transition: opacity linear 500ms;
+    }
+
+
+    #selectChatChannel {
+        grid-column: 1;
+        font-size: .8em;
+    }
+
+    #chatInput {
+        grid-column: 2;
+        width: 100%;
+    }
+</style>

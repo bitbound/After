@@ -1,102 +1,77 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>aspnet-After-0FBBC1D9-0EC1-44FA-B03F-EBDCEED7B124</UserSecretsId>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Properties\PublishProfiles\Default Settings.pubxml" />
+    <Content Remove="wwwroot\ts\App\Input.ts" />
+    <Content Remove="wwwroot\ts\App\Me.ts" />
+    <Content Remove="wwwroot\ts\App\PixiHelper.ts" />
+    <Content Remove="wwwroot\ts\App\Renderer.ts" />
+    <Content Remove="wwwroot\ts\App\Settings.ts" />
+    <Content Remove="wwwroot\ts\App\Sockets.ts" />
+    <Content Remove="wwwroot\ts\App\UI.ts" />
+    <Content Remove="wwwroot\ts\CharacterSelect.ts" />
+    <Content Remove="wwwroot\ts\Enums\StatusEffectTarget.ts" />
+    <Content Remove="wwwroot\ts\Main.ts" />
+    <Content Remove="wwwroot\ts\Models\Character.ts" />
+    <Content Remove="wwwroot\ts\Models\GameObject.ts" />
+    <Content Remove="wwwroot\ts\Models\Keybind.ts" />
+    <Content Remove="wwwroot\ts\Models\PlayerCharacter.ts" />
+    <Content Remove="wwwroot\ts\Models\Projectile.ts" />
+    <Content Remove="wwwroot\ts\Models\SoundTrack.ts" />
+    <Content Remove="wwwroot\ts\Models\StatusEffect.ts" />
+    <Content Remove="wwwroot\ts\Pages\Intro.ts" />
+    <Content Remove="wwwroot\ts\Splash.ts" />
+    <Content Remove="wwwroot\ts\Worker.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="jquery.TypeScript.DefinitelyTyped" Version="3.1.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.RazorPages" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.3.2" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Data\Storage\Messages\" />
-    <Folder Include="wwwroot\Data\Storage\NPCs\" />
+    <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="wwwroot\lib\types\signalr\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Scripts\App\Audio.js" />
-    <None Include="wwwroot\Scripts\App\Canvas.js" />
-    <None Include="wwwroot\Scripts\App\Connection.js" />
-    <None Include="wwwroot\Scripts\App\Drawing.js" />
-    <None Include="wwwroot\Scripts\App\Game.js" />
-    <None Include="wwwroot\Scripts\App\Init.js" />
-    <None Include="wwwroot\Scripts\App\Input.js" />
-    <None Include="wwwroot\Scripts\App\Me.js" />
-    <None Include="wwwroot\Scripts\App\Settings.js" />
-    <None Include="wwwroot\Scripts\App\Temp.js" />
-    <None Include="wwwroot\Scripts\App\Utilities.js" />
-    <None Include="wwwroot\Scripts\Controls\CreateAccount.js" />
-    <None Include="wwwroot\Scripts\Controls\CreateCharacter.js" />
-    <None Include="wwwroot\Scripts\Controls\Game.js" />
-    <None Include="wwwroot\Scripts\Controls\Intro.js" />
-    <None Include="wwwroot\Scripts\Controls\LoginForm.js" />
-    <None Include="wwwroot\Scripts\Controls\Splash.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.0.min.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1-vsdoc.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.min.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.min.map" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.js" />
-    <None Include="wwwroot\Scripts\jQuery\jquery-3.1.1.slim.min.map" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Accounts.js" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Events.js" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Messages.js" />
-    <None Include="wwwroot\Scripts\Message_Handlers\Queries.js" />
-    <None Include="wwwroot\Scripts\Models\Area.js" />
-    <None Include="wwwroot\Scripts\Models\Bases\Selectable.js" />
-    <None Include="wwwroot\Scripts\Models\FreeParticle.js" />
-    <None Include="wwwroot\Scripts\Models\Landmark.js" />
-    <None Include="wwwroot\Scripts\Models\Occupant.js" />
-    <None Include="wwwroot\Scripts\Models\Particle.js" />
-    <None Include="wwwroot\Scripts\Models\Power.js" />
-    <None Include="wwwroot\Scripts\Models\Soul.js" />
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.js" />
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.js.map" />
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.min.js" />
+    <None Include="wwwroot\lib\pixi-particles\dist\pixi-particles.min.js.map" />
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Audio.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Canvas.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Connection.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Drawing.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Game.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Init.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Input.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Me.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Settings.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Temp.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\App\Utilities.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\CreateAccount.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\CreateCharacter.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\Game.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\Intro.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\LoginForm.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Controls\Splash.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Accounts.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Events.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Messages.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Message_Handlers\Queries.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\Area.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\Bases\Selectable.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\FreeParticle.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\Landmark.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\Occupant.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\Particle.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\Power.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\Models\Soul.ts" />
-    <TypeScriptCompile Include="wwwroot\Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\Input.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\Me.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\PixiHelper.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\Renderer.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\Settings.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\UI.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\App\Sockets.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Enums\StatusEffectTarget.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\Character.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\GameObject.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\Keybind.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\PlayerCharacter.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\Projectile.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\Scene.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\SoundTrack.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Models\StatusEffect.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Pages\CharacterSelect.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Pages\Intro.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Pages\Splash.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Main.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\Worker.ts" />
   </ItemGroup>
 
 </Project>

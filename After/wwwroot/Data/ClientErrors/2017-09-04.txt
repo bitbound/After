@@ -1,8 +1,0 @@
-{"Message":"TypeError: After.Temp.Splash is undefined","TimeStamp":"Mon Sep 04 2017 16:14:28 GMT-0700 (Pacific Standard Time)","Line":59,"Column":25,"Error":{}}
-
-{"Message":"TypeError: After.Temp.Splash is undefined","TimeStamp":"Mon Sep 04 2017 16:14:40 GMT-0700 (Pacific Standard Time)","Line":59,"Column":25,"Error":{}}
-
-{"Message":"TypeError: After.Temp.Splash is undefined","TimeStamp":"Mon Sep 04 2017 16:17:03 GMT-0700 (Pacific Standard Time)","Source":"http://localhost:50224/scripts/Controls/SplaWSC.js","Line":59,"Column":25,"Error":{}}
-
-{"Message":"TypeError: After.Temp.Splash is undefined","TimeStamp":"Mon Sep 04 2017 18:26:33 GMT-0700 (Pacific Standard Time)","Source":"http://localhost:50224/scripts/Controls/SplaWSC.js","Line":59,"Column":25,"Error":{}}
-

@@ -1,0 +1,57 @@
+﻿<div id="characterInfo">
+   
+    <div class="info-title">Location <span class="small">(x100)</span></div>
+    <div class="location-frame">
+        X: <span data-bind="After.Me.Character.XCoord" data-render="(value)=>{return Math.round(value / 100);}"></span> |
+        Y: <span data-bind="After.Me.Character.YCoord" data-render="(value)=>{return Math.round(value / 100);}"></span> |
+        Z: <span data-bind="After.Me.Character.ZCoord" data-render="(value)=>{return Math.round(value / 100);}"></span>
+    </div>
+    <div class="info-title">Energy</div>
+    <div class="progress">
+        <div id="energyProgress" class="progress-bar progress-bar-energy"></div>
+    </div>
+
+    <div class="info-title">Willpower</div>
+    <div class="progress">
+        <div id="willpowerProgress" class="progress-bar progress-bar-willpower"></div>
+    </div>
+
+    <div class="info-title">Charge</div>
+    <div class="progress">
+        <div id="chargeProgress" class="progress-bar progress-bar-charge"></div>
+    </div>
+</div>
+
+<style>
+    #characterInfo {
+        position: fixed;
+        top: 5px;
+        left: 5px;
+        width: 200px;
+        max-width: 15vw;
+    }
+
+    #characterInfo .progress {
+        margin-bottom: 5px;
+        background-color: lightgray;
+    }
+
+    .progress-bar-energy {
+        background-color: rgb(0,200,200) !important;
+    }
+
+    .progress-bar-willpower {
+        background-color: gold !important;
+    }
+
+    .progress-bar-charge {
+        background-color: magenta !important;
+    }
+
+    .info-title {
+        font-size: .8em;
+    }
+    .location-frame {
+        font-size: .7em;
+    }
+</style>

@@ -2,25 +2,36 @@
   "id": "After",
   "name": "After",
   "short_name": "After",
-  "start_url": "https://after-game.azurewebsites.net",
+  "start_url": "https://after-game.net",
   "display": "standalone",
   "background_color": "black",
-  "description": "A MUD-like, infinite-progression, online RPG.",
+  "theme_color": "white",
+  "categories": ["online", "multiplayer", "rpg" ],
+  "description": "An online action-RPG set in an abstract, infinite afterlife.",
   "icons": [
     {
-      "src": "https://after-game.azurewebsites.net/Assets/Images/A-128.png",
+      "src": "https://after-game.net/Assets/Images/A-128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "https://after-game.azurewebsites.net/Assets/Images/A-512.png",
+      "src": "https://after-game.net/Assets/Images/A-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
   "related_applications": [
     {
-      "platform": "web"
+      "platform": "windows",
+      "url": " https://after-game.net"
+    },
+    {
+      "platform": "play",
+      "url": " https://after-game.net"
+    },
+    {
+      "platform": "itunes",
+      "url": " https://after-game.net"
     }
   ]
 }

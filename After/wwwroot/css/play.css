@@ -1,0 +1,97 @@
+﻿html {
+    background-color: #222222;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+body {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    padding: 0;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+canvas {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    cursor: crosshair !important;
+    transform: translate(-50%, -50%);
+    max-width: 99vw;
+    max-height: 99vh;
+    -ms-touch-action: pan-y !important;
+    touch-action: pan-y !important;
+}
+
+
+button {
+    background-color: black;
+    border: 1px solid gray;
+    padding: 5px 10px;
+    color: white;
+}
+button:hover {
+    border: 1px solid white;
+    background-color: rgb(30, 30, 30);
+
+}
+button:active {
+    border: 1px solid dimgray;
+    background-color: rgb(60, 60, 60);
+}
+
+select, input {
+    background-color: black;
+    border: 1px solid gray;
+    padding: 5px;
+    color: white;
+}
+
+select:hover, input:hover {
+    border: 1px solid white;
+}
+
+
+/***  Toggle Switch ***/
+.toggle-switch-outer {
+    height: 25px;
+    width: 45px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.toggle-switch-outer[on="true"] {
+    background-color: steelblue;
+    transition: .5s;
+}
+
+.toggle-switch-outer[on="false"] {
+    background-color: gray;
+    transition: .5s;
+}
+
+.toggle-switch-inner {
+    border-radius: 100%;
+    background-color: white;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.toggle-switch-outer[on="true"] .toggle-switch-inner {
+    margin-left: 24%;
+    transition: .5s;
+}
+
+.toggle-switch-outer[on="false"] .toggle-switch-inner {
+    margin-left: -24%;
+    transition: .5s;
+}

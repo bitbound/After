@@ -1,0 +1,80 @@
+﻿@page
+@model ContactModel
+@{
+    ViewData["Title"] = "Contact";
+}
+<h2>@ViewData["Title"]</h2>
+
+<h4>Let's chat.</h4>
+
+<div class="row">
+    <div class="col-sm-6">
+        <form id="contactForm" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input class="form-control" asp-for="Input.Name" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input class="form-control" asp-for="Input.Email" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Message"></label>
+                <textarea class="form-control" asp-for="Input.Message"></textarea>
+                <span asp-validation-for="Input.Message" class="text-danger"></span>
+            </div>
+            <div class="form-group text-right">
+                <button id="submitButton" type="submit" class="btn btn-primary">Send</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelector("#contactForm").method = "get";
+        document.querySelector("#contactForm").action = "/";
+        window.addEventListener("load", ev => { 
+            document.querySelector("#submitButton").addEventListener("mousedown", ev => {
+                document.querySelector("#contactForm").method = "post";
+                document.querySelector("#contactForm").action = location.pathname;
+            });
+            document.querySelector("#submitButton").addEventListener("touchstart", ev => {
+                document.querySelector("#contactForm").method = "post";
+                document.querySelector("#contactForm").action = location.pathname;
+            });
+        });
+
+    </script>
+
+    @if (Request.Query["success"] == "true")
+    {
+        <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Email Sent</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Your email was sent successfully!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $("#emailModal").modal();
+        </script>
+    }
+}
