@@ -24,7 +24,6 @@ export const Input = new class {
     private SendMovementTimeout: number;
     private LastMovementSent: number = Date.now();
     QueueMovementStateUpdate(methodName: string, args: any) {
-        console.log(args.Force);
         var waitRequired = 100 - Date.now() + this.LastMovementSent;
         window.clearTimeout(this.SendMovementTimeout);
         if (waitRequired <= 0) {

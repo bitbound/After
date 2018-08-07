@@ -166,13 +166,13 @@ export const UI = new class {
         $(".modal")["modal"]();
     };
     UpdateStatBars(): void {
-        this.ChargeProgress.innerText = String(Me.Character.CurrentCharge);
+        this.ChargeProgress.innerText = String(Math.round(Me.Character.CurrentCharge));
         this.ChargeProgress.style.width = String(Me.Character.CurrentCharge / Me.Character.MaxEnergy * 100) + "%";
 
-        this.EnergyProgress.innerText = String(Me.Character.CurrentEnergy);
+        this.EnergyProgress.innerText = String(Math.round(Me.Character.CurrentEnergy));
         this.EnergyProgress.style.width = String(Me.Character.CurrentEnergy / Me.Character.MaxEnergy * 100) + "%";
 
-        this.WillpowerProgress.innerText = String(Me.Character.CurrentWillpower);
+        this.WillpowerProgress.innerText = String(Math.round(Me.Character.CurrentWillpower));
         this.WillpowerProgress.style.width = String(Me.Character.CurrentWillpower / Me.Character.MaxWillpower * 100) + "%";
     }
 }

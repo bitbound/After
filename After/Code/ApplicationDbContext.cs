@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using After.Code.Models;
+using After.Code.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,7 @@ namespace After.Code
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseLoggerFactory(AppConstants.CustomLogger);
             base.OnConfiguring(optionsBuilder);
         }
         

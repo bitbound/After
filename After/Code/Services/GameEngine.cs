@@ -55,10 +55,10 @@ namespace After.Code.Services
             {
                 var totalAcceleration = (Math.Abs(xAcceleration) + Math.Abs(yAcceleration));
                 var maxVelocityX = gameObject.MaxVelocity * (Math.Abs(xAcceleration) / totalAcceleration) * gameObject.MovementForce;
-                var maxVelocityY = gameObject.MaxVelocity * (Math.Abs(yAcceleration) / totalAcceleration) * gameObject.MovementForce;
                 gameObject.VelocityX += xAcceleration;
-                gameObject.VelocityY += yAcceleration;
                 gameObject.VelocityX = Math.Max(-maxVelocityX, Math.Min(maxVelocityX, gameObject.VelocityX));
+                var maxVelocityY = gameObject.MaxVelocity * (Math.Abs(yAcceleration) / totalAcceleration) * gameObject.MovementForce;
+                gameObject.VelocityY += yAcceleration;
                 gameObject.VelocityY = Math.Max(-maxVelocityY, Math.Min(maxVelocityY, gameObject.VelocityY));
                 gameObject.Modified = true;
             }
@@ -103,9 +103,17 @@ namespace After.Code.Services
             ApplyDeceleration(gameObject, delta, xAcceleration, yAcceleration);
         }
 
-        private void ApplyStatusEffects(GameObject gameObjectIDs, double delta)
+        private void ApplyStatusEffects(GameObject gameObject, double delta)
         {
-
+            if (gameObject is Character)
+            {
+                var character = gameObject as Character;
+                if (character.IsCharging)
+                {
+                    character.CurrentCharge = Math.Min(character.MaxCharge, character.CurrentCharge + (delta * (character.MaxCharge / 40)));
+                    character.Modified = true;
+                }
+            }
         }
 
         private List<GameObject> GetAllVisibleObjects(List<PlayerCharacter> playerCharacters)

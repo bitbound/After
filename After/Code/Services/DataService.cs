@@ -120,21 +120,25 @@ namespace After.Code.Services
             var character = DBContext.PlayerCharacters.Find(characterID);
             if (character != null)
             {
+                var magnitude = character.ChargePercent;
                 character.IsCharging = false;
                 character.CurrentCharge = 0;
-                var projectile = new Projectile()
+                var projectile = new Projectile(magnitude, character.CurrentCharge)
                 {
                     XCoord = character.XCoord,
                     YCoord = character.YCoord,
                     ZCoord = character.ZCoord,
                     Owner = characterID,
-                    MovementAngle = Angle
+                    MovementAngle = Angle,
+                    Color = character.Color
+                    
                 };
                 // TODO: Apply velocity to projectile.  Copy from game engine.
                 lock (GameEngine.MemoryOnlyObjects)
                 {
                     GameEngine.MemoryOnlyObjects.Add(projectile);
                 }
+                DBContext.SaveChanges();
             }
         }
     }

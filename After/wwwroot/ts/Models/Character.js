@@ -100,8 +100,6 @@ export class Character extends GameObject {
         this.YCoord = 0;
         this.ZCoord = "0";
     }
-    OnCollision(collidingObject) {
-    }
     CreateGraphics() {
         this.EmitterConfig.color.list[1].value = this.Color;
         this.ParticleContainer = new PIXI.particles.ParticleContainer();

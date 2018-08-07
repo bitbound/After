@@ -18,7 +18,11 @@ export const PixiHelper = new class {
                 });
                 break;
             case "Projectile":
-                objectToUpdate = x.PixiGraphics;
+                objectToUpdate = x.WrapperContainer;
+                x.ParticleContainer.children.forEach(part => {
+                    part.x -= x.VelocityX * .2;
+                    part.y -= x.VelocityY * .2;
+                });
                 break;
             default:
                 break;

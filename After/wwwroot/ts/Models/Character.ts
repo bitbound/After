@@ -13,7 +13,6 @@ export class Character extends GameObject {
         this.ZCoord = "0";
     }
     public Name: string;
-    public Color: string;
     public PortraitUri: string;
 
     // Energy.
@@ -34,9 +33,7 @@ export class Character extends GameObject {
 
     public StatusEffects: Array<StatusEffect>;
 
-    public OnCollision(collidingObject: GameObject): void {
-        
-    }
+
     public Emitter: PIXI.particles.Emitter;
     public ParticleContainer: PIXI.particles.ParticleContainer;
 

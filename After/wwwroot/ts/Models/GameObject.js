@@ -14,7 +14,6 @@ export class GameObject {
         genericObject.y = Main.Renderer.PixiApp.screen.height / 2;
         genericObject.name = this.ID;
         Main.Renderer.SceneContainer.addChild(genericObject);
-        this.PixiGraphics = genericObject;
     }
 }
 //# sourceMappingURL=GameObject.js.map

@@ -1,7 +1,7 @@
 ﻿import { Main } from "../Main.js";
 
 export class GameObject {
-    public PixiGraphics: PIXI.DisplayObject;
+  
     public ID: string;
     public Height: number;
     public Width: number;
@@ -13,6 +13,7 @@ export class GameObject {
     public MaxVelocity: number;
     public AccelerationSpeed: number;
     public DecelerationSpeed: number;
+    public Color: string;
     public Discriminator: string;
     public get Rect(): PIXI.Rectangle {
         return new PIXI.Rectangle(this.XCoord, this.YCoord, this.Width, this.Height);
@@ -28,6 +29,6 @@ export class GameObject {
         genericObject.y = Main.Renderer.PixiApp.screen.height / 2;
         genericObject.name = this.ID;
         Main.Renderer.SceneContainer.addChild(genericObject);
-        this.PixiGraphics = genericObject;
+   
     }
 }

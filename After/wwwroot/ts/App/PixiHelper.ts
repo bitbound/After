@@ -14,7 +14,6 @@ export const PixiHelper = new class {
         var fromY;
         var objectToUpdate:PIXI.DisplayObject;
        
-
         switch (x.Discriminator) {
             case "Character":
             case "PlayerCharacter":
@@ -25,8 +24,11 @@ export const PixiHelper = new class {
                 })
                 break;
             case "Projectile":
-                objectToUpdate = (x as Projectile).PixiGraphics;
-      
+                objectToUpdate = (x as Projectile).WrapperContainer;
+                (x as Projectile).ParticleContainer.children.forEach(part => {
+                    part.x -= x.VelocityX * .2;
+                    part.y -= x.VelocityY * .2;
+                })
                 break;
             default:
                 break;
