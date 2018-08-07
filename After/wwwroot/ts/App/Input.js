@@ -31,6 +31,7 @@ export const Input = new class {
     }
     ;
     QueueMovementStateUpdate(methodName, args) {
+        console.log(args.Force);
         var waitRequired = 100 - Date.now() + this.LastMovementSent;
         window.clearTimeout(this.SendMovementTimeout);
         if (waitRequired <= 0) {
@@ -362,7 +363,7 @@ function handleMovementJoystick() {
         var evPoint = new PIXI.Point(ev.x, ev.y);
         var distance = Math.min(PixiHelper.GetDistanceBetween(centerPoint, evPoint), outer.clientWidth / 2);
         var angle = PixiHelper.GetAngleInDegrees(centerPoint, evPoint);
-        Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: angle, Force: (distance / outer.clientHeight) });
+        Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: angle, Force: (distance / (outer.clientHeight / 2)) });
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
     function movementUp(ev) {
@@ -411,7 +412,7 @@ function sendKeyboardMovementState() {
         yVector++;
     }
     var angle = PixiHelper.GetAngleInDegrees(new PIXI.Point(0, 0), new PIXI.Point(xVector, yVector));
-    var force = Math.min(Math.abs(xVector) + Math.abs(yVector), .5);
+    var force = Math.min(Math.abs(xVector) + Math.abs(yVector), 1);
     Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: angle, Force: force });
 }
 //# sourceMappingURL=Input.js.map

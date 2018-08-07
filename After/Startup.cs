@@ -81,6 +81,7 @@ namespace After
                 routes.MapHub<SocketHub>("/SocketEndpoint");
             });
             app.UseMvc();
+            dataService.CleanupTempUsers();
         }
     }
 }

@@ -1,6 +1,37 @@
 import { Main } from "../Main.js";
 import { Settings } from "./Settings.js";
+import { Utilities } from "./Utilities.js";
 export const PixiHelper = new class {
+    UpdateGameObjectPosition(x) {
+        var targetX = (x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
+        var targetY = (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
+        var fromX;
+        var fromY;
+        var objectToUpdate;
+        switch (x.Discriminator) {
+            case "Character":
+            case "PlayerCharacter":
+                objectToUpdate = x.ParticleContainer;
+                x.ParticleContainer.children.forEach(part => {
+                    part.x -= x.VelocityX * .5;
+                    part.y -= x.VelocityY * .5;
+                });
+                break;
+            case "Projectile":
+                objectToUpdate = x.PixiGraphics;
+                break;
+            default:
+                break;
+        }
+        fromX = objectToUpdate.x;
+        fromY = objectToUpdate.y;
+        if (targetX != fromX) {
+            Utilities.Animate(objectToUpdate, "x", null, targetX, null, 20, 1);
+        }
+        if (targetY != fromY) {
+            Utilities.Animate(objectToUpdate, "y", null, targetY, null, 20, 1);
+        }
+    }
     GetDistanceBetween(point1, point2) {
         return Math.sqrt(Math.pow(point1.x - point2.x, 2) +
             Math.pow(point1.y - point2.y, 2));

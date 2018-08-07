@@ -28,6 +28,7 @@ namespace After.Code.Services
         private ApplicationDbContext DBContext { get; set; }
 
         private EmailSender EmailSender { get; set; }
+        private DateTime LastEmailSent { get; set; } = DateTime.Now;
 
         private DateTime LastTick { get; set; }
 
@@ -53,8 +54,8 @@ namespace After.Code.Services
             if (gameObject.MovementForce > 0)
             {
                 var totalAcceleration = (Math.Abs(xAcceleration) + Math.Abs(yAcceleration));
-                var maxVelocityX = gameObject.MaxVelocity * (Math.Abs(xAcceleration) / totalAcceleration);
-                var maxVelocityY = gameObject.MaxVelocity * (Math.Abs(yAcceleration) / totalAcceleration);
+                var maxVelocityX = gameObject.MaxVelocity * (Math.Abs(xAcceleration) / totalAcceleration) * gameObject.MovementForce;
+                var maxVelocityY = gameObject.MaxVelocity * (Math.Abs(yAcceleration) / totalAcceleration) * gameObject.MovementForce;
                 gameObject.VelocityX += xAcceleration;
                 gameObject.VelocityY += yAcceleration;
                 gameObject.VelocityX = Math.Max(-maxVelocityX, Math.Min(maxVelocityX, gameObject.VelocityX));
@@ -109,7 +110,7 @@ namespace After.Code.Services
 
         private List<GameObject> GetAllVisibleObjects(List<PlayerCharacter> playerCharacters)
         {
-            var dbObjects = DBContext.GameObjects.Where(go =>
+            var allObjects = DBContext.GameObjects.Where(go =>
                 playerCharacters.Exists(pc => pc.ZCoord == go.ZCoord) &&
                 playerCharacters.Exists(pc => Math.Abs(go.XCoord - pc.XCoord) < AppConstants.RendererWidth) &&
                 playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight) &&
@@ -117,11 +118,11 @@ namespace After.Code.Services
             ).ToList();
             lock (MemoryOnlyObjects)
             {
-                dbObjects.AddRange(MemoryOnlyObjects);
+                allObjects.AddRange(MemoryOnlyObjects);
             }
-            return dbObjects;
+            return allObjects;
         }
-        public List<GameObject> MemoryOnlyObjects { get; set; }
+        public List<GameObject> MemoryOnlyObjects { get; set; } = new List<GameObject>();
         private List<GameObject> GetCurrentScene(PlayerCharacter playerCharacter, List<GameObject> gameObjects)
         {
             return gameObjects.Where(go =>
@@ -201,6 +202,11 @@ namespace After.Code.Services
                 {
                     try
                     {
+                        if (DateTime.Now - LastEmailSent < TimeSpan.FromMinutes(1))
+                        {
+                            return;
+                        }
+                        LastEmailSent = DateTime.Now;
                         var error = new Error()
                         {
                             PathWhereOccurred = "Main Engine Loop",

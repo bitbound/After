@@ -11,7 +11,11 @@ namespace After.Code.Models
     {
         [Key]
         public Guid ID { get; set; }
+        public StatusEffectTypes Type { get; set; }
         public StatusEffectTargets Target { get; set; }
         public double Amount { get; set; }
+        public DateTime Expiration { get; set; }
+        public TimeSpan Interval { get; set; }
+        public DateTime LastTick { get; set; }
     }
 }

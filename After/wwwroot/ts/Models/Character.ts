@@ -40,7 +40,7 @@ export class Character extends GameObject {
     public Emitter: PIXI.particles.Emitter;
     public ParticleContainer: PIXI.particles.ParticleContainer;
 
-    public CreateEmitter() {
+    public CreateGraphics() {
         this.EmitterConfig.color.list[1].value = this.Color;
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
         this.ParticleContainer.x = Main.Renderer.PixiApp.screen.width / 2;

@@ -102,7 +102,7 @@ export class Character extends GameObject {
     }
     OnCollision(collidingObject) {
     }
-    CreateEmitter() {
+    CreateGraphics() {
         this.EmitterConfig.color.list[1].value = this.Color;
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
         this.ParticleContainer.x = Main.Renderer.PixiApp.screen.width / 2;

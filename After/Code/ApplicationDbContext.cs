@@ -5,6 +5,7 @@ using After.Code.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace After.Code
 {
@@ -47,7 +48,5 @@ namespace After.Code
         public DbSet<Error> Errors { get; set; }
 
         public DbSet<StatusEffect> StatusEffects { get; set; }
-        
-
     }
 }

@@ -88,8 +88,7 @@ namespace After.Code.Services
             DBContext.Users
                 .Where(x => x.IsTemporary && x.LastLogin < DateTime.Now.AddDays(-14))
                 .ToList()
-                .ForEach(x => DeleteUser(x.UserName)
-            );
+                .ForEach(x => DeleteUser(x.UserName));
             DBContext.SaveChanges();
         }
 
@@ -128,9 +127,10 @@ namespace After.Code.Services
                     XCoord = character.XCoord,
                     YCoord = character.YCoord,
                     ZCoord = character.ZCoord,
-                    Owner = characterID
+                    Owner = characterID,
+                    MovementAngle = Angle
                 };
-                projectile.MovementAngle = Angle;
+                // TODO: Apply velocity to projectile.  Copy from game engine.
                 lock (GameEngine.MemoryOnlyObjects)
                 {
                     GameEngine.MemoryOnlyObjects.Add(projectile);

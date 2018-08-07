@@ -22,10 +22,12 @@ namespace After.Code.Models
             YCoord = 0;
             ZCoord = "0";
             Color = Utilities.GetRandomHexColor();
+            MaxVelocity = 10;
+            AccelerationSpeed = 2;
+            DecelerationSpeed = 1;
         }
       
         public string Name { get; set; }
-        public string Color { get; set; }
         public string PortraitUri { get; set; }
 
 

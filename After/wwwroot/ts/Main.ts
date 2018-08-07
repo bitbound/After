@@ -10,6 +10,8 @@ import { PixiHelper } from "./App/PixiHelper.js";
 import { Input } from "./App/Input.js";
 import { Renderer } from "./App/Renderer.js";
 import { Character } from "./Models/Character.js";
+import { Projectile } from "./Models/Projectile.js";
+import { GameObject } from "./Models/GameObject.js";
 
 var main = new class {
     ErrorLog: string = "";
@@ -41,7 +43,7 @@ var main = new class {
         PixiHelper.LoadBackgroundEmitter();
         $.extend(true, this.Me.Character, currentCharacter);
         UI.UpdateStatBars();
-        this.Me.Character.CreateEmitter();
+        this.Me.Character.CreateGraphics();
         this.StartGameLoop();
     }
 }
@@ -94,53 +96,11 @@ function gameLoop(delta) {
         part.y -= Main.Me.Character.VelocityY * .25;
     });
     Main.Me.Scene.GameObjects.forEach(x => {
-        switch (x.Discriminator) {
-            case "Character":
-            case "PlayerCharacter":
-                if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
-                    (x as Character).CreateEmitter();
-                }
-                else {
-                    var targetX = (x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
-                    var targetY = (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
-                    var fromX = (x as Character).ParticleContainer.x;
-                    var fromY = (x as Character).ParticleContainer.y;
-                    if (targetX != fromX) {
-                        Utilities.Animate((x as Character).ParticleContainer, "x", null, targetX, null, 20, 1);
-                    }
-                    if (targetY != fromY) {
-                        Utilities.Animate((x as Character).ParticleContainer, "y", null, targetY, null, 20, 1);
-                    }
-                    (x as Character).ParticleContainer.children.forEach(part => {
-                        part.x -= x.VelocityX * .5;
-                        part.y -= x.VelocityY * .5;
-                    })
-                }
-                break;
-            case "Projectile":
-                if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
-                    var projectile = new PIXI.Graphics();
-                    // TODO:
-                }
-                else {
-                    var targetX = (x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
-                    var targetY = (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
-                    var fromX = (x as Character).ParticleContainer.x;
-                    var fromY = (x as Character).ParticleContainer.y;
-                    if (targetX != fromX) {
-                        Utilities.Animate((x as Character).ParticleContainer, "x", null, targetX, null, 20, 1);
-                    }
-                    if (targetY != fromY) {
-                        Utilities.Animate((x as Character).ParticleContainer, "y", null, targetY, null, 20, 1);
-                    }
-                    (x as Character).ParticleContainer.children.forEach(part => {
-                        part.x -= x.VelocityX * .5;
-                        part.y -= x.VelocityY * .5;
-                    })
-                }
-                break;
-            default:
-                break;
+        if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
+            x.CreateGraphics();
+        }
+        else {
+            PixiHelper.UpdateGameObjectPosition(x);
         }
     });
     Main.Renderer.SceneContainer.children.forEach( value => {
