@@ -1,6 +1,7 @@
 ﻿using After.Code.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,8 +29,15 @@ namespace After.Code.Models
         public DateTime Expiration { get; set; } = DateTime.Now.AddSeconds(3);
         public Guid Owner { get; set; }
         public double Force { get; set; }
+        public Rectangle Location
+        {
+            get
+            {
+                return new Rectangle((int)XCoord, (int)YCoord, Width, Height);
+            }
+        }
 
-        public void OnCollision(GameObject collidingObject)
+        public void OnCollision(ICollidable collidingObject)
         {
             throw new NotImplementedException();
         }

@@ -1,6 +1,7 @@
 ﻿import { GameObject } from "./GameObject.js";
 import { StatusEffect } from "./StatusEffect.js";
 import { Main } from "../Main.js";
+import { PixiHelper } from "../App/PixiHelper.js";
 
 export class Character extends GameObject {
     constructor() {
@@ -38,20 +39,22 @@ export class Character extends GameObject {
     public ParticleContainer: PIXI.particles.ParticleContainer;
 
     public CreateGraphics() {
-        this.EmitterConfig.color.list[1].value = this.Color;
+        this.EmitterConfig.color.list[1].value = this.Color
+        this.WrapperContainer = new PIXI.Container();
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
-        this.ParticleContainer.x = Main.Renderer.PixiApp.screen.width / 2;
-        this.ParticleContainer.y = Main.Renderer.PixiApp.screen.height / 2;
-        this.ParticleContainer.name = this.ID;
+        this.WrapperContainer.x = (this.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
+        this.WrapperContainer.y = (this.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
+        this.WrapperContainer.name = this.ID;
+        this.WrapperContainer.addChild(this.ParticleContainer);
         if (this.ID == Main.Me.Character.ID) {
-         
-            Main.Renderer.PixiApp.stage.addChild(this.ParticleContainer);
-            this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
+
+            Main.Renderer.PixiApp.stage.addChild(this.WrapperContainer);
+            this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], this.EmitterConfig);
   
         }
         else {
-            Main.Renderer.SceneContainer.addChild(this.ParticleContainer);
-            this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
+            Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
+            this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], this.EmitterConfig);
         }
 
     };
@@ -72,11 +75,11 @@ export class Character extends GameObject {
         "scale": {
             "list": [
                 {
-                    "value": 0.6,
+                    "value": 1,
                     "time": 0
                 },
                 {
-                    "value": 0.5,
+                    "value": .9,
                     "time": 1
                 }
             ],
@@ -108,7 +111,7 @@ export class Character extends GameObject {
                 }
             ],
             "isStepped": false,
-            "minimumSpeedMultiplier": 0.5
+            "minimumSpeedMultiplier": 0.1
         },
         "acceleration": {
             "x": 0,

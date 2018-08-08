@@ -102,7 +102,17 @@ namespace After.Code.Models
         public bool IsCharging { get; set; }
 
         public List<StatusEffect> StatusEffects { get; set; } = new List<StatusEffect>();
-        public void OnCollision(GameObject collidingObject)
+
+        public Rectangle Location
+        {
+            get
+            {
+                return new Rectangle((int)XCoord, (int)YCoord, Width, Height);
+            }
+        }
+
+        
+        public void OnCollision(ICollidable collidingObject)
         {
             throw new NotImplementedException();
         }

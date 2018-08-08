@@ -21,13 +21,6 @@ namespace After.Code.Models
 
         [Key]
         public Guid ID { get; set; }
-        public Rectangle Location
-        {
-            get
-            {
-                return new Rectangle((int)XCoord, (int)YCoord, Width, Height);
-            }
-        }
 
         public double MaxVelocity { get; set; }
         public bool Modified { get; set; }

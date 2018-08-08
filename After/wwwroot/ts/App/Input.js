@@ -54,10 +54,7 @@ function addAimingPointer(centerPoint, targetPoint) {
         pointerGraphic.name = "Aiming Pointer";
         pointerGraphic.lineStyle(2, PIXI.utils.rgb2hex([1, 1, 1]));
         pointerGraphic.moveTo(-30, 0);
-        pointerGraphic.lineTo(-100, 0);
-        pointerGraphic.lineTo(-90, 5);
-        pointerGraphic.moveTo(-100, 0);
-        pointerGraphic.lineTo(-90, -5);
+        pointerGraphic.lineTo(-150, 0);
         pointerGraphic.rotation = PixiHelper.GetAngleInRadians(centerPoint, targetPoint);
         Main.Renderer.PixiApp.stage.addChild(pointerGraphic);
     }

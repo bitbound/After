@@ -86,7 +86,12 @@ namespace After.Code.Services
                 }
             }
             var characterID = DataService.GetCharacter(UserName, characterName).ID;
-            DataService.UpdateCharacterMovement(characterID, 0, 0);
+            GameEngine.InputQueue.Enqueue(dbContext =>
+            {
+                var character = dbContext.PlayerCharacters.Find(characterID);
+                character.MovementAngle = 0;
+                character.MovementForce = 0;
+            });
             ConnectionDetails = new ConnectionDetails()
             {
                 CharacterName = characterName,
@@ -142,11 +147,44 @@ namespace After.Code.Services
         }
         public void BeginCharging(dynamic data)
         {
-            DataService.BeginCharging(CurrentCharacter.ID);
+            var characterID = CurrentCharacter.ID;
+            GameEngine.InputQueue.Enqueue(dbContext =>
+            {
+                var character = dbContext.PlayerCharacters.Find(characterID);
+                if (character != null)
+                {
+                    character.IsCharging = true;
+                }
+            });
         }
         public void ReleaseCharging(dynamic data)
         {
-            DataService.ReleaseCharging(CurrentCharacter.ID, (double)data.Angle);
+            var angle = (double)data.Angle;
+            var characterID = CurrentCharacter.ID;
+            GameEngine.InputQueue.Enqueue(dbContext =>
+            {
+                var character = dbContext.PlayerCharacters.Find(characterID);
+                if (character != null)
+                {
+                    var magnitude = character.ChargePercent;
+                    character.IsCharging = false;
+                    character.CurrentCharge = 0;
+                    var projectile = new Projectile(magnitude, character.CurrentCharge)
+                    {
+                        XCoord = character.XCoord,
+                        YCoord = character.YCoord,
+                        ZCoord = character.ZCoord,
+                        Owner = characterID,
+                        MovementAngle = angle,
+                        Color = character.Color
+
+                    };
+                    lock (GameEngine.MemoryOnlyObjects)
+                    {
+                        GameEngine.MemoryOnlyObjects.Add(projectile);
+                    }
+                }
+            });
         }
         public void SendInitialUpdate()
         {
@@ -154,7 +192,15 @@ namespace After.Code.Services
         }
         public void UpdateMovementInput(dynamic data)
         {
-            DataService.UpdateCharacterMovement(ConnectionDetails.CharacterID, (double)data.Angle, (double)data.Force);
+            var characterID = ConnectionDetails.CharacterID;
+            var angle = (double)data.Angle;
+            var force = (double)data.Force;
+            GameEngine.InputQueue.Enqueue(dbContext =>
+            {
+                var character = dbContext.PlayerCharacters.Find(characterID);
+                character.MovementAngle = angle;
+                character.MovementForce = force;
+            });
         }
     }
 }

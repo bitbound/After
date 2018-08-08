@@ -17,15 +17,9 @@ export const PixiHelper = new class {
         switch (x.Discriminator) {
             case "Character":
             case "PlayerCharacter":
-                objectToUpdate = (x as Character).ParticleContainer;
-                (x as Character).ParticleContainer.children.forEach(part => {
-                    part.x -= x.VelocityX * .5;
-                    part.y -= x.VelocityY * .5;
-                })
-                break;
             case "Projectile":
-                objectToUpdate = (x as Projectile).WrapperContainer;
-                (x as Projectile).ParticleContainer.children.forEach(part => {
+                objectToUpdate = x.WrapperContainer;
+                (x as Character | Projectile).ParticleContainer.children.forEach(part => {
                     part.x -= x.VelocityX * .2;
                     part.y -= x.VelocityY * .2;
                 })
@@ -108,11 +102,11 @@ var backgroundEmitterConfig = {
     "color": {
         "list": [
             {
-                "value": "#FCFFA9",
+                "value": "#B3F7FF",
                 "time": 0
             },
             {
-                "value": "#FFF261",
+                "value": "#75F0FF",
                 "time": 1
             }
         ],

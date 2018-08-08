@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -22,7 +23,8 @@ namespace After.Code.Services
             EmailSender = emailSender;
         }
         public bool IsRunning { get; private set; }
-
+        public ConcurrentQueue<Action<ApplicationDbContext>> InputQueue { get; set; } = new ConcurrentQueue<Action<ApplicationDbContext>>();
+        public List<GameObject> MemoryOnlyObjects { get; set; } = new List<GameObject>();
         private IConfiguration Configuration { get; }
 
         private ApplicationDbContext DBContext { get; set; }
@@ -130,7 +132,6 @@ namespace After.Code.Services
             }
             return allObjects;
         }
-        public List<GameObject> MemoryOnlyObjects { get; set; } = new List<GameObject>();
         private List<GameObject> GetCurrentScene(PlayerCharacter playerCharacter, List<GameObject> gameObjects)
         {
             return gameObjects.Where(go =>
@@ -140,42 +141,46 @@ namespace After.Code.Services
             ).ToList();
         }
 
+        private bool IsExpired(GameObject x)
+        {
+            if (x is IExpirable && (x as IExpirable).Expiration < DateTime.Now)
+            {
+                if (MemoryOnlyObjects.Contains(x))
+                {
+                    MemoryOnlyObjects.Remove(x as Projectile);
+                }
+                else
+                {
+                    DBContext.GameObjects.Remove(x);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void RunMainLoop()
         {
+            List<ConnectionDetails> activeConnections;
+            List<PlayerCharacter> playerCharacters;
+            List<GameObject> visibleObjects;
             while (IsRunning)
             {
                 try
                 {
                     DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
 
-                    var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
-                    
-                    while (delta < 1)
-                    {
-                        System.Threading.Thread.Sleep(1);
-                        delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
-                    }
+                    var delta = GetDelta();
 
 
-                    if (delta > 2)
-                    {
-                        Logger.LogWarning($"Slow game loop.  Delta: {delta.ToString()}");
-                        var error = new Error()
-                        {
-                            PathWhereOccurred = "Main Engine Loop",
-                            Message = $"Slow game loop.  Delta: {delta.ToString()}",
-                            Timestamp = DateTime.Now
-                        };
-                        DBContext.Errors.Add(error);
-                    }
-                    LastTick = DateTime.Now;
+                    ProcessInputQueue();
 
+                    activeConnections = SocketHub.ConnectionList.ToList();
+                    playerCharacters = DBContext.PlayerCharacters.Where(x => x is PlayerCharacter && activeConnections.Exists(y => y.CharacterID == x.ID)).ToList();
+                    visibleObjects = GetAllVisibleObjects(playerCharacters);
 
-
-                    var activeConnections = SocketHub.ConnectionList.ToList();
-                    var playerCharacters = DBContext.PlayerCharacters.Where(x => x is PlayerCharacter && activeConnections.Exists(y => y.CharacterID == x.ID)).ToList();
-
-                    var visibleObjects = GetAllVisibleObjects(playerCharacters);
 
                     visibleObjects.ForEach(x =>
                     {
@@ -186,15 +191,11 @@ namespace After.Code.Services
                         ApplyStatusEffects(x, delta);
                         ApplyInputUpdates(x, delta);
                         UpdatePositionsFromVelociy(x, delta);
-                        // TODO: Check collisions.
                     });
-                    visibleObjects.ForEach(x =>
-                    {
-                        if (x is PlayerCharacter)
-                        {
-                            SendUpdates(visibleObjects, activeConnections, x as PlayerCharacter);
-                        }
-                    });
+
+                    CheckForCollisions(visibleObjects.Where(x => x is ICollidable).Cast<ICollidable>().ToList());
+
+                    SendUpdates(visibleObjects, activeConnections);
                     
                     visibleObjects.ForEach(x =>
                     {
@@ -233,41 +234,73 @@ namespace After.Code.Services
             }
         }
 
-        private bool IsExpired(GameObject x)
+        private double GetDelta()
         {
-            if (x is IExpirable && (x as IExpirable).Expiration < DateTime.Now)
+            var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
+            while (delta < 1)
             {
-                if (MemoryOnlyObjects.Contains(x))
-                {
-                    MemoryOnlyObjects.Remove(x as Projectile);
-                }
-                else
-                {
-                    DBContext.GameObjects.Remove(x);
-                }
-                return true;
+                System.Threading.Thread.Sleep(1);
+                delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
             }
-            else
+
+
+            if (delta > 2)
             {
-                return false;
+                Logger.LogWarning($"Slow game loop.  Delta: {delta.ToString()}");
+                var error = new Error()
+                {
+                    PathWhereOccurred = "Main Engine Loop",
+                    Message = $"Slow game loop.  Delta: {delta.ToString()}",
+                    Timestamp = DateTime.Now
+                };
+                DBContext.Errors.Add(error);
+            }
+            LastTick = DateTime.Now;
+            return delta;
+        }
+
+        private void ProcessInputQueue()
+        {
+            for (var i = 0; i < InputQueue.Count; i++)
+            {
+                if (InputQueue.TryDequeue(out var action))
+                {
+                    action.Invoke(DBContext);
+                }
             }
         }
 
-        private void SendUpdates(List<GameObject> visibleObjects, List<ConnectionDetails> activeConnections, PlayerCharacter playerCharacters)
+        private void CheckForCollisions(List<ICollidable> visibleObjects)
         {
-            var connectionDetails = activeConnections.Find(x => x.CharacterID == playerCharacters.ID);
-            var currentScene = GetCurrentScene(playerCharacters, visibleObjects);
-    
-            var modifiedObjects = currentScene?.Where(x => x.Modified);
-            var addedObjects = currentScene?.Where(x => connectionDetails.CachedScene?.Any(y => y.ID == x.ID) == false);
-            var removedObjects = connectionDetails.CachedScene?.Where(x => currentScene?.Any(y => y.ID == x.ID) == false);
-            if (modifiedObjects.Count() > 0 || addedObjects.Count() > 0 || removedObjects.Count() > 0)
+            visibleObjects.ForEach(x =>
             {
-                connectionDetails?.ClientProxy?.SendCoreAsync("UpdateGameState", new object[] { currentScene });
-            }
-            connectionDetails.CachedScene = currentScene;
+                foreach (var intersectingObject in visibleObjects.Where(y => y != x && y.Location.IntersectsWith(x.Location)))
+                {
+                    // TODO
+                    //x.OnCollision(intersectingObject);
+                }
+            });
+        }
 
+        private void SendUpdates(List<GameObject> visibleObjects, List<ConnectionDetails> activeConnections)
+        {
+            visibleObjects.ForEach(playerCharacter =>
+            {
+                if (playerCharacter is PlayerCharacter)
+                {
+                    var connectionDetails = activeConnections.Find(x => x.CharacterID == playerCharacter.ID);
+                    var currentScene = GetCurrentScene((PlayerCharacter)playerCharacter, visibleObjects);
 
+                    var modifiedObjects = currentScene?.Where(x => x.Modified);
+                    var addedObjects = currentScene?.Where(x => connectionDetails.CachedScene?.Any(y => y.ID == x.ID) == false);
+                    var removedObjects = connectionDetails.CachedScene?.Where(x => currentScene?.Any(y => y.ID == x.ID) == false);
+                    if (modifiedObjects.Count() > 0 || addedObjects.Count() > 0 || removedObjects.Count() > 0)
+                    {
+                        connectionDetails?.ClientProxy?.SendCoreAsync("UpdateGameState", new object[] { currentScene });
+                    }
+                    connectionDetails.CachedScene = currentScene;
+                }
+            });
         }
         private void UpdatePositionsFromVelociy(GameObject gameObject, double delta)
         {

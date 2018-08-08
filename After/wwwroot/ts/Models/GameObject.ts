@@ -15,6 +15,7 @@ export class GameObject {
     public DecelerationSpeed: number;
     public Color: string;
     public Discriminator: string;
+    public WrapperContainer: PIXI.Container;
     public get Rect(): PIXI.Rectangle {
         return new PIXI.Rectangle(this.XCoord, this.YCoord, this.Width, this.Height);
     }

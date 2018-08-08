@@ -1,19 +1,24 @@
 ﻿import { GameObject } from "./GameObject.js";
 import { Main } from "../Main.js";
 import { Character } from "./Character.js";
+import { PixiHelper } from "../App/PixiHelper.js";
 
 export class Projectile extends GameObject {
+    constructor() {
+        super();
+        this.Height = 5;
+        this.Width = 5;
+    }
     public Owner: string;
     public Magnitude: number;
     public Force: number;
     public Emitter: PIXI.particles.Emitter;
-    public WrapperContainer: PIXI.Container;
     public ParticleContainer: PIXI.particles.ParticleContainer;
     public CreateGraphics() {
         this.WrapperContainer = new PIXI.Container();
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
-        this.WrapperContainer.x = Main.Renderer.PixiApp.screen.width / 2;
-        this.WrapperContainer.y = Main.Renderer.PixiApp.screen.height / 2;
+        this.WrapperContainer.x = (this.XCoord - Main.Me.Character.XCoord)  + (Main.Renderer.PixiApp.screen.width / 2);
+        this.WrapperContainer.y = (this.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
         this.WrapperContainer.name = this.ID;
 
         var centerCircle = new PIXI.Graphics();
@@ -28,7 +33,7 @@ export class Projectile extends GameObject {
         this.WrapperContainer.addChild(this.ParticleContainer);
         Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
 
-        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
+        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/ProjectileParticle.png"], this.EmitterConfig);
 
     };
     public EmitterConfig = {
@@ -48,11 +53,11 @@ export class Projectile extends GameObject {
         "scale": {
             "list": [
                 {
-                    "value": 0.25,
+                    "value": 1,
                     "time": 0
                 },
                 {
-                    "value": 0.3,
+                    "value": .9,
                     "time": 1
                 }
             ],

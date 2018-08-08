@@ -2,7 +2,7 @@ import { GameObject } from "./GameObject.js";
 import { Main } from "../Main.js";
 export class Projectile extends GameObject {
     constructor() {
-        super(...arguments);
+        super();
         this.EmitterConfig = {
             "alpha": {
                 "list": [
@@ -20,11 +20,11 @@ export class Projectile extends GameObject {
             "scale": {
                 "list": [
                     {
-                        "value": 0.25,
+                        "value": 1,
                         "time": 0
                     },
                     {
-                        "value": 0.3,
+                        "value": .9,
                         "time": 1
                     }
                 ],
@@ -93,12 +93,14 @@ export class Projectile extends GameObject {
             },
             "autoUpdate": true
         };
+        this.Height = 5;
+        this.Width = 5;
     }
     CreateGraphics() {
         this.WrapperContainer = new PIXI.Container();
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
-        this.WrapperContainer.x = Main.Renderer.PixiApp.screen.width / 2;
-        this.WrapperContainer.y = Main.Renderer.PixiApp.screen.height / 2;
+        this.WrapperContainer.x = (this.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
+        this.WrapperContainer.y = (this.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
         this.WrapperContainer.name = this.ID;
         var centerCircle = new PIXI.Graphics();
         centerCircle.beginFill(PIXI.utils.rgb2hex([1, 1, 1]), 1);
@@ -110,7 +112,7 @@ export class Projectile extends GameObject {
         this.EmitterConfig.scale.list[1].value += this.EmitterConfig.scale.list[1].value * this.Magnitude;
         this.WrapperContainer.addChild(this.ParticleContainer);
         Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
-        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/particle.png"], this.EmitterConfig);
+        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/ProjectileParticle.png"], this.EmitterConfig);
     }
     ;
 }

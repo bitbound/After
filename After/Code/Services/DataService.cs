@@ -97,49 +97,6 @@ namespace After.Code.Services
             var user = DBContext.Users.FirstOrDefault(x => x.UserName == userName).LastLogin = loginDate;
             DBContext.SaveChanges();
         }
-        internal void UpdateCharacterMovement(Guid characterID, double angle, double force)
-        {
-            var character = DBContext.PlayerCharacters.Find(characterID);
-            character.MovementAngle = angle;
-            character.MovementForce = force;
-            DBContext.SaveChanges();
-        }
 
-        internal void BeginCharging(Guid characterID)
-        {
-            var character = DBContext.PlayerCharacters.Find(characterID);
-            if (character != null)
-            {
-                character.IsCharging = true;
-            }
-            DBContext.SaveChanges();
-        }
-
-        internal void ReleaseCharging(Guid characterID, double Angle)
-        {
-            var character = DBContext.PlayerCharacters.Find(characterID);
-            if (character != null)
-            {
-                var magnitude = character.ChargePercent;
-                character.IsCharging = false;
-                character.CurrentCharge = 0;
-                var projectile = new Projectile(magnitude, character.CurrentCharge)
-                {
-                    XCoord = character.XCoord,
-                    YCoord = character.YCoord,
-                    ZCoord = character.ZCoord,
-                    Owner = characterID,
-                    MovementAngle = Angle,
-                    Color = character.Color
-                    
-                };
-                // TODO: Apply velocity to projectile.  Copy from game engine.
-                lock (GameEngine.MemoryOnlyObjects)
-                {
-                    GameEngine.MemoryOnlyObjects.Add(projectile);
-                }
-                DBContext.SaveChanges();
-            }
-        }
     }
 }
