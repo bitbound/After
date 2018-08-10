@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace After.Code.Enums
 {
-    public enum StatusEffectTargets
+    public enum StatusEffectTiming
     {
-        MaxEnergy,
-        MaxWillpower,
-        MaxCharge,
+        Constant,
+        OneTime,
+        Interval
     }
 }

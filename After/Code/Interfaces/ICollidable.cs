@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace After.Code.Interfaces
 {
-    public interface ICollidable
+    public interface ICollidable : IGameObject
     {
         Rectangle Location { get; }
         void OnCollision(ICollidable collidingObject);

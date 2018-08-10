@@ -105,6 +105,7 @@ namespace After.Code.Services
             lock (ConnectionList) {
                 ConnectionList.Add(ConnectionDetails);
             }
+            await Clients.All.SendAsync("CharacterConnected", characterName);
         }
         public override Task OnConnectedAsync()
         {
@@ -118,6 +119,7 @@ namespace After.Code.Services
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             ConnectionList.RemoveAll(x=>x.UserName == UserName);
+            await Clients.All.SendAsync("CharacterDisconnected", CurrentCharacter.Name);
             if (ConnectionList.Count == 0)
             {
                 GameEngine.Stop();
@@ -164,15 +166,19 @@ namespace After.Code.Services
             GameEngine.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
+                if (character.IsDead)
+                {
+                    return;
+                }
                 if (character != null)
                 {
                     var magnitude = character.ChargePercent;
                     character.IsCharging = false;
-                    character.CurrentCharge = 0;
+                  
                     var projectile = new Projectile(magnitude, character.CurrentCharge)
                     {
-                        XCoord = character.XCoord,
-                        YCoord = character.YCoord,
+                        XCoord = character.XCoord + (character.Width / 2),
+                        YCoord = character.YCoord + (character.Height / 2),
                         ZCoord = character.ZCoord,
                         Owner = characterID,
                         MovementAngle = angle,
@@ -183,6 +189,7 @@ namespace After.Code.Services
                     {
                         GameEngine.MemoryOnlyObjects.Add(projectile);
                     }
+                    character.CurrentCharge = 0;
                 }
             });
         }
@@ -198,6 +205,10 @@ namespace After.Code.Services
             GameEngine.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
+                if (character.IsDead)
+                {
+                    return;
+                }
                 character.MovementAngle = angle;
                 character.MovementForce = force;
             });

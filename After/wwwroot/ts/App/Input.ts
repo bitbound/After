@@ -130,6 +130,7 @@ function handleCanvasPointerInput() {
     window.addEventListener("blur", e => {
         removeAimingPointer();
     })
+
     Main.Renderer.PixiApp.view.addEventListener("pointerdown", e => {
         Sockets.Invoke("BeginCharging", null);
         var centerPoint = Utilities.GetCenterPoint(e);

@@ -4,26 +4,23 @@ import { Character } from "./Character.js";
 import { PixiHelper } from "../App/PixiHelper.js";
 
 export class Projectile extends GameObject {
-    constructor() {
-        super();
-        this.Height = 5;
-        this.Width = 5;
-    }
     public Owner: string;
     public Magnitude: number;
     public Force: number;
     public Emitter: PIXI.particles.Emitter;
     public ParticleContainer: PIXI.particles.ParticleContainer;
     public CreateGraphics() {
-        this.WrapperContainer = new PIXI.Container();
+        var size = this.Width + (this.Width * this.Magnitude);
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
-        this.WrapperContainer.x = (this.XCoord - Main.Me.Character.XCoord)  + (Main.Renderer.PixiApp.screen.width / 2);
-        this.WrapperContainer.y = (this.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
+        this.WrapperContainer = new PIXI.Container();
         this.WrapperContainer.name = this.ID;
+        this.WrapperContainer.height = size;
+        this.WrapperContainer.width = size;
+        this.WrapperContainer.position = PixiHelper.GetCoordsRelativeToMe(this);
 
         var centerCircle = new PIXI.Graphics();
         centerCircle.beginFill(PIXI.utils.rgb2hex([1, 1, 1]), 1);
-        centerCircle.drawCircle(0, 0, 5 + (5 * this.Magnitude));
+        centerCircle.drawCircle(0, 0, size / 2);
         centerCircle.endFill();
         this.WrapperContainer.addChild(centerCircle);
 

@@ -29,5 +29,6 @@ namespace After.Code.Services
                 return customLogger;
             }
         }
+
     }
 }

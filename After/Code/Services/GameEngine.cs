@@ -1,5 +1,7 @@
-﻿using After.Code.Interfaces;
+﻿using After.Code.Enums;
+using After.Code.Interfaces;
 using After.Code.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -16,14 +18,19 @@ namespace After.Code.Services
 {
     public class GameEngine
     {
-        public GameEngine(ILogger<GameEngine> logger, IConfiguration configuration, EmailSender emailSender)
+        public static GameEngine Current { get; set; }
+        public GameEngine(ILogger<GameEngine> logger, IConfiguration configuration, EmailSender emailSender, IHubContext<SocketHub> hubContext)
         {
             Logger = logger;
             Configuration = configuration;
             EmailSender = emailSender;
+            HubContext = hubContext;
+            Current = this;
         }
+        private IHubContext<SocketHub> HubContext { get; set; }
         public bool IsRunning { get; private set; }
         public ConcurrentQueue<Action<ApplicationDbContext>> InputQueue { get; set; } = new ConcurrentQueue<Action<ApplicationDbContext>>();
+        public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
         public List<GameObject> MemoryOnlyObjects { get; set; } = new List<GameObject>();
         private IConfiguration Configuration { get; }
 
@@ -105,11 +112,24 @@ namespace After.Code.Services
             ApplyDeceleration(gameObject, delta, xAcceleration, yAcceleration);
         }
 
-        private void ApplyStatusEffects(GameObject gameObject, double delta)
+        private void ApplyStatUpdates(GameObject gameObject, double delta)
         {
             if (gameObject is Character)
             {
                 var character = gameObject as Character;
+                if (character.IsDead)
+                {
+                    if (character.StatusEffects.Find(x=>x.Type == StatusEffectTypes.Dead).Expiration < DateTime.Now)
+                    {
+                        character.StatusEffects.RemoveAll(x=>x.Type == StatusEffectTypes.Dead);
+                        character.CurrentEnergy = character.MaxEnergy;
+                        character.XCoord = 0;
+                        character.YCoord = 0;
+                        character.ZCoord = "0";
+                        character.Modified = true;
+                    }
+                    return;
+                }
                 if (character.IsCharging)
                 {
                     character.CurrentCharge = Math.Min(character.MaxCharge, character.CurrentCharge + (delta * (character.MaxCharge / 40)));
@@ -120,7 +140,7 @@ namespace After.Code.Services
 
         private List<GameObject> GetAllVisibleObjects(List<PlayerCharacter> playerCharacters)
         {
-            var allObjects = DBContext.GameObjects.Where(go =>
+            var allObjects = DBContext.GameObjects.Include("StatusEffects").Where(go =>
                 playerCharacters.Exists(pc => pc.ZCoord == go.ZCoord) &&
                 playerCharacters.Exists(pc => Math.Abs(go.XCoord - pc.XCoord) < AppConstants.RendererWidth) &&
                 playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight) &&
@@ -140,7 +160,14 @@ namespace After.Code.Services
                 Math.Abs(go.YCoord - playerCharacter.YCoord) < AppConstants.RendererHeight
             ).ToList();
         }
-
+        private IEnumerable<GameEvent> GetNearbyEvents(GameObject gameObject)
+        {
+            return GameEvents.Where(ge =>
+                gameObject.ZCoord == ge.ZCoord &&
+                Math.Abs(ge.XCoord - gameObject.XCoord) < AppConstants.RendererWidth &&
+                Math.Abs(ge.YCoord - gameObject.YCoord) < AppConstants.RendererHeight
+            );
+        }
         private bool IsExpired(GameObject x)
         {
             if (x is IExpirable && (x as IExpirable).Expiration < DateTime.Now)
@@ -178,7 +205,9 @@ namespace After.Code.Services
                     ProcessInputQueue();
 
                     activeConnections = SocketHub.ConnectionList.ToList();
-                    playerCharacters = DBContext.PlayerCharacters.Where(x => x is PlayerCharacter && activeConnections.Exists(y => y.CharacterID == x.ID)).ToList();
+                    playerCharacters = DBContext.PlayerCharacters
+                        .Include(x=>x.StatusEffects)
+                        .Where(x => x is PlayerCharacter && activeConnections.Exists(y => y.CharacterID == x.ID)).ToList();
                     visibleObjects = GetAllVisibleObjects(playerCharacters);
 
 
@@ -188,12 +217,12 @@ namespace After.Code.Services
                         {
                             return;
                         }
-                        ApplyStatusEffects(x, delta);
+                        ApplyStatUpdates(x, delta);
                         ApplyInputUpdates(x, delta);
                         UpdatePositionsFromVelociy(x, delta);
                     });
 
-                    CheckForCollisions(visibleObjects.Where(x => x is ICollidable).Cast<ICollidable>().ToList());
+                    CheckForCollisions(visibleObjects.Where(x => x is ICollidable).Cast<ICollidable>());
 
                     SendUpdates(visibleObjects, activeConnections);
                     
@@ -206,9 +235,11 @@ namespace After.Code.Services
                     DBContext.Database.CloseConnection();
                     DBContext.Dispose();
                     visibleObjects.Clear();
+                    GameEvents.Clear();
                 }
                 catch (Exception ex)
                 {
+                    MainLoop = Task.Run(new Action(RunMainLoop));
                     try
                     {
                         if (DateTime.Now - LastEmailSent < TimeSpan.FromMinutes(1))
@@ -228,15 +259,19 @@ namespace After.Code.Services
                         DBContext.SaveChanges();
                         EmailSender.SendEmail("jared@lucent.rocks", "jared@lucent.rocks", "After Server Error", JsonConvert.SerializeObject(error));
                     }
-                    catch{ }
+                    catch
+                    {
+
+                     
+                    }
                 }
-             
             }
         }
 
         private double GetDelta()
         {
             var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
+            //Console.WriteLine("Delta: " + delta);
             while (delta < 1)
             {
                 System.Threading.Thread.Sleep(1);
@@ -270,16 +305,15 @@ namespace After.Code.Services
             }
         }
 
-        private void CheckForCollisions(List<ICollidable> visibleObjects)
+        private void CheckForCollisions(IEnumerable<ICollidable> visibleObjects)
         {
-            visibleObjects.ForEach(x =>
+            foreach (var collidable in visibleObjects)
             {
-                foreach (var intersectingObject in visibleObjects.Where(y => y != x && y.Location.IntersectsWith(x.Location)))
+                foreach (var intersectingObject in visibleObjects.Where(y => y != collidable && y.Location.IntersectsWith(collidable.Location)))
                 {
-                    // TODO
-                    //x.OnCollision(intersectingObject);
+                    collidable.OnCollision(intersectingObject);
                 }
-            });
+            };
         }
 
         private void SendUpdates(List<GameObject> visibleObjects, List<ConnectionDetails> activeConnections)
@@ -296,9 +330,15 @@ namespace After.Code.Services
                     var removedObjects = connectionDetails.CachedScene?.Where(x => currentScene?.Any(y => y.ID == x.ID) == false);
                     if (modifiedObjects.Count() > 0 || addedObjects.Count() > 0 || removedObjects.Count() > 0)
                     {
-                        connectionDetails?.ClientProxy?.SendCoreAsync("UpdateGameState", new object[] { currentScene });
+                        HubContext.Clients.Client(connectionDetails.ConnectionID).SendAsync("UpdateGameState", currentScene);
                     }
                     connectionDetails.CachedScene = currentScene;
+
+                    var events = GetNearbyEvents(playerCharacter);
+                    if (events.Count() > 0)
+                    {
+                        HubContext.Clients.Client(connectionDetails.ConnectionID).SendAsync("ShowGameEvents", events);
+                    }
                 }
             });
         }

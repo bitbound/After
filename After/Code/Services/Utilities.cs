@@ -19,9 +19,9 @@ namespace After.Code.Services
             return (Math.PI / 180) * degrees;
         }
 
-        public static bool IsAccelerating(double currentVelocity, double vector)
+        public static double GetOppositeAngle(double angle)
         {
-            return Math.Abs(currentVelocity + vector) > Math.Abs(currentVelocity);
+            return angle <= 179 ? angle + 180 : angle - 180;
         }
 
         public static bool AreDifferent(dynamic firstObject, dynamic secondObject)

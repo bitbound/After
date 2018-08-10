@@ -1,4 +1,5 @@
-﻿using System;
+﻿using After.Code.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace After.Code.Models
 {
-    public class GameObject
+    public class GameObject : IGameObject
     {
         public double AccelerationSpeed { get; set; }
 

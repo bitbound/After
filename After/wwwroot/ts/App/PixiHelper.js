@@ -2,9 +2,14 @@ import { Main } from "../Main.js";
 import { Settings } from "./Settings.js";
 import { Utilities } from "./Utilities.js";
 export const PixiHelper = new class {
+    GetCoordsRelativeToMe(x) {
+        return new PIXI.Point((x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2) + (x.Width / 2) - (Main.Me.Character.Width / 2), (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2) + (x.Height / 2) - (Main.Me.Character.Height / 2));
+    }
+    GetEventPoint(x, y) {
+        return new PIXI.Point((x - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2) - (Main.Me.Character.Width / 2), (y - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2) - (Main.Me.Character.Height / 2));
+    }
     UpdateGameObjectPosition(x) {
-        var targetX = (x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2);
-        var targetY = (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2);
+        var target = this.GetCoordsRelativeToMe(x);
         var fromX;
         var fromY;
         var objectToUpdate;
@@ -23,11 +28,11 @@ export const PixiHelper = new class {
         }
         fromX = objectToUpdate.x;
         fromY = objectToUpdate.y;
-        if (targetX != fromX) {
-            Utilities.Animate(objectToUpdate, "x", null, targetX, null, 20, 1);
+        if (target.x != fromX) {
+            Utilities.Animate(objectToUpdate, "x", null, target.x, null, 20, 1);
         }
-        if (targetY != fromY) {
-            Utilities.Animate(objectToUpdate, "y", null, targetY, null, 20, 1);
+        if (target.y != fromY) {
+            Utilities.Animate(objectToUpdate, "y", null, target.y, null, 20, 1);
         }
     }
     GetDistanceBetween(point1, point2) {
@@ -45,6 +50,12 @@ export const PixiHelper = new class {
         return Math.atan2(dy, dx);
     }
     LoadBackgroundEmitter() {
+        backgroundEmitterConfig.spawnRect = {
+            "x": -(Settings.RendererResolution.Width / 2),
+            "y": -(Settings.RendererResolution.Height / 2),
+            "w": Settings.RendererResolution.Width * 2,
+            "h": Settings.RendererResolution.Height * 2
+        };
         var container = new PIXI.particles.ParticleContainer;
         Main.Renderer.BackgroundParticleContainer = container;
         container.name = "Background Emitter";
@@ -144,10 +155,10 @@ var backgroundEmitterConfig = {
     "addAtBack": true,
     "spawnType": "rect",
     "spawnRect": {
-        "x": -(Settings.RendererResolution.Width / 2),
-        "y": -(Settings.RendererResolution.Height / 2),
-        "w": Settings.RendererResolution.Width * 2,
-        "h": Settings.RendererResolution.Height * 2
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
     },
     "autoUpdate": true
 };

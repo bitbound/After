@@ -7,8 +7,9 @@ namespace After.Code.Enums
 {
     public enum StatusEffectTypes
     {
-        Constant,
-        OneTime,
-        Interval
+        MaxEnergy,
+        MaxWillpower,
+        MaxCharge,
+        Dead
     }
 }

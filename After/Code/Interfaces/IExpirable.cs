@@ -2,7 +2,7 @@
 
 namespace After.Code.Interfaces
 {
-    internal interface IExpirable
+    internal interface IExpirable : IGameObject
     {
         DateTime Expiration { get; set; }
     }

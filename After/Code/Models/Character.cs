@@ -1,5 +1,6 @@
 ﻿using After.Code.Interfaces;
 using After.Code.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace After.Code.Models
 {
-    public class Character : GameObject, ICollidable
+    public class Character : GameObject, ICollidable, IDestructible
     {
         public Character()
         {
             CoreEnergy = 100;
             CurrentEnergy = 100;
             CurrentWillpower = 100;
-            Height = 25;
-            Width = 25;
+            Height = 50;
+            Width = 50;
             XCoord = 0;
             YCoord = 0;
             ZCoord = "0";
@@ -55,7 +56,7 @@ namespace After.Code.Models
             get
             {
                 return CoreEnergy + StatusEffects
-                    .Where(x => x.Target == Enums.StatusEffectTargets.MaxEnergy)
+                    .Where(x => x.Type == Enums.StatusEffectTypes.MaxEnergy)
                     .Sum(x => x.Amount);
             }
         }
@@ -67,7 +68,7 @@ namespace After.Code.Models
             get
             {
                 return CoreEnergy + StatusEffects
-                    .Where(x => x.Target == Enums.StatusEffectTargets.MaxCharge)
+                    .Where(x => x.Type == Enums.StatusEffectTypes.MaxCharge)
                     .Sum(x => x.Amount);
             }
         }
@@ -86,7 +87,7 @@ namespace After.Code.Models
             get
             {
                 return CoreEnergy + StatusEffects
-                    .Where(x => x.Target == Enums.StatusEffectTargets.MaxCharge)
+                    .Where(x => x.Type == Enums.StatusEffectTypes.MaxCharge)
                     .Sum(x => x.Amount);
             }
         }
@@ -101,6 +102,14 @@ namespace After.Code.Models
 
         public bool IsCharging { get; set; }
 
+        public bool IsDead
+        {
+            get
+            {
+                return this.StatusEffects.Exists(x => x.Type == Enums.StatusEffectTypes.Dead);
+            }
+        }
+
         public List<StatusEffect> StatusEffects { get; set; } = new List<StatusEffect>();
 
         public Rectangle Location
@@ -114,7 +123,36 @@ namespace After.Code.Models
         
         public void OnCollision(ICollidable collidingObject)
         {
-            throw new NotImplementedException();
+           
+        }
+        public void OnDestruction()
+        {
+            var characterID = this.ID;
+            GameEngine.Current.InputQueue.Enqueue((dbContext) =>
+            {
+                var character = dbContext.Characters.Find(characterID);
+                character.MovementForce = 0;
+                character.VelocityX = 0;
+                character.VelocityY = 0;
+                character.CurrentCharge = 0;
+                character.IsCharging = false;
+                character.ZCoord = Guid.NewGuid().ToString();
+                character.StatusEffects.Add(new StatusEffect()
+                {
+                    Type = Enums.StatusEffectTypes.Dead,
+                    Timing = Enums.StatusEffectTiming.Constant,
+                    Expiration = DateTime.Now.AddSeconds(5)
+
+                });
+            });
+            GameEngine.Current.GameEvents.Add(new GameEvent()
+            {
+                EventName = "SoulDestroyed",
+                EventData = new Dictionary<string, dynamic>() { { "Color", this.Color } },
+                XCoord = this.XCoord + this.Width/2,
+                YCoord = this.YCoord + this.Height/2,
+                ZCoord = this.ZCoord
+            });
         }
     }
 }

@@ -12,8 +12,10 @@ import { Renderer } from "./App/Renderer.js";
 import { Character } from "./Models/Character.js";
 import { Projectile } from "./Models/Projectile.js";
 import { GameObject } from "./Models/GameObject.js";
+import { GameEvents } from "./App/GameEvents.js";
 
 var main = new class {
+    GameEvents = GameEvents;
     ErrorLog: string = "";
     Input = Input;
     Me = Me;
@@ -88,8 +90,8 @@ if (location.pathname.search("play") > -1) {
 
 function gameLoop(delta) {
     Main.Me.Character.ParticleContainer.children.forEach(part => {
-        part.x -= Main.Me.Character.VelocityX * .5;
-        part.y -= Main.Me.Character.VelocityY * .5;
+        part.x -= Main.Me.Character.VelocityX * .25;
+        part.y -= Main.Me.Character.VelocityY * .25;
     });
     Main.Renderer.BackgroundParticleContainer.children.forEach(part => {
         part.x -= Main.Me.Character.VelocityX * .25;

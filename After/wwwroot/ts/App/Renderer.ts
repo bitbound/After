@@ -11,6 +11,7 @@ export const Renderer = new class {
             width: width,
             height: height
         });
+        this.SceneContainer.name = "Scene Container";
         this.PixiApp.stage.addChild(this.SceneContainer);
     }
 }

@@ -102,5 +102,16 @@ function applyMessageHandlers(hubConnection) {
             }
         });
     });
+    hubConnection.on("ShowGameEvents", (args) => {
+        args.forEach(value => {
+            Main.GameEvents.ProcessEvent(value);
+        });
+    });
+    hubConnection.on("CharacterConnected", args => {
+        UI.AddSystemMessage(args + " has joined.");
+    });
+    hubConnection.on("CharacterDisconnected", args => {
+        UI.AddSystemMessage(args + " has left.");
+    });
 }
 //# sourceMappingURL=Sockets.js.map

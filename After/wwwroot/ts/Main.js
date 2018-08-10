@@ -8,8 +8,10 @@ import { Settings } from "./App/Settings.js";
 import { PixiHelper } from "./App/PixiHelper.js";
 import { Input } from "./App/Input.js";
 import { Renderer } from "./App/Renderer.js";
+import { GameEvents } from "./App/GameEvents.js";
 var main = new class {
     constructor() {
+        this.GameEvents = GameEvents;
         this.ErrorLog = "";
         this.Input = Input;
         this.Me = Me;
@@ -76,8 +78,8 @@ if (location.pathname.search("play") > -1) {
 }
 function gameLoop(delta) {
     Main.Me.Character.ParticleContainer.children.forEach(part => {
-        part.x -= Main.Me.Character.VelocityX * .5;
-        part.y -= Main.Me.Character.VelocityY * .5;
+        part.x -= Main.Me.Character.VelocityX * .25;
+        part.y -= Main.Me.Character.VelocityY * .25;
     });
     Main.Renderer.BackgroundParticleContainer.children.forEach(part => {
         part.x -= Main.Me.Character.VelocityX * .25;

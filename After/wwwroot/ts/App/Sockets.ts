@@ -9,7 +9,7 @@ import { Settings } from "./Settings.js";
 import { PixiHelper } from "./PixiHelper.js";
 import { Character } from "../Models/Character.js";
 import { Projectile } from "../Models/Projectile.js";
-
+import { GameEvent } from "../Models/GameEvent.js";
 
 export const Sockets = new class {
     Connection: any;
@@ -71,7 +71,7 @@ function applyMessageHandlers(hubConnection: any) {
         Main.UI.ShowModal("Unable to Connection", "There is an existing connection on your account that is preventing your login.  The system was unable to disconnect it.  Please try again.");
     })
 
-    hubConnection.on("UpdateGameState", (args:Array<GameObject>) => {
+    hubConnection.on("UpdateGameState", (args: Array<GameObject>) => {
         args.forEach(x => {
             if (x.ID == Me.Character.ID) {
                 $.extend(true, Me.Character, x);
@@ -111,6 +111,17 @@ function applyMessageHandlers(hubConnection: any) {
                     (go as Character).Emitter.destroy();
                 }
             }
+        });
+    })
+    hubConnection.on("ShowGameEvents", (args: Array<GameEvent>) => {
+        args.forEach(value => {
+            Main.GameEvents.ProcessEvent(value);
         })
+    });
+    hubConnection.on("CharacterConnected", args => {
+        UI.AddSystemMessage(args + " has joined.");
+    });
+    hubConnection.on("CharacterDisconnected", args => {
+        UI.AddSystemMessage(args + " has left.");
     })
 }
