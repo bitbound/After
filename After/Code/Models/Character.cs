@@ -136,7 +136,6 @@ namespace After.Code.Models
                 character.VelocityY = 0;
                 character.CurrentCharge = 0;
                 character.IsCharging = false;
-                character.ZCoord = Guid.NewGuid().ToString();
                 character.StatusEffects.Add(new StatusEffect()
                 {
                     Type = Enums.StatusEffectTypes.Dead,
@@ -148,7 +147,10 @@ namespace After.Code.Models
             GameEngine.Current.GameEvents.Add(new GameEvent()
             {
                 EventName = "SoulDestroyed",
-                EventData = new Dictionary<string, dynamic>() { { "Color", this.Color } },
+                EventData = new Dictionary<string, dynamic>() {
+                    { "Color", this.Color },
+                    { "CharacterID", this.ID }
+                },
                 XCoord = this.XCoord + this.Width/2,
                 YCoord = this.YCoord + this.Height/2,
                 ZCoord = this.ZCoord

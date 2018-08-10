@@ -163,6 +163,9 @@ namespace After.Code.Services
         {
             var angle = (double)data.Angle;
             var characterID = CurrentCharacter.ID;
+            var radians = Utilities.GetRadiansFromDegrees(angle);
+            var xVector = -Math.Cos(radians);
+            var yVector = -Math.Sin(radians);
             GameEngine.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
@@ -174,7 +177,7 @@ namespace After.Code.Services
                 {
                     var magnitude = character.ChargePercent;
                     character.IsCharging = false;
-                  
+                    
                     var projectile = new Projectile(magnitude, character.CurrentCharge)
                     {
                         XCoord = character.XCoord + (character.Width / 2),
@@ -185,11 +188,23 @@ namespace After.Code.Services
                         Color = character.Color
 
                     };
+                    
                     lock (GameEngine.MemoryOnlyObjects)
                     {
                         GameEngine.MemoryOnlyObjects.Add(projectile);
                     }
                     character.CurrentCharge = 0;
+                    GameEngine.Current.GameEvents.Add(new GameEvent()
+                    {
+                        EventName = "ProjectileFired",
+                        EventData = new Dictionary<string, dynamic>()
+                        {
+                            { "Color", character.Color }
+                        },
+                        XCoord = character.XCoord + ((character.Width / 2) + (xVector * character.Width)),
+                        YCoord = character.YCoord + ((character.Height / 2) + (yVector * character.Height)),
+                        ZCoord = character.ZCoord
+                    });
                 }
             });
         }

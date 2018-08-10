@@ -126,6 +126,17 @@ namespace After.Code.Services
                         character.XCoord = 0;
                         character.YCoord = 0;
                         character.ZCoord = "0";
+                        GameEvents.Add(new GameEvent()
+                        {
+                            EventName = "SoulReturned",
+                            EventData = new Dictionary<string, dynamic>()
+                            {
+                                {"CharacterID", character.ID }
+                            },
+                            XCoord = character.XCoord,
+                            YCoord = character.YCoord,
+                            ZCoord = character.ZCoord
+                        });
                         character.Modified = true;
                     }
                     return;
@@ -271,7 +282,7 @@ namespace After.Code.Services
         private double GetDelta()
         {
             var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
-            //Console.WriteLine("Delta: " + delta);
+            Console.WriteLine("Delta: " + delta);
             while (delta < 1)
             {
                 System.Threading.Thread.Sleep(1);

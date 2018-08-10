@@ -3,6 +3,7 @@
 export const Renderer = new class {
     PixiApp: PIXI.Application;
     SceneContainer: PIXI.Container = new PIXI.Container();
+    EventContainer: PIXI.Container = new PIXI.Container();
     BackgroundEmitter: PIXI.particles.Emitter;
     BackgroundParticleContainer: PIXI.particles.ParticleContainer;
     CreatePixiApp(width: number, height: number) {
@@ -13,5 +14,6 @@ export const Renderer = new class {
         });
         this.SceneContainer.name = "Scene Container";
         this.PixiApp.stage.addChild(this.SceneContainer);
+        this.PixiApp.stage.addChild(this.EventContainer);
     }
 }

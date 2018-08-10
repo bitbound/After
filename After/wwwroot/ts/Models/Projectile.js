@@ -4,7 +4,7 @@ import { PixiHelper } from "../App/PixiHelper.js";
 export class Projectile extends GameObject {
     constructor() {
         super(...arguments);
-        this.EmitterConfig = {
+        this.DefaultEmitter = {
             "alpha": {
                 "list": [
                     {
@@ -35,7 +35,7 @@ export class Projectile extends GameObject {
             "color": {
                 "list": [
                     {
-                        "value": "#ffffff",
+                        "value": "#FFFFFF",
                         "time": 0
                     },
                     {
@@ -108,12 +108,12 @@ export class Projectile extends GameObject {
         centerCircle.drawCircle(0, 0, size / 2);
         centerCircle.endFill();
         this.WrapperContainer.addChild(centerCircle);
-        this.EmitterConfig.color.list[1].value = this.Color;
-        this.EmitterConfig.scale.list[0].value += this.EmitterConfig.scale.list[0].value * this.Magnitude;
-        this.EmitterConfig.scale.list[1].value += this.EmitterConfig.scale.list[1].value * this.Magnitude;
+        this.DefaultEmitter.color.list[1].value = this.Color;
+        this.DefaultEmitter.scale.list[0].value += this.DefaultEmitter.scale.list[0].value * this.Magnitude;
+        this.DefaultEmitter.scale.list[1].value += this.DefaultEmitter.scale.list[1].value * this.Magnitude;
         this.WrapperContainer.addChild(this.ParticleContainer);
         Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
-        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/ProjectileParticle.png"], this.EmitterConfig);
+        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/ProjectileParticle.png"], this.DefaultEmitter);
     }
     ;
 }
