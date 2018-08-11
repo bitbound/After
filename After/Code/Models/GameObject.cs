@@ -21,7 +21,7 @@ namespace After.Code.Models
         public int Height { get; set; }
 
         [Key]
-        public Guid ID { get; set; }
+        public string ID { get; set; }
 
         public double MaxVelocity { get; set; }
         public bool Modified { get; set; }

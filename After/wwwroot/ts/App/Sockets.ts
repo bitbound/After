@@ -123,5 +123,13 @@ function applyMessageHandlers(hubConnection: any) {
     });
     hubConnection.on("CharacterDisconnected", args => {
         UI.AddSystemMessage(args + " has left.");
+    });
+    hubConnection.on("Ping", args => {
+        UI.PingSpan.innerText = String(Date.now() - args["Sent"]) + "ms";
+        if (Main.Settings.IsDebugEnabled) {
+            window.setTimeout(() => {
+                Sockets.Invoke("Ping", { Sent: Date.now() });
+            }, 1000);
+        }
     })
 }

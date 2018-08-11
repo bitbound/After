@@ -33,6 +33,7 @@ export const Settings = new class {
             Main.Renderer.PixiApp.ticker.remove(fpsUpdateTicker);
             UI.DebugFrame.style.display = "none";
         }
+        Main.Sockets.Invoke("Ping", { Sent: Date.now() });
         document.querySelector("#toggleDebugWindow").setAttribute("on", String(value));
     }
 

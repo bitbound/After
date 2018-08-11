@@ -125,11 +125,12 @@ namespace After.Code.Models
         {
            
         }
-        public void OnDestruction()
+        public void OnDestruction(string destroyerID)
         {
             var characterID = this.ID;
             GameEngine.Current.InputQueue.Enqueue((dbContext) =>
             {
+                var destroyer = dbContext.Characters.Find(destroyerID);
                 var character = dbContext.Characters.Find(characterID);
                 character.MovementForce = 0;
                 character.VelocityX = 0;
@@ -143,6 +144,10 @@ namespace After.Code.Models
                     Expiration = DateTime.Now.AddSeconds(5)
 
                 });
+                var gainedEnergy = Math.Round(character.CoreEnergy / destroyer.CoreEnergy) + (Math.Max(0, character.CoreEnergy - destroyer.CoreEnergy));
+                destroyer.CoreEnergy += gainedEnergy;
+                destroyer.CurrentEnergy += gainedEnergy;
+                destroyer.CurrentWillpower += gainedEnergy;
             });
             GameEngine.Current.GameEvents.Add(new GameEvent()
             {

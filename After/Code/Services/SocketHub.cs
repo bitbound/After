@@ -118,6 +118,10 @@ namespace After.Code.Services
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            GameEngine.InputQueue.Enqueue(dbContext =>
+            {
+                dbContext.SaveChanges();
+            });
             ConnectionList.RemoveAll(x=>x.UserName == UserName);
             await Clients.All.SendAsync("CharacterDisconnected", CurrentCharacter.Name);
             if (ConnectionList.Count == 0)
@@ -183,7 +187,7 @@ namespace After.Code.Services
                         XCoord = character.XCoord + (character.Width / 2),
                         YCoord = character.YCoord + (character.Height / 2),
                         ZCoord = character.ZCoord,
-                        Owner = characterID,
+                        OwnerID = characterID,
                         MovementAngle = angle,
                         Color = character.Color
 
@@ -227,6 +231,10 @@ namespace After.Code.Services
                 character.MovementAngle = angle;
                 character.MovementForce = force;
             });
+        }
+        public void Ping(object data)
+        {
+            Clients.Caller.SendAsync("Ping", data);
         }
     }
 }

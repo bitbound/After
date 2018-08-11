@@ -8,7 +8,6 @@ namespace After.Code.Interfaces
     public interface IDestructible : IGameObject
     {
         double CurrentEnergy { get; set; }
-
-        void OnDestruction();
+        void OnDestruction(string ownerID);
     }
 }

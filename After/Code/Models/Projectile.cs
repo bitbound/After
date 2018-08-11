@@ -13,7 +13,7 @@ namespace After.Code.Models
     {
         public Projectile(double magnitude, double force)
         {
-            this.ID = Guid.NewGuid();
+            this.ID = Guid.NewGuid().ToString();
             var size = (int)(5 + (5 * magnitude));
             var speed = 20 + (20 * magnitude);
             this.Height = size;
@@ -27,7 +27,7 @@ namespace After.Code.Models
         }
         public double Magnitude { get; set; }
         public DateTime Expiration { get; set; } = DateTime.Now.AddSeconds(3);
-        public Guid Owner { get; set; }
+        public string OwnerID { get; set; }
         public double CurrentEnergy { get; set; }
         public Rectangle Location
         {
@@ -39,7 +39,7 @@ namespace After.Code.Models
 
         public void OnCollision(ICollidable collidingObject)
         {
-            if (collidingObject.ID == this.Owner)
+            if (collidingObject.ID == this.OwnerID)
             {
                 return;
             }
@@ -53,17 +53,17 @@ namespace After.Code.Models
                     this.CurrentEnergy -= damageDealt;
                     if (destructible.CurrentEnergy == 0)
                     {
-                        destructible.OnDestruction();
+                        destructible.OnDestruction(this.OwnerID);
                     }
                     if (this.CurrentEnergy == 0)
                     {
-                        this.OnDestruction();
+                        this.OnDestruction(this.OwnerID);
                     }
                 }
             }
         }
 
-        public void OnDestruction()
+        public void OnDestruction(string destroyerID)
         {
             var objectID = this.ID;
             GameEngine.Current.MemoryOnlyObjects.Remove(this);

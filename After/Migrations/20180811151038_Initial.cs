@@ -182,7 +182,7 @@ namespace After.Migrations
                     DecelerationSpeed = table.Column<double>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Height = table.Column<int>(nullable: false),
-                    ID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<string>(nullable: false),
                     MaxVelocity = table.Column<double>(nullable: false),
                     Modified = table.Column<bool>(nullable: false),
                     MovementAngle = table.Column<double>(nullable: false),
@@ -218,14 +218,14 @@ namespace After.Migrations
                 name: "StatusEffects",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
+                    ID = table.Column<string>(nullable: false),
                     Timing = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     Amount = table.Column<double>(nullable: false),
                     Expiration = table.Column<DateTime>(nullable: false),
                     Interval = table.Column<TimeSpan>(nullable: false),
                     LastTick = table.Column<DateTime>(nullable: false),
-                    CharacterID = table.Column<Guid>(nullable: true)
+                    CharacterID = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -281,6 +281,18 @@ namespace After.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_GameObjects_Name",
+                table: "GameObjects",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameObjects_ID",
+                table: "GameObjects",
+                column: "ID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GameObjects_XCoord_YCoord_ZCoord",
                 table: "GameObjects",
                 columns: new[] { "XCoord", "YCoord", "ZCoord" });
@@ -289,12 +301,6 @@ namespace After.Migrations
                 name: "IX_GameObjects_AfterUserId",
                 table: "GameObjects",
                 column: "AfterUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GameObjects_Name",
-                table: "GameObjects",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatusEffects_CharacterID",

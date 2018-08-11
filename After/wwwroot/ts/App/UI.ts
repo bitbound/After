@@ -22,6 +22,9 @@ export const UI = new class {
     get FPSSpan(): HTMLSpanElement {
         return document.querySelector("#fpsSpan");
     }
+    get PingSpan(): HTMLSpanElement {
+        return document.querySelector("#pingSpan");
+    }
     get WillpowerProgress(): HTMLDivElement {
         return document.querySelector("#willpowerProgress");
     }

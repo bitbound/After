@@ -90,8 +90,8 @@ if (location.pathname.search("play") > -1) {
 
 function gameLoop(delta) {
     Main.Me.Character.ParticleContainer.children.forEach(part => {
-        part.x -= Main.Me.Character.VelocityX * .25;
-        part.y -= Main.Me.Character.VelocityY * .25;
+        part.x -= Main.Me.Character.VelocityX * .30;
+        part.y -= Main.Me.Character.VelocityY * .30;
     });
     Main.Renderer.BackgroundParticleContainer.children.forEach(part => {
         part.x -= Main.Me.Character.VelocityX * .25;

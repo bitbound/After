@@ -7,38 +7,6 @@ export const Utilities = new class {
         });
         return queryStrings;
     }
-    Animate(targetObject: any, targetProperty: string, fromValue: number, toValue: number, measurementUnit:string = null, msTransition: number = 400, msKeyframeSpeed: number = 20) {
-        if (parseInt(targetObject[targetProperty]) == NaN) {
-            console.log("Property is not a number.");
-            return;
-        }
-        if (!fromValue) {
-            fromValue = targetObject[targetProperty];
-        }
-        
-        var totalChange = toValue - fromValue;
-        for (var i = 0; i <= msTransition; i = i + msKeyframeSpeed) {
-            window.setTimeout(function (currentTime) {
-                var newValue = fromValue + (currentTime / msTransition * totalChange);
-                if (measurementUnit) {
-                    targetObject[targetProperty] = newValue + measurementUnit;
-                }
-                else {
-                    targetObject[targetProperty] = newValue;
-                }
-               
-               
-                if (currentTime + msKeyframeSpeed >= msTransition) {
-                    if (measurementUnit) {
-                        targetObject[targetProperty] = toValue + measurementUnit;
-                    }
-                    else {
-                        targetObject[targetProperty] = toValue;
-                    }
-                }
-            }, i, i)
-        }
-    }
     ColorNameToHex(colour: string): string {
         var colours = {
             "aliceblue": "#f0f8ff",
@@ -297,5 +265,20 @@ export const Utilities = new class {
         var centerX = clientRect.left + (clientRect.width / 2);
         var centerY = clientRect.top + (clientRect.height / 2);
         return new PIXI.Point(centerX, centerY);
+    }
+    async Tween(targetObject: Object, targetProperty: string, targetValue: number, transitionTime: number, interval: number = 5) {
+        var totalChange = targetValue - targetObject[targetProperty];
+        var changePerTick = totalChange / transitionTime * interval;
+        var totalTicks = Math.abs(totalChange / changePerTick);
+        var currentTick = 0;
+        while (currentTick < totalTicks) {
+            if (Math.round(targetObject[targetProperty]) == Math.round(targetValue)) {
+                targetObject[targetProperty] = targetValue;
+                break;
+            }
+            targetObject[targetProperty] += changePerTick;
+            currentTick++;
+            await Utilities.Delay(interval);
+        }
     }
 }

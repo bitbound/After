@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="App_Data\" />
     <Folder Include="wwwroot\lib\types\signalr\" />
   </ItemGroup>
 

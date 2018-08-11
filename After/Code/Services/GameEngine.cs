@@ -40,6 +40,7 @@ namespace After.Code.Services
         private DateTime LastEmailSent { get; set; } = DateTime.Now;
 
         private DateTime LastTick { get; set; }
+        private DateTime LastDBSave { get; set; } = DateTime.Now;
 
         private ILogger<GameEngine> Logger { get; set; }
 
@@ -204,14 +205,21 @@ namespace After.Code.Services
             List<ConnectionDetails> activeConnections;
             List<PlayerCharacter> playerCharacters;
             List<GameObject> visibleObjects;
+            DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
+            DBContext.Database.Migrate();
             while (IsRunning)
             {
                 try
                 {
-                    DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
-
+                    if (DateTime.Now - LastDBSave > TimeSpan.FromMinutes(5))
+                    {
+                        DBContext.SaveChanges();
+                        DBContext.Database.CloseConnection();
+                        DBContext.Dispose();
+                        DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
+                        LastDBSave = DateTime.Now;
+                    }
                     var delta = GetDelta();
-
 
                     ProcessInputQueue();
 
@@ -241,10 +249,7 @@ namespace After.Code.Services
                     {
                         x.Modified = false;
                     });
-                    DBContext.SaveChanges();
 
-                    DBContext.Database.CloseConnection();
-                    DBContext.Dispose();
                     visibleObjects.Clear();
                     GameEvents.Clear();
                 }

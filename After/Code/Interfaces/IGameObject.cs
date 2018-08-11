@@ -7,6 +7,6 @@ namespace After.Code.Interfaces
 {
     public interface IGameObject
     {
-        Guid ID { get; set; }
+        string ID { get; set; }
     }
 }

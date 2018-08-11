@@ -40,7 +40,7 @@ namespace After
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                options.UseSqlite("Data Source=After.db")
+                options.UseSqlite(Configuration.GetConnectionString("SQLite"))
             );
  
             services.AddIdentity<AfterUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)

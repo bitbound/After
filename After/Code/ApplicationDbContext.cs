@@ -21,7 +21,7 @@ namespace After.Code
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            optionsBuilder.UseSqlite("Data Source=After.db");
+            optionsBuilder.UseSqlite(Configuration.GetConnectionString("SQLite"));
             optionsBuilder.UseLoggerFactory(AppConstants.CustomLogger);
             base.OnConfiguring(optionsBuilder);
         }
@@ -29,10 +29,12 @@ namespace After.Code
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<GameObject>().HasIndex(x => x.ID).IsUnique();
+
             builder.Entity<GameObject>()
                 .HasIndex(x => new { x.XCoord, x.YCoord, x.ZCoord });
 
-            builder.Entity<PlayerCharacter>()
+            builder.Entity<Character>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
 

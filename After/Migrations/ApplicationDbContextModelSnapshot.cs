@@ -40,7 +40,7 @@ namespace After.Migrations
 
             modelBuilder.Entity("After.Code.Models.GameObject", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<string>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<double>("AccelerationSpeed");
@@ -76,6 +76,9 @@ namespace After.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("ID")
+                        .IsUnique();
+
                     b.HasIndex("XCoord", "YCoord", "ZCoord");
 
                     b.ToTable("GameObjects");
@@ -85,12 +88,12 @@ namespace After.Migrations
 
             modelBuilder.Entity("After.Code.Models.StatusEffect", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<string>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<double>("Amount");
 
-                    b.Property<Guid?>("CharacterID");
+                    b.Property<string>("CharacterID");
 
                     b.Property<DateTime>("Expiration");
 
@@ -295,6 +298,9 @@ namespace After.Migrations
 
                     b.Property<string>("PortraitUri");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Character");
 
                     b.HasDiscriminator().HasValue("Character");
@@ -322,9 +328,6 @@ namespace After.Migrations
                     b.Property<string>("AfterUserId");
 
                     b.HasIndex("AfterUserId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("PlayerCharacter");
 

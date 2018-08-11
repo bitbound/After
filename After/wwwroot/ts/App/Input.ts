@@ -206,10 +206,10 @@ function handleChatResize() {
 
             if (!preventClick) {
                 if (Main.UI.ChatFrame.clientHeight <= 35) {
-                    Utilities.Animate(UI.ChatFrame.style, "height", UI.ChatFrame.clientHeight, 150, "px", 200);
+                    $(UI.ChatFrame).animate({ "height": 150 }, 200);
                 }
                 else {
-                    Utilities.Animate(UI.ChatFrame.style, "height", UI.ChatFrame.clientHeight, 35, "px", 200);
+                    $(UI.ChatFrame).animate({ "height": 35 }, 200);
                 }
             }
         }
@@ -295,14 +295,14 @@ function handleMenuButton() {
             window.removeEventListener("pointerup", pointerUp);
             if (!preventClick) {
                 if (wrapper.clientWidth <= 45) {
-                    Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 200, "px", 200);
                     wrapper.style.height = "auto";
                     wrapper.style.overflow = "auto";
+                    $(wrapper).animate({ "width": 200 }, 200);
                 }
                 else {
-                    Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 45, "px", 200);
-                    Utilities.Animate(wrapper.style, "height", wrapper.clientHeight, 45, "px", 200);
                     wrapper.style.overflow = "hidden";
+                    $(wrapper).animate({ "width": 45 }, 200);
+                    $(wrapper).animate({ "height": 45 }, 200);
                 }
             }
         }

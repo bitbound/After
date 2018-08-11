@@ -1,4 +1,3 @@
-import { Utilities } from "../App/Utilities.js";
 import { Sound } from "../App/Sound.js";
 var introSoulEmitter;
 var introFlybyEmitter;
@@ -171,7 +170,7 @@ createRenderer();
 Sound.Play("/Assets/Sounds/ceich93__drone-darkemptiness.mp3", true);
 document.querySelectorAll("#introTextWrapper div").forEach((value, index) => {
     window.setTimeout((value) => {
-        Utilities.Animate(value.style, "opacity", 0, 1, null, 1500);
+        $(value).animate({ "opacity": 1 }, 1500);
     }, (index + 1) * 1500, value);
 });
 //# sourceMappingURL=Intro.js.map

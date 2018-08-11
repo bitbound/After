@@ -4,7 +4,7 @@ import { Character } from "./Character.js";
 import { PixiHelper } from "../App/PixiHelper.js";
 
 export class Projectile extends GameObject {
-    public Owner: string;
+    public OwnerID: string;
     public Magnitude: number;
     public Force: number;
     public Emitter: PIXI.particles.Emitter;

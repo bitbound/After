@@ -10,7 +10,7 @@ namespace After.Code.Models
     public class StatusEffect
     {
         [Key]
-        public Guid ID { get; set; }
+        public string ID { get; set; }
         public StatusEffectTiming Timing { get; set; }
         public StatusEffectTypes Type { get; set; }
         public double Amount { get; set; }
