@@ -92,11 +92,27 @@ function gameLoop(delta) {
         else {
             PixiHelper.UpdateGameObjectPosition(x);
         }
+        if (x.Discriminator == "Character" || x.Discriminator == "PlayerCharacter") {
+            x.UpdateHealthBar();
+        }
+    });
+    Main.Renderer.EventContainer.children.forEach(displayObject => {
+        if (Me.LastXCoord == null || Me.LastYCoord == null) {
+            return;
+        }
+        displayObject.x += (Me.LastXCoord - Me.Character.XCoord);
+        displayObject.y += (Me.LastYCoord - Me.Character.YCoord);
     });
     Main.Renderer.SceneContainer.children.forEach(value => {
         if (!Main.Me.Scene.GameObjects.some(go => go.ID == value.name)) {
             Main.Renderer.SceneContainer.removeChild(value);
         }
     });
+    Main.Me.LastXCoord = Main.Me.Character.XCoord;
+    Main.Me.LastYCoord = Main.Me.Character.YCoord;
+    if (Main.Me.LastZCoord != Main.Me.Character.ZCoord) {
+        Renderer.EventContainer.removeChildren();
+    }
+    Main.Me.LastZCoord = Main.Me.Character.ZCoord;
 }
 //# sourceMappingURL=Main.js.map

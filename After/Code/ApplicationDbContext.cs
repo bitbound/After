@@ -20,7 +20,8 @@ namespace After.Code
         private IConfiguration Configuration { get; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            //optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlite("Data Source=After.db");
             optionsBuilder.UseLoggerFactory(AppConstants.CustomLogger);
             base.OnConfiguring(optionsBuilder);
         }

@@ -5,6 +5,12 @@ import { PixiHelper } from "../App/PixiHelper.js";
 
 export class Character extends GameObject {
 
+    public UpdateHealthBar(): void {
+        var healthBar = this.WrapperContainer.getChildByName("Healthbar") as PIXI.Graphics;
+        if (healthBar) {
+            healthBar.width = this.CurrentEnergy / this.MaxEnergy * this.Width;
+        }
+    }
     public Name: string;
     public PortraitUri: string;
 
@@ -44,6 +50,26 @@ export class Character extends GameObject {
             Main.Renderer.PixiApp.stage.addChild(this.WrapperContainer);
         }
         else {
+            var nameplate = new PIXI.Text(this.Name,
+                {
+                    fill: this.Color,
+                    fontSize: 12
+                });
+            nameplate.name = "Nameplate";
+            nameplate.x = -(nameplate.width / 2);
+            nameplate.y = -(this.Height + 20);
+            this.WrapperContainer.addChild(nameplate);
+
+
+            var healthbar = new PIXI.Graphics();
+            healthbar.name = "Healthbar";
+            healthbar.width = this.Width;
+            healthbar.beginFill(Main.Utilities.HexStringToNumber(this.Color));
+            healthbar.drawRect(0, 0, this.Width, 4);
+            healthbar.endFill();
+            healthbar.x = -(this.Width / 2);
+            healthbar.y = -(this.Height + 25);
+            this.WrapperContainer.addChild(healthbar);
 
             Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
         }

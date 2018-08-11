@@ -185,6 +185,12 @@ export class Character extends GameObject {
             "autoUpdate": true
         };
     }
+    UpdateHealthBar() {
+        var healthBar = this.WrapperContainer.getChildByName("Healthbar");
+        if (healthBar) {
+            healthBar.width = this.CurrentEnergy / this.MaxEnergy * this.Width;
+        }
+    }
     CreateGraphics() {
         this.DefaultEmitter.color.list[1].value = this.Color;
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
@@ -198,6 +204,23 @@ export class Character extends GameObject {
             Main.Renderer.PixiApp.stage.addChild(this.WrapperContainer);
         }
         else {
+            var nameplate = new PIXI.Text(this.Name, {
+                fill: this.Color,
+                fontSize: 12
+            });
+            nameplate.name = "Nameplate";
+            nameplate.x = -(nameplate.width / 2);
+            nameplate.y = -(this.Height + 20);
+            this.WrapperContainer.addChild(nameplate);
+            var healthbar = new PIXI.Graphics();
+            healthbar.name = "Healthbar";
+            healthbar.width = this.Width;
+            healthbar.beginFill(Main.Utilities.HexStringToNumber(this.Color));
+            healthbar.drawRect(0, 0, this.Width, 4);
+            healthbar.endFill();
+            healthbar.x = -(this.Width / 2);
+            healthbar.y = -(this.Height + 25);
+            this.WrapperContainer.addChild(healthbar);
             Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
         }
         this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], this.DefaultEmitter);

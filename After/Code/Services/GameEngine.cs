@@ -248,16 +248,14 @@ namespace After.Code.Services
                     visibleObjects.Clear();
                     GameEvents.Clear();
                 }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    continue;
+                }
                 catch (Exception ex)
                 {
-                    MainLoop = Task.Run(new Action(RunMainLoop));
                     try
                     {
-                        if (DateTime.Now - LastEmailSent < TimeSpan.FromMinutes(1))
-                        {
-                            return;
-                        }
-                        LastEmailSent = DateTime.Now;
                         var error = new Error()
                         {
                             PathWhereOccurred = "Main Engine Loop",
@@ -268,12 +266,18 @@ namespace After.Code.Services
                         };
                         DBContext.Errors.Add(error);
                         DBContext.SaveChanges();
+                        if (DateTime.Now - LastEmailSent < TimeSpan.FromMinutes(1))
+                        {
+                            continue;
+                        }
+                        LastEmailSent = DateTime.Now;
                         EmailSender.SendEmail("jared@lucent.rocks", "jared@lucent.rocks", "After Server Error", JsonConvert.SerializeObject(error));
+                        continue;
                     }
                     catch
                     {
+                        continue;
 
-                     
                     }
                 }
             }
@@ -282,7 +286,7 @@ namespace After.Code.Services
         private double GetDelta()
         {
             var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
-            Console.WriteLine("Delta: " + delta);
+            //Console.WriteLine("Delta: " + delta);
             while (delta < 1)
             {
                 System.Threading.Thread.Sleep(1);

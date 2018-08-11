@@ -255,7 +255,6 @@ function handleKeyboardInput() {
 }
 function handleMenuButton() {
     document.querySelector("#menuButton").addEventListener("pointerdown", (ev) => {
-        var button = document.querySelector("#menuButton");
         var wrapper = document.querySelector("#menuWrapper");
         var pointerID = ev.pointerId;
         var preventClick = false;
@@ -280,14 +279,14 @@ function handleMenuButton() {
             window.removeEventListener("pointermove", pointerMove);
             window.removeEventListener("pointerup", pointerUp);
             if (!preventClick) {
-                if (wrapper.clientWidth <= 35) {
+                if (wrapper.clientWidth <= 45) {
                     Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 200, "px", 200);
                     wrapper.style.height = "auto";
                     wrapper.style.overflow = "auto";
                 }
                 else {
-                    Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 35, "px", 200);
-                    Utilities.Animate(wrapper.style, "height", wrapper.clientHeight, 35, "px", 200);
+                    Utilities.Animate(wrapper.style, "width", wrapper.clientWidth, 45, "px", 200);
+                    Utilities.Animate(wrapper.style, "height", wrapper.clientHeight, 45, "px", 200);
                     wrapper.style.overflow = "hidden";
                 }
             }

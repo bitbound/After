@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace After.Migrations
@@ -55,7 +54,7 @@ namespace After.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     PathWhereOccurred = table.Column<string>(nullable: true),
                     User = table.Column<string>(nullable: true),
                     Message = table.Column<string>(nullable: true),
@@ -73,7 +72,7 @@ namespace After.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -94,7 +93,7 @@ namespace After.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -178,22 +177,23 @@ namespace After.Migrations
                 name: "GameObjects",
                 columns: table => new
                 {
-                    ID = table.Column<Guid>(nullable: false),
+                    AccelerationSpeed = table.Column<double>(nullable: false),
+                    Color = table.Column<string>(nullable: true),
+                    DecelerationSpeed = table.Column<double>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false),
                     Height = table.Column<int>(nullable: false),
-                    Width = table.Column<int>(nullable: false),
-                    XCoord = table.Column<double>(nullable: false),
-                    YCoord = table.Column<double>(nullable: false),
-                    ZCoord = table.Column<string>(nullable: true),
+                    ID = table.Column<Guid>(nullable: false),
+                    MaxVelocity = table.Column<double>(nullable: false),
+                    Modified = table.Column<bool>(nullable: false),
                     MovementAngle = table.Column<double>(nullable: false),
                     MovementForce = table.Column<double>(nullable: false),
                     VelocityX = table.Column<double>(nullable: false),
                     VelocityY = table.Column<double>(nullable: false),
-                    MaxVelocity = table.Column<double>(nullable: false),
-                    AccelerationSpeed = table.Column<double>(nullable: false),
-                    DecelerationSpeed = table.Column<double>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
+                    Width = table.Column<int>(nullable: false),
+                    XCoord = table.Column<double>(nullable: false),
+                    YCoord = table.Column<double>(nullable: false),
+                    ZCoord = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    Color = table.Column<string>(nullable: true),
                     PortraitUri = table.Column<string>(nullable: true),
                     CoreEnergyPeak = table.Column<double>(nullable: true),
                     CoreEnergy = table.Column<double>(nullable: true),
@@ -219,16 +219,20 @@ namespace After.Migrations
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
-                    Target = table.Column<int>(nullable: false),
+                    Timing = table.Column<int>(nullable: false),
+                    Type = table.Column<int>(nullable: false),
                     Amount = table.Column<double>(nullable: false),
-                    PlayerCharacterID = table.Column<Guid>(nullable: true)
+                    Expiration = table.Column<DateTime>(nullable: false),
+                    Interval = table.Column<TimeSpan>(nullable: false),
+                    LastTick = table.Column<DateTime>(nullable: false),
+                    CharacterID = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StatusEffects", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_StatusEffects_GameObjects_PlayerCharacterID",
-                        column: x => x.PlayerCharacterID,
+                        name: "FK_StatusEffects_GameObjects_CharacterID",
+                        column: x => x.CharacterID,
                         principalTable: "GameObjects",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
@@ -243,8 +247,7 @@ namespace After.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -275,8 +278,7 @@ namespace After.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GameObjects_XCoord_YCoord_ZCoord",
@@ -292,13 +294,12 @@ namespace After.Migrations
                 name: "IX_GameObjects_Name",
                 table: "GameObjects",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_StatusEffects_PlayerCharacterID",
+                name: "IX_StatusEffects_CharacterID",
                 table: "StatusEffects",
-                column: "PlayerCharacterID");
+                column: "CharacterID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

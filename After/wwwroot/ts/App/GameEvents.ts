@@ -10,6 +10,8 @@ export const GameEvents = new class {
     ShowSoulDestroyed(gameEvent: GameEvent) {
         var characterID = gameEvent.EventData["CharacterID"];
         if (characterID == Main.Me.Character.ID) {
+            // TODO
+            //Main.UI.FloatMessage();
             Main.Me.Character.Emitter.destroy();
             Main.Me.Character.WrapperContainer.parent.removeChild(Main.Me.Character.WrapperContainer);
             Main.Me.Character.CreateDeathGraphics();
@@ -26,7 +28,9 @@ export const GameEvents = new class {
 
         characterExplosionConfig.color.end = gameEvent.EventData["Color"];
         characterExplosionConfig.pos = PixiHelper.GetEventPoint(gameEvent.XCoord, gameEvent.YCoord);
-        var emitter = new PIXI.particles.Emitter(Main.Renderer.EventContainer, ["/Assets/Images/particle.png"], characterExplosionConfig);
+        var eventWrapper = new PIXI.Container();
+        Main.Renderer.EventContainer.addChild(eventWrapper);
+        var emitter = new PIXI.particles.Emitter(eventWrapper, ["/Assets/Images/particle.png"], characterExplosionConfig);
         emitter.playOnceAndDestroy();
     }
     ShowProjectileDestroyed(gameEvent: GameEvent) {
@@ -36,13 +40,17 @@ export const GameEvents = new class {
             max: gameEvent.EventData["Angle"] + 15,
             min: gameEvent.EventData["Angle"] - 15
         }
-        var emitter = new PIXI.particles.Emitter(Main.Renderer.EventContainer, ["/Assets/Images/Sparks.png"], projectileHitConfig);
+        var eventWrapper = new PIXI.Container();
+        Main.Renderer.EventContainer.addChild(eventWrapper);
+        var emitter = new PIXI.particles.Emitter(eventWrapper, ["/Assets/Images/Sparks.png"], projectileHitConfig);
         emitter.playOnceAndDestroy();
     }
     ShowProjectileFired(gameEvent: GameEvent) {
         projectileFireConfig.color.end = gameEvent.EventData["Color"];
         projectileFireConfig.pos = PixiHelper.GetEventPoint(gameEvent.XCoord, gameEvent.YCoord);
-        var emitter = new PIXI.particles.Emitter(Main.Renderer.EventContainer, ["/Assets/Images/Sparks.png"], projectileFireConfig);
+        var eventWrapper = new PIXI.Container();
+        Main.Renderer.EventContainer.addChild(eventWrapper);
+        var emitter = new PIXI.particles.Emitter(eventWrapper, ["/Assets/Images/Sparks.png"], projectileFireConfig);
         emitter.playOnceAndDestroy();
     }
     ShowSoulReturned(gameEvent: GameEvent) {
@@ -208,8 +216,8 @@ var projectileFireConfig = {
         "max": 0
     },
     "lifetime": {
-        "min": 0.50,
-        "max": 0.50
+        "min": 0.25,
+        "max": 0.3
     },
     "blendMode": "normal",
     "frequency": 0.001,

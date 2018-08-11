@@ -3,29 +3,25 @@ using System;
 using After.Code;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180730141914_Initial")]
+    [Migration("20180811043215_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846");
 
             modelBuilder.Entity("After.Code.Models.Error", b =>
                 {
                     b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Message");
 
@@ -51,6 +47,8 @@ namespace After.Migrations
 
                     b.Property<double>("AccelerationSpeed");
 
+                    b.Property<string>("Color");
+
                     b.Property<double>("DecelerationSpeed");
 
                     b.Property<string>("Discriminator")
@@ -59,6 +57,8 @@ namespace After.Migrations
                     b.Property<int>("Height");
 
                     b.Property<double>("MaxVelocity");
+
+                    b.Property<bool>("Modified");
 
                     b.Property<double>("MovementAngle");
 
@@ -92,13 +92,21 @@ namespace After.Migrations
 
                     b.Property<double>("Amount");
 
-                    b.Property<Guid?>("PlayerCharacterID");
+                    b.Property<Guid?>("CharacterID");
 
-                    b.Property<int>("Target");
+                    b.Property<DateTime>("Expiration");
+
+                    b.Property<TimeSpan>("Interval");
+
+                    b.Property<DateTime>("LastTick");
+
+                    b.Property<int>("Timing");
+
+                    b.Property<int>("Type");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("PlayerCharacterID");
+                    b.HasIndex("CharacterID");
 
                     b.ToTable("StatusEffects");
                 });
@@ -121,8 +129,7 @@ namespace After.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -130,8 +137,7 @@ namespace After.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ClaimType");
 
@@ -195,8 +201,7 @@ namespace After.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
 
@@ -206,8 +211,7 @@ namespace After.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ClaimType");
 
@@ -273,13 +277,9 @@ namespace After.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("After.Code.Models.PlayerCharacter", b =>
+            modelBuilder.Entity("After.Code.Models.Character", b =>
                 {
                     b.HasBaseType("After.Code.Models.GameObject");
-
-                    b.Property<string>("AfterUserId");
-
-                    b.Property<string>("Color");
 
                     b.Property<double>("CoreEnergy");
 
@@ -297,15 +297,9 @@ namespace After.Migrations
 
                     b.Property<string>("PortraitUri");
 
-                    b.HasIndex("AfterUserId");
+                    b.ToTable("Character");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
-
-                    b.ToTable("PlayerCharacter");
-
-                    b.HasDiscriminator().HasValue("PlayerCharacter");
+                    b.HasDiscriminator().HasValue("Character");
                 });
 
             modelBuilder.Entity("After.Code.Models.AfterUser", b =>
@@ -323,11 +317,27 @@ namespace After.Migrations
                     b.HasDiscriminator().HasValue("AfterUser");
                 });
 
+            modelBuilder.Entity("After.Code.Models.PlayerCharacter", b =>
+                {
+                    b.HasBaseType("After.Code.Models.Character");
+
+                    b.Property<string>("AfterUserId");
+
+                    b.HasIndex("AfterUserId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("PlayerCharacter");
+
+                    b.HasDiscriminator().HasValue("PlayerCharacter");
+                });
+
             modelBuilder.Entity("After.Code.Models.StatusEffect", b =>
                 {
-                    b.HasOne("After.Code.Models.PlayerCharacter")
+                    b.HasOne("After.Code.Models.Character")
                         .WithMany("StatusEffects")
-                        .HasForeignKey("PlayerCharacterID");
+                        .HasForeignKey("CharacterID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
