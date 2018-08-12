@@ -3,14 +3,16 @@ using System;
 using After.Code;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180812171536_Anchors")]
+    partial class Anchors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -299,8 +301,6 @@ namespace After.Migrations
                     b.Property<double>("CurrentWillpower");
 
                     b.Property<bool>("IsCharging");
-
-                    b.Property<bool>("IsRespawnable");
 
                     b.Property<string>("Name");
 

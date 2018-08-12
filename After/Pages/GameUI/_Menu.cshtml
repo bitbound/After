@@ -18,22 +18,24 @@
             Character
         </div>
         <div class="menu-body menu-body-closed">
-            <div class="menu-item">
-                <span class="menu-item-left">Name:</span>
-                <span class="menu-item-right">@Context?.Request?.Query?["character"]</span>
-            </div>
+            <div class="sliver-separator"></div>
+                <div class="menu-item">
+                    <span class="menu-item-center">@Context?.Request?.Query?["character"]</span>
+                </div>
+            <div class="sliver-separator"></div>
             <div class="menu-item">
                 <span class="menu-item-left">Core&nbsp;Energy:</span>
                 <span class="menu-item-right" data-bind="After.Me.Character.CoreEnergy"></span>
-            </div>
-            <div class="menu-item">
-                <span class="menu-item-left">Max&nbsp;Energy:</span>
-                <span class="menu-item-right" data-bind="After.Me.Character.MaxEnergy"></span>
             </div>
 
             <div class="menu-item">
                 <span class="menu-item-left">Energy&nbsp;Peak:</span>
                 <span class="menu-item-right" data-bind="After.Me.Character.CoreEnergyPeak"></span>
+            </div>
+
+            <div class="menu-item">
+                <span class="menu-item-left">Max&nbsp;Energy:</span>
+                <span class="menu-item-right" data-bind="After.Me.Character.MaxEnergy"></span>
             </div>
 
             <div class="menu-item">

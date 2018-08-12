@@ -10,7 +10,7 @@ namespace After.Code.Models
     {
         public PlayerCharacter()
         {
-
+            this.IsRespawnable = true;
         }
     }
 }

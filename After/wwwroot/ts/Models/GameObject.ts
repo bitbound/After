@@ -10,6 +10,7 @@ export class GameObject {
     public ZCoord: string;
     public VelocityX: number;
     public VelocityY: number;
+    public MovementAngle: number;
     public MaxVelocity: number;
     public AccelerationSpeed: number;
     public DecelerationSpeed: number;

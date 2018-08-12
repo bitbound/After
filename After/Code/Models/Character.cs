@@ -22,6 +22,9 @@ namespace After.Code.Models
             XCoord = 0;
             YCoord = 0;
             ZCoord = "0";
+            AnchorX = 0;
+            AnchorY = 0;
+            AnchorZ = "0";
             Color = Utilities.GetRandomHexColor();
             MaxVelocity = 15;
             AccelerationSpeed = 2;
@@ -120,7 +123,8 @@ namespace After.Code.Models
             }
         }
 
-        
+        public bool IsRespawnable { get; protected set; }
+
         public void OnCollision(ICollidable collidingObject)
         {
            
@@ -128,22 +132,30 @@ namespace After.Code.Models
         public void OnDestruction(string destroyerID)
         {
             var characterID = this.ID;
-            GameEngine.Current.InputQueue.Enqueue((dbContext) =>
+            if (IsRespawnable)
             {
-                var destroyer = dbContext.Characters.Find(destroyerID);
-                var character = dbContext.Characters.Find(characterID);
-                character.MovementForce = 0;
-                character.VelocityX = 0;
-                character.VelocityY = 0;
-                character.CurrentCharge = 0;
-                character.IsCharging = false;
-                character.StatusEffects.Add(new StatusEffect()
+                MovementForce = 0;
+                VelocityX = 0;
+                VelocityY = 0;
+                CurrentCharge = 0;
+                IsCharging = false;
+                StatusEffects.Add(new StatusEffect()
                 {
                     Type = Enums.StatusEffectTypes.Dead,
                     Timing = Enums.StatusEffectTiming.Constant,
                     Expiration = DateTime.Now.AddSeconds(5)
 
                 });
+            }
+            GameEngine.Current.InputQueue.Enqueue((dbContext) =>
+            {
+                var destroyer = dbContext.Characters.Find(destroyerID);
+                var character = dbContext.Characters.Find(characterID);
+                if (!character.IsRespawnable)
+                {
+                    dbContext.Characters.Remove(character);
+                    dbContext.SaveChanges();
+                }
                 var gainedEnergy = Math.Round(character.CoreEnergy / destroyer.CoreEnergy) + (Math.Max(0, character.CoreEnergy - destroyer.CoreEnergy));
                 destroyer.CoreEnergy += gainedEnergy;
                 destroyer.CurrentEnergy += gainedEnergy;

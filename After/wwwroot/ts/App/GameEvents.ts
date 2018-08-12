@@ -17,11 +17,13 @@ export const GameEvents = new class {
             Main.Me.Character.RenderDead();
         }
         else {
-            var destroyedCharacter = Main.Me.Scene.GameObjects.find(x => x.ID == characterID);
+            var destroyedCharacter = Main.Me.Scene.GameObjects.find(x => x.ID == characterID) as Character;
             if (destroyedCharacter != null) {
                 destroyedCharacter.WrapperContainer.parent.removeChild(destroyedCharacter.WrapperContainer);
                 (destroyedCharacter as Character).Emitter.destroy();
-                (destroyedCharacter as Character).RenderDead();
+                if (destroyedCharacter.IsRespawnable) {
+                    (destroyedCharacter as Character).RenderDead();
+                }
             }
 
         }

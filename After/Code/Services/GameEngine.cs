@@ -124,9 +124,9 @@ namespace After.Code.Services
                     {
                         character.StatusEffects.RemoveAll(x=>x.Type == StatusEffectTypes.Dead);
                         character.CurrentEnergy = character.MaxEnergy;
-                        character.XCoord = 0;
-                        character.YCoord = 0;
-                        character.ZCoord = "0";
+                        character.XCoord = character.AnchorX;
+                        character.YCoord = character.AnchorY;
+                        character.ZCoord = character.AnchorZ;
                         GameEvents.Add(new GameEvent()
                         {
                             EventName = "SoulReturned",

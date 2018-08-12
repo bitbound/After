@@ -34,5 +34,9 @@ namespace After.Code.Models
         public double XCoord { get; set; }
         public double YCoord { get; set; }
         public string ZCoord { get; set; }
+
+        public double AnchorX { get; set; }
+        public double AnchorY { get; set; }
+        public string AnchorZ { get; set; }
     }
 }

@@ -18,7 +18,9 @@ export const GameEvents = new class {
             if (destroyedCharacter != null) {
                 destroyedCharacter.WrapperContainer.parent.removeChild(destroyedCharacter.WrapperContainer);
                 destroyedCharacter.Emitter.destroy();
-                destroyedCharacter.RenderDead();
+                if (destroyedCharacter.IsRespawnable) {
+                    destroyedCharacter.RenderDead();
+                }
             }
         }
         characterExplosionConfig.color.end = gameEvent.EventData["Color"];

@@ -95,3 +95,10 @@ select:hover, input:hover {
     margin-left: -24%;
     transition: .5s;
 }
+
+.sliver-separator {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 100%
+}

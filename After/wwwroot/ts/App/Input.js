@@ -276,6 +276,7 @@ function handleMenuButton() {
             if (ev.pointerId != pointerID) {
                 return;
             }
+            ev.preventDefault();
             window.removeEventListener("pointermove", pointerMove);
             window.removeEventListener("pointerup", pointerUp);
             if (!preventClick) {

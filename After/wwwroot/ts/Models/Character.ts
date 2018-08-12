@@ -32,6 +32,7 @@ export class Character extends GameObject {
 
     public StatusEffects: Array<StatusEffect>;
     public IsDead: boolean;
+    public IsRespawnable: boolean;
 
 
     public Emitter: PIXI.particles.Emitter;
