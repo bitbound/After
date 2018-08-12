@@ -37,8 +37,11 @@ export class Character extends GameObject {
     public Emitter: PIXI.particles.Emitter;
     public ParticleContainer: PIXI.particles.ParticleContainer;
 
-    public CreateGraphics() {
-        this.DefaultEmitter.color.list[1].value = this.Color
+    public Render() {
+        this.CreateEmitter(this.DefaultEmitter);
+    }
+    private CreateEmitter(config: any) {
+        config.color.list[1].value = this.Color
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
         this.WrapperContainer = new PIXI.Container();
         this.WrapperContainer.name = this.ID;
@@ -50,49 +53,38 @@ export class Character extends GameObject {
             Main.Renderer.PixiApp.stage.addChild(this.WrapperContainer);
         }
         else {
-            var nameplate = new PIXI.Text(this.Name,
-                {
-                    fill: this.Color,
-                    fontSize: 12
-                });
-            nameplate.name = "Nameplate";
-            nameplate.x = -(nameplate.width / 2);
-            nameplate.y = -(this.Height + 20);
-            this.WrapperContainer.addChild(nameplate);
-
-
-            var healthbar = new PIXI.Graphics();
-            healthbar.name = "Healthbar";
-            healthbar.width = this.Width;
-            healthbar.beginFill(Main.Utilities.HexStringToNumber(this.Color));
-            healthbar.drawRect(0, 0, this.Width, 4);
-            healthbar.endFill();
-            healthbar.x = -(this.Width / 2);
-            healthbar.y = -(this.Height + 25);
-            this.WrapperContainer.addChild(healthbar);
+            this.CreateNameplate();
+            this.CreateHealthbar();
 
             Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
         }
-        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], this.DefaultEmitter);
-
-    };
-    public CreateDeathGraphics() {
-        this.DeathEmitter.color.list[1].value = this.Color
-        this.ParticleContainer = new PIXI.particles.ParticleContainer();
-        this.WrapperContainer = new PIXI.Container();
-        this.WrapperContainer.name = this.ID;
-        this.WrapperContainer.height = this.Height;
-        this.WrapperContainer.width = this.Width;
-        this.WrapperContainer.position = PixiHelper.GetCoordsRelativeToMe(this);
-        this.WrapperContainer.addChild(this.ParticleContainer);
-        if (this.ID == Main.Me.Character.ID) {
-            Main.Renderer.PixiApp.stage.addChild(this.WrapperContainer);
-        }
-        else {
-
-            Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
-        }
-        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], this.DeathEmitter);
+        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], config);
+    }
+    private CreateNameplate(): any {
+        var nameplate = new PIXI.Text(this.Name,
+            {
+                fill: this.Color,
+                fontSize: 12
+            });
+        nameplate.name = "Nameplate";
+        nameplate.x = -(nameplate.width / 2);
+        nameplate.y = -(this.Height + 20);
+        this.WrapperContainer.addChild(nameplate);
+    }
+    private CreateHealthbar(): void {
+        var healthbar = new PIXI.Graphics();
+        healthbar.name = "Healthbar";
+        healthbar.width = this.Width;
+        healthbar.beginFill(Main.Utilities.HexStringToNumber(this.Color));
+        healthbar.drawRect(0, 0, this.Width, 4);
+        healthbar.endFill();
+        healthbar.x = -(this.Width / 2);
+        healthbar.y = -(this.Height + 25);
+        this.WrapperContainer.addChild(healthbar);
+    }
+;
+    public RenderDead() {
+        this.CreateEmitter(this.DeathEmitter);
     }
     public DefaultEmitter = {
         "alpha": {

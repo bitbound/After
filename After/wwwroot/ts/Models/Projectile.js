@@ -95,7 +95,7 @@ export class Projectile extends GameObject {
             "autoUpdate": true
         };
     }
-    CreateGraphics() {
+    Render() {
         var size = this.Width + (this.Width * this.Magnitude);
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
         this.WrapperContainer = new PIXI.Container();

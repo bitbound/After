@@ -19,7 +19,7 @@ export class GameObject {
     public get Rect(): PIXI.Rectangle {
         return new PIXI.Rectangle(this.XCoord, this.YCoord, this.Width, this.Height);
     }
-    public CreateGraphics() {
+    public Render() {
         var genericObject = new PIXI.Graphics();
         genericObject.width = 5;
         genericObject.height = 5;

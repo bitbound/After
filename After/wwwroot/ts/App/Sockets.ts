@@ -126,7 +126,7 @@ function applyMessageHandlers(hubConnection: any) {
     });
     hubConnection.on("Ping", args => {
         UI.PingSpan.innerText = String(Date.now() - args["Sent"]) + "ms";
-        if (Main.Settings.IsDebugEnabled) {
+        if (Main.Settings.Local.IsDebugEnabled) {
             window.setTimeout(() => {
                 Sockets.Invoke("Ping", { Sent: Date.now() });
             }, 1000);

@@ -14,14 +14,14 @@ export const GameEvents = new class {
             //Main.UI.FloatMessage();
             Main.Me.Character.Emitter.destroy();
             Main.Me.Character.WrapperContainer.parent.removeChild(Main.Me.Character.WrapperContainer);
-            Main.Me.Character.CreateDeathGraphics();
+            Main.Me.Character.RenderDead();
         }
         else {
             var destroyedCharacter = Main.Me.Scene.GameObjects.find(x => x.ID == characterID);
             if (destroyedCharacter != null) {
                 destroyedCharacter.WrapperContainer.parent.removeChild(destroyedCharacter.WrapperContainer);
                 (destroyedCharacter as Character).Emitter.destroy();
-                (destroyedCharacter as Character).CreateDeathGraphics();
+                (destroyedCharacter as Character).RenderDead();
             }
 
         }
@@ -58,14 +58,14 @@ export const GameEvents = new class {
         if (characterID == Main.Me.Character.ID) {
             Main.Me.Character.Emitter.destroy();
             Main.Me.Character.WrapperContainer.parent.removeChild(Main.Me.Character.WrapperContainer);
-            Main.Me.Character.CreateGraphics();
+            Main.Me.Character.Render();
         }
         else {
             var destroyedCharacter = Main.Me.Scene.GameObjects.find(x => x.ID == characterID);
             if (destroyedCharacter != null) {
                 destroyedCharacter.WrapperContainer.parent.removeChild(destroyedCharacter.WrapperContainer);
                 (destroyedCharacter as Character).Emitter.destroy();
-                (destroyedCharacter as Character).CreateGraphics();
+                (destroyedCharacter as Character).Render();
             }
 
         }

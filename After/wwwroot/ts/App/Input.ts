@@ -246,7 +246,7 @@ function handleKeyboardInput() {
             return;
         }
         e.preventDefault();
-        var keybind = Settings.Keybinds.find(x => x.Key == e.key);
+        var keybind = Settings.Roaming.Keybinds.find(x => x.Key == e.key);
         if (keybind != null) {
             Input.InputKeyStates[keybind.Name] = true;
             sendKeyboardMovementState();
@@ -257,7 +257,7 @@ function handleKeyboardInput() {
             return;
         }
         e.preventDefault();
-        var keybind = Settings.Keybinds.find(x => x.Key == e.key);
+        var keybind = Settings.Roaming.Keybinds.find(x => x.Key == e.key);
         if (keybind != null) {
             Input.InputKeyStates[keybind.Name] = false;
             sendKeyboardMovementState();
@@ -295,14 +295,13 @@ function handleMenuButton() {
             window.removeEventListener("pointerup", pointerUp);
             if (!preventClick) {
                 if (wrapper.clientWidth <= 45) {
+                    $(wrapper).animate({ "width": 200 }, 200);
                     wrapper.style.height = "auto";
                     wrapper.style.overflow = "auto";
-                    $(wrapper).animate({ "width": 200 }, 200);
                 }
                 else {
                     wrapper.style.overflow = "hidden";
-                    $(wrapper).animate({ "width": 45 }, 200);
-                    $(wrapper).animate({ "height": 45 }, 200);
+                    $(wrapper).animate({ "width": 45, "height": 45 }, { duration: 200, queue: false});
                 }
             }
         }
@@ -346,7 +345,7 @@ function handleMenuOptionsButtons() {
         }
     });
     document.querySelector("#toggleDebugWindow").addEventListener("click", ev => {
-        Settings.IsDebugEnabled = !Settings.IsDebugEnabled;
+        Settings.Local.IsDebugEnabled = !Settings.Local.IsDebugEnabled;
     });
     document.querySelector("#logoutButton").addEventListener("click", ev => {
         UI.ShowModal("Confirm Logout", "Are you sure you want to log out?", `
@@ -356,7 +355,7 @@ function handleMenuOptionsButtons() {
         `);
     });
     document.querySelector("#toggleTouchControls").addEventListener("click", ev => {
-        Settings.AreTouchControlsEnabled = !Settings.AreTouchControlsEnabled;
+        Settings.Local.AreTouchControlsEnabled = !Settings.Local.AreTouchControlsEnabled;
     });
 }
 function handleMovementJoystick() {

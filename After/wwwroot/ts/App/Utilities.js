@@ -273,12 +273,17 @@ export const Utilities = new class {
         return new PIXI.Point(centerX, centerY);
     }
     async Tween(targetObject, targetProperty, targetValue, transitionTime, interval = 5) {
+        if (targetObject["_isTweening" + targetProperty]) {
+            return;
+        }
+        targetObject["_isTweening" + targetProperty] = true;
+        var endTime = Date.now() + transitionTime;
         var totalChange = targetValue - targetObject[targetProperty];
         var changePerTick = totalChange / transitionTime * interval;
         var totalTicks = Math.abs(totalChange / changePerTick);
         var currentTick = 0;
         while (currentTick < totalTicks) {
-            if (Math.round(targetObject[targetProperty]) == Math.round(targetValue)) {
+            if (Math.round(targetObject[targetProperty]) == Math.round(targetValue) || Date.now() >= endTime) {
                 targetObject[targetProperty] = targetValue;
                 break;
             }
@@ -286,6 +291,7 @@ export const Utilities = new class {
             currentTick++;
             await Utilities.Delay(interval);
         }
+        targetObject["_isTweening" + targetProperty] = false;
     }
 };
 //# sourceMappingURL=Utilities.js.map

@@ -9,7 +9,7 @@ export class Projectile extends GameObject {
     public Force: number;
     public Emitter: PIXI.particles.Emitter;
     public ParticleContainer: PIXI.particles.ParticleContainer;
-    public CreateGraphics() {
+    public Render() {
         var size = this.Width + (this.Width * this.Magnitude);
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
         this.WrapperContainer = new PIXI.Container();

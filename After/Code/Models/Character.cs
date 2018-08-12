@@ -23,7 +23,7 @@ namespace After.Code.Models
             YCoord = 0;
             ZCoord = "0";
             Color = Utilities.GetRandomHexColor();
-            MaxVelocity = 10;
+            MaxVelocity = 15;
             AccelerationSpeed = 2;
             DecelerationSpeed = 1;
         }

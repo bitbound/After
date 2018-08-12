@@ -27,21 +27,23 @@ var main = new class {
         Main.Renderer.PixiApp.ticker.add(delta => gameLoop(delta));
     }
     Init(currentCharacter, rendererWidth, rendererHeight) {
+        Settings.Local.RendererResolution.Width = rendererWidth;
+        Settings.Local.RendererResolution.Height = rendererHeight;
         UI.AddSystemMessage("Welcome to After.");
         UI.ApplyDataBinds();
         this.Renderer.CreatePixiApp(rendererWidth, rendererHeight);
         Input.ApplyInputHandlers();
         if (location.href.indexOf("localhost") > -1) {
-            Settings.IsDebugEnabled = true;
+            Settings.Local.IsDebugEnabled = true;
         }
         else {
-            Settings.IsDebugEnabled = Settings.IsDebugEnabled;
+            Settings.Local.IsDebugEnabled = Settings.Local.IsDebugEnabled;
         }
-        Settings.AreTouchControlsEnabled = Settings.AreTouchControlsEnabled;
-        PixiHelper.LoadBackgroundEmitter();
+        Settings.Local.AreTouchControlsEnabled = Settings.Local.AreTouchControlsEnabled;
+        PixiHelper.LoadBackgroundEmitter(rendererWidth, rendererHeight);
         $.extend(true, this.Me.Character, currentCharacter);
         UI.UpdateStatBars();
-        this.Me.Character.CreateGraphics();
+        this.Me.Character.Render();
         this.StartGameLoop();
     }
 };
@@ -87,7 +89,7 @@ function gameLoop(delta) {
     });
     Main.Me.Scene.GameObjects.forEach(x => {
         if (!Main.Renderer.SceneContainer.children.some(y => y.name == x.ID)) {
-            x.CreateGraphics();
+            x.Render();
         }
         else {
             PixiHelper.UpdateGameObjectPosition(x);

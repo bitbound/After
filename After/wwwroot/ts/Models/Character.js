@@ -191,8 +191,11 @@ export class Character extends GameObject {
             healthBar.width = this.CurrentEnergy / this.MaxEnergy * this.Width;
         }
     }
-    CreateGraphics() {
-        this.DefaultEmitter.color.list[1].value = this.Color;
+    Render() {
+        this.CreateEmitter(this.DefaultEmitter);
+    }
+    CreateEmitter(config) {
+        config.color.list[1].value = this.Color;
         this.ParticleContainer = new PIXI.particles.ParticleContainer();
         this.WrapperContainer = new PIXI.Container();
         this.WrapperContainer.name = this.ID;
@@ -204,44 +207,36 @@ export class Character extends GameObject {
             Main.Renderer.PixiApp.stage.addChild(this.WrapperContainer);
         }
         else {
-            var nameplate = new PIXI.Text(this.Name, {
-                fill: this.Color,
-                fontSize: 12
-            });
-            nameplate.name = "Nameplate";
-            nameplate.x = -(nameplate.width / 2);
-            nameplate.y = -(this.Height + 20);
-            this.WrapperContainer.addChild(nameplate);
-            var healthbar = new PIXI.Graphics();
-            healthbar.name = "Healthbar";
-            healthbar.width = this.Width;
-            healthbar.beginFill(Main.Utilities.HexStringToNumber(this.Color));
-            healthbar.drawRect(0, 0, this.Width, 4);
-            healthbar.endFill();
-            healthbar.x = -(this.Width / 2);
-            healthbar.y = -(this.Height + 25);
-            this.WrapperContainer.addChild(healthbar);
+            this.CreateNameplate();
+            this.CreateHealthbar();
             Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
         }
-        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], this.DefaultEmitter);
+        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], config);
+    }
+    CreateNameplate() {
+        var nameplate = new PIXI.Text(this.Name, {
+            fill: this.Color,
+            fontSize: 12
+        });
+        nameplate.name = "Nameplate";
+        nameplate.x = -(nameplate.width / 2);
+        nameplate.y = -(this.Height + 20);
+        this.WrapperContainer.addChild(nameplate);
+    }
+    CreateHealthbar() {
+        var healthbar = new PIXI.Graphics();
+        healthbar.name = "Healthbar";
+        healthbar.width = this.Width;
+        healthbar.beginFill(Main.Utilities.HexStringToNumber(this.Color));
+        healthbar.drawRect(0, 0, this.Width, 4);
+        healthbar.endFill();
+        healthbar.x = -(this.Width / 2);
+        healthbar.y = -(this.Height + 25);
+        this.WrapperContainer.addChild(healthbar);
     }
     ;
-    CreateDeathGraphics() {
-        this.DeathEmitter.color.list[1].value = this.Color;
-        this.ParticleContainer = new PIXI.particles.ParticleContainer();
-        this.WrapperContainer = new PIXI.Container();
-        this.WrapperContainer.name = this.ID;
-        this.WrapperContainer.height = this.Height;
-        this.WrapperContainer.width = this.Width;
-        this.WrapperContainer.position = PixiHelper.GetCoordsRelativeToMe(this);
-        this.WrapperContainer.addChild(this.ParticleContainer);
-        if (this.ID == Main.Me.Character.ID) {
-            Main.Renderer.PixiApp.stage.addChild(this.WrapperContainer);
-        }
-        else {
-            Main.Renderer.SceneContainer.addChild(this.WrapperContainer);
-        }
-        this.Emitter = new PIXI.particles.Emitter(this.ParticleContainer, ["/Assets/Images/CharacterParticle.png"], this.DeathEmitter);
+    RenderDead() {
+        this.CreateEmitter(this.DeathEmitter);
     }
 }
 //# sourceMappingURL=Character.js.map

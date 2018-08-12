@@ -38,14 +38,14 @@ export const PixiHelper = new class {
                 break;
 
         }
-        //if (objectToUpdate.x != target.x) {
-        //    Main.Utilities.Tween(objectToUpdate, "x", target.x, 40);
-        //}
-        //if (objectToUpdate.y != target.y) {
-        //    Main.Utilities.Tween(objectToUpdate, "y", target.y, 40);
-        //}
-        objectToUpdate.x = target.x;
-        objectToUpdate.y = target.y;
+        if (objectToUpdate.x != target.x) {
+            Main.Utilities.Tween(objectToUpdate, "x", target.x, 20);
+        }
+        if (objectToUpdate.y != target.y) {
+            Main.Utilities.Tween(objectToUpdate, "y", target.y, 20);
+        }
+        //objectToUpdate.x = target.x;
+        //objectToUpdate.y = target.y;
        
     }
 
@@ -65,12 +65,12 @@ export const PixiHelper = new class {
         var dy = centerPoint.y - targetPoint.y;
         return Math.atan2(dy, dx);
     }
-    LoadBackgroundEmitter(): any {
+    LoadBackgroundEmitter(rendererWidth:number, rendererHeight:number): any {
         backgroundEmitterConfig.spawnRect = {
-            "x": -(Settings.RendererResolution.Width / 2),
-            "y": -(Settings.RendererResolution.Height / 2),
-            "w": Settings.RendererResolution.Width * 2,
-            "h": Settings.RendererResolution.Height * 2
+            "x": -(rendererWidth / 2),
+            "y": -(rendererHeight / 2),
+            "w": rendererWidth * 2,
+            "h": rendererHeight * 2
         };
         var container = new PIXI.particles.ParticleContainer;
         Main.Renderer.BackgroundParticleContainer = container;

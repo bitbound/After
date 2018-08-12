@@ -1,5 +1,4 @@
 import { Main } from "../Main.js";
-import { Settings } from "./Settings.js";
 export const PixiHelper = new class {
     GetCoordsRelativeToMe(x) {
         return new PIXI.Point((x.XCoord - Main.Me.Character.XCoord) + (Main.Renderer.PixiApp.screen.width / 2) + (x.Width / 2) - (Main.Me.Character.Width / 2), (x.YCoord - Main.Me.Character.YCoord) + (Main.Renderer.PixiApp.screen.height / 2) + (x.Height / 2) - (Main.Me.Character.Height / 2));
@@ -25,14 +24,14 @@ export const PixiHelper = new class {
             default:
                 break;
         }
-        //if (objectToUpdate.x != target.x) {
-        //    Main.Utilities.Tween(objectToUpdate, "x", target.x, 40);
-        //}
-        //if (objectToUpdate.y != target.y) {
-        //    Main.Utilities.Tween(objectToUpdate, "y", target.y, 40);
-        //}
-        objectToUpdate.x = target.x;
-        objectToUpdate.y = target.y;
+        if (objectToUpdate.x != target.x) {
+            Main.Utilities.Tween(objectToUpdate, "x", target.x, 20);
+        }
+        if (objectToUpdate.y != target.y) {
+            Main.Utilities.Tween(objectToUpdate, "y", target.y, 20);
+        }
+        //objectToUpdate.x = target.x;
+        //objectToUpdate.y = target.y;
     }
     GetDistanceBetween(point1, point2) {
         return Math.sqrt(Math.pow(point1.x - point2.x, 2) +
@@ -48,12 +47,12 @@ export const PixiHelper = new class {
         var dy = centerPoint.y - targetPoint.y;
         return Math.atan2(dy, dx);
     }
-    LoadBackgroundEmitter() {
+    LoadBackgroundEmitter(rendererWidth, rendererHeight) {
         backgroundEmitterConfig.spawnRect = {
-            "x": -(Settings.RendererResolution.Width / 2),
-            "y": -(Settings.RendererResolution.Height / 2),
-            "w": Settings.RendererResolution.Width * 2,
-            "h": Settings.RendererResolution.Height * 2
+            "x": -(rendererWidth / 2),
+            "y": -(rendererHeight / 2),
+            "w": rendererWidth * 2,
+            "h": rendererHeight * 2
         };
         var container = new PIXI.particles.ParticleContainer;
         Main.Renderer.BackgroundParticleContainer = container;

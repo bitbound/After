@@ -53,7 +53,7 @@ export const UI = new class {
         }
     }
     AddDebugMessage(message: string, jsonData: any, addBlankLines: number = 0) {
-        if (Settings.IsDebugEnabled) {
+        if (Settings.Local.IsDebugEnabled) {
             var temp = new Array<any>();
             var jsonHTML = "";
             if (jsonData) {
@@ -71,7 +71,7 @@ export const UI = new class {
                 }, "&emsp;").split("\n").join("<br/>").split(" ").join("&nbsp;");
                 temp = null;
             }
-            var messageText = `<div style="color:${Settings.Colors.DebugMessage}">[Debug]: ${Utilities.EncodeForHTML(message) + jsonHTML}</div>`;
+            var messageText = `<div style="color:${Settings.Roaming.Colors.DebugMessage}">[Debug]: ${Utilities.EncodeForHTML(message) + jsonHTML}</div>`;
             for (var i = 0; i < addBlankLines; i++) {
                 messageText += "<br>";
             }
@@ -92,7 +92,7 @@ export const UI = new class {
         this.AppendMessageToWindow(html);
     };
     AddSystemMessage(message: string, addBlankLines: number = 0) {
-        var messageText = `<div style="color:${Settings.Colors.SystemMessage}">[System]: ${message}</div>`;
+        var messageText = `<div style="color:${Settings.Roaming.Colors.SystemMessage}">[System]: ${message}</div>`;
         for (var i = 0; i < addBlankLines; i++) {
             messageText += "<br>";
         }
@@ -100,7 +100,7 @@ export const UI = new class {
     };
     AddGlobalChat(characterName:string, message: string, color: string) {
         var messageText = `<div>
-                <span style="color:${Settings.Colors.GlobalChat}">[Global] </span>
+                <span style="color:${Settings.Roaming.Colors.GlobalChat}">[Global] </span>
                 <span style="color:${color}">${characterName}</span>: 
                 ${message}</div>`;
         this.AppendMessageToWindow(messageText);

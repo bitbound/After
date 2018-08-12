@@ -15,7 +15,7 @@ namespace After.Code.Models
         {
             this.ID = Guid.NewGuid().ToString();
             var size = (int)(5 + (5 * magnitude));
-            var speed = 20 + (20 * magnitude);
+            var speed = 30 + (30 * magnitude);
             this.Height = size;
             this.Width = size;
             this.AccelerationSpeed = speed;
