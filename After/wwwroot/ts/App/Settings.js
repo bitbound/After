@@ -52,6 +52,7 @@ export const Settings = new class {
                 document.querySelector("#toggleTouchControls").setAttribute("on", String(value));
             }
         };
+        // TODO: Save settings on server.
         this.Roaming = new class {
             constructor() {
                 this.Colors = {

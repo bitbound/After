@@ -53,7 +53,7 @@ export const Settings = new class {
             Height: 720
         }
     }
-
+    // TODO: Save settings on server.
     Roaming = new class {
         Colors = {
             GlobalChat: "rgb(0, 255, 64)",
