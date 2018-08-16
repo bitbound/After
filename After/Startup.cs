@@ -16,6 +16,8 @@ using After.Code;
 using After.Code.Models;
 using After.Code.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace After
 {
@@ -75,6 +77,17 @@ namespace After
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            // Needed for Let's Encrypt.
+            if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @".well-known")))
+            {
+                app.UseStaticFiles(new StaticFileOptions
+                {
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @".well-known")),
+                    RequestPath = new PathString("/.well-known"),
+                    ServeUnknownFileTypes = true
+                });
+            }
+           
             app.UseCookiePolicy();
 
             app.UseAuthentication();

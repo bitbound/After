@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace After.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180812171536_Anchors")]
-    partial class Anchors
+    [Migration("20180814194223_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -301,6 +301,8 @@ namespace After.Migrations
                     b.Property<double>("CurrentWillpower");
 
                     b.Property<bool>("IsCharging");
+
+                    b.Property<bool>("IsRespawnable");
 
                     b.Property<string>("Name");
 

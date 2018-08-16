@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace After.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -193,6 +193,9 @@ namespace After.Migrations
                     XCoord = table.Column<double>(nullable: false),
                     YCoord = table.Column<double>(nullable: false),
                     ZCoord = table.Column<string>(nullable: true),
+                    AnchorX = table.Column<double>(nullable: false),
+                    AnchorY = table.Column<double>(nullable: false),
+                    AnchorZ = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     PortraitUri = table.Column<string>(nullable: true),
                     CoreEnergyPeak = table.Column<double>(nullable: true),
@@ -201,6 +204,7 @@ namespace After.Migrations
                     CurrentCharge = table.Column<double>(nullable: true),
                     CurrentWillpower = table.Column<double>(nullable: true),
                     IsCharging = table.Column<bool>(nullable: true),
+                    IsRespawnable = table.Column<bool>(nullable: true),
                     AfterUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
