@@ -1,6 +1,7 @@
 ﻿using After.Code.Enums;
 using After.Code.Interfaces;
 using After.Code.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,6 @@ namespace After.Code.Services
         private IConfiguration Configuration { get; }
 
         private ApplicationDbContext DBContext { get; set; }
-
         private EmailSender EmailSender { get; set; }
         private DateTime LastEmailSent { get; set; } = DateTime.Now;
 
@@ -207,6 +207,34 @@ namespace After.Code.Services
             List<GameObject> visibleObjects;
             DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
             DBContext.Database.Migrate();
+            //for (var i = 0; i < 300; i++)
+            //{
+            //    var userName = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10);
+            //    var user = new AfterUser()
+            //    {
+            //        IsTemporary = true,
+            //        UserName = userName,
+            //        Email = "test@test.com",
+            //        NormalizedEmail = "TEST@TEST.COM",
+            //        NormalizedUserName = userName.ToUpper(),
+            //        Characters = new List<PlayerCharacter>()
+            //        {
+            //            new PlayerCharacter()
+            //            {
+            //                Name = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10),
+            //                XCoord = new Random().Next(-5000, 5000),
+            //                YCoord = new Random().Next(-5000, 5000),
+            //                Color = Utilities.GetRandomHexColor()
+            //            }
+            //        }
+            //    };
+            //    SocketHub.ConnectionList.Add(new ConnectionDetails()
+            //    {
+            //        CharacterID = user.Characters[0].ID
+            //    });
+            //    DBContext.Users.Add(user);
+            //}
+            DBContext.SaveChanges();
             while (IsRunning)
             {
                 try
@@ -291,7 +319,7 @@ namespace After.Code.Services
         private double GetDelta()
         {
             var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
-            //Console.WriteLine("Delta: " + delta);
+            Console.WriteLine("Delta: " + delta);
             while (delta < 1)
             {
                 System.Threading.Thread.Sleep(1);

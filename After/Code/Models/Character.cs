@@ -123,7 +123,7 @@ namespace After.Code.Models
             }
         }
 
-        public bool IsRespawnable { get; protected set; }
+        public bool IsRespawnable { get; set; }
 
         public void OnCollision(ICollidable collidingObject)
         {
