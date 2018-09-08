@@ -37,22 +37,6 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
-    <script>
-        document.querySelector("#contactForm").method = "get";
-        document.querySelector("#contactForm").action = "/";
-        window.addEventListener("load", ev => { 
-            document.querySelector("#submitButton").addEventListener("mousedown", ev => {
-                document.querySelector("#contactForm").method = "post";
-                document.querySelector("#contactForm").action = location.pathname;
-            });
-            document.querySelector("#submitButton").addEventListener("touchstart", ev => {
-                document.querySelector("#contactForm").method = "post";
-                document.querySelector("#contactForm").action = location.pathname;
-            });
-        });
-
-    </script>
-
     @if (Request.Query["success"] == "true")
     {
         <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-hidden="true">
