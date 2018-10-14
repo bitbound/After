@@ -20,7 +20,7 @@ namespace After.Code.Services
             mailClient.Host = "mail.after-game.net";
             mailClient.Port = 25;
             mailClient.EnableSsl = false;
-            mailClient.Credentials = new NetworkCredential("hello@after-game.net", "xH78eKysI%7D");
+            mailClient.Credentials = new NetworkCredential("hello@after-game.net", "");
             mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
             var from = new MailAddress("hello@after-game.net", "After Support");
@@ -48,7 +48,7 @@ namespace After.Code.Services
             mailClient.Host = "mail.after-game.net";
             mailClient.Port = 25;
             mailClient.EnableSsl = false;
-            mailClient.Credentials = new NetworkCredential("hello@after-game.net", "xH78eKysI%7D");
+            mailClient.Credentials = new NetworkCredential("hello@after-game.net", "");
             mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
             var from = new MailAddress("hello@after-game.net", "After Support");
