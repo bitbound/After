@@ -305,7 +305,7 @@ function handleMenuHeaderClick() {
 function handleMenuOptionsButtons() {
     document.querySelector("#buttonFullscreen").addEventListener("click", ev => {
         if (document.documentElement.requestFullscreen) {
-            if (document.fullscreenElement) {
+            if (document.fullscreen) {
                 document.exitFullscreen();
             }
             else {
@@ -318,14 +318,6 @@ function handleMenuOptionsButtons() {
             }
             else {
                 document.documentElement.mozRequestFullScreen();
-            }
-        }
-        else if (document.documentElement.webkitRequestFullScreen) {
-            if (document.webkitIsFullScreen) {
-                document.webkitExitFullscreen();
-            }
-            else {
-                document.documentElement.webkitRequestFullScreen();
             }
         }
     });

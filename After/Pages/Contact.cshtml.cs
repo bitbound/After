@@ -22,7 +22,7 @@ namespace After.Pages
         }
         public async Task OnPost(InputModel input)
         {
-            await EmailSender.SendEmailAsync($"jared@lucent.rocks", input.Email, "Message from After", $"From {input.Name} (mailto:{input.Email}):<br><br>{input.Message.Replace(Environment.NewLine, "<br>")}");
+            await EmailSender.SendEmailAsync($"", input.Email, "", $"From {input.Name}: <br/><br/>{input.Message}");
             Response.Redirect("/Contact?success=true");
         }
         public class InputModel

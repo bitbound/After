@@ -17,13 +17,13 @@ namespace After.Code.Services
         public Task SendEmailAsync(string email, string replyTo, string subject, string message)
         {
             var mailClient = new SmtpClient();
-            mailClient.Host = "mail.after-game.net";
+            mailClient.Host = "";
             mailClient.Port = 25;
             mailClient.EnableSsl = false;
-            mailClient.Credentials = new NetworkCredential("hello@after-game.net", "xH78eKysI%7D");
+            mailClient.Credentials = new NetworkCredential("", "");
             mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
-            var from = new MailAddress("hello@after-game.net", "After Support");
+            var from = new MailAddress("", "");
             var to = new MailAddress(email);
 
             var mailMessage = new MailMessage(from, to);
@@ -32,7 +32,7 @@ namespace After.Code.Services
             mailMessage.Body = message;
             mailMessage.ReplyToList.Add(new MailAddress(replyTo));
 
-            mailMessage.Bcc.Add("hello@after-game.net");
+            mailMessage.Bcc.Add("");
 
             try
             {
@@ -45,13 +45,13 @@ namespace After.Code.Services
         public void SendEmail(string email, string replyTo, string subject, string message)
         {
             var mailClient = new SmtpClient();
-            mailClient.Host = "mail.after-game.net";
+            mailClient.Host = "";
             mailClient.Port = 25;
             mailClient.EnableSsl = false;
-            mailClient.Credentials = new NetworkCredential("hello@after-game.net", "xH78eKysI%7D");
+            mailClient.Credentials = new NetworkCredential("", "");
             mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
-            var from = new MailAddress("hello@after-game.net", "After Support");
+            var from = new MailAddress("", "");
             var to = new MailAddress(email);
 
             var mailMessage = new MailMessage(from, to);
@@ -60,7 +60,7 @@ namespace After.Code.Services
             mailMessage.Body = message;
             mailMessage.ReplyToList.Add(new MailAddress(replyTo));
 
-            mailMessage.Bcc.Add("hello@after-game.net");
+            mailMessage.Bcc.Add("");
 
             try
             {
