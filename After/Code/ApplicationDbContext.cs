@@ -16,6 +16,7 @@ namespace After.Code
             : base(options)
         {
             Configuration = configuration;
+            this.Database.Migrate();
         }
         private IConfiguration Configuration { get; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
