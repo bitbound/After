@@ -56,7 +56,7 @@ namespace After.Pages
                 try
                 {
                     DataService.AddError(error);
-                    await EmailSender.SendEmailAsync("jared@lucent.rocks", "jared@lucent.rocks", "After Server Error", JsonConvert.SerializeObject(error));
+                    await EmailSender.SendEmailAsync("jared@lucency.co", "jared@lucency.co", "After Server Error", JsonConvert.SerializeObject(error));
                 }
                 catch{ }
             }

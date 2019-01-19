@@ -11,7 +11,7 @@
     <div class="col-sm-6">
         <form id="contactForm" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <input class="hidden" type="tel" name="Phone" />
+       
             <div class="form-group">
                 <label asp-for="Input.Name"></label>
                 <input class="form-control" asp-for="Input.Name" />
@@ -26,6 +26,9 @@
                 <label asp-for="Input.Message"></label>
                 <textarea class="form-control" asp-for="Input.Message"></textarea>
                 <span asp-validation-for="Input.Message" class="text-danger"></span>
+            </div>
+            <div>
+                <input class="hidden" asp-for="Input.Phone" />
             </div>
             <div class="form-group text-right">
                 <button id="submitButton" type="submit" class="btn btn-primary">Send</button>

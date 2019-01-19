@@ -304,7 +304,7 @@ namespace After.Code.Services
                             continue;
                         }
                         LastEmailSent = DateTime.Now;
-                        EmailSender.SendEmail("jared@lucent.rocks", "jared@lucent.rocks", "After Server Error", JsonConvert.SerializeObject(error));
+                        EmailSender.SendEmail("jared@lucency.co", "jared@lucency.co", "After Server Error", JsonConvert.SerializeObject(error));
                         continue;
                     }
                     catch

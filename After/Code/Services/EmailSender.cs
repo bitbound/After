@@ -16,27 +16,10 @@ namespace After.Code.Services
     {
         public Task SendEmailAsync(string email, string replyTo, string subject, string message)
         {
-            var mailClient = new SmtpClient();
-            mailClient.Host = "";
-            mailClient.Port = 25;
-            mailClient.EnableSsl = false;
-            mailClient.Credentials = new NetworkCredential("", "");
-            mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-            var from = new MailAddress("", "");
-            var to = new MailAddress(email);
-
-            var mailMessage = new MailMessage(from, to);
-            mailMessage.IsBodyHtml = true;
-            mailMessage.Subject = subject;
-            mailMessage.Body = message;
-            mailMessage.ReplyToList.Add(new MailAddress(replyTo));
-
-            mailMessage.Bcc.Add("");
-
             try
             {
-                mailClient.Send(mailMessage);
+                var client = new SmtpClient("mail.lucency.co");
+                client.SendAsync(replyTo, email, subject, message, null);
             }
             catch { }
 
@@ -44,29 +27,13 @@ namespace After.Code.Services
         }
         public void SendEmail(string email, string replyTo, string subject, string message)
         {
-            var mailClient = new SmtpClient();
-            mailClient.Host = "";
-            mailClient.Port = 25;
-            mailClient.EnableSsl = false;
-            mailClient.Credentials = new NetworkCredential("", "");
-            mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-            var from = new MailAddress("", "");
-            var to = new MailAddress(email);
-
-            var mailMessage = new MailMessage(from, to);
-            mailMessage.IsBodyHtml = true;
-            mailMessage.Subject = subject;
-            mailMessage.Body = message;
-            mailMessage.ReplyToList.Add(new MailAddress(replyTo));
-
-            mailMessage.Bcc.Add("");
-
             try
             {
-                mailClient.Send(mailMessage);
+                var client = new SmtpClient("mail.lucency.co");
+                client.SendAsync(replyTo, email, subject, message, null);
             }
-            catch { }
+            catch{ }
+
         }
     }
 }
