@@ -207,38 +207,28 @@ namespace After.Code.Services
             List<GameObject> visibleObjects;
             DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
             DBContext.Database.Migrate();
-            //for (var i = 0; i < 300; i++)
-            //{
-            //    var userName = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10);
-            //    var user = new AfterUser()
-            //    {
-            //        IsTemporary = true,
-            //        UserName = userName,
-            //        Email = "test@test.com",
-            //        NormalizedEmail = "TEST@TEST.COM",
-            //        NormalizedUserName = userName.ToUpper(),
-            //        Characters = new List<PlayerCharacter>()
-            //        {
-            //            new PlayerCharacter()
-            //            {
-            //                Name = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10),
-            //                XCoord = new Random().Next(-5000, 5000),
-            //                YCoord = new Random().Next(-5000, 5000),
-            //                Color = Utilities.GetRandomHexColor()
-            //            }
-            //        }
-            //    };
-            //    SocketHub.ConnectionList.Add(new ConnectionDetails()
-            //    {
-            //        CharacterID = user.Characters[0].ID
-            //    });
-            //    DBContext.Users.Add(user);
-            //}
             DBContext.SaveChanges();
             while (IsRunning)
             {
                 try
                 {
+                    // TODO: Remove these dummy users later.
+                    while (DBContext.Characters.Count(x=> !(x is PlayerCharacter)) < 5)
+                    {
+                        DBContext.Characters.Add(new Character()
+                        {
+                            Name = "TargetDummy" + Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10),
+                            XCoord = new Random().Next(-500, 500),
+                            YCoord = new Random().Next(-500, 500),
+                            Color = Utilities.GetRandomHexColor(),
+                            AnchorX = 0,
+                            AnchorY = 0,
+                            AnchorZ = "0",
+                            CoreEnergy = DBContext.PlayerCharacters.Any() ? DBContext.PlayerCharacters.Average(x => x.CoreEnergy) : 100
+                        });
+                        DBContext.SaveChanges();
+                    }
+
                     if (DateTime.Now - LastDBSave > TimeSpan.FromMinutes(5))
                     {
                         DBContext.SaveChanges();
