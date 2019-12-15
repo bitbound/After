@@ -18,6 +18,8 @@ using After.Code.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Hosting;
 
 namespace After
 {
@@ -42,7 +44,8 @@ namespace After
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                options.UseSqlite(Configuration.GetConnectionString("SQLite"))
+                //options.UseSqlite(Configuration.GetConnectionString("SQLite"))
+                options.UseInMemoryDatabase("AfterDb")
             );
  
             services.AddIdentity<AfterUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
@@ -50,11 +53,16 @@ namespace After
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSignalR().AddJsonProtocol(options =>
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            })
+            .AddNewtonsoftJsonProtocol(options =>
             {
                 options.PayloadSerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             });
+
             services.AddLogging();
             services.AddScoped<DataService>();
             services.AddSingleton<GameEngine>();
@@ -62,18 +70,22 @@ namespace After
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataService dataService, GameEngine gameEngine)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataService dataService, GameEngine gameEngine)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -90,12 +102,21 @@ namespace After
            
             app.UseCookiePolicy();
 
+            app.UseRouting();
+
             app.UseAuthentication();
-            app.UseSignalR(routes =>
+
+            app.UseAuthorization();
+
+
+            app.UseEndpoints(routeBuilder =>
             {
-                routes.MapHub<SocketHub>("/SocketEndpoint");
+                routeBuilder.MapHub<BrowserHub>("/SocketEndpoint");
+
+                routeBuilder.MapRazorPages();
+                routeBuilder.MapControllers();
+
             });
-            app.UseMvc();
             dataService.CleanupTempUsers();
         }
     }

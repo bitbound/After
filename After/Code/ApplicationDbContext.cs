@@ -7,23 +7,26 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 
 namespace After.Code
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
             : base(options)
         {
             Configuration = configuration;
-            this.Database.Migrate();
+            //this.Database.Migrate();
         }
         private IConfiguration Configuration { get; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            optionsBuilder.UseSqlite(Configuration.GetConnectionString("SQLite"));
-            optionsBuilder.UseLoggerFactory(AppConstants.CustomLogger);
+            //optionsBuilder.UseSqlite(Configuration.GetConnectionString("SQLite"));
+            optionsBuilder.UseInMemoryDatabase("AfterDb");
             base.OnConfiguring(optionsBuilder);
         }
         

@@ -43,14 +43,14 @@ export const Sockets = new class {
         });
     }
     IsDisconnectExpected: boolean = false;
-    Invoke(methodName: string, args: any) {
-        this.Connection.invoke(methodName, args);
+    Invoke(methodName: string, ...rest) {
+        this.Connection.invoke(methodName, ...rest);
     }
 }
 
 function applyMessageHandlers(hubConnection: any) {
-    hubConnection.on("InitialUpdate", (args) => {
-        Main.Init(args.CurrentCharacter, args.RendererWidth, args.RendererHeight);
+    hubConnection.on("InitialUpdate", (currentCharacter: Character, renderWidth: number, renderHeight: number) => {
+        Main.Init(currentCharacter, renderWidth, renderHeight);
       
     });
 
@@ -62,12 +62,12 @@ function applyMessageHandlers(hubConnection: any) {
         }
     });
 
-    hubConnection.on("DisconnectDuplicateConnection", args => {
+    hubConnection.on("DisconnectDuplicateConnection", () => {
         Main.Sockets.IsDisconnectExpected = true;
         Main.UI.ShowModal("Connection Closed", "Your account was logged into on another device.  This session has been closed.", "", () => { location.assign("/"); });
         hubConnection.stop();
     })
-    hubConnection.on("FailLoginDueToExistingConnection", args => {
+    hubConnection.on("FailLoginDueToExistingConnection", () => {
         Main.UI.ShowModal("Unable to Connection", "There is an existing connection on your account that is preventing your login.  The system was unable to disconnect it.  Please try again.");
     })
 
@@ -118,17 +118,17 @@ function applyMessageHandlers(hubConnection: any) {
             Main.GameEvents.ProcessEvent(value);
         })
     });
-    hubConnection.on("CharacterConnected", args => {
-        UI.AddSystemMessage(args + " has joined.");
+    hubConnection.on("CharacterConnected", characterName => {
+        UI.AddSystemMessage(characterName + " has joined.");
     });
-    hubConnection.on("CharacterDisconnected", args => {
-        UI.AddSystemMessage(args + " has left.");
+    hubConnection.on("CharacterDisconnected", characterName => {
+        UI.AddSystemMessage(characterName + " has left.");
     });
-    hubConnection.on("Ping", args => {
-        UI.PingSpan.innerText = String(Date.now() - args["Sent"]) + "ms";
+    hubConnection.on("Ping", (time: number) => {
+        UI.PingSpan.innerText = String(Date.now() - time) + "ms";
         if (Main.Settings.Local.IsDebugEnabled) {
             window.setTimeout(() => {
-                Sockets.Invoke("Ping", { Sent: Date.now() });
+                Sockets.Invoke("Ping", Date.now());
             }, 1000);
         }
     })

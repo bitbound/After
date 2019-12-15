@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace After.Pages
 {
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public class ErrorModel : PageModel
     {
         public string RequestId { get; set; }
@@ -27,7 +28,7 @@ namespace After.Pages
             DataService = dataSerivce;
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+      
         public async Task OnGet()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;

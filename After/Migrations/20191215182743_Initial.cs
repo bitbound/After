@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace After.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,7 +54,7 @@ namespace After.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     PathWhereOccurred = table.Column<string>(nullable: true),
                     User = table.Column<string>(nullable: true),
                     Message = table.Column<string>(nullable: true),
@@ -73,7 +72,7 @@ namespace After.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -94,7 +93,7 @@ namespace After.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -178,12 +177,12 @@ namespace After.Migrations
                 name: "GameObjects",
                 columns: table => new
                 {
+                    ID = table.Column<string>(nullable: false),
                     AccelerationSpeed = table.Column<double>(nullable: false),
                     Color = table.Column<string>(nullable: true),
                     DecelerationSpeed = table.Column<double>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Height = table.Column<int>(nullable: false),
-                    ID = table.Column<string>(nullable: false),
                     MaxVelocity = table.Column<double>(nullable: false),
                     Modified = table.Column<bool>(nullable: false),
                     MovementAngle = table.Column<double>(nullable: false),
@@ -252,8 +251,7 @@ namespace After.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -284,15 +282,13 @@ namespace After.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GameObjects_Name",
                 table: "GameObjects",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GameObjects_ID",

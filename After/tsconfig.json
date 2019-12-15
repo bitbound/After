@@ -6,12 +6,14 @@
     "sourceMap": true,
     "target": "esnext",
     "module": "es2015",
-    "allowJs": false
+    "allowJs": false,
+    "typeRoots": [ "wwwroot/lib/types/" ]
   },
   "exclude": [
     "node_modules",
     "obj",
-    "bin"
+    "bin",
+    "wwwroot/lib/types/"
   ],
   "compileOnSave": true
 }

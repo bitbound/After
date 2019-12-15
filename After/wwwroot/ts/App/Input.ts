@@ -23,17 +23,17 @@ export const Input = new class {
     };
     private SendMovementTimeout: number;
     private LastMovementSent: number = Date.now();
-    QueueMovementStateUpdate(methodName: string, args: any) {
+    QueueMovementStateUpdate(methodName: string, ...rest) {
         var waitRequired = 100 - Date.now() + this.LastMovementSent;
         window.clearTimeout(this.SendMovementTimeout);
         if (waitRequired <= 0) {
             this.LastMovementSent = Date.now();
-            Sockets.Invoke(methodName, args);
+            Sockets.Invoke(methodName, ...rest);
         }
         else {
             this.SendMovementTimeout = window.setTimeout(() => {
                 this.LastMovementSent = Date.now();
-                Sockets.Invoke(methodName, args);
+                Sockets.Invoke(methodName, ...rest);
             }, waitRequired);
         }
     };
@@ -93,7 +93,7 @@ function handleActionJoystick() {
         var centerPoint = new PIXI.Point(centerX, centerY);
         var targetPoint = new PIXI.Point(ev.x, ev.y);
         var angle = PixiHelper.GetAngleInDegrees(centerPoint, targetPoint);
-        Sockets.Invoke("ReleaseCharging", { Angle: angle });
+        Sockets.Invoke("ReleaseCharging", angle);
         window.removeEventListener("pointermove", actionMove);
         window.removeEventListener("pointerup", actionUp);
         inner.style.transform = "";
@@ -132,7 +132,7 @@ function handleCanvasPointerInput() {
     })
 
     Main.Renderer.PixiApp.view.addEventListener("pointerdown", e => {
-        Sockets.Invoke("BeginCharging", null);
+        Sockets.Invoke("BeginCharging");
         var centerPoint = Utilities.GetCenterPoint(e);
         var targetPoint = new PIXI.Point(e.x, e.y);
         addAimingPointer(centerPoint, targetPoint);
@@ -142,7 +142,7 @@ function handleCanvasPointerInput() {
         var centerPoint = Utilities.GetCenterPoint(e);
         var targetPoint = new PIXI.Point(e.x, e.y);
         var angle = PixiHelper.GetAngleInDegrees(centerPoint, targetPoint);
-        Sockets.Invoke("ReleaseCharging", { Angle: angle });
+        Sockets.Invoke("ReleaseCharging", angle);
         if (e.pointerType == "touch" || e.pointerType == "pen") {
             removeAimingPointer()
         }
@@ -221,10 +221,7 @@ function handleChatResize() {
 function handleChatTextInput() {
     Main.UI.ChatInput.addEventListener("keypress", (e) => {
         if (e.key.toLowerCase() == "enter" && Main.UI.ChatInput.value.length > 0) {
-            Main.Sockets.Invoke("SendChat", {
-                Channel: Main.UI.ChatChannelSelect.value,
-                Message: Main.UI.ChatInput.value
-            });
+            Main.Sockets.Invoke("SendChat", Main.UI.ChatChannelSelect.value, Main.UI.ChatInput.value);
             Main.UI.ChatInput.value = "";
         }
     });
@@ -369,7 +366,7 @@ function handleMovementJoystick() {
 
         var distance = Math.min(PixiHelper.GetDistanceBetween(centerPoint, evPoint), outer.clientWidth / 2);
         var angle = PixiHelper.GetAngleInDegrees(centerPoint, evPoint);
-        Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: angle, Force: (distance / (outer.clientHeight / 2)) });
+        Input.QueueMovementStateUpdate("UpdateMovementInput", angle, (distance / (outer.clientHeight / 2)));
         inner.style.transform = `rotate(${angle}deg) translateX(-${distance}px)`;
     }
 
@@ -377,7 +374,7 @@ function handleMovementJoystick() {
         if (ev.pointerId != pointerID) {
             return;
         }
-        Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: 0, Force: 0 });
+        Input.QueueMovementStateUpdate("UpdateMovementInput", 0, 0);
         window.removeEventListener("pointermove", movementMove);
         window.removeEventListener("pointerup", movementUp);
         inner.style.transform = "";
@@ -424,5 +421,5 @@ function sendKeyboardMovementState() {
 
     var force = Math.min(Math.abs(xVector) + Math.abs(yVector), 1);
 
-    Input.QueueMovementStateUpdate("UpdateMovementInput", { Angle: angle, Force: force });
+    Input.QueueMovementStateUpdate("UpdateMovementInput", angle, force);
 }

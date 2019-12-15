@@ -268,3 +268,5 @@ __pycache__/
 *.db
 
 *.pubxml
+/After/After.db-shm
+/After/After.db-wal

@@ -20,7 +20,7 @@ namespace After.Code.Services
     public class GameEngine
     {
         public static GameEngine Current { get; set; }
-        public GameEngine(ILogger<GameEngine> logger, IConfiguration configuration, EmailSender emailSender, IHubContext<SocketHub> hubContext)
+        public GameEngine(ILogger<GameEngine> logger, IConfiguration configuration, EmailSender emailSender, IHubContext<BrowserHub> hubContext)
         {
             Logger = logger;
             Configuration = configuration;
@@ -28,7 +28,7 @@ namespace After.Code.Services
             HubContext = hubContext;
             Current = this;
         }
-        private IHubContext<SocketHub> HubContext { get; set; }
+        private IHubContext<BrowserHub> HubContext { get; set; }
         public bool IsRunning { get; private set; }
         public ConcurrentQueue<Action<ApplicationDbContext>> InputQueue { get; set; } = new ConcurrentQueue<Action<ApplicationDbContext>>();
         public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
@@ -152,11 +152,10 @@ namespace After.Code.Services
 
         private List<GameObject> GetAllVisibleObjects(List<PlayerCharacter> playerCharacters)
         {
-            var allObjects = DBContext.GameObjects.Include("StatusEffects").Where(go =>
+            var allObjects = DBContext.GameObjects.Include("StatusEffects").ToList().Where(go =>
                 playerCharacters.Exists(pc => pc.ZCoord == go.ZCoord) &&
                 playerCharacters.Exists(pc => Math.Abs(go.XCoord - pc.XCoord) < AppConstants.RendererWidth) &&
-                playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight) &&
-                (go is PlayerCharacter == false || playerCharacters.Any(x => x.ID == go.ID))
+                playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight)
             ).ToList();
             lock (MemoryOnlyObjects)
             {
@@ -202,11 +201,10 @@ namespace After.Code.Services
 
         private void RunMainLoop()
         {
-            List<ConnectionDetails> activeConnections;
             List<PlayerCharacter> playerCharacters;
             List<GameObject> visibleObjects;
             DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
-            DBContext.Database.Migrate();
+            //DBContext.Database.Migrate();
             DBContext.SaveChanges();
             while (IsRunning)
             {
@@ -241,10 +239,11 @@ namespace After.Code.Services
 
                     ProcessInputQueue();
 
-                    activeConnections = SocketHub.ConnectionList.ToList();
+                    var activeCharacters = BrowserHub.ConnectionList.Select(x => x.CharacterID).ToList();
+
                     playerCharacters = DBContext.PlayerCharacters
-                        .Include(x=>x.StatusEffects)
-                        .Where(x => x is PlayerCharacter && activeConnections.Exists(y => y.CharacterID == x.ID)).ToList();
+                        .Include(x => x.StatusEffects)
+                        .Where(x => x is PlayerCharacter && activeCharacters.Contains(x.ID)).ToList();
                     visibleObjects = GetAllVisibleObjects(playerCharacters);
 
 
@@ -261,7 +260,7 @@ namespace After.Code.Services
 
                     CheckForCollisions(visibleObjects.Where(x => x is ICollidable).Cast<ICollidable>());
 
-                    SendUpdates(visibleObjects, activeConnections);
+                    SendUpdates(visibleObjects, BrowserHub.ConnectionList.ToList());
                     
                     visibleObjects.ForEach(x =>
                     {
@@ -356,11 +355,15 @@ namespace After.Code.Services
 
         private void SendUpdates(List<GameObject> visibleObjects, List<ConnectionDetails> activeConnections)
         {
-            visibleObjects.ForEach(playerCharacter =>
+            foreach (var playerCharacter in visibleObjects)
             {
                 if (playerCharacter is PlayerCharacter)
                 {
                     var connectionDetails = activeConnections.Find(x => x.CharacterID == playerCharacter.ID);
+                    if (connectionDetails == null)
+                    {
+                        continue;
+                    }
                     var currentScene = GetCurrentScene((PlayerCharacter)playerCharacter, visibleObjects);
 
                     var modifiedObjects = currentScene?.Where(x => x.Modified);
@@ -378,7 +381,7 @@ namespace After.Code.Services
                         HubContext.Clients.Client(connectionDetails.ConnectionID).SendAsync("ShowGameEvents", events);
                     }
                 }
-            });
+            }
         }
         private void UpdatePositionsFromVelociy(GameObject gameObject, double delta)
         {

@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace After.Code.Services
 {
     [Authorize]
-    public class SocketHub : Hub
+    public class BrowserHub : Hub
     {
-        public SocketHub(DataService dataService,
+        public BrowserHub(DataService dataService,
             IHttpContextAccessor contextAccessor,
             UserManager<AfterUser> userManager,
             SignInManager<AfterUser> signInManager,
@@ -132,26 +132,20 @@ namespace After.Code.Services
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendChat(dynamic data)
+        public async Task SendChat(string channel, string message)
         {
             var character = DataService.GetCharacter(Context.User.Identity.Name, ConnectionDetails.CharacterName);
-            switch (data["Channel"].ToString())
+            switch (channel.ToString())
             {
                 case "Global":
-                    await Clients.All.SendAsync("ReceiveChat", new
-                    {
-                        Channel = data["Channel"],
-                        CharacterName = character?.Name,
-                        Message = data["Message"],
-                        Color = character?.Color
-                    });
+                    await Clients.All.SendAsync("ReceiveChat", channel, character?.Name, message, character?.Color);
                     break;
 
                 default:
                     break;
             }
         }
-        public void BeginCharging(dynamic data)
+        public void BeginCharging()
         {
             var characterID = CurrentCharacter.ID;
             GameEngine.InputQueue.Enqueue(dbContext =>
@@ -163,9 +157,8 @@ namespace After.Code.Services
                 }
             });
         }
-        public void ReleaseCharging(dynamic data)
+        public void ReleaseCharging(double angle)
         {
-            var angle = (double)data.Angle;
             var characterID = CurrentCharacter.ID;
             var radians = Utilities.GetRadiansFromDegrees(angle);
             var xVector = -Math.Cos(radians);
@@ -214,13 +207,11 @@ namespace After.Code.Services
         }
         public void SendInitialUpdate()
         {
-            Clients.Caller.SendAsync("InitialUpdate", new { CurrentCharacter, AppConstants.RendererWidth, AppConstants.RendererHeight } );
+            Clients.Caller.SendAsync("InitialUpdate", CurrentCharacter, AppConstants.RendererWidth, AppConstants.RendererHeight);
         }
-        public void UpdateMovementInput(dynamic data)
+        public void UpdateMovementInput(double angle, double force)
         {
             var characterID = ConnectionDetails.CharacterID;
-            var angle = (double)data.Angle;
-            var force = (double)data.Force;
             GameEngine.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
@@ -232,9 +223,9 @@ namespace After.Code.Services
                 character.MovementForce = force;
             });
         }
-        public void Ping(object data)
+        public void Ping(long time)
         {
-            Clients.Caller.SendAsync("Ping", data);
+            Clients.Caller.SendAsync("Ping", time);
         }
     }
 }

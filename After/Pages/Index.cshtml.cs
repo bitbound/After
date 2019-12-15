@@ -23,7 +23,6 @@ namespace After.Pages
         {
         }
 
-        [Authorize]
         public IActionResult OnPost(string characterName)
         {
             DataService.DeleteCharacter(characterName);
