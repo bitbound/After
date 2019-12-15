@@ -122,7 +122,7 @@ namespace After.Code.Services
             {
                 dbContext.SaveChanges();
             });
-            ConnectionList.RemoveAll(x=>x.UserName == UserName);
+            ConnectionList.RemoveAll(x => x.UserName == UserName);
             await Clients.All.SendAsync("CharacterDisconnected", CurrentCharacter.Name);
             if (ConnectionList.Count == 0)
             {
@@ -131,7 +131,6 @@ namespace After.Code.Services
             }
             await base.OnDisconnectedAsync(exception);
         }
-
         public async Task SendChat(string channel, string message)
         {
             var character = DataService.GetCharacter(Context.User.Identity.Name, ConnectionDetails.CharacterName);

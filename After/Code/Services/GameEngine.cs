@@ -155,7 +155,8 @@ namespace After.Code.Services
             var allObjects = DBContext.GameObjects.Include("StatusEffects").ToList().Where(go =>
                 playerCharacters.Exists(pc => pc.ZCoord == go.ZCoord) &&
                 playerCharacters.Exists(pc => Math.Abs(go.XCoord - pc.XCoord) < AppConstants.RendererWidth) &&
-                playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight)
+                playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight) &&
+                (go is PlayerCharacter == false || playerCharacters.Any(x => x.ID == go.ID))
             ).ToList();
             lock (MemoryOnlyObjects)
             {
