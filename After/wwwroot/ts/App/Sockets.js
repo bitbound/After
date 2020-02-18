@@ -45,10 +45,10 @@ function applyMessageHandlers(hubConnection) {
     hubConnection.on("InitialUpdate", (currentCharacter, renderWidth, renderHeight) => {
         Main.Init(currentCharacter, renderWidth, renderHeight);
     });
-    hubConnection.on("ReceiveChat", data => {
-        switch (data.Channel) {
+    hubConnection.on("ReceiveChat", (channel, characterName, message, color) => {
+        switch (channel) {
             case "Global":
-                Main.UI.AddGlobalChat(data.CharacterName, data.Message, data.Color);
+                Main.UI.AddGlobalChat(characterName, message, color);
             default:
         }
     });

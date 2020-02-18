@@ -54,10 +54,10 @@ function applyMessageHandlers(hubConnection: any) {
       
     });
 
-    hubConnection.on("ReceiveChat", data => {
-        switch (data.Channel) {
+    hubConnection.on("ReceiveChat", (channel:string, characterName:string, message:string, color:string)  => {
+        switch (channel) {
             case "Global":
-                Main.UI.AddGlobalChat(data.CharacterName, data.Message, data.Color);
+                Main.UI.AddGlobalChat(characterName, message, color);
             default:
         }
     });
