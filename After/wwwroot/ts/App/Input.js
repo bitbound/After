@@ -99,7 +99,7 @@ function handleActionJoystick() {
     outer.addEventListener("pointerdown", ev => {
         ev.stopPropagation();
         pointerID = ev.pointerId;
-        Sockets.Invoke("BeginCharging", null);
+        Sockets.Invoke("BeginCharging");
         window.addEventListener("pointermove", actionMove);
         window.addEventListener("pointerup", actionUp);
         inner.style.backgroundColor = "white";
