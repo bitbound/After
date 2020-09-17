@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -309,7 +310,7 @@ namespace After.Code.Services
         private double GetDelta()
         {
             var delta = (DateTime.Now - LastTick).TotalMilliseconds / 50;
-            Console.WriteLine("Delta: " + delta);
+            Debug.WriteLine("Delta: " + delta);
             while (delta < 1)
             {
                 System.Threading.Thread.Sleep(1);
