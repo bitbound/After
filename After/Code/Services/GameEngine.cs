@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -30,7 +31,7 @@ namespace After.Code.Services
             Current = this;
         }
         private IHubContext<BrowserHub> HubContext { get; set; }
-        public bool IsRunning { get; private set; }
+        public bool IsRunning => MainLoop?.Status == TaskStatus.Running;
         public ConcurrentQueue<Action<ApplicationDbContext>> InputQueue { get; set; } = new ConcurrentQueue<Action<ApplicationDbContext>>();
         public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
         public List<GameObject> MemoryOnlyObjects { get; set; } = new List<GameObject>();
@@ -45,6 +46,8 @@ namespace After.Code.Services
 
         private ILogger<GameEngine> Logger { get; set; }
 
+        private CancellationTokenSource _mainLoopCancellationSource;
+
         private Task MainLoop { get; set; }
 
         public void Start()
@@ -53,12 +56,15 @@ namespace After.Code.Services
             {
                 return;
             }
-            IsRunning = true;
-            MainLoop = Task.Run(new Action(RunMainLoop));
+
+            _mainLoopCancellationSource?.Dispose();
+            _mainLoopCancellationSource = new CancellationTokenSource();
+
+            MainLoop = Task.Run(new Action(RunMainLoop), _mainLoopCancellationSource.Token);
         }
         public void Stop()
         {
-            IsRunning = false;
+            _mainLoopCancellationSource.Cancel();
         }
         private void ApplyAcceleration(GameObject gameObject, double delta, double xAcceleration, double yAcceleration)
         {
@@ -206,9 +212,8 @@ namespace After.Code.Services
             List<PlayerCharacter> playerCharacters;
             List<GameObject> visibleObjects;
             DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
-            //DBContext.Database.Migrate();
             DBContext.SaveChanges();
-            while (IsRunning)
+            while (!_mainLoopCancellationSource.IsCancellationRequested)
             {
                 try
                 {

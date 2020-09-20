@@ -70,7 +70,10 @@ namespace After
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataService dataService, GameEngine gameEngine)
+        public void Configure(IApplicationBuilder app,
+            IWebHostEnvironment env,
+            DataService dataService,
+            ApplicationDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -117,6 +120,16 @@ namespace After
                 routeBuilder.MapControllers();
 
             });
+
+            try
+            {
+                dbContext.Database.Migrate();
+            }
+            catch
+            {
+                // Log.
+            }
+
             dataService.CleanupTempUsers();
         }
     }
