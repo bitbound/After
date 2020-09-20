@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -19,7 +20,7 @@ using System.Timers;
 
 namespace After.Code.Services
 {
-    public class GameEngine
+    public class GameEngine : BackgroundService
     {
         public static GameEngine Current { get; set; }
         public GameEngine(ILogger<GameEngine> logger, IConfiguration configuration, EmailSender emailSender, IHubContext<BrowserHub> hubContext)
@@ -31,7 +32,6 @@ namespace After.Code.Services
             Current = this;
         }
         private IHubContext<BrowserHub> HubContext { get; set; }
-        public bool IsRunning => MainLoop?.Status == TaskStatus.Running;
         public ConcurrentQueue<Action<ApplicationDbContext>> InputQueue { get; set; } = new ConcurrentQueue<Action<ApplicationDbContext>>();
         public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
         public List<GameObject> MemoryOnlyObjects { get; set; } = new List<GameObject>();
@@ -46,26 +46,6 @@ namespace After.Code.Services
 
         private ILogger<GameEngine> Logger { get; set; }
 
-        private CancellationTokenSource _mainLoopCancellationSource;
-
-        private Task MainLoop { get; set; }
-
-        public void Start()
-        {
-            if (IsRunning)
-            {
-                return;
-            }
-
-            _mainLoopCancellationSource?.Dispose();
-            _mainLoopCancellationSource = new CancellationTokenSource();
-
-            MainLoop = Task.Run(new Action(RunMainLoop), _mainLoopCancellationSource.Token);
-        }
-        public void Stop()
-        {
-            _mainLoopCancellationSource.Cancel();
-        }
         private void ApplyAcceleration(GameObject gameObject, double delta, double xAcceleration, double yAcceleration)
         {
             if (gameObject.MovementForce > 0)
@@ -165,10 +145,7 @@ namespace After.Code.Services
                 playerCharacters.Exists(pc => Math.Abs(go.YCoord - pc.YCoord) < AppConstants.RendererHeight) &&
                 (go is PlayerCharacter == false || playerCharacters.Any(x => x.ID == go.ID))
             ).ToList();
-            lock (MemoryOnlyObjects)
-            {
-                allObjects.AddRange(MemoryOnlyObjects);
-            }
+            allObjects.AddRange(MemoryOnlyObjects);
             return allObjects;
         }
         private List<GameObject> GetCurrentScene(PlayerCharacter playerCharacter, List<GameObject> gameObjects)
@@ -213,10 +190,15 @@ namespace After.Code.Services
             List<GameObject> visibleObjects;
             DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
             DBContext.SaveChanges();
-            while (!_mainLoopCancellationSource.IsCancellationRequested)
+            while (true)
             {
                 try
                 {
+                    if (BrowserHub.ConnectionList.Count == 0)
+                    {
+                        Thread.Sleep(1000);
+                        continue;
+                    }
                     // TODO: Remove these dummy users later.
                     while (DBContext.Characters.Count(x=> !(x is PlayerCharacter)) < 5)
                     {
@@ -246,7 +228,7 @@ namespace After.Code.Services
 
                     ProcessInputQueue();
 
-                    var activeCharacters = BrowserHub.ConnectionList.Select(x => x.CharacterID).ToList();
+                    var activeCharacters = BrowserHub.ConnectionList.Values.Select(x => x.CharacterID);
 
                     playerCharacters = DBContext.PlayerCharacters
                         .Include(x => x.StatusEffects)
@@ -267,7 +249,7 @@ namespace After.Code.Services
 
                     CheckForCollisions(visibleObjects.Where(x => x is ICollidable).Cast<ICollidable>());
 
-                    SendUpdates(visibleObjects, BrowserHub.ConnectionList.ToList());
+                    SendUpdates(visibleObjects, BrowserHub.ConnectionList.Values.ToList());
                     
                     visibleObjects.ForEach(x =>
                     {
@@ -402,6 +384,11 @@ namespace After.Code.Services
                 gameObject.YCoord = Math.Round(gameObject.YCoord + gameObject.VelocityY);
                 gameObject.Modified = true;
             }
+        }
+
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            return Task.Run(RunMainLoop, stoppingToken);
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,18 +16,16 @@ namespace After.Code.Services
     public class BrowserHub : Hub
     {
         public BrowserHub(DataService dataService,
-            IHttpContextAccessor contextAccessor,
             UserManager<AfterUser> userManager,
-            SignInManager<AfterUser> signInManager,
-            GameEngine gameEngine)
+            SignInManager<AfterUser> signInManager)
         {
             DataService = dataService;
             UserManager = userManager;
             SignInManager = signInManager;
-            GameEngine = gameEngine;
         }
 
-        public static List<ConnectionDetails> ConnectionList { get; set; } = new List<ConnectionDetails>();
+        public static ConcurrentDictionary<string, ConnectionDetails> ConnectionList { get; set; } =
+            new ConcurrentDictionary<string, ConnectionDetails>();
 
         private ConnectionDetails ConnectionDetails
         {
@@ -59,7 +58,6 @@ namespace After.Code.Services
         private DataService DataService { get; set; }
         private UserManager<AfterUser> UserManager { get; }
         private SignInManager<AfterUser> SignInManager { get; }
-        private GameEngine GameEngine { get; }
 
         private string UserName
         {
@@ -71,11 +69,11 @@ namespace After.Code.Services
 
         public async Task Init(string characterName)
         {
-            if (ConnectionList.Any(x => x.UserName == UserName))
+            if (ConnectionList.TryGetValue(UserName, out var details))
             {
-                await ConnectionList.FirstOrDefault(x => x.UserName == UserName).ClientProxy.SendAsync("DisconnectDuplicateConnection");
+                await details.ClientProxy.SendAsync("DisconnectDuplicateConnection");
                 var startWait = DateTime.Now;
-                while (ConnectionList.Any(x => x.UserName == UserName))
+                while (ConnectionList.ContainsKey(UserName))
                 {
                     await Task.Delay(100);
                     if (DateTime.Now > startWait.AddSeconds(3))
@@ -86,7 +84,7 @@ namespace After.Code.Services
                 }
             }
             var characterID = DataService.GetCharacter(UserName, characterName).ID;
-            GameEngine.InputQueue.Enqueue(dbContext =>
+            GameEngine.Current.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
                 character.MovementAngle = 0;
@@ -102,33 +100,22 @@ namespace After.Code.Services
             };
             SendInitialUpdate();
 
-            lock (ConnectionList) {
-                ConnectionList.Add(ConnectionDetails);
-            }
+            ConnectionList.AddOrUpdate(UserName, ConnectionDetails, (k,v) => ConnectionDetails);
             await Clients.All.SendAsync("CharacterConnected", characterName);
         }
         public override Task OnConnectedAsync()
         {
-            if (!GameEngine.IsRunning)
-            {
-                GameEngine.Start();
-            }
             return base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            GameEngine.InputQueue.Enqueue(dbContext =>
+            GameEngine.Current.InputQueue.Enqueue(dbContext =>
             {
                 dbContext.SaveChanges();
             });
-            ConnectionList.RemoveAll(x => x.UserName == UserName);
+            ConnectionList.Remove(UserName, out _);
             await Clients.All.SendAsync("CharacterDisconnected", CurrentCharacter.Name);
-            if (ConnectionList.Count == 0)
-            {
-                GameEngine.Stop();
-                DataService.CleanupTempUsers();
-            }
             await base.OnDisconnectedAsync(exception);
         }
         public async Task SendChat(string channel, string message)
@@ -147,7 +134,7 @@ namespace After.Code.Services
         public void BeginCharging()
         {
             var characterID = CurrentCharacter.ID;
-            GameEngine.InputQueue.Enqueue(dbContext =>
+            GameEngine.Current.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
                 if (character != null)
@@ -162,7 +149,7 @@ namespace After.Code.Services
             var radians = Utilities.GetRadiansFromDegrees(angle);
             var xVector = -Math.Cos(radians);
             var yVector = -Math.Sin(radians);
-            GameEngine.InputQueue.Enqueue(dbContext =>
+            GameEngine.Current.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
                 if (character.IsDead)
@@ -185,10 +172,7 @@ namespace After.Code.Services
 
                     };
                     
-                    lock (GameEngine.MemoryOnlyObjects)
-                    {
-                        GameEngine.MemoryOnlyObjects.Add(projectile);
-                    }
+                    GameEngine.Current.MemoryOnlyObjects.Add(projectile);
                     character.CurrentCharge = 0;
                     GameEngine.Current.GameEvents.Add(new GameEvent()
                     {
@@ -211,7 +195,7 @@ namespace After.Code.Services
         public void UpdateMovementInput(double angle, double force)
         {
             var characterID = ConnectionDetails.CharacterID;
-            GameEngine.InputQueue.Enqueue(dbContext =>
+            GameEngine.Current.InputQueue.Enqueue(dbContext =>
             {
                 var character = dbContext.PlayerCharacters.Find(characterID);
                 if (character.IsDead)

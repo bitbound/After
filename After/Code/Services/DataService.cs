@@ -11,11 +11,9 @@ namespace After.Code.Services
     public class DataService
     {
         private ApplicationDbContext DBContext { get; set; }
-        private GameEngine GameEngine { get; set; }
-        public DataService(ApplicationDbContext dbContext, GameEngine gameEngine)
+        public DataService(ApplicationDbContext dbContext)
         {
             DBContext = dbContext;
-            GameEngine = gameEngine;
         }
 
         public bool IsCharacterNameTaken(string name)
