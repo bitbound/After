@@ -36,12 +36,10 @@ namespace After.Code.Services
             Configuration = configuration;
             EmailSender = emailSender;
             HubContext = hubContext;
-            DBContext = serviceProvider
-                .CreateScope()
-                .ServiceProvider
-                .GetRequiredService<ApplicationDbContext>();
+            Services = serviceProvider;
         }
         private IHubContext<BrowserHub> HubContext { get; set; }
+        private IServiceProvider Services { get; }
         public ConcurrentQueue<Action<ApplicationDbContext>> InputQueue { get; set; } = new ConcurrentQueue<Action<ApplicationDbContext>>();
         public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
         public List<GameObject> MemoryOnlyObjects { get; set; } = new List<GameObject>();
@@ -196,6 +194,8 @@ namespace After.Code.Services
 
         private void RunMainLoop()
         {
+            var scope = Services.CreateScope();
+            DBContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             List<PlayerCharacter> playerCharacters;
             List<GameObject> visibleObjects;
             while (true)
@@ -207,8 +207,22 @@ namespace After.Code.Services
                         Thread.Sleep(1000);
                         continue;
                     }
+
+                    if (DateTime.Now - LastDBSave > TimeSpan.FromMinutes(1) &&
+                       !DBContext.Database.IsInMemory())
+                    {
+                        DBContext.SaveChanges();
+                        DBContext.Database.CloseConnection();
+                        DBContext.Dispose();
+                        scope.Dispose();
+                        scope = Services.CreateScope();
+                        DBContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                        LastDBSave = DateTime.Now;
+                        continue;
+                    }
+
                     // TODO: Remove these dummy users later.
-                    while (DBContext.Characters.Count(x=> !(x is PlayerCharacter)) < 5)
+                    while (DBContext.Characters.Count(x => !(x is PlayerCharacter)) < 5)
                     {
                         DBContext.Characters.Add(new Character()
                         {
@@ -224,15 +238,7 @@ namespace After.Code.Services
                         DBContext.SaveChanges();
                     }
 
-                    if (DateTime.Now - LastDBSave > TimeSpan.FromMinutes(5) &&
-                        !DBContext.Database.IsInMemory())
-                    {
-                        DBContext.SaveChanges();
-                        DBContext.Database.CloseConnection();
-                        DBContext.Dispose();
-                        DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
-                        LastDBSave = DateTime.Now;
-                    }
+                   
                     var delta = GetDelta();
 
                     ProcessInputQueue();
@@ -259,7 +265,7 @@ namespace After.Code.Services
                     CheckForCollisions(visibleObjects.Where(x => x is ICollidable).Cast<ICollidable>());
 
                     SendUpdates(visibleObjects, BrowserHub.ConnectionList.Values.ToList());
-                    
+
                     visibleObjects.ForEach(x =>
                     {
                         x.Modified = false;
