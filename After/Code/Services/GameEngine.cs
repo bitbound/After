@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -23,13 +24,22 @@ namespace After.Code.Services
     public class GameEngine : BackgroundService
     {
         public static GameEngine Current { get; set; }
-        public GameEngine(ILogger<GameEngine> logger, IConfiguration configuration, EmailSender emailSender, IHubContext<BrowserHub> hubContext)
+        public GameEngine(
+            EmailSender emailSender, 
+            ILogger<GameEngine> logger,
+            IConfiguration configuration,
+            IHubContext<BrowserHub> hubContext,
+            IServiceProvider serviceProvider)
         {
+            Current = this;
             Logger = logger;
             Configuration = configuration;
             EmailSender = emailSender;
             HubContext = hubContext;
-            Current = this;
+            DBContext = serviceProvider
+                .CreateScope()
+                .ServiceProvider
+                .GetRequiredService<ApplicationDbContext>();
         }
         private IHubContext<BrowserHub> HubContext { get; set; }
         public ConcurrentQueue<Action<ApplicationDbContext>> InputQueue { get; set; } = new ConcurrentQueue<Action<ApplicationDbContext>>();
@@ -188,8 +198,6 @@ namespace After.Code.Services
         {
             List<PlayerCharacter> playerCharacters;
             List<GameObject> visibleObjects;
-            DBContext = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>(), Configuration);
-            DBContext.SaveChanges();
             while (true)
             {
                 try
@@ -216,7 +224,8 @@ namespace After.Code.Services
                         DBContext.SaveChanges();
                     }
 
-                    if (DateTime.Now - LastDBSave > TimeSpan.FromMinutes(5))
+                    if (DateTime.Now - LastDBSave > TimeSpan.FromMinutes(5) &&
+                        !DBContext.Database.IsInMemory())
                     {
                         DBContext.SaveChanges();
                         DBContext.Database.CloseConnection();

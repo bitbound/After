@@ -42,11 +42,24 @@ namespace After
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                //options.UseSqlite(Configuration.GetConnectionString("SQLite"))
-                options.UseInMemoryDatabase("AfterDb")
-            );
+            var provider = Configuration.GetValue<string>("DbProvider")?.ToLower();
+
+            if (provider == "mssql")
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                  options.UseSqlServer(Configuration.GetConnectionString("MSSQL")));
+            }
+            else if (provider == "sqlite")
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                  options.UseSqlite(Configuration.GetConnectionString("SQLite")));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseInMemoryDatabase("AfterDb"));
+            }
+
  
             services.AddIdentity<AfterUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
                 .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -19,14 +19,10 @@ namespace After.Code
             : base(options)
         {
             Configuration = configuration;
-            //this.Database.Migrate();
         }
         private IConfiguration Configuration { get; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            //optionsBuilder.UseSqlite(Configuration.GetConnectionString("SQLite"));
-            optionsBuilder.UseInMemoryDatabase("AfterDb");
             base.OnConfiguring(optionsBuilder);
         }
         
