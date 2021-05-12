@@ -134,13 +134,9 @@ namespace After
 
             });
 
-            try
+            if (dbContext.Database.IsRelational())
             {
                 dbContext.Database.Migrate();
-            }
-            catch
-            {
-                // Log.
             }
 
             dataService.CleanupTempUsers();
